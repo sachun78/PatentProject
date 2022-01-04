@@ -1,10 +1,10 @@
 // import React from 'react';
 import { Global, css } from '@emotion/react'
 import AppLayout from './components/AppLayout'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Home from './pages/Home'
 import Logo from './components/Logo'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 import Search from './pages/Search'
 import Sidebar from './components/Sidebar'
 import TopMenu from './components/TopMenu'
@@ -13,12 +13,25 @@ import Schedule from './pages/MemberShip/Schedule'
 import Network from './pages/MemberShip/Network'
 import Meeting from './pages/Meeting'
 import Login from './pages/Login'
+import Register from './pages/Register'
+import { useLoginValue } from './atoms/loginState'
 
 function App() {
+  const navigate = useNavigate()
+  const loginValue = useLoginValue()
+
+  useEffect(() => {
+    if (!loginValue.isloggedIn) {
+      console.log('isloggedIn is false')
+      navigate('/login')
+    }
+  }, [loginValue])
+
   return (
     <>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route
           path="/*"
           element={

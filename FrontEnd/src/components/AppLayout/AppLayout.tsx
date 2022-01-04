@@ -44,7 +44,6 @@ const headerStyle = css`
   box-shadow: rgb(0 0 0 / 13%) 0px 0px 16px;
 `
 const mainStyle = css`
-  height: 100%;
   padding-top: 1rem;
   margin-left: 16.25rem;
 `

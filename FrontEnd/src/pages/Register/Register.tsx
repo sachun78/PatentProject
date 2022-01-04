@@ -1,21 +1,21 @@
 import { css } from '@emotion/react'
 import AuthFormBody from '../../components/AuthFormBody'
-import LoginForm from '../../components/AuthFormBody/LoginForm'
+import RegisterForm from '../../components/AuthFormBody/RegisterForm'
 import palette from '../../lib/palette'
 
-type LoginProps = {}
+type RegisterProps = {}
 
-function Login({}: LoginProps) {
+export default function Register({}: RegisterProps) {
   return (
-    <div css={pageStyle}>
-      <AuthFormBody width={606} height={480}>
-        <LoginForm />
+    <div css={wrapper}>
+      <AuthFormBody width={606} height={820}>
+        <RegisterForm />
       </AuthFormBody>
     </div>
   )
 }
 
-const pageStyle = css`
+const wrapper = css`
   background-color: ${palette.blueGrey[50]};
   width: 100%;
   height: 100%;
@@ -26,5 +26,3 @@ const pageStyle = css`
   align-items: center;
   justify-content: center;
 `
-
-export default Login

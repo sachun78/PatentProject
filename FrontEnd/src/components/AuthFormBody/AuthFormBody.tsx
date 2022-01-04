@@ -1,34 +1,41 @@
 import { css } from '@emotion/react'
-import LoginForm from './LoginForm'
 import palette from '../../lib/palette'
 import IconControl from '../IconControl'
 import React from 'react'
 
-type LoginFormBodyProps = {}
+type AuthFormBodyProps = {
+  children: React.ReactNode
+  width: number
+  height: number
+}
 
-export default function LoginFormBody({}: LoginFormBodyProps) {
+export default function AuthFormBody({
+  children,
+  width,
+  height,
+}: AuthFormBodyProps) {
   return (
-    <div css={bodyStyle}>
+    <div css={bodyStyle(width, height)}>
       <div css={wrapStyle}>
         <div className="img-block">
           <IconControl name={'welcome'} />
           <span>WEMET</span>
         </div>
-        <LoginForm />
+        {children}
       </div>
     </div>
   )
 }
 
-const bodyStyle = css`
+const bodyStyle = (width: number, height: number) => css`
   z-index: 20;
   display: flex;
   flex-direction: column;
   background-color: white;
 
-  width: 606px;
-  height: 480px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.09);
+  width: ${width}px;
+  height: ${height}px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 40%);
 `
 
 const wrapStyle = css`

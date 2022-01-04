@@ -1,37 +1,41 @@
 import { css } from '@emotion/react'
-import { Button, Input } from 'antd'
-import React, { useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
-import useSetLogin, {
-  useLoginValue,
-  useToggleLoginType,
-} from '../../hooks/useLogin'
+import { Button, Divider, Input } from 'antd'
+import React, { useCallback, useEffect } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { useLoginStateActions, useLoginValue } from '../../atoms/loginState'
 import palette from '../../lib/palette'
 
 type LoginFormProps = {}
 
 export default function LoginForm({}: LoginFormProps) {
   const navigate = useNavigate()
+  const loginActions = useLoginStateActions()
   const loginValue = useLoginValue()
-  const setLogin = useSetLogin(true, 'isloggedIn')
-  const toggleLogin = useToggleLoginType()
+
+  useEffect(() => {
+    if (loginValue.isloggedIn) {
+      console.log('already loggedIn')
+      navigate('/')
+    }
+  }, [loginValue])
 
   const handleTypeChange = () => {
-    toggleLogin()
+    loginActions.toggle()
   }
+
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
-      await setLogin()
+      await loginActions.setLoggedIn(true)
       alert('로그인 성공')
       navigate('/')
     },
-    [navigate, setLogin]
+    [navigate]
   )
 
   return (
     <div css={loginFormStyle}>
-      {loginValue?.loginType === 'USER' ? (
+      {loginValue.loginType === 'USER' ? (
         <>
           <h2>로그인 </h2>
           <section>
@@ -47,9 +51,12 @@ export default function LoginForm({}: LoginFormProps) {
               </div>
             </form>
           </section>
+          <Divider />
           <section>
             <div css={underBlockStyle}>
-              <h4>회원가입</h4>
+              <NavLink to={'/register'}>
+                <h4>회원가입</h4>
+              </NavLink>
               <h4>비밀번호 찾기</h4>
             </div>
           </section>
@@ -73,7 +80,7 @@ export default function LoginForm({}: LoginFormProps) {
         </>
       )}
       <div className="foot">
-        {loginValue?.loginType === 'USER' ? (
+        {loginValue.loginType === 'USER' ? (
           <span>비회원으로</span>
         ) : (
           <span>회원으로</span>
