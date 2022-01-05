@@ -8,9 +8,7 @@ type LoginProps = {}
 function Login({}: LoginProps) {
   return (
     <div css={pageStyle}>
-      <AuthFormBody width={606} height={480}>
         <LoginForm />
-      </AuthFormBody>
     </div>
   )
 }

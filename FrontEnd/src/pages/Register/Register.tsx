@@ -1,5 +1,4 @@
 import { css } from '@emotion/react'
-import AuthFormBody from '../../components/AuthFormBody'
 import RegisterForm from '../../components/AuthFormBody/RegisterForm'
 import palette from '../../lib/palette'
 
@@ -8,9 +7,7 @@ type RegisterProps = {}
 export default function Register({}: RegisterProps) {
   return (
     <div css={wrapper}>
-      <AuthFormBody width={606} height={820}>
         <RegisterForm />
-      </AuthFormBody>
     </div>
   )
 }

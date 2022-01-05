@@ -52,7 +52,6 @@ const sidebarStyle = css`
   height: 100%;
   position: fixed;
   display: flex;
-
   padding: 3rem;
   padding-top: 0;
   justify-content: center;

@@ -1,7 +1,8 @@
 import { css } from '@emotion/react'
-import { Button, Divider, Input } from 'antd'
+import { Button, Input } from 'antd'
 import React, { useCallback, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
+import AuthFormBody from '.'
 import { useLoginStateActions, useLoginValue } from '../../atoms/loginState'
 import palette from '../../lib/palette'
 
@@ -34,6 +35,7 @@ export default function LoginForm({}: LoginFormProps) {
   )
 
   return (
+    <AuthFormBody width={606} height={480}>
     <div css={loginFormStyle}>
       {loginValue.loginType === 'USER' ? (
         <>
@@ -51,7 +53,8 @@ export default function LoginForm({}: LoginFormProps) {
               </div>
             </form>
           </section>
-          <Divider />
+
+
           <section>
             <div css={underBlockStyle}>
               <NavLink to={'/register'}>
@@ -90,6 +93,7 @@ export default function LoginForm({}: LoginFormProps) {
         </div>
       </div>
     </div>
+    </AuthFormBody>
   )
 }
 
