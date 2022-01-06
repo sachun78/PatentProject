@@ -1,9 +1,14 @@
 import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
-  password: String,
   name: String,
-  id: String,
+  email: String,
+  password: String,
+  company: String,
+  department: String,
+  position: String,
+  tel: String,
+  country: String,
 });
 
 const NoticeSchema = new mongoose.Schema({
