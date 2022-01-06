@@ -29,4 +29,32 @@ const UserLikeSchema = new mongoose.Schema({
   likeposts: [String],
 });
 
-export { UserSchema, NoticeSchema, PostSchema, UserLikeSchema };
+const MeetingUserSchema = new mongoose.Schema({
+  name: String,
+  company: String,
+  email: String,
+  tel: String,
+  member: Boolean,
+});
+
+const MeetingSchema = new mongoose.Schema({
+  email: String,
+  event: String,
+  date: String,
+  time: String,
+  location: String,
+  photofolder: String,
+  cardfolder: String,
+  withmycompany: [MeetingUserSchema],
+  guests: [MeetingUserSchema],
+  confirm: Boolean,
+});
+
+export {
+  UserSchema,
+  NoticeSchema,
+  PostSchema,
+  UserLikeSchema,
+  MeetingSchema,
+  MeetingUserSchema,
+};

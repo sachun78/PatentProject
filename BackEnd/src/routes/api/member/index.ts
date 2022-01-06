@@ -14,14 +14,24 @@ route.get(
 
 route.post("/signup", (req, res) => {
   const user = mongoose.model("members", UserSchema);
-  const new_user = new user(req.body);
-  new_user.save((err: any) => {
-    if (err) {
-      return res.status(500).json({ message: "회원 가입 실패" });
-    } else {
-      return res.status(200).json({ message: "회원 가입 성공" });
+  user.findOne(
+    { email: req.body.email, password: req.body.password },
+    (err: any, user: any) => {
+      if (err) return res.status(500).json({ message: "error!!" });
+      else if (user)
+        return res.status(200).json({ message: "아이디가 이미 존재합니다." });
+      else {
+        const new_user = new user(req.body);
+        new_user.save((err: any) => {
+          if (err) {
+            return res.status(500).json({ message: "회원 가입 실패" });
+          } else {
+            return res.status(200).json({ message: "회원 가입 성공" });
+          }
+        });
+      }
     }
-  });
+  );
 });
 
 route.post("/signin", (req, res) => {
