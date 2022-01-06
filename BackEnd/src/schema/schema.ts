@@ -17,4 +17,16 @@ const NoticeSchema = new mongoose.Schema({
   date: String,
 });
 
-export { UserSchema, NoticeSchema };
+const PostSchema = new mongoose.Schema({
+  email: String,
+  postmessage: String,
+  postdate: String,
+  likecount: Number,
+});
+
+const UserLikeSchema = new mongoose.Schema({
+  email: String,
+  likeposts: [String],
+});
+
+export { UserSchema, NoticeSchema, PostSchema, UserLikeSchema };
