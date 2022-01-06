@@ -33,6 +33,9 @@ function PostView({}: PostViewProps) {
       </div>
       <Post id={TestDATA[0].id} contents={TestDATA[0].contents} />
       <Post id={TestDATA[1].id} contents={TestDATA[1].contents} />
+      <Post id={TestDATA[1].id} contents={TestDATA[0].contents} />
+      <Post id={TestDATA[1].id} contents={TestDATA[1].contents} />
+      <Post id={TestDATA[1].id} contents={TestDATA[0].contents} />
     </div>
   )
 }
@@ -41,11 +44,9 @@ const postViewStyle = css`
   height: 100%;
   background: ${palette.grey[50]};
   flex: 4;
-  border-right: 1px solid ${palette.grey[200]};
   display: flex;
   flex-direction: column;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  margin-left: 1.5rem;
   padding-top: 1rem;
   .post + .post {
     margin-top: 0.5rem;

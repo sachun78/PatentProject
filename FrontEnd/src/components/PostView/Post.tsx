@@ -54,9 +54,9 @@ function Post({ id, contents }: PostProps) {
       <div css={memberIDStyle}>{id}</div>
       <div
         css={css`
-          flex: 3;
           background-color: yellow;
           margin-bottom: 0.5rem;
+          height: 5rem;
         `}
       >
         {contents}

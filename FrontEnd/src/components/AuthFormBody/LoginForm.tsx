@@ -4,6 +4,9 @@ import React, { useCallback, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import AuthFormBody from '.'
 import { useLoginStateActions, useLoginValue } from '../../atoms/loginState'
+import useInputs from '../../hooks/useInputs'
+import { useSignin } from '../../hooks/useSignup'
+import { signinInput } from '../../lib/api/member/signin'
 import palette from '../../lib/palette'
 
 type LoginFormProps = {}
@@ -12,6 +15,11 @@ export default function LoginForm({}: LoginFormProps) {
   const navigate = useNavigate()
   const loginActions = useLoginStateActions()
   const loginValue = useLoginValue()
+  const { login, loading, error } = useSignin()
+  const [form, onChange] = useInputs({
+    email: '',
+    password: '',
+  })
 
   useEffect(() => {
     if (loginValue.isloggedIn) {
@@ -24,75 +32,90 @@ export default function LoginForm({}: LoginFormProps) {
     loginActions.toggle()
   }
 
-  const handleSubmit = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
-      await loginActions.setLoggedIn(true)
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const input:signinInput = {
+      email: form.email,
+      password: form.password,
+    }
+    try {
+      await login(input)
+      loginActions.setLoggedIn(true)
       alert('로그인 성공')
       navigate('/')
-    },
-    [navigate]
-  )
-
+    } catch (e) {
+    }
+  }
+  
   return (
     <AuthFormBody width={606} height={480}>
-    <div css={loginFormStyle}>
-      {loginValue.loginType === 'USER' ? (
-        <>
-          <h2>로그인 </h2>
-          <section>
-            <form onSubmit={handleSubmit}>
-              <h4>사용자 이름</h4>
-              <Input type="email" placeholder="사용자 이름 또는 이메일" />
-              <h4>비밀번호</h4>
-              <Input.Password placeholder="비밀번호" />
-              <div className="button-div">
-                <Button type="primary" htmlType="submit">
-                  로그인
-                </Button>
-              </div>
-            </form>
-          </section>
-
-
-          <section>
-            <div css={underBlockStyle}>
-              <NavLink to={'/register'}>
-                <h4>회원가입</h4>
-              </NavLink>
-              <h4>비밀번호 찾기</h4>
-            </div>
-          </section>
-        </>
-      ) : (
-        <>
-          <h2>비회원 로그인 </h2>
-          <section>
-            <form onSubmit={handleSubmit}>
-              <h4>사용자 이름</h4>
-              <Input type="email" placeholder="사용자 이름 또는 이메일" />
-              <h4>전화번호</h4>
-              <Input.Password placeholder="비밀번호" />
-              <div className="button-div">
-                <Button type="primary" htmlType="submit">
-                  시작하기
-                </Button>
-              </div>
-            </form>
-          </section>
-        </>
-      )}
-      <div className="foot">
+      <div css={loginFormStyle}>
         {loginValue.loginType === 'USER' ? (
-          <span>비회원으로</span>
+          <>
+            <h2>로그인 </h2>
+            <section>
+              <form onSubmit={onSubmit}>
+                <h4>이메일</h4>
+                <Input
+                  type="email"
+                  placeholder="이메일"
+                  onChange={onChange}
+                  value={form.email}
+                  name="email"
+                />
+                <h4>비밀번호</h4>
+                <Input.Password
+                  placeholder="비밀번호"
+                  onChange={onChange}
+                  value={form.password}
+                  name="password"
+                />
+                <div className="button-div">
+                  <Button type="primary" htmlType="submit">
+                    로그인
+                  </Button>
+                </div>
+              </form>
+            </section>
+
+            <section>
+              <div css={underBlockStyle}>
+                <NavLink to={'/register'}>
+                  <h4>회원가입</h4>
+                </NavLink>
+                <h4>비밀번호 찾기</h4>
+              </div>
+            </section>
+          </>
         ) : (
-          <span>회원으로</span>
+          <>
+            <h2>비회원 로그인 </h2>
+            <section>
+              <form onSubmit={onSubmit}>
+                <h4>사용자 이름</h4>
+                <Input type="email" placeholder="사용자 이름 또는 이메일" />
+                <h4>전화번호</h4>
+                <Input.Password placeholder="비밀번호" />
+                <div className="button-div">
+                  <Button type="primary" htmlType="submit">
+                    시작하기
+                  </Button>
+                </div>
+              </form>
+            </section>
+          </>
         )}
-        <div className="link" onClick={handleTypeChange}>
-          로그인
+        <div className="foot">
+          {loginValue.loginType === 'USER' ? (
+            <span>비회원으로</span>
+          ) : (
+            <span>회원으로</span>
+          )}
+          <div className="link" onClick={handleTypeChange}>
+            로그인
+          </div>
         </div>
       </div>
-    </div>
     </AuthFormBody>
   )
 }

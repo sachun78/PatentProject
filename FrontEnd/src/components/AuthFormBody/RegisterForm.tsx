@@ -1,9 +1,11 @@
 import { css } from '@emotion/react'
 import { Button, Input } from 'antd'
-import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
 import AuthFormBody from '.'
 import useInputs from '../../hooks/useInputs'
+import useSignup from '../../hooks/useSignup'
+import { signupInput } from '../../lib/api/member/signup'
 import palette from '../../lib/palette'
 import IconControl from '../IconControl'
 
@@ -15,13 +17,86 @@ export default function RegisterForm({}: RegisterFormProps) {
     email: '',
     password: '',
     password_confirm: '',
+    company: '',
+    department: '',
+    position: '',
+    tel: '',
+    country: '',
   })
 
+  const {sign, loading, error} = useSignup();
+  const navigate = useNavigate()
   const [type, setType] = useState<'default' | 'additional'>('default')
+  const [enable,setEnable] = useState(true)
+
+  useEffect(()=> {
+    if (
+      form.country === '' ||
+      form.tel === '' ||
+      form.position === '' ||
+      form.department === '' ||
+      form.company === ''
+    ) {
+      setEnable(true)
+    }
+    else {
+      setEnable(false)
+    }
+  }, [form])
 
   const toggle = () => {
     const text = type === 'default' ? 'additional' : 'default'
     setType(text)
+  }
+
+  const next = () => {
+    if (
+      form.username === '' ||
+      form.email === '' ||
+      form.password === '' ||
+      form.password_confirm === ''
+    ) {
+      alert('항목을 모두 입력해주세요')
+      return
+    }
+
+    let reg = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    if(!reg.test(form.email)) {
+      alert('올바르지 않은 이메일 형식입니다.')
+      return
+    }
+
+    // reg = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+    // if(!reg.test(form.password)) {
+    //   alert('올바르지 않은 비밀번호 형식입니다.')
+    //   return
+    // }
+
+    if (form.password_confirm !== form.password) {
+      alert('패스워드가 일치하지 않습니다.')
+      return
+    }
+
+    toggle()
+  }
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const input:signupInput = {
+      username: form.username,
+      email: form.email,
+      password: form.password,
+      company: form.company,
+      department: form.department,
+      position: form.position,
+      tel: form.tel,
+      country: form.country
+    }
+    try {
+      await sign(input)
+      navigate('/login', { replace: true })
+    } catch (e) {
+    }
   }
 
   return (
@@ -43,13 +118,6 @@ export default function RegisterForm({}: RegisterFormProps) {
             <h2>회원가입</h2>
             <section>
               <form>
-                <h4>사용자 이름</h4>
-                <Input
-                  placeholder="사용자 이름"
-                  value={form.username}
-                  onChange={onChange}
-                  name="username"
-                />
                 <h4>이메일</h4>
                 <Input
                   type="email"
@@ -57,6 +125,13 @@ export default function RegisterForm({}: RegisterFormProps) {
                   value={form.email}
                   onChange={onChange}
                   name="email"
+                />
+                <h4>사용자 이름</h4>
+                <Input
+                  placeholder="사용자 이름"
+                  value={form.username}
+                  onChange={onChange}
+                  name="username"
                 />
                 <h4>비밀번호</h4>
                 <Input.Password
@@ -73,7 +148,7 @@ export default function RegisterForm({}: RegisterFormProps) {
                   name="password_confirm"
                 />
                 <div className="button-div">
-                  <Button type="primary" onClick={toggle}>
+                  <Button type="primary" onClick={next}>
                     다음
                   </Button>
                 </div>
@@ -82,21 +157,47 @@ export default function RegisterForm({}: RegisterFormProps) {
           </>
         ) : (
           <>
-            <h2>추가 정보</h2>
+            <h2>추가 정보 입력</h2>
             <section>
-              <form>
+              <form onSubmit={onSubmit}>
                 <h4>회사</h4>
-                <Input placeholder="회사" />
+                <Input
+                  placeholder="회사"
+                  onChange={onChange}
+                  value={form.company}
+                  name="company"
+                />
                 <h4>파트</h4>
-                <Input placeholder="파트" />
+                <Input
+                  placeholder="파트"
+                  onChange={onChange}
+                  value={form.department}
+                  name="department"
+                />
                 <h4>직급</h4>
-                <Input placeholder="직급" />
-                <h4>전화번호</h4>
-                <Input type="tel" placeholder="010-0000-0000" />
+                <Input
+                  placeholder="직급"
+                  onChange={onChange}
+                  value={form.position}
+                  name="position"
+                />
                 <h4>국가</h4>
-                <Input placeholder="사용자 이름 또는 이메일" />
+                <Input
+                  placeholder="대한민국"
+                  onChange={onChange}
+                  value={form.country}
+                  name="country"
+                />
+                <h4>전화번호</h4>
+                <Input
+                  type="tel"
+                  placeholder="01000000000"
+                  onChange={onChange}
+                  value={form.tel}
+                  name="tel"
+                />
                 <div className="button-div">
-                  <Button type="primary" htmlType="submit" disabled>
+                  <Button type="primary" htmlType="submit" disabled={enable && !loading}>
                     회원가입
                   </Button>
                 </div>
@@ -137,10 +238,6 @@ const loginFormStyle = css`
     flex: 1;
   }
 
-  section + section {
-    margin-top: 0;
-  }
-
   .link {
     display: inline-block;
     font-weight: bold;
@@ -166,5 +263,4 @@ const undoStyle = css`
   display: flex;
   justify-content: flex-end;
   font-size: 1.5rem;
-  /* margin-bottom: 0.75rem; */
 `
