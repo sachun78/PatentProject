@@ -42,7 +42,7 @@ route.post("/signin", (req, res) => {
       if (err) return res.status(500).json({ message: "error!!" });
       else if (user) return res.status(200).json({ message: "환영합니다." });
       else
-        return res.status(404).json({
+        return res.status(409).json({
           message:
             "가입된 정보를 찾을 수 없습니다. 회원가입을 하시기 바랍니다.",
         });
