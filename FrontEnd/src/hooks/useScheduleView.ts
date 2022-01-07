@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Listdata, meetinglist, MeetingUser } from '../lib/api/scheduleview/getlist'
+import { Listdata, meetinglist } from '../lib/api/scheduleview/getlist'
 
 export type ScheduleValue = {
     key: number,

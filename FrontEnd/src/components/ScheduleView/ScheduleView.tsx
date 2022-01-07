@@ -43,7 +43,7 @@ function ScheduleView({ type }: ScheduleViewProps) {
 const tableStyle = css`
   flex: 1;
   width: 100%;
-  white-space: pre;
+  white-space: pre-line;
 `
 
 export default ScheduleView
