@@ -25,7 +25,7 @@ route.post("/postup", (req, res) => {
 
 route.post("/postfind", (req, res) => {
   const post = mongoose.model("post", PostSchema);
-  post.findOne({ email: req.body.email }, (err: any, post: any) => {
+  post.find({ email: req.body.email }, (err: any, post: any) => {
     if (err) return res.status(500).json({ message: "error!!" });
     else if (post)
       return res

@@ -51,7 +51,7 @@ route.post("/signin", (req, res) => {
 });
 
 route.post("/likeup", (req, res) => {
-  const userlike = mongoose.model("members", UserLikeSchema);
+  const userlike = mongoose.model("likeup", UserLikeSchema);
   userlike.findOne({ email: req.body.email }, (err: any, userlike: any) => {
     if (err) return res.status(500).json({ message: "error!!" });
     else if (userlike)

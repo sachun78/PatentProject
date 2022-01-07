@@ -48,6 +48,7 @@ const MeetingSchema = new mongoose.Schema({
   withmycompany: [MeetingUserSchema],
   guests: [MeetingUserSchema],
   confirm: Boolean,
+  ismeet: Number,
 });
 
 export {
