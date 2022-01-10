@@ -10,16 +10,13 @@ type PostViewProps = {}
 
 function PostView({}: PostViewProps) {
   const {list, error, loading}  = usePostView();
-  
   const [dataSource, setDataSourece] = useState<PostValue[] | undefined>();
-  const loadData = async()=> {
-     const data: PostValue[] | undefined = await list('ryan4321@naver.com')
-     setDataSourece(data)
-     console.log(dataSource)
-     console.log(data)
-  }
 
   useEffect(()=> {
+    const loadData = async()=> {
+      const data: PostValue[] | undefined = await list('ryan4321@naver.com')
+      setDataSourece(data)
+   }
     loadData();
   }, [])
 
@@ -39,7 +36,7 @@ function PostView({}: PostViewProps) {
         </Button>
       </div>
     {     dataSource.map((data)=> {
-      return <Post id={data.email.toString()} contents={data.postmessage.toString()} />
+      return <Post key={data._id.toString()} id={data.email.toString()} contents={data.postmessage.toString()} />
     })}
       
     </div>
