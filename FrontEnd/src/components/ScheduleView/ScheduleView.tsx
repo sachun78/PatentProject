@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 import { Table } from 'antd'
 import Column from 'antd/lib/table/Column'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ScheduleValue, useScheduleView } from '../../hooks/useScheduleView'
 import ViewBase from '../ViewBase'
 import React from 'react'
@@ -17,6 +17,14 @@ function ScheduleView({ type }: ScheduleViewProps) {
      const data: ScheduleValue[] | undefined = await list('ryan4321@naver.com')
      setDataSourece(data)
   }
+
+  useEffect(()=> {
+    const loadData = async()=> {
+      const data: ScheduleValue[] | undefined = await list('ryan4321@naver.com')
+      setDataSourece(data)
+   }
+    loadData();
+  }, [])
 
   console.log(type)
   return (
@@ -48,7 +56,6 @@ function ScheduleView({ type }: ScheduleViewProps) {
           
         </Table>
       </div>
-      <button onClick={loadData}></button>
     </ViewBase>
   )
 }
