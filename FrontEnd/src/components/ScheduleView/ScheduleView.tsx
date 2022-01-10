@@ -13,10 +13,6 @@ type ScheduleViewProps = {
 function ScheduleView({ type }: ScheduleViewProps) {
   const {list, error, loading}  = useScheduleView();
   const [dataSource, setDataSourece] = useState<ScheduleValue[] | undefined>();
-  const loadData = async()=> {
-     const data: ScheduleValue[] | undefined = await list('ryan4321@naver.com')
-     setDataSourece(data)
-  }
 
   useEffect(()=> {
     const loadData = async()=> {
