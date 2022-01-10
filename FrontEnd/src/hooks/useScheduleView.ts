@@ -32,22 +32,21 @@ export function useScheduleView() {
       } finally {
         setLoading(false)
         if(result){
-            console.log(result.data);
             let cnt:number = 0;
             for (const value of result.data) {
                 cnt++;
                 let stconfirm = "제안";
                 let stmeet = "미팅전";
 
-                if(value.confirm == true)   stconfirm = "확정";
+                if(value.confirm === true)   stconfirm = "확정";
 
-                if(value.ismeet == 1)       stmeet = "못만남";
-                else if(value.ismeet == 2)   stmeet = "만남";
+                if(value.ismeet === 1)       stmeet = "못만남";
+                else if(value.ismeet === 2)   stmeet = "만남";
 
                 let stguestname = "";
                 let cntguest:number = 0;
                 for (const guest of value.guests) {
-                    if(cntguest != 0)    stguestname += '\n';
+                    if(cntguest !== 0)    stguestname += '\n';
                     stguestname += guest.name;
                     cntguest++;
                 }
@@ -55,7 +54,7 @@ export function useScheduleView() {
                 let stguestcompany = "";
                 cntguest = 0;
                 for (const guest of value.guests) {
-                    if(cntguest != 0)    stguestcompany += '\n';
+                    if(cntguest !== 0)    stguestcompany += '\n';
                     stguestcompany += guest.company;
                     cntguest++;
                 }
@@ -74,7 +73,6 @@ export function useScheduleView() {
                 }
                 data.push(obj)
             }
-            console.log(data);
             return data
         }
       }

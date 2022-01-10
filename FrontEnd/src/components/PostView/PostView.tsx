@@ -3,41 +3,48 @@ import { Link } from 'react-router-dom'
 import { Button } from 'antd'
 import Post from './Post'
 import palette from '../../lib/palette'
+import { PostValue, usePostView } from '../../hooks/usePostView'
+import { useEffect, useState } from 'react'
 
 type PostViewProps = {}
 
-// Temporary Post & MemberID Data
-const TestDATA = [
-  {
-    id: "member1's ID",
-    contents: "Post1's Contents",
-  },
-  {
-    id: "member2's ID",
-    contents: "Post2's Contents",
-  },
-]
-
 function PostView({}: PostViewProps) {
+  const {list, error, loading}  = usePostView();
+  
+  const [dataSource, setDataSourece] = useState<PostValue[] | undefined>();
+  const loadData = async()=> {
+     const data: PostValue[] | undefined = await list('ryan4321@naver.com')
+     setDataSourece(data)
+     console.log(dataSource)
+     console.log(data)
+  }
+
+  useEffect(()=> {
+    loadData();
+  }, [])
+
+  if(dataSource === undefined){
+    return (<div>loading ~~~~ </div>)
+  }
+
   return (
     <div css={postViewStyle}>
       <div css={sortButtonStyle}>
         <span>Sorting Option</span>
-        <Button css={growStyle}>button1</Button>
-        <Button css={growStyle}>button2</Button>
-        <Button css={growStyle}>button3</Button>
-        <Button css={growStyle}>button4</Button>
+        <Button css={growStyle}>Country</Button>
+        <Button css={growStyle}>Field</Button>
+        <Button css={growStyle}>My Acquaintance</Button>
         <Button css={growStyle} type="primary">
           <Link to={'/search'}>검색</Link>
         </Button>
       </div>
-      <Post id={TestDATA[0].id} contents={TestDATA[0].contents} />
-      <Post id={TestDATA[1].id} contents={TestDATA[1].contents} />
-      <Post id={TestDATA[1].id} contents={TestDATA[0].contents} />
-      <Post id={TestDATA[1].id} contents={TestDATA[1].contents} />
-      <Post id={TestDATA[1].id} contents={TestDATA[0].contents} />
+    {     dataSource.map((data)=> {
+      return <Post id={data.email.toString()} contents={data.postmessage.toString()} />
+    })}
+      
     </div>
   )
+  
 }
 
 const postViewStyle = css`
