@@ -15,7 +15,7 @@ export default class Server {
   }
 
   setup() {
-    this.app.use(cors({credentials:true, origin:"http://localhost:3000"}));
+    this.app.use(cors({credentials:true, origin:["http://localhost:3000","http://192.168.11.108:3000"]}));
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(compression());
