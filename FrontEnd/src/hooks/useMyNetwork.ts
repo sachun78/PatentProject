@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { MeetingUser, Listdata, mynetworklist } from '../lib/api/MyNetwork/getlist'
+import { Listdata, mynetworklist, MyNetworkResult, mynetworkup, mynetworkupdatefind, mynetworkupdatecount, mynetworkupdatepeople } from '../lib/api/MyNetwork/getlist'
 
 export type MyNetworkValue = {
   key: number,
@@ -59,6 +59,57 @@ export function useMyNetwork() {
 
     return {
      list,
+      loading,
+      error,
+    }
+  }
+
+  export function useMyNetworkup() {
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+    const list = async (input: MyNetworkResult) => {
+      try {
+        setLoading(true)
+        const result = await mynetworklist(input.email)
+      } catch (e: any) {
+        if (e.response.status === 409) {
+          try {
+            const upresult = await mynetworkup(input)
+            setLoading(false)
+          } catch (e: any) {
+            throw e;
+          }
+        }
+      } finally {
+        for (const value of input.meetpeople) {
+          let meetcnt = 0
+        try {
+          const findresult = await mynetworkupdatefind(input.email, value.email)
+          meetcnt = <number>findresult
+        } catch (e: any) {
+          if (e.response.status === 409) {
+            try {
+              // new people
+              const upresult = await mynetworkupdatepeople(input.email, value)
+              setLoading(false)
+            } catch (e: any) {
+              throw e;
+            }
+          }
+        } finally {
+          // count
+          try {
+            const countresult = await mynetworkupdatecount(input.email, value.email, meetcnt)
+          } catch (e: any) {
+            throw e;
+          }
+        }
+        }
+        setLoading(false)
+      }
+    }
+    return {
+      list,
       loading,
       error,
     }

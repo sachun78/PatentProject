@@ -32,3 +32,59 @@ export type Listdata = {
   console.log(response.data)
   return response.data
 }
+
+export async function mynetworkup({
+  name,
+  email,
+  meetpeople
+}: MyNetworkResult) {
+const response = await client.post<Listdata>('/api/mynetwork/mynetworkup', {
+  name,
+  email,
+  meetpeople
+})
+
+console.log(response.data)
+  return response.data
+}
+
+export async function mynetworkupdatefind(
+  email: String,
+  meet_email: String
+) {
+const response = await client.post<Number>('/api/mynetwork/mynetworkupdatefind', {
+  email,
+  meet_email
+})
+
+console.log(response.data)
+  return response.data
+}
+
+export async function mynetworkupdatecount(
+  email: String,
+  meet_email: String,
+  meetcnt: Number
+) {
+const response = await client.post<Listdata>('/api/mynetwork/mynetworkupdatecount', {
+  email,
+  meet_email,
+  meetcnt
+})
+
+console.log(response.data)
+  return response.data
+}
+
+export async function mynetworkupdatepeople(
+  email: String,
+  meetpeople: MeetingUser
+) {
+const response = await client.post<Listdata>('/api/mynetwork/mynetworkupdatepeople', {
+  email,
+  meetpeople
+})
+
+console.log(response.data)
+  return response.data
+}
