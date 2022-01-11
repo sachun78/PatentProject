@@ -38,4 +38,19 @@ route.post("/meetingfind", (req, res) => {
   });
 });
 
+route.post("/meetingnetwork", (req, res) => {
+  const meeting = mongoose.model("meeting", MeetingSchema);
+  meeting.find({ $or:[{email: req.body.email}, {guests:{email: req.body.email}} ]}, (err: any, meeting: any) => {
+    if (err) return res.status(500).json({ message: "error!!" });
+    else if (meeting)
+      return res
+        .status(200)
+        .json({ message: "meeting 리스트 찾기 완료", data: meeting });
+    else
+      return res.status(404).json({
+        message: "meeting 내용을 찾을 수 없습니다.",
+      });
+  });
+});
+
 export default route;

@@ -16,9 +16,9 @@ route.post("/signup", (req, res) => {
   const user = mongoose.model("members", UserSchema);
   user.findOne(
     { email: req.body.email, password: req.body.password },
-    (err: any, user: any) => {
+    (err: any, resuser: any) => {
       if (err) return res.status(500).json({ message: "error!!" });
-      else if (user)
+      else if (resuser)
         return res.status(200).json({ message: "아이디가 이미 존재합니다." });
       else {
         const new_user = new user(req.body);

@@ -11,6 +11,23 @@ const UserSchema = new mongoose.Schema({
   country: String,
 });
 
+const MeetPeopleSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  company: String,
+  department: String,
+  position: String,
+  tel: String,
+  country: String,
+  meetcount: Number
+});
+
+const MyNetworkSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  meetpeople: [MeetPeopleSchema]
+});
+
 const NoticeSchema = new mongoose.Schema({
   noti: String,
   name: String,
@@ -58,4 +75,6 @@ export {
   UserLikeSchema,
   MeetingSchema,
   MeetingUserSchema,
+  MeetPeopleSchema,
+  MyNetworkSchema
 };
