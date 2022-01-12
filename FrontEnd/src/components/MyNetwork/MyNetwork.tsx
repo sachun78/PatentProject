@@ -2,7 +2,8 @@ import { css } from '@emotion/react'
 import { Table } from 'antd'
 import Column from 'antd/lib/table/Column'
 import { useEffect, useState } from 'react'
-import { MyNetworkValue, useMyNetwork } from '../../hooks/useMyNetwork'
+import { MyNetworkValue, useMyNetwork, useMyNetworkup } from '../../hooks/useMyNetwork'
+import { MyNetworkResult } from '../../lib/api/MyNetwork/getlist'
 import ViewBase from '../ViewBase'
 
 type MyNetworkProps = {}
@@ -20,6 +21,28 @@ function MyNetwork({}: MyNetworkProps) {
     loadData();
   }, [])
 
+  const AddData = async()=> {
+    const {upload/*, error, loading*/}  = useMyNetworkup();
+    const test:MyNetworkResult = {
+      name: "Yang",
+      email: "ryan4321@naver.com",
+      meetpeople:[
+        {
+          name: "J",
+          email: "test11@test.com",
+          company: "J",
+          department: "J",
+          position: "J",
+          tel: "000000000",
+          country: "FRA",
+          meetcount: 1,
+        }
+      ]
+    }
+    const updata = await upload(test)
+    
+  }
+
   console.log(dataSource)
   return (
     <ViewBase title="MY Network">
@@ -35,6 +58,7 @@ function MyNetwork({}: MyNetworkProps) {
               <Column align="center" title="Meet Count" dataIndex="meet_count" key="meet_count" />
         </Table>
       </div>
+      <div><button onClick={AddData}>추가</button></div>
     </ViewBase>
   )
 }

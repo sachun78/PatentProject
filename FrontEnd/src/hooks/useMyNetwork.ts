@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Listdata, mynetworklist, MyNetworkResult, mynetworkup, mynetworkupdatefind, mynetworkupdatecount, mynetworkupdatepeople } from '../lib/api/MyNetwork/getlist'
+import { Listdata, mynetworklist, MyNetworkResult, mynetworkup, mynetworkupdatefind, mynetworkupdatepeople } from '../lib/api/MyNetwork/getlist'
 
 export type MyNetworkValue = {
   key: number,
@@ -65,17 +65,17 @@ export function useMyNetwork() {
   }
 
   export function useMyNetworkup() {
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
-    const list = async (input: MyNetworkResult) => {
+    //const [loading, setLoading] = useState(false)
+    //const [error, setError] = useState<string | null>(null)
+    const upload = async (input: MyNetworkResult) => {
       try {
-        setLoading(true)
+        //setLoading(true)
         const result = await mynetworklist(input.email)
       } catch (e: any) {
         if (e.response.status === 409) {
           try {
             const upresult = await mynetworkup(input)
-            setLoading(false)
+            //setLoading(false)
           } catch (e: any) {
             throw e;
           }
@@ -85,32 +85,29 @@ export function useMyNetwork() {
           let meetcnt = 0
         try {
           const findresult = await mynetworkupdatefind(input.email, value.email)
-          meetcnt = <number>findresult
+          console.log(findresult)
         } catch (e: any) {
           if (e.response.status === 409) {
             try {
               // new people
+              console.log(input.email)
+              console.log(value)
+              console.log('-------------------------------')
               const upresult = await mynetworkupdatepeople(input.email, value)
-              setLoading(false)
+              //setLoading(false)
             } catch (e: any) {
               throw e;
             }
           }
         } finally {
-          // count
-          try {
-            const countresult = await mynetworkupdatecount(input.email, value.email, meetcnt)
-          } catch (e: any) {
-            throw e;
-          }
         }
         }
-        setLoading(false)
+        //setLoading(false)
       }
     }
     return {
-      list,
-      loading,
-      error,
+      upload,
+      //loading,
+      //error,
     }
   }
