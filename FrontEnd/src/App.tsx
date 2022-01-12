@@ -49,7 +49,7 @@ function App() {
                   <Route path="/membership" element={<MemberShip />} />
                   <Route path="/schedule" element={<Schedule />} />
                   <Route path="/network" element={<Network />} />
-                  <Route path="/meeting" element={<Meeting />} />
+                  <Route path="/meeting/*" element={<Meeting />} />
                   <Route path="/search" element={<Search />} />
                 </Routes>
               </AppLayout.Main>

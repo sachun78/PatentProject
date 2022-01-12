@@ -40,8 +40,12 @@ AppLayout.Main = Main
 
 const headerStyle = css`
   height: 4rem;
+  width:100%;
   display: flex;
   box-shadow: rgb(0 0 0 / 13%) 0px 0px 16px;
+  position: sticky;
+  background: white;
+  z-index: 10;
 `
 const mainStyle = css`
   padding-top: 1rem;

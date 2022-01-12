@@ -22,6 +22,7 @@ const wrapper = css`
   justify-content: center;
   flex-direction: column;
   padding-right: 1rem;
+  padding-left: 1rem;
   h2 {
     line-hegiht: 1.5rem;
     background: ${palette.grey[100]};
