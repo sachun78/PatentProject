@@ -14,9 +14,9 @@ function Home({}: HomeProps) {
 
 const baseStyle = css`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  height: calc(100vh - 6rem);
+  height: 100%;
 `
 
 export default Home

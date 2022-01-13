@@ -19,8 +19,6 @@ export default function RequestSection({
     <section css={sectionStyle}>
       <h3>{title}</h3>
       <div>
-        {console.log(children)}
-        {console.log(title)}
         {children}
         {button_visible !== undefined && (
           <Button onClick={onClick}>검색</Button>

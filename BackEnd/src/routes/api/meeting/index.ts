@@ -1,5 +1,5 @@
 import express from "express";
-import mongoose from "mongoose";
+import mongoose, {Error} from "mongoose";
 import { MeetingSchema } from "schema/schema";
 
 const route = express.Router();
@@ -14,7 +14,7 @@ route.get(
 route.post("/meetingup", (req, res) => {
   const meeting = mongoose.model("meeting", MeetingSchema);
   const new_meeting = new meeting(req.body);
-  new_meeting.save((err: any) => {
+  new_meeting.save((err: Error) => {
     if (err) {
       return res.status(500).json({ message: "meeting 저장 실패" });
     } else {
@@ -25,7 +25,7 @@ route.post("/meetingup", (req, res) => {
 
 route.post("/meetingfind", (req, res) => {
   const meeting = mongoose.model("meeting", MeetingSchema);
-  meeting.find({ email: req.body.email }, (err: any, meeting: any) => {
+  meeting.find({ email: req.body.email }, (err: Error, meeting: any) => {
     if (err) return res.status(500).json({ message: "error!!" });
     else if (meeting)
       return res
@@ -40,7 +40,7 @@ route.post("/meetingfind", (req, res) => {
 
 route.post("/meetingnetwork", (req, res) => {
   const meeting = mongoose.model("meeting", MeetingSchema);
-  meeting.find({ $or:[{email: req.body.email}, {guests:{email: req.body.email}} ]}, (err: any, meeting: any) => {
+  meeting.find({ $or:[{email: req.body.email}, {guests:{email: req.body.email}} ]}, (err: Error, meeting: any) => {
     if (err) return res.status(500).json({ message: "error!!" });
     else if (meeting)
       return res

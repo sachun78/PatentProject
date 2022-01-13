@@ -9,13 +9,16 @@ import Input from '../Input'
 import ViewBase from '../ViewBase'
 import RequestSection from './RequestSection'
 import { SearchUserResult, useFindName } from '../../hooks/useFindMember'
+import { useMeetProposal } from '../../hooks/useMeeting'
+import { proposalInput, subUser } from '../../lib/api/meeting/proposal'
 
 type RequestViewProps = {
   title: string
 }
 
 export default function RequestView({ title }: RequestViewProps) {
-  const [value, setValue] = useDateState()
+  const [timeDatevalue, setTimeDateValue] = useDateState()
+  const { proposal, complete, error, loading } = useMeetProposal()
   const [infoVisible, setInfoVisible] = useState(false)
   const [form, onChange] = useInputs({
     username: '',
@@ -23,13 +26,12 @@ export default function RequestView({ title }: RequestViewProps) {
     place: '',
     comment: '',
   })
+  const format = 'HH:mm'
 
-  const useSearch = async() => {
+  const useSearch = async () => {
     const { list } = useFindName()
     const data: SearchUserResult[] | undefined = await list(form.username)
-    if(data !== undefined)
-    {
-      
+    if (data !== undefined) {
       setInfoVisible(true)
     }
 
@@ -37,18 +39,44 @@ export default function RequestView({ title }: RequestViewProps) {
   }
 
   const handleChangeDate = (date: moment.Moment) => {
-    setValue({ date })
+    setTimeDateValue({ ...timeDatevalue, date })
   }
 
-  
-  const format = 'HH:mm'
-  console.log(value)
+  const handleProposal = async () => {
+    const guests: subUser[] = []
+    guests.push({
+      name: form.username,
+      company: '',
+      email: form.username,
+      tel: '',
+      member: true,
+    })
+    const input: proposalInput = {
+      email: 'ryan4321@naver.com', //TODO: TEMPORARY DATA, EMAIL value NEED Change accoding to USER
+      event: form.event,
+      date: moment(timeDatevalue.date).format('YYYY-MM-DD'),
+      time: moment(timeDatevalue.time).format(format),
+      location: form.place,
+      guests: guests,
+      comment: form.comment,
+    }
+    await proposal(input)
+  }
+
+  if (error) return <div>제안 실패, 에러발생, 재시도 부탁드립니다.</div>
+  if (complete) return <div>제안 성공</div>
+
   return (
     <ViewBase title={title}>
       <div css={wrapper}>
         <div css={sectionStyle}>
           <RequestSection title={'이벤트'}>
-            <Input placeholder="event" />
+            <Input
+              placeholder="event"
+              name="event"
+              value={form.event}
+              onChange={onChange}
+            />
           </RequestSection>
           <RequestSection
             title={'사용자 이름'}
@@ -71,11 +99,14 @@ export default function RequestView({ title }: RequestViewProps) {
             </div>
           )}
           <RequestSection title={'날짜'}>
-            <DatePickerInput value={value.date} onChange={handleChangeDate} />
+            <DatePickerInput
+              value={timeDatevalue.date}
+              onChange={handleChangeDate}
+            />
           </RequestSection>
           <RequestSection title={'시간'}>
             <TimePicker
-              defaultValue={moment('12:00', format)}
+              defaultValue={timeDatevalue.time}
               format={format}
               minuteStep={10}
             />
@@ -97,7 +128,9 @@ export default function RequestView({ title }: RequestViewProps) {
             />
           </RequestSection>
           <div css={space}></div>
-          <Button type="primary">제안하기</Button>
+          <Button type="primary" disabled={loading} onClick={handleProposal}>
+            제안하기
+          </Button>
         </div>
         <div css={previewStyle(true)}>미리보기</div>
       </div>

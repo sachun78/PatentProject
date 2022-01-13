@@ -35,7 +35,7 @@ function SponsorView({}: SponsorViewProps) {
 const sponsorViewStyle = css`
   flex: 1;
   height: 100%;
-  padding-left: 2rem;
+  padding-left: 1.5rem;
   padding-right: 2rem;
   flex-direction: row;
 `

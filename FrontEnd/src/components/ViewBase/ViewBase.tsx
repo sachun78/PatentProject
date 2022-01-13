@@ -18,7 +18,7 @@ function ViewBase({ title, children }: ViewBaseProps) {
 const wrapper = css`
   flex: 1;
   display: flex;
-  aligin-items: center;
+  /* aligin-items: center; this use for miniSize*/
   justify-content: center;
   flex-direction: column;
   padding-right: 1rem;
