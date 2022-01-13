@@ -7,7 +7,7 @@ export type AppLayoutProps = {
 }
 
 export default function AppLayout({ children }: AppLayoutProps) {
-  return <div>{children}</div>
+  return <>{children}</>
 }
 
 export type HeaderProps = {
@@ -48,8 +48,9 @@ const headerStyle = css`
   z-index: 10;
 `
 const mainStyle = css`
-  padding-top: 1rem;
   margin-left: 16.25rem;
+  min-height: calc(100vh - 64px);
+  background: rgb(245, 245, 245);
 `
 const sidebarStyle = css`
   width: 16.25rem;
@@ -59,5 +60,4 @@ const sidebarStyle = css`
   padding: 3rem;
   padding-top: 0;
   justify-content: center;
-  border-right: 2px solid ${palette.grey[200]};
 `

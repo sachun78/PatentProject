@@ -8,14 +8,6 @@ function Meeting({}: MeetingProps) {
   return (
     <Routes>
       <Route
-        path="/"
-        element={
-          <div>
-            base <NavLink to={'/meeting/request'}>요청 화면으로 이동</NavLink>
-          </div>
-        }
-      />
-      <Route
         path="/request"
         element={
           <div css={pageStyle}>
@@ -28,7 +20,9 @@ function Meeting({}: MeetingProps) {
 }
 
 const pageStyle = css`
-  height: 88vh;
+  height: 100%;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 `
 
 export default Meeting

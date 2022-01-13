@@ -40,9 +40,6 @@ function TopMenu({}: topMenuProps) {
         <Menu.Item key="net">
           <Link to={'/network'}>Network</Link>
         </Menu.Item>
-        <Menu.Item key="meeting">
-          <Link to={'/meeting'}>Meeting</Link>
-        </Menu.Item>
         <SubMenu key="conference" title="Conference">
           <Menu.ItemGroup css={svgStyle}>
             <Menu.Item key="conf:1">
@@ -65,7 +62,6 @@ function TopMenu({}: topMenuProps) {
 }
 
 const menuStyle = css`
-  margin-left: 9rem;
   margin-top: 0.5rem;
   min-width: 384px;
   user-select: none;

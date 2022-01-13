@@ -32,7 +32,7 @@ export default function RequestView({ title }: RequestViewProps) {
   }
 
   const format = 'HH:mm'
-
+  console.log(value)
   return (
     <ViewBase title={title}>
       <div css={wrapper}>
@@ -65,7 +65,7 @@ export default function RequestView({ title }: RequestViewProps) {
           </RequestSection>
           <RequestSection title={'시간'}>
             <TimePicker
-              defaultValue={moment('12:08', format)}
+              defaultValue={moment('12:00', format)}
               format={format}
               minuteStep={10}
             />
@@ -112,7 +112,7 @@ const sectionStyle = css`
   }
 
   .ant-picker {
-    width: 600px;
+    flex-grow: 1;
   }
 `
 const infoboxStyle = css`

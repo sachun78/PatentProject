@@ -23,7 +23,6 @@ const logoStyle = css`
   justify-content: center;
   font-weight: bold;
   line-height: 2rem;
-  height: 50%;
   margin-top: 1rem;
   margin-bottom: 1rem;
   margin-left: 1.5rem;
@@ -32,7 +31,7 @@ const logoStyle = css`
   border-radius: 0.5rem;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
-
+  margin-right: 8.713rem;
   a {
     text-decoration: none;
     color: black;

@@ -13,9 +13,8 @@ function Schedule({}: ScheduleProps) {
 
 const wrapper = css`
   display: flex;
-  padding: 1.5rem;
-  padding-right: 0;
-  height: 88vh;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 `
 
 export default Schedule

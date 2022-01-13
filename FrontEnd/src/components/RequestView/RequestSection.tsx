@@ -30,7 +30,7 @@ export default function RequestSection({
 
 const sectionStyle = css`
   section + & {
-    margin-top: 1.5rem;
+    margin-top: 1.25rem;
   }
 
   h3 {
@@ -51,7 +51,6 @@ const sectionStyle = css`
     justify-content: center;
 
     .ant-btn {
-      margin-bottom: 0;
       margin-left: 1rem;
     }
   }

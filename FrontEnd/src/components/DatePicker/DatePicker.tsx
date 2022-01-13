@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 import { Calendar } from 'antd'
 import moment from 'moment'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import useOnClickOutside from 'use-onclickoutside'
 
 type DataPickerProps = {
