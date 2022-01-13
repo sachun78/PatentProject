@@ -32,3 +32,12 @@ export type Listdata = {
   })
   return response.data
 }
+
+export async function meetingAlllist(
+  email: String,
+) {
+const response = await client.post<Listdata>('/api/meeting/meetingnetwork', {
+  email,
+})
+return response.data
+}

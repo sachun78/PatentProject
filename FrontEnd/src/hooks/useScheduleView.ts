@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Listdata, meetinglist } from '../lib/api/scheduleview/getlist'
+import { Listdata, meetinglist, meetingAlllist } from '../lib/api/scheduleview/getlist'
 
 export type ScheduleValue = {
     key: number,
@@ -11,6 +11,7 @@ export type ScheduleValue = {
     meetcompany: String,
     isconfirm: String,
     ismeet: String,
+    propose: String,
     _id: String
 }
 
@@ -23,7 +24,7 @@ export function useScheduleView() {
     const data: ScheduleValue[] = []
       try {
         setLoading(true)
-        result = await meetinglist(email)
+        result = await meetingAlllist(email)
       } catch (e: any) {
         if (e.response.status === 409) {
           setError('Username already exists')
@@ -37,6 +38,7 @@ export function useScheduleView() {
                 cnt++;
                 let stconfirm = "제안";
                 let stmeet = "미팅전";
+                let stpropose = "수정";
 
                 if(value.confirm === true)   stconfirm = "확정";
 
@@ -59,6 +61,13 @@ export function useScheduleView() {
                     cntguest++;
                 }
 
+                for (const guest of value.guests) {
+                    if(email === guest.email)
+                    {
+                      stpropose = "제안 수락";
+                    }
+                }
+
                 const obj = {
                     key: cnt,
                     date: value.date,
@@ -69,6 +78,7 @@ export function useScheduleView() {
                     meetcompany: stguestcompany,
                     isconfirm: stconfirm,
                     ismeet: stmeet,
+                    propose: stpropose,
                     _id: value._id
                 }
                 data.push(obj)

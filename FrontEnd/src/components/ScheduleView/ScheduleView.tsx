@@ -88,6 +88,12 @@ function ScheduleView({ type }: ScheduleViewProps) {
                 dataIndex="ismeet"
                 key="ismeet"
               />
+              <Column
+                align="center"
+                title="Propose"
+                dataIndex="propose"
+                key="propose"
+              />
             </>
           )}
         </Table>

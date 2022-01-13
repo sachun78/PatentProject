@@ -69,4 +69,20 @@ route.post("/likeup", (req, res) => {
   });
 });
 
+route.post("/findname", (req, res) => {
+  const user = mongoose.model("members", UserSchema);
+  user.find(
+    { email: {$regex: '.*' + req.body.name + '.*'} },
+    (err: any, user: any) => {
+      if (err) return res.status(500).json({ message: "error!!" });
+      else if (user) return res.status(200).json({ message: "find user", data: user });
+      else
+        return res.status(409).json({
+          message:
+            "not found user",
+        });
+    }
+  );
+});
+
 export default route;

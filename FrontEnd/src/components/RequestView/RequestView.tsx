@@ -8,6 +8,7 @@ import DatePickerInput from '../DatePicker/DatePickerInput'
 import Input from '../Input'
 import ViewBase from '../ViewBase'
 import RequestSection from './RequestSection'
+import { SearchUserResult, useFindName } from '../../hooks/useFindMember'
 
 type RequestViewProps = {
   title: string
@@ -23,14 +24,23 @@ export default function RequestView({ title }: RequestViewProps) {
     comment: '',
   })
 
-  const handleSearch = () => {
-    setInfoVisible(!infoVisible)
+  const useSearch = async() => {
+    const { list } = useFindName()
+    const data: SearchUserResult[] | undefined = await list(form.username)
+    if(data !== undefined)
+    {
+      
+      setInfoVisible(true)
+    }
+
+    setInfoVisible(false)
   }
 
   const handleChangeDate = (date: moment.Moment) => {
     setValue({ date })
   }
 
+  
   const format = 'HH:mm'
   console.log(value)
   return (
@@ -43,7 +53,7 @@ export default function RequestView({ title }: RequestViewProps) {
           <RequestSection
             title={'사용자 이름'}
             button_visible
-            onClick={handleSearch}
+            onClick={useSearch}
           >
             <Input
               placeholder="username"
@@ -54,7 +64,7 @@ export default function RequestView({ title }: RequestViewProps) {
           </RequestSection>
           {infoVisible && (
             <div css={infoboxStyle}>
-              인포박스 <br />
+              Meet People Information <br />
               회사: --- <br />
               파트: --- <br />
               추가정보: ---
