@@ -1,4 +1,3 @@
-// import React from 'react';
 import { Global, css } from '@emotion/react'
 import AppLayout from './components/AppLayout'
 import React, { useEffect } from 'react'
@@ -30,10 +29,10 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
         <Route
-          path="/*"
+          path='/*'
           element={
             <AppLayout>
               <AppLayout.Header>
@@ -45,12 +44,12 @@ function App() {
               </AppLayout.Sidebar>
               <AppLayout.Main>
                 <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/membership" element={<MemberShip />} />
-                  <Route path="/schedule" element={<Schedule />} />
-                  <Route path="/network" element={<Network />} />
-                  <Route path="/meeting/*" element={<Meeting />} />
-                  <Route path="/search" element={<Search />} />
+                  <Route path='/' element={<Home />} />
+                  <Route path='/membership' element={<MemberShip />} />
+                  <Route path='/schedule' element={<Schedule />} />
+                  <Route path='/network' element={<Network />} />
+                  <Route path='/meeting/*' element={<Meeting />} />
+                  <Route path='/search' element={<Search />} />
                 </Routes>
               </AppLayout.Main>
             </AppLayout>
@@ -68,8 +67,11 @@ const globalStyle = css`
   #root {
     height: 100%;
   }
+
   html {
     box-sizing: border-box;
+    font-size: 62.5%;
+
     * {
       box-sizing: inherit;
     }

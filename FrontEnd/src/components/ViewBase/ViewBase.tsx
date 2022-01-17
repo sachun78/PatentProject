@@ -27,7 +27,7 @@ const wrapper = css`
     line-hegiht: 1.5rem;
     background: ${palette.grey[100]};
     border-radius: 0.25rem; 
-    text-align: center;
+    /* text-align: center; */
   }
 `
 

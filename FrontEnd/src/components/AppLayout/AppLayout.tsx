@@ -39,13 +39,14 @@ AppLayout.Sidebar = Sidebar
 AppLayout.Main = Main
 
 const headerStyle = css`
-  height: 4rem;
+  height: 5rem;
   width:100%;
   display: flex;
-  box-shadow: rgb(0 0 0 / 13%) 0px 0px 16px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.15),0 0 2px rgba(0,0,0,0.1);
   position: sticky;
   background: white;
-  z-index: 10;
+  z-index: 1000;
+  top: 0;
 `
 const mainStyle = css`
   margin-left: 16.25rem;
