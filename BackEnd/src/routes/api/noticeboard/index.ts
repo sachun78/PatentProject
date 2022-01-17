@@ -14,9 +14,9 @@ route.get(
 route.post("/noticeboardadd", (req, res) => {
   const notice = mongoose.model("noticeboard", NoticeSchema);
   const new_notice = new notice(req.body);
-  new_notice.save((err: any) => {
+  new_notice.save((err: mongoose.CallbackError) => {
     if (err) {
-      return res.status(500).json({ message: "저장 실패" });
+      return res.status(500).json({ message: err.message });
     } else {
       return res.status(200).json({ message: "저장 성공", data: new_notice });
     }

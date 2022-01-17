@@ -12,11 +12,11 @@ route.get(
 );
 
 route.post("/mynetworkfind", (req, res) => {
-    const user = mongoose.model("mynetwork", MyNetworkSchema);
+    const user = mongoose.model("mynetworks", MyNetworkSchema);
     user.findOne(
       { email: req.body.email },
-      (err: any, resuser: any) => {
-        if (err) return res.status(500).json({ message: "error!!" });
+      (err: mongoose.CallbackError, resuser: any) => {
+        if (err) return res.status(500).json({ message: err.message });
         else if (resuser){
           return res.status(200).json({ message: "mynetwork find", data : resuser })
         }
@@ -28,11 +28,11 @@ route.post("/mynetworkfind", (req, res) => {
   });
 
   route.post("/mynetworkup", (req, res) => {
-    const user = mongoose.model("mynetwork", MyNetworkSchema);
+    const user = mongoose.model("mynetworks", MyNetworkSchema);
     const new_user = new user(req.body);
-    new_user.save((err: any) => {
+    new_user.save((err: mongoose.CallbackError) => {
       if (err) {
-        return res.status(500).json({ message: "mynetwork new save error" });
+        return res.status(500).json({ message: err.message });
       } else {
         return res.status(200).json({ message: "mynetwork new save success" });
       }
@@ -40,11 +40,11 @@ route.post("/mynetworkfind", (req, res) => {
   });
 
   route.post("/mynetworkupdatefind", (req, res) => {
-    const user = mongoose.model("mynetwork", MyNetworkSchema);
+    const user = mongoose.model("mynetworks", MyNetworkSchema);
     user.findOneAndUpdate(
       { $and: [{email: req.body.email}, {"meetpeople":{"$elemMatch":{"email": req.body.meet_email}}} ]}, {$inc:{"meetpeople.$.meetcount": 1}}, {new: true}, 
-      (err: any, resuser: any) => {
-        if (err) return res.status(500).json({ message: "error!!" });
+      (err: mongoose.CallbackError, resuser: any) => {
+        if (err) return res.status(500).json({ message: err.message });
         else if (resuser){
           console.log(resuser)
           return (
@@ -59,11 +59,11 @@ route.post("/mynetworkfind", (req, res) => {
   });
 
   route.post("/mynetworkupdatepeople", (req, res) => {
-    const user = mongoose.model("mynetwork", MyNetworkSchema);
+    const user = mongoose.model("mynetworks", MyNetworkSchema);
       user.findOneAndUpdate(
         {email: req.body.email}, {$push:{"meetpeople": req.body.meetpeople}},
-        (err: any, resuser: any) => {
-          if (err) return res.status(500).json({ message: "error!!" });
+        (err: mongoose.CallbackError, resuser: any) => {
+          if (err) return res.status(500).json({ message: err.message });
           else if (resuser){
             return res.status(200).json({ message: "mynetwork push"})
           }

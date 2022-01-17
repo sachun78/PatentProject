@@ -12,11 +12,11 @@ route.get(
 );
 
 route.post("/meetingup", (req, res) => {
-  const meeting = mongoose.model("meeting", MeetingSchema);
+  const meeting = mongoose.model("meetings", MeetingSchema);
   const new_meeting = new meeting(req.body);
-  new_meeting.save((err: Error) => {
+  new_meeting.save((err: mongoose.CallbackError) => {
     if (err) {
-      return res.status(500).json({ message: "meeting 저장 실패" });
+      return res.status(500).json({ message: err.message });
     } else {
       return res.status(200).json({ message: "meeting 저장 성공" });
     }
@@ -24,9 +24,9 @@ route.post("/meetingup", (req, res) => {
 });
 
 route.post("/meetingfind", (req, res) => {
-  const meeting = mongoose.model("meeting", MeetingSchema);
-  meeting.find({ email: req.body.email }, (err: Error, meeting: any) => {
-    if (err) return res.status(500).json({ message: "error!!" });
+  const meeting = mongoose.model("meetings", MeetingSchema);
+  meeting.find({ email: req.body.email }, (err: mongoose.CallbackError, meeting: any) => {
+    if (err) return res.status(500).json({ message: err.message });
     else if (meeting)
       return res
         .status(200)
@@ -39,9 +39,9 @@ route.post("/meetingfind", (req, res) => {
 });
 
 route.post("/meetingnetwork", (req, res) => {
-  const meeting = mongoose.model("meeting", MeetingSchema);
-  meeting.find({ $or:[{email: req.body.email}, {guests:{email: req.body.email}} ]}, (err: Error, meeting: any) => {
-    if (err) return res.status(500).json({ message: "error!!" });
+  const meeting = mongoose.model("meetings", MeetingSchema);
+  meeting.find({ $or:[{email: req.body.email}, {guests:{email: req.body.email}} ]}, (err: mongoose.CallbackError, meeting: any) => {
+    if (err) return res.status(500).json({ message: err.message });
     else if (meeting)
       return res
         .status(200)

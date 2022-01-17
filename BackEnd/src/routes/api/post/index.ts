@@ -12,11 +12,11 @@ route.get(
 );
 
 route.post("/postup", (req, res) => {
-  const post = mongoose.model("post", PostSchema);
+  const post = mongoose.model("posts", PostSchema);
   const new_post = new post(req.body);
-  new_post.save((err: any) => {
+  new_post.save((err: mongoose.CallbackError) => {
     if (err) {
-      return res.status(500).json({ message: "게시글 업로드 실패" });
+      return res.status(500).json({ message: err.message });
     } else {
       return res.status(200).json({ message: "게시글 업로드 성공" });
     }
@@ -24,9 +24,9 @@ route.post("/postup", (req, res) => {
 });
 
 route.post("/postfind", (req, res) => {
-  const post = mongoose.model("post", PostSchema);
-  post.find({ email: req.body.email }, (err: any, post: any) => {
-    if (err) return res.status(500).json({ message: "error!!" });
+  const post = mongoose.model("posts", PostSchema);
+  post.find({ email: req.body.email }, (err: mongoose.CallbackError, post: any) => {
+    if (err) return res.status(500).json({ message: err.message });
     else if (post)
       return res
         .status(200)
