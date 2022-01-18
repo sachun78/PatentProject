@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import { UserSchema, UserLikeSchema } from "schema/schema";
 
+const bcrypt = require("bcrypt");
 const route = express.Router();
 const validator = require("validator");
 
@@ -18,13 +19,23 @@ route.get(
 route.post("/signup", (req, res) => {
   const user = mongoose.model("members", UserSchema);
   user.findOne(
-    { email: req.body.email, password: req.body.password },
+    { email: req.body.email },
     (err: mongoose.CallbackError, resuser: any) => {
       if (err) return res.status(500).json({ message: err.message });
       else if (resuser)
         return res.status(200).json({ message: "아이디가 이미 존재합니다." });
       else {
-        const new_user = new user(req.body);
+        const new_user = new user({
+          name: req.body.name,
+          email: req.body.email,
+          password: req.body.password,
+          company: req.body.company,
+          department: req.body.department,
+          position: req.body.position,
+          tel: req.body.tel,
+          country: req.body.country
+        });
+        console.log(new_user)
         new_user.save((err: mongoose.CallbackError) => {
           if (err) {
             return res.status(500).json({ message: err.message });
@@ -44,11 +55,16 @@ route.post("/signup", (req, res) => {
 route.post("/signin", (req, res) => {
   const user = mongoose.model("members", UserSchema);
   user.findOne(
-    { email: req.body.email, password: req.body.password },
+    { email: req.body.email },
     (err: mongoose.CallbackError, user: any) => {
       if (err) return res.status(500).json({ message: err.message });
-      else if (user) return res.status(200).json({ message: "환영합니다." });
-      else
+      else if (user){
+        if(bcrypt.compareSync(req.body.password, user.password) === true){
+          return res.status(200).json({ message: "환영합니다." , data: user.name});
+        } else {
+          return res.status(409).json({ message: "비밀번호 오류" });
+        }
+      } else
         return res.status(409).json({
           message:
             "가입된 정보를 찾을 수 없습니다. 회원가입을 하시기 바랍니다.",

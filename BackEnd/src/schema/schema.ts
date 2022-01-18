@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
 const validator = require("validator");
+const bcrypt = require("bcrypt");
+const SALT_FACTOR = 1;
 
 const UserSchema = new mongoose.Schema({
   name: {type: String, required: true},
@@ -17,6 +19,18 @@ const UserSchema = new mongoose.Schema({
   position: {type: String, required: true},
   tel: {type: String},
   country: {type: String, trim: true, required: true}
+});
+
+//모델이 저장되기("save") 전(.pre)에 실행되는 함수
+UserSchema.pre("save",function(done){
+  let user = this;
+  if(!user.isModified("password")){
+    return done();
+  }
+  const salt = bcrypt.genSaltSync(SALT_FACTOR);
+  const hash = bcrypt.hashSync(user.password, salt);
+  user.password = hash;
+  done();
 });
 
 const MeetPeopleSchema = new mongoose.Schema({
