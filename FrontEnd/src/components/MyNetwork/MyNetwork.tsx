@@ -2,7 +2,7 @@ import { css } from '@emotion/react'
 import { Table } from 'antd'
 import Column from 'antd/lib/table/Column'
 import { useEffect, useState } from 'react'
-import { MyNetworkValue, useMyNetwork, useMyNetworkup } from '../../hooks/useMyNetwork'
+import { MyNetworkValue, useMyNetwork, useMyNetworkFindNUpdate } from '../../hooks/useMyNetwork'
 import { MyNetworkResult } from '../../lib/api/MyNetwork/getlist'
 import ViewBase from '../ViewBase'
 
@@ -22,14 +22,14 @@ function MyNetwork({}: MyNetworkProps) {
   }, [])
 
   const AddData = async()=> {
-    const {upload/*, error, loading*/}  = useMyNetworkup();
+    const {upload/*, error, loading*/}  = useMyNetworkFindNUpdate();
     const test:MyNetworkResult = {
       name: "Yang",
       email: "ryan4321@naver.com",
       meetpeople:[
         {
           name: "J",
-          email: "test11@test.com",
+          email: "test2@test.com",
           company: "J",
           department: "J",
           position: "J",

@@ -21,58 +21,61 @@ route.post("/mynetworkfind", (req, res) => {
           return res.status(200).json({ message: "mynetwork find", data : resuser })
         }
         else {
-          return res.status(409).json({ message: "mynetwork not found" });
+          return res.status(409).json({ message: "not found user" });
         }
       }
     );
   });
 
-  route.post("/mynetworkup", (req, res) => {
+  route.post("/mynetworkfindnupdate", (req, res) => {
     const user = mongoose.model("mynetworks", MyNetworkSchema);
-    const new_user = new user(req.body);
-    new_user.save((err: mongoose.CallbackError) => {
-      if (err) {
-        return res.status(500).json({ message: err.message });
-      } else {
-        return res.status(200).json({ message: "mynetwork new save success" });
-      }
-    });
-  });
-
-  route.post("/mynetworkupdatefind", (req, res) => {
-    const user = mongoose.model("mynetworks", MyNetworkSchema);
-    user.findOneAndUpdate(
-      { $and: [{email: req.body.email}, {"meetpeople":{"$elemMatch":{"email": req.body.meet_email}}} ]}, {$inc:{"meetpeople.$.meetcount": 1}}, {new: true}, 
+    user.findOne(
+      { email: req.body.email },
       (err: mongoose.CallbackError, resuser: any) => {
         if (err) return res.status(500).json({ message: err.message });
         else if (resuser){
-          console.log(resuser)
-          return (
-            res.status(200).json({ message: "mynetwork find and increase meetcount", data: resuser})
-          )
+          for (const value of req.body.meetpeople) {
+          user.findOneAndUpdate(
+            { $and: [{email: req.body.email}, {"meetpeople":{"$elemMatch":{"email": value.email}}} ]}, {$inc:{"meetpeople.$.meetcount": 1}}, {new: true}, 
+            (err: mongoose.CallbackError, resuser1: any) => {
+              if (err) return res.status(500).json({ message: err.message });
+              else if (resuser1){
+                console.log(resuser1)
+                return (
+                  res.status(200).json({ message: "mynetwork find and increase meetcount", data: resuser1})
+                )
+              }
+              else {
+                user.findOneAndUpdate(
+                  {email: req.body.email}, {$push:{"meetpeople": value}},
+                  (err: mongoose.CallbackError, resuser2: any) => {
+                    if (err) return res.status(500).json({ message: err.message });
+                    else if (resuser2){
+                      return res.status(200).json({ message: "mynetwork push"})
+                    }
+                    else {
+                      return (res.status(409).json({ message: "mynetwork push error" })
+                      )
+                    }
+                  }
+                );
+              }
+            }
+          );
+          }
         }
         else {
-          return res.status(409).json({ message: "mynetwork not found" })
+          const new_user = new user(req.body);
+          new_user.save((err: mongoose.CallbackError) => {
+            if (err) {
+              return res.status(500).json({ message: err.message });
+            } else {
+              return res.status(200).json({ message: "mynetwork new save success" });
+            }
+          });
         }
       }
     );
-  });
-
-  route.post("/mynetworkupdatepeople", (req, res) => {
-    const user = mongoose.model("mynetworks", MyNetworkSchema);
-      user.findOneAndUpdate(
-        {email: req.body.email}, {$push:{"meetpeople": req.body.meetpeople}},
-        (err: mongoose.CallbackError, resuser: any) => {
-          if (err) return res.status(500).json({ message: err.message });
-          else if (resuser){
-            return res.status(200).json({ message: "mynetwork push"})
-          }
-          else {
-            return (res.status(409).json({ message: "mynetwork push error" })
-            )
-          }
-        }
-      );
   });
 
   export default route;

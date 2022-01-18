@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Listdata, mynetworklist, MyNetworkResult, mynetworkup, mynetworkupdatefind, mynetworkupdatepeople } from '../lib/api/MyNetwork/getlist'
+import { Listdata, mynetworklist, MyNetworkResult, mynetworkfindnupdate } from '../lib/api/MyNetwork/getlist'
 
 export type MyNetworkValue = {
   key: number,
@@ -27,7 +27,7 @@ export function useMyNetwork() {
         result = await mynetworklist(email)
       } catch (e: any) {
         if (e.response.status === 409) {
-          setError('Username already exists')
+          setError('not found user')
           throw e
         }
       } finally {
@@ -64,45 +64,18 @@ export function useMyNetwork() {
     }
   }
 
-  export function useMyNetworkup() {
+  export function useMyNetworkFindNUpdate() {
     //const [loading, setLoading] = useState(false)
     //const [error, setError] = useState<string | null>(null)
     const upload = async (input: MyNetworkResult) => {
       try {
         //setLoading(true)
-        const result = await mynetworklist(input.email)
+        const result = await mynetworkfindnupdate(input)
       } catch (e: any) {
-        if (e.response.status === 409) {
-          try {
-            const upresult = await mynetworkup(input)
-            //setLoading(false)
-          } catch (e: any) {
-            throw e;
-          }
-        }
+        //setError('mynetwork push error')
+        throw e
       } finally {
-        for (const value of input.meetpeople) {
-          let meetcnt = 0
-        try {
-          const findresult = await mynetworkupdatefind(input.email, value.email)
-          console.log(findresult)
-        } catch (e: any) {
-          if (e.response.status === 409) {
-            try {
-              // new people
-              console.log(input.email)
-              console.log(value)
-              console.log('-------------------------------')
-              const upresult = await mynetworkupdatepeople(input.email, value)
-              //setLoading(false)
-            } catch (e: any) {
-              throw e;
-            }
-          }
-        } finally {
-        }
-        }
-        //setLoading(false)
+        
       }
     }
     return {

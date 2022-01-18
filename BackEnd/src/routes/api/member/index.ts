@@ -79,11 +79,30 @@ route.post("/signin", (req, res) => {
 route.post("/likepostfind", (req, res) => {
   const postlike = mongoose.model("likeposts", UserLikeSchema);
   postlike.findOne({email: req.body.email},
-     (err: mongoose.CallbackError, userresult: any) => {
+     (err: mongoose.CallbackError, postresult: any) => {
     if (err) return res.status(500).json({ message: err.message });
-    else if (userresult)
-      return res.status(409).json({ message: "like user already add!" });
-    else {
+    else if (postresult){
+      postlike.findOne({ $and: [{email: req.body.email}, {"likes":{"$elemMatch":{"id": req.body.likes[0].id}}} ]},
+        (err: mongoose.CallbackError, postresult2: any) => {
+        if (err) return res.status(500).json({ message: err.message });
+        else if (postresult2)
+          return res.status(200).json({ message: "like post already add!" });
+        else{
+          postlike.findOneAndUpdate({email: req.body.email}, {$push:{"likes": req.body.likes[0]}}, {new: true},
+            (err: mongoose.CallbackError, postresult3: any) => {
+            if (err) return res.status(500).json({ message: err.message });
+            else if (postresult3){
+              if (!validator.isEmail(req.body.email) || !validator.isEmail(req.body.likes[0].email)) {
+                return res.status(500).json({ message: "Email is invalid!" });
+              }
+              return res.status(200).json({ message: "like post add!" });
+            } else {
+            return res.status(500).json({ message: "like post add error!" });
+          }
+          });
+        }
+      });
+    } else {
       const new_postlike = new postlike(req.body);
       new_postlike.save((err: mongoose.CallbackError) => {
         if (err) {
@@ -96,36 +115,6 @@ route.post("/likepostfind", (req, res) => {
   });
 });
 
-route.post("/userlikepostfind", (req, res) => {
-  const postlike = mongoose.model("likeposts", UserLikeSchema);
-  postlike.findOne({ $and: [{email: req.body.email}, {"likes":{"$elemMatch":{"id": req.body.likes[0].id}}} ]},
-     (err: mongoose.CallbackError, userresult: any) => {
-    if (err) return res.status(500).json({ message: err.message });
-    else if (userresult)
-      return res.status(200).json({ message: "like post already add!" });
-    else
-      return res.status(409).json({ message: "like post not found!" });
-
-  });
-});
-
-route.post("/userlikepostup", (req, res) => {
-  const postlike = mongoose.model("likeposts", UserLikeSchema);
-  postlike.findOneAndUpdate({email: req.body.email}, {$push:{"likes": req.body.likes[0]}}, {new: true},
-     (err: mongoose.CallbackError, userresult: any) => {
-    if (err) return res.status(500).json({ message: err.message });
-    else if (userresult)
-    {
-      if (!validator.isEmail(req.body.email) || !validator.isEmail(req.body.likes[0].email)) {
-        return res.status(500).json({ message: "Email is invalid!" });
-      }
-      return res.status(200).json({ message: "like post add!" });
-    } else {
-      return res.status(500).json({ message: "like post add error!" });
-    }
-  });
-});
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // User like
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,9 +123,28 @@ route.post("/likeuserfind", (req, res) => {
   userlike.findOne({email: req.body.email},
      (err: mongoose.CallbackError, userresult: any) => {
     if (err) return res.status(500).json({ message: err.message });
-    else if (userresult)
-      return res.status(409).json({ message: "like user already add!" });
-    else {
+    else if (userresult){
+      userlike.findOne({ $and: [{email: req.body.email}, {"likes":{"$elemMatch":{"email": req.body.likes[0].email}}} ]},
+        (err: mongoose.CallbackError, userresult2: any) => {
+        if (err) return res.status(500).json({ message: err.message });
+        else if (userresult2)
+          return res.status(200).json({ message: "like user already add!" });
+        else{
+          userlike.findOneAndUpdate({email: req.body.email}, {$push:{"likes": req.body.likes[0]}}, {new: true},
+            (err: mongoose.CallbackError, userresult3: any) => {
+            if (err) return res.status(500).json({ message: err.message });
+            else if (userresult3){
+              if (!validator.isEmail(req.body.email) || !validator.isEmail(req.body.likes[0].email)) {
+                return res.status(500).json({ message: "Email is invalid!" });
+              }
+              return res.status(200).json({ message: "like user add!" });
+            } else {
+            return res.status(500).json({ message: "like user add error!" });
+          }
+          });
+        }
+      });
+    } else {
       const new_userlike = new userlike(req.body);
       new_userlike.save((err: mongoose.CallbackError) => {
         if (err) {
@@ -146,35 +154,6 @@ route.post("/likeuserfind", (req, res) => {
         }
       });
     }
-  });
-});
-
-route.post("/userlikeuserfind", (req, res) => {
-  const userlike = mongoose.model("likeusers", UserLikeSchema);
-  userlike.findOne({ $and: [{email: req.body.email}, {"likes":{"$elemMatch":{"email": req.body.likes[0].email}}} ]},
-     (err: mongoose.CallbackError, userresult: any) => {
-    if (err) return res.status(500).json({ message: err.message });
-    else if (userresult)
-      return res.status(200).json({ message: "like user already add!" });
-    else
-      return res.status(409).json({ message: "like user not found!" });
-
-  });
-});
-
-route.post("/userlikeuserup", (req, res) => {
-  const userlike = mongoose.model("likeusers", UserLikeSchema);
-  userlike.findOneAndUpdate({email: req.body.email}, {$push:{"likes": req.body.likes[0]}}, {new: true},
-     (err: mongoose.CallbackError, userresult: any) => {
-    if (err) return res.status(500).json({ message: err.message });
-    else if (userresult){
-      if (!validator.isEmail(req.body.email) || !validator.isEmail(req.body.likes[0].email)) {
-        return res.status(500).json({ message: "Email is invalid!" });
-      }
-      return res.status(200).json({ message: "like user add!" });
-    } else {
-    return res.status(500).json({ message: "like user add error!" });
-  }
   });
 });
 

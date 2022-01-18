@@ -1,5 +1,13 @@
 import client from '../client'
 
+export type Event = {
+  name: String,
+  email: String,
+  startdate: Date,
+  enddate: Date,
+  comment: String
+}
+
 export type MeetingUser = {
     name: String,
     company: String,
@@ -10,8 +18,8 @@ export type MeetingUser = {
 
   export type MeetingResult = {
     _id: String,
-    event: String,
-    date: String,
+    event: Event,
+    date: Date,
     time: String,
     location: String,
     guests: [MeetingUser],

@@ -33,12 +33,12 @@ export type Listdata = {
   return response.data
 }
 
-export async function mynetworkup({
+export async function mynetworkfindnupdate({
   name,
   email,
   meetpeople
 }: MyNetworkResult) {
-const response = await client.post<Listdata>('/api/mynetwork/mynetworkup', {
+const response = await client.post<Listdata>('/api/mynetwork/mynetworkfindnupdate', {
   name,
   email,
   meetpeople
@@ -48,28 +48,3 @@ console.log(response.data)
   return response.data
 }
 
-export async function mynetworkupdatefind(
-  email: String,
-  meet_email: String
-) {
-const response = await client.post<Listdata>('/api/mynetwork/mynetworkupdatefind', {
-  email,
-  meet_email
-})
-
-console.log(response.data)
-  return response.data
-}
-
-export async function mynetworkupdatepeople(
-  email: String,
-  meetpeople: MeetingUser
-) {
-const response = await client.post<Listdata>('/api/mynetwork/mynetworkupdatepeople', {
-  email,
-  meetpeople
-})
-
-console.log(response.data)
-  return response.data
-}

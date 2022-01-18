@@ -3,7 +3,7 @@ import { Listdata, meetinglist, meetingAlllist } from '../lib/api/scheduleview/g
 
 export type ScheduleValue = {
     key: number,
-    date: String,
+    date: Date,
     event: String,
     time: String,
     location: String,
@@ -71,7 +71,7 @@ export function useScheduleView() {
                 const obj = {
                     key: cnt,
                     date: value.date,
-                    event: value.event,
+                    event: value.event.name,
                     time:value.time,
                     location: value.location,
                     meetname: stguestname,
