@@ -32,8 +32,12 @@ route.post("/signup", (req, res) => {
           company: req.body.company,
           department: req.body.department,
           position: req.body.position,
-          tel: req.body.tel,
-          country: req.body.country
+          field: req.body.field,
+          photopath: req.body.photopath,
+          status: req.body.status,
+          prevhistory: req.body.prevhistory,
+          country: req.body.country,
+          date: new Date()
         });
         console.log(new_user)
         new_user.save((err: mongoose.CallbackError) => {
@@ -167,6 +171,25 @@ route.post("/findname", (req, res) => {
     (err: mongoose.CallbackError, user: any) => {
       if (err) return res.status(500).json({ message: err.message });
       else if (user) return res.status(200).json({ message: "find user", data: user });
+      else
+        return res.status(409).json({
+          message:
+            "not found user",
+        });
+    }
+  );
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// find name & email
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+route.post("/findnamenemail", (req, res) => {
+  const user = mongoose.model("members", UserSchema);
+  user.findOne(
+    { $and: [{email: req.body.email}, {name: req.body.name} ]},
+    (err: mongoose.CallbackError, user: any) => {
+      if (err) return res.status(500).json({ message: err.message });
+      else if (user) return res.status(200).json({ message: "find user" });
       else
         return res.status(409).json({
           message:

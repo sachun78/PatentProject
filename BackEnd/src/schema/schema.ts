@@ -2,23 +2,37 @@ import mongoose from "mongoose";
 
 const validator = require("validator");
 const bcrypt = require("bcrypt");
-const SALT_FACTOR = 1;
+const SALT_FACTOR = 10;
 
 const UserSchema = new mongoose.Schema({
-  name: {type: String, required: true},
-  email: {type: String, required: true, 
+  name: {type: String, required: true,
+    validate(value:String){
+      if(value.length < 3 || value.length > 255)
+      throw new Error("name lenth error");
+    }
+  },
+  email: {type: String, required: true, unique: true,
     validate(value:String){
       if (!validator.isEmail(value)) {
         throw new Error("Email is invalid");
       }
     }
   },
-  password: {type: String, required: true},
-  company: {type: String, required: true},
-  department: {type: String, required: true},
-  position: {type: String, required: true},
-  tel: {type: String},
-  country: {type: String, trim: true, required: true}
+  password: {type: String, required: true,
+    validate(value:String){
+      if(value.length < 8)
+      throw new Error("password lenth error");
+    }
+  },
+  date: {type: Date},
+  company: {type: String},      // 회사
+  department: {type: String},   // 부서
+  position: {type: String},     // 직급
+  prevhistory: {type: String},  // 이전 이력
+  field: {type: [String]},      // 분야
+  photopath: {type: String},    // 프로필 사진 위치
+  status: {type: Number},       // 0 - 삭제된 유저, 1 - 정상 등록 유저, 2 - 휴먼 유저
+  country: {type: String}       // 국가
 });
 
 //모델이 저장되기("save") 전(.pre)에 실행되는 함수
