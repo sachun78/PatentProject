@@ -40,21 +40,22 @@ AppLayout.Main = Main
 
 const headerStyle = css`
   height: 5rem;
-  width:100%;
-  display: flex;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.15),0 0 2px rgba(0,0,0,0.1);
-  position: sticky;
-  background: white;
+  width: 100%;
+  flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15), 0 0 2px rgba(0, 0, 0, 0.1);
+  background: #fff;
   z-index: 1000;
   top: 0;
+    position: sticky;
 `
 const mainStyle = css`
-  margin-left: 16.25rem;
+  margin-left: 26rem;
   min-height: calc(100vh - 64px);
-  background: rgb(245, 245, 245);
+  background: #f7f7f8;
+  position: relative;
 `
 const sidebarStyle = css`
-  width: 16.25rem;
+  width: 26rem;
   height: 100%;
   position: fixed;
   display: flex;

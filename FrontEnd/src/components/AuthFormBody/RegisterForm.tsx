@@ -8,7 +8,6 @@ import { signupInput } from '../../lib/api/member/signup'
 import palette from '../../lib/palette'
 import IconControl from '../IconControl'
 import RegisterFormDefault from './RegisterFormDefault'
-import RegisterFormAdd from './RegisterFormAdd'
 
 type RegisterFormProps = {}
 
@@ -17,32 +16,13 @@ export default function RegisterForm({}: RegisterFormProps) {
     username: '',
     email: '',
     password: '',
-    password_confirm: '',
-    company: '',
-    department: '',
-    position: '',
-    tel: '',
-    country: ''
+    password_confirm: ''
   })
 
   const { sign, loading, error } = useSignup()
   const navigate = useNavigate()
   const [type, setType] = useState<'default' | 'additional'>('default')
   const [enable, setEnable] = useState(true)
-
-  useEffect(() => {
-    if (
-      form.country === '' ||
-      form.tel === '' ||
-      form.position === '' ||
-      form.department === '' ||
-      form.company === ''
-    ) {
-      setEnable(true)
-    } else {
-      setEnable(false)
-    }
-  }, [form])
 
   const toggle = () => {
     const text = type === 'default' ? 'additional' : 'default'
@@ -86,11 +66,6 @@ export default function RegisterForm({}: RegisterFormProps) {
       username: form.username,
       email: form.email,
       password: form.password,
-      company: form.company,
-      department: form.department,
-      position: form.position,
-      tel: form.tel,
-      country: form.country
     }
     try {
       await sign(input)
@@ -113,13 +88,8 @@ export default function RegisterForm({}: RegisterFormProps) {
             </div>
           )}
         </div>
-        {type === 'default' ? (
-          <RegisterFormDefault email={form.email} password={form.password} password_confirm={form.password_confirm}
-                               username={form.username} onChange={onChange} next={next} />
-        ) : (
-          <RegisterFormAdd company={form.company} country={form.country} department={form.department} enable={enable}
-                           position={form.position} tel={form.tel} onSubmit={onSubmit} onChange={onChange} loading={loading} />
-        )}
+        <RegisterFormDefault email={form.email} password={form.password} password_confirm={form.password_confirm}
+                             username={form.username} onChange={onChange} next={next} />
       </div>
     </AuthFormBody>
   )
@@ -135,11 +105,13 @@ const loginFormStyle = css`
   padding-right: 2rem;
   line-height: 1.5rem;
   height: 100%;
+
   form {
     height: 100%;
     display: flex;
     flex-direction: column;
   }
+
   .title {
     margin: 0;
     margin-bottom: 1.5rem;
@@ -172,6 +144,7 @@ const loginFormStyle = css`
     bottom: 0;
     justify-content: flex-end;
     margin-top: auto;
+
     button {
       flex: 1;
       height: 3.6rem;

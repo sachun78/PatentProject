@@ -4,7 +4,6 @@ import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { BrowserRouter } from 'react-router-dom'
-import 'antd/dist/antd.min.css'
 import { RecoilRoot } from 'recoil'
 
 ReactDOM.render(

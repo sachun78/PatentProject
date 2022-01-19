@@ -1,5 +1,4 @@
 import { css } from '@emotion/react'
-import { Button, TimePicker } from 'antd'
 import moment from 'moment'
 import { useState } from 'react'
 import { useDateState } from '../../atoms/dateState'
@@ -11,6 +10,7 @@ import RequestSection from './RequestSection'
 import { SearchUserResult, useFindName } from '../../hooks/useFindMember'
 import { useMeetProposal } from '../../hooks/useMeeting'
 import { proposalInput, subUser } from '../../lib/api/meeting/proposal'
+import { Button } from '@mui/material'
 
 type RequestViewProps = {
   title: string
@@ -105,11 +105,7 @@ export default function RequestView({ title }: RequestViewProps) {
             />
           </RequestSection>
           <RequestSection title={'시간'}>
-            <TimePicker
-              defaultValue={timeDatevalue.time}
-              format={format}
-              minuteStep={10}
-            />
+            시간선택기
           </RequestSection>
           <RequestSection title={'미팅장소'}>
             <Input
@@ -128,7 +124,7 @@ export default function RequestView({ title }: RequestViewProps) {
             />
           </RequestSection>
           <div css={space}></div>
-          <Button type="primary" disabled={loading} onClick={handleProposal}>
+          <Button disabled={loading} onClick={handleProposal}>
             제안하기
           </Button>
         </div>

@@ -46,7 +46,7 @@ export default function DatePickerInput({
       >
         {moment(value).format('YYYY-MM-DD')}
       </div>
-      <DatePicker visible={open} onClose={onClose} value={value} onChange={onChange} onExit={handleClose} />
+      <DatePicker visible={open} onClose={onClose} value={value} onExit={handleClose} />
     </InputBase>
   )
 }
@@ -62,7 +62,7 @@ const textStyle = css`
   align-items: center;
   margin-left: 1rem;
   cursor: pointer;
-  &::focus-visible {
+  &:focus-visible {
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
   }
 `

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import { Button } from 'antd'
+import { Button } from '@mui/material'
 import palette from '../../lib/palette'
 
 type RequestSectionProps = {

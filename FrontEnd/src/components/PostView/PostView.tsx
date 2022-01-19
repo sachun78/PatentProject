@@ -1,10 +1,10 @@
 import { css } from '@emotion/react'
 import { Link } from 'react-router-dom'
-import { Button } from 'antd'
 import Post from './Post'
 import palette from '../../lib/palette'
 import { PostValue, usePostView } from '../../hooks/usePostView'
 import { useEffect, useState } from 'react'
+import { Button } from '@mui/material'
 
 type PostViewProps = {}
 
@@ -31,17 +31,17 @@ function PostView({}: PostViewProps) {
         <Button css={growStyle}>Country</Button>
         <Button css={growStyle}>Field</Button>
         <Button css={growStyle}>My Acquaintance</Button>
-        <Button css={growStyle} type="primary">
+        <Button css={growStyle} >
           <Link to={'/search'}>검색</Link>
         </Button>
       </div>
     {     dataSource.map((data)=> {
       return <Post key={data._id.toString()} id={data.email.toString()} contents={data.postmessage.toString()} />
     })}
-      
+
     </div>
   )
-  
+
 }
 
 const postViewStyle = css`

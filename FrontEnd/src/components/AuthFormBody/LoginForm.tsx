@@ -56,12 +56,13 @@ export default function LoginForm({}: LoginFormProps) {
             <section>
               <form onSubmit={onSubmit}>
                 <div>
-                  <TextField id='outlined-basic' label='username' variant='outlined' type='email' name='email'
-                             value={form.email} onChange={onChange} css={inputStyle}
+                  <TextField label='username' variant='outlined' type='email' name='email'
+                             value={form.email} onChange={onChange} css={inputStyle} autoComplete='username'
                              InputProps={{ style: { fontSize: 15 } }} />
                 </div>
-                <div><TextField id='outlined-basic' label='password' variant='outlined' type='password' name='password'
+                <div><TextField label='password' variant='outlined' type='password' name='password'
                                 value={form.password} onChange={onChange} css={inputStyle}
+                                autoComplete='current-password'
                                 InputProps={{ style: { fontSize: 15 } }} />
                 </div>
                 <div className='button-div'>
@@ -90,10 +91,10 @@ export default function LoginForm({}: LoginFormProps) {
             <h2 className='title'>비회원 로그인 </h2>
             <section>
               <form onSubmit={onSubmit}>
-                <div><TextField id='outlined-basic' label='username' variant='outlined' type='email' css={inputStyle} />
+                <div><TextField label='username' variant='outlined' type='email' css={inputStyle} value='fix' />
                 </div>
-                <div><TextField id='outlined-basic' label='password' variant='outlined' type='password'
-                                css={inputStyle} />
+                <div><TextField label='password' variant='outlined' type='password'
+                                css={inputStyle} value='fix' />
                 </div>
                 <div className='button-div'>
                   <Button type='submit'>
@@ -197,10 +198,12 @@ const underBlockStyle = css`
 
   div {
     flex: 1;
+
     h4 {
       text-align: center;
       color: ${palette.blueGrey['600']};
       font-size: 1.3rem;
+
       &:hover {
         text-decoration: underline;
       }
