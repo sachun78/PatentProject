@@ -12,6 +12,10 @@ export function saveMyNetworkUserAdd(bodyData: any, meetpeopleData: any) {
     return mynetwork.findOneAndUpdate({email: bodyData}, {$push:{"meetpeople": meetpeopleData}});
 }
 
+export function findMyNetworkUser(bodyData: any, meetpeopleData: any) {
+    return mynetwork.findOne({ $and: [{email: bodyData}, {"meetpeople":{"$elemMatch":{"email": meetpeopleData.email}}} ]});
+}
+
 export function saveMyNetworkUserIncrease(bodyData: any, meetpeopleData: any) {
     return mynetwork.findOneAndUpdate({ $and: [{email: bodyData}, {"meetpeople":{"$elemMatch":{"email": meetpeopleData.email}}} ]}, {$inc:{"meetpeople.$.meetcount": 1}}, {new: true});
 }
