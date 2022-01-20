@@ -1,9 +1,10 @@
 import { css } from '@emotion/react'
 import { Avatar, Button } from '@mui/material'
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { emailStyle, photoStyle, textStyle } from './InfoViewCardStyle'
 import IconControl from '../IconControl'
 import Input from '../Input/Input'
+import Tag from '../Tag'
 
 export type InfoViewCardProps = {
   children: React.ReactNode
@@ -30,7 +31,8 @@ export type InfoViewCardItemProps = {
   photo?: string
   description?: string
   editable?: boolean
-  minWidth?: number
+  minHeight?: number
+  fields?: string[]
 }
 
 function InfoViewCardItem({
@@ -41,7 +43,8 @@ function InfoViewCardItem({
                             photo,
                             description,
                             editable,
-                            minWidth = 0
+                            minHeight = 0,
+                            fields
                           }: InfoViewCardItemProps) {
   const fileRef = useRef<HTMLInputElement>(null)
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,8 +56,10 @@ function InfoViewCardItem({
     }
   }
   const [editMode, setEditMode] = useState(false)
-  const [prevValue, setPrevValue] = useState(description)
-  const [currentText, setCurrentText] = useState(description)
+  const [prevValue, setPrevValue] = useState(description || '')
+  const [currentText, setCurrentText] = useState(description || '')
+  const [prevFields, setPrevFields] = useState(fields)
+  const [currentFields, setCurrentFields] = useState(fields)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentText(e.target.value)
   }
@@ -64,10 +69,35 @@ function InfoViewCardItem({
   const onCancel = () => {
     toggle()
     setCurrentText(prevValue)
+
   }
+  const onCancelField = () => {
+    toggle()
+    setCurrentFields(prevFields)
+  }
+
   const onSave = () => {
     toggle()
     setPrevValue(currentText)
+  }
+  const onSaveField = () => {
+    toggle()
+    setPrevFields(currentFields)
+  }
+  const onClickAdd = () => {
+    if (currentFields === undefined) return
+    if (currentText === undefined) return
+    const findResult = currentFields.find((value) => value === currentText)
+    if (findResult === undefined) {
+      setCurrentFields([...currentFields, currentText])
+      console.log('success')
+      return
+    }
+  }
+
+  const onDelete = (e: React.MouseEvent<SVGSVGElement>) => {
+    const name = e.currentTarget.getAttribute('name')
+    setCurrentFields(currentFields?.filter(v => v !== name))
   }
   return <div css={itemStyle}>
     <div className='inner'>
@@ -101,7 +131,7 @@ function InfoViewCardItem({
         <div className='email-block'>{username}.</div>
       </div>}
       {/*4. Text TYPE*/}
-      {type === 'text' && <div css={textStyle(minWidth)}>
+      {type === 'text' && <div css={textStyle(minHeight)}>
         {!editMode && <div className='text'>
           <div>{currentText}</div>
           <button onClick={toggle}><IconControl name={'edit'} /></button>
@@ -109,7 +139,7 @@ function InfoViewCardItem({
         {editMode && <Input
           placeholder={currentText}
           name={title}
-          value={currentText}
+          value={currentText || ''}
           onChange={handleChange}
           css={inputStyle}
         />}
@@ -119,21 +149,28 @@ function InfoViewCardItem({
         </div>}
       </div>}
       {/*5. Field TYPE*/}
-      {type === 'field' && <div css={textStyle(minWidth)}>
-        {editMode && <Input
+      {type === 'field' && <div css={textStyle(minHeight)}>
+        {editMode && <div css={css`display: flex`}><Input
           placeholder={currentText}
           name={title}
-          value={currentText}
+          value={currentText || ''}
           onChange={handleChange}
           css={inputStyle}
-        />}
+        />
+          <Button disabled={currentText === ''} className='plus' onClick={onClickAdd}>add</Button>
+        </div>}
         <div className='text'>
-          <div>block Items</div>
+          <div css={tagStyle}>  {/*Change TO MAP*/}
+            {currentFields?.map((tagName) => {
+              return <Tag className={'tag'} label={tagName} key={tagName} visible={editMode} onDelete={onDelete} />
+            })}
+            {currentFields?.length === 0 && !editMode && <div>Please Input Your Fields</div>}
+          </div>
           {!editMode && <button onClick={toggle}><IconControl name={'edit'} /></button>}
         </div>
         {editMode && <div className='save-cancel'>
-          <Button onClick={onSave} disabled={prevValue === currentText || currentText === ''}>Save</Button>
-          <Button onClick={onCancel}>Cancel</Button>
+          <Button disabled={prevFields === currentFields} onClick={onSaveField}>Save</Button>
+          <Button onClick={onCancelField}>Cancel</Button>
         </div>}
       </div>}
     </div>
@@ -146,7 +183,7 @@ const itemStyle = css`
   padding: 2rem;
   width: 100%;
 
-  &:not(:first-child) {
+  &:not(:first-of-type) {
     border-top: 1px solid rgba(0, 0, 0, .1);
   }
 
@@ -176,7 +213,17 @@ const itemStyle = css`
 const inputStyle = css`
   font-size: 1.3rem;
   line-height: 1.2;
-  min-height: 4rem;
+  min-height: 3.5rem;
+  flex-grow: 1;
+`
+const tagStyle = css`
+  display: block;
+  flex-direction: column;
+  margin-top: 0.5rem;
+
+  .tag + .tag {
+    margin-left: 0.5rem;
+  }
 `
 
 export default InfoViewCard

@@ -70,6 +70,7 @@ const logoStyle = css`
     align-items: center;
     user-select: none;
     display: flex;
+    text-decoration: none;
 
     div {
       line-height: 1.2;

@@ -48,10 +48,25 @@ export const textStyle = (minWidth: number) => css`
 
   .text {
     display: flex;
+
+    svg {
+      &:hover {
+        color: ${palette.teal[200]};
+      }
+    }
+  }
+
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    cursor: pointer;
+
   }
 
   .save-cancel {
     margin-top: 1rem;
+    display: inline-flex;
 
     button {
       height: 3rem;
@@ -64,11 +79,15 @@ export const textStyle = (minWidth: number) => css`
       padding-left: 1rem;
       border-radius: 0.4rem;
       font-weight: 600;
+
       &:hover {
         background-color: ${palette.grey[200]};
       }
+
       &:disabled {
-        color: blue;
+        color: rgba(0, 0, 0, 0.3);
+        background-color: rgba(0, 0, 0, 0.05);
+        user-select: none;
       }
     }
 
@@ -77,13 +96,28 @@ export const textStyle = (minWidth: number) => css`
     }
   }
 
-  svg {
-    width: 1.5rem;
-    height: 1.5rem;
-    cursor: pointer;
+  .plus {
+    height: 3rem;
+    font-size: 1.3rem;
+    justify-content: center;
+    align-items: center;
+    background-color: ${palette.grey[50]};
+    padding-right: 1rem;
+    padding-left: 1rem;
+    border-radius: 0.4rem;
+    font-weight: 600;
+    margin-left: 1rem;
+    margin-top: 0.2rem;
+
+    &:disabled {
+      color: rgba(0, 0, 0, 0.3);
+      background-color: rgba(0, 0, 0, 0.05);
+      user-select: none;
+    }
 
     &:hover {
-      color: ${palette.teal[200]};
+      background-color: ${palette.grey[200]};
     }
   }
+
 `
