@@ -1,10 +1,11 @@
 import { css } from '@emotion/react'
-import { Avatar, Button } from '@mui/material'
+import { Avatar, Button, TextField } from '@mui/material'
 import React, { useRef, useState } from 'react'
-import { emailStyle, photoStyle, textStyle } from './InfoViewCardStyle'
+import { careerStyle, countryWrapper, emailStyle, photoStyle, textStyle } from './InfoViewCardStyle'
 import IconControl from '../IconControl'
 import Input from '../Input/Input'
 import Tag from '../Tag'
+import CountrySelector from '../CountrySelector'
 
 export type InfoViewCardProps = {
   children: React.ReactNode
@@ -21,7 +22,7 @@ const wrapper = css`
   border: 1px solid rgba(0, 0, 0, 0.1);
 `
 
-type cardItemType = 'email' | 'photo' | 'country' | 'username' | 'text' | 'field'
+type cardItemType = 'email' | 'photo' | 'country' | 'username' | 'text' | 'field' | 'career'
 // INFOVIEW CARD ITEM
 export type InfoViewCardItemProps = {
   title: string
@@ -173,6 +174,23 @@ function InfoViewCardItem({
           <Button onClick={onCancelField}>Cancel</Button>
         </div>}
       </div>}
+      {/*6. COUNTRY TYPE*/}
+      {type === 'country' &&
+        <div css={countryWrapper}>
+          <div css={css`width: 100%;
+            display: flex;`}>
+            <CountrySelector disabled={!editMode} />
+          </div>
+          <div className='save'>
+            <Button onClick={toggle}>{editMode ? 'Save' : 'Edit'}</Button>
+          </div>
+        </div>}
+      {/*7. CAREER TYPE*/}
+      {type === 'career' &&
+        <div css={careerStyle}>
+          <TextField multiline fullWidth />
+        </div>
+      }
     </div>
   </div>
 }

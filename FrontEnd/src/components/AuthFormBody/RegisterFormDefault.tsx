@@ -2,45 +2,39 @@ import React from 'react'
 import { Button, TextField } from '@mui/material'
 import { inputStyle } from './RegisterForm'
 import { css } from '@emotion/react'
+import { useSignUpForm } from '../../hooks/useSignup'
+import palette from '../../lib/palette'
 
-export type RegisterFormDefaultProps = {
-  email: string,
-  username: string,
-  password: string,
-  password_confirm: string,
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  next: () => void
-}
+export type RegisterFormDefaultProps = {}
 
-function RegisterFormDefault({
-                               email,
-                               username,
-                               password,
-                               password_confirm,
-                               next,
-                               onChange
-                             }: RegisterFormDefaultProps) {
+function RegisterFormDefault({}: RegisterFormDefaultProps) {
+  const {
+    form, onChange, handleSubmit,
+    loading, errorMessage
+  } = useSignUpForm()
+
   return <>
     <h2 className='title'>Sign Up</h2>
     <section>
       <form>
         <TextField label='Email' variant='outlined' type='email' name='email'
-                   value={email} onChange={onChange} css={inputStyle}
+                   value={form.email} onChange={onChange} css={inputStyle}
                    InputProps={{ style: { fontSize: 12 } }} />
         <TextField label='Name' variant='outlined' type='text' name='username'
-                   value={username} onChange={onChange} css={inputStyle}
+                   value={form.username} onChange={onChange} css={inputStyle}
                    InputProps={{ style: { fontSize: 12 } }} />
         <TextField label='Password' variant='outlined' type='password' name='password'
-                   value={password} onChange={onChange} css={inputStyle}
+                   value={form.password} onChange={onChange} css={inputStyle}
                    InputProps={{ style: { fontSize: 12 } }} />
         <TextField label='Confirm Password' variant='outlined' type='password'
                    name='password_confirm'
-                   value={password_confirm} onChange={onChange} css={inputStyle}
+                   value={form.password_confirm} onChange={onChange} css={inputStyle}
                    InputProps={{ style: { fontSize: 12 } }} />
+        { errorMessage !== null && <div>ERROR</div>}
         <div css={privacyStyle}><p>By clicking Sign Up, you are indicating that you have read and acknowledge the
-          <a>Terms of Service</a> and <a>Privacy Notice</a>.</p></div>
+          <a> Terms of Service</a> and <a>Privacy Notice</a>.</p></div>
         <div className='button-div'>
-          <Button variant='contained' onClick={next}>
+          <Button variant='contained' disabled={loading} onClick={handleSubmit}>
             Sign Up
           </Button>
         </div>
@@ -65,6 +59,7 @@ const privacyStyle = css`
 
   a {
     text-decoration: none;
+    color: ${palette.deepOrange[600]};
   }
 
   a:hover {

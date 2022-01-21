@@ -16,10 +16,10 @@ function InfoView({}: InfoViewProps) {
       <InfoViewCard.Item title='Department' type={'text'} description={'~~~'} />
       <InfoViewCard.Item title='Position' type={'text'} description={'~~~'} />
       <InfoViewCard.Item title='Field' type={'field'} fields={['IT/Network', 'IT/Computer', 'Construct/Apart']}/>
-      <InfoViewCard.Item title='Country' type={'text'} description={'Republic of Korea'} />
+      <InfoViewCard.Item title='Country' type={'country'} />
     </InfoViewSection>
     <InfoViewSection title='Additional'>
-      <InfoViewCard.Item title='Prev Career' type={'text'}/>
+      <InfoViewCard.Item title='Prev Career' type={'career'}/>
     </InfoViewSection>
   </div>
 }

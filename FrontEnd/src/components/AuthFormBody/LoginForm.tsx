@@ -26,7 +26,7 @@ export default function LoginForm({}: LoginFormProps) {
       console.log('already loggedIn')
       navigate('/')
     }
-  }, [loginValue])
+  }, [loginValue, navigate])
 
   const handleTypeChange = () => {
     loginActions.toggle()
