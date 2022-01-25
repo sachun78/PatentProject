@@ -5,11 +5,12 @@ import AuthFormBody from '.'
 import palette from '../../lib/palette'
 import IconControl from '../IconControl'
 import RegisterFormDefault from './RegisterFormDefault'
+import RegisterSuccess from './RegisterSuccess'
 
 type RegisterFormProps = {}
 
 export default function RegisterForm({}: RegisterFormProps) {
-  const [type, setType] = useState<'default' | 'success'>('default')
+  const [type, setType] = useState<'default' | 'success'>('success')
 
   const toggle = () => {
     const text = type === 'default' ? 'success' : 'default'
@@ -17,20 +18,15 @@ export default function RegisterForm({}: RegisterFormProps) {
   }
 
   return (
-    <AuthFormBody width={622} height={type === 'default' ? 500 : 560}>
+    <AuthFormBody width={622} height={500}>
       <div css={loginFormStyle}>
         <div css={undoStyle}>
-          {type === 'default' ? (
-            <NavLink to={'/login'} className='link'>
-              <IconControl name={'undo'} /> <span>Back</span>
-            </NavLink>
-          ) : (
-            <div className='link' onClick={toggle}>
-              <IconControl name={'back'} />
-            </div>
-          )}
+          <NavLink to={'/login'} className='link'>
+            <IconControl name={'undo'} /> <span>Back</span>
+          </NavLink>
         </div>
-        <RegisterFormDefault />
+        { type === 'default' && <RegisterFormDefault />}
+        { type === 'success' && <RegisterSuccess />}
       </div>
     </AuthFormBody>
   )

@@ -1,6 +1,5 @@
 import { css } from '@emotion/react'
 import React from 'react'
-import palette from '../../lib/palette'
 
 export type AppLayoutProps = {
   children: React.ReactNode
@@ -62,4 +61,5 @@ const sidebarStyle = css`
   padding: 3rem;
   padding-top: 0;
   justify-content: center;
+  background: #f7f7f8;
 `

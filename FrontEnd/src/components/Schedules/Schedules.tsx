@@ -1,46 +1,26 @@
 import { css } from '@emotion/react'
-import React, { useEffect, useState } from 'react'
-import { MyNetworkValue, useMyNetwork, useMyNetworkFindNUpdate } from '../../hooks/useMyNetwork'
-import { MyNetworkResult } from '../../lib/api/MyNetwork/getlist'
+import { useEffect, useState } from 'react'
+import { ScheduleValue, useScheduleView } from '../../hooks/useScheduleView'
 import ViewBase from '../ViewBase'
+import React from 'react'
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 
-type MyNetworkProps = {}
+type ScheduleViewProps = {
+  type?: string
+}
 
-function MyNetwork({}: MyNetworkProps) {
-  const {list, error, loading}  = useMyNetwork();
-  const [dataSource, setDataSourece] = useState<MyNetworkValue[] | undefined>();
+function Schedules({ type }: ScheduleViewProps) {
+  const { list, error, loading } = useScheduleView()
+  const [dataSource, setDataSourece] = useState<ScheduleValue[] | undefined>()
 
-  useEffect(()=> {
-    const loadData = async()=> {
-      const data: MyNetworkValue[] | undefined = await list('ryan4321@naver.com')
-      //const data: MyNetworkValue[] | undefined = await list('test@test.com')
+  useEffect(() => {
+    const loadData = async () => {
+      const data: ScheduleValue[] | undefined = await list('ryan4321@naver.com')
       setDataSourece(data)
-   }
-    loadData();
+    }
+    loadData()
   }, [])
 
-  const AddData = async()=> {
-    const {upload/*, error, loading*/}  = useMyNetworkFindNUpdate();
-    const test:MyNetworkResult = {
-      name: "Yang",
-      email: "ryan4321@naver.com",
-      meetpeople:[
-        {
-          name: "J",
-          email: "test2@test.com",
-          company: "J",
-          department: "J",
-          position: "J",
-          tel: "000000000",
-          country: "FRA",
-          meetcount: 1,
-        }
-      ]
-    }
-  }
-
-  console.log(dataSource)
 
   function createData(
     name: string,
@@ -61,7 +41,7 @@ function MyNetwork({}: MyNetworkProps) {
   ]
 
   return (
-    <ViewBase title="MY Network">
+    <ViewBase title='MY SCHEDULE'>
       <div css={tableStyle}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label='simple table'>
@@ -93,7 +73,6 @@ function MyNetwork({}: MyNetworkProps) {
           </Table>
         </TableContainer>
       </div>
-      <div><button onClick={AddData}>추가</button></div>
     </ViewBase>
   )
 }
@@ -101,7 +80,17 @@ function MyNetwork({}: MyNetworkProps) {
 const tableStyle = css`
   flex: 1;
   width: 100%;
-  white-space: pre-line;
 `
 
-export default MyNetwork
+const right = css`
+  display: flex;
+  justify-content: right;
+  margin-top: 2rem;
+
+  .ant-btn {
+    min-width: 10rem;
+    border-radius: 0.25rem;
+  }
+`
+
+export default Schedules

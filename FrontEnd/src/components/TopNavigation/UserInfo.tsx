@@ -1,8 +1,14 @@
 import { css } from '@emotion/react'
+import { Link } from 'react-router-dom'
+import React from 'react'
 
 export type UserInfoProps = {}
 function UserInfo({}: UserInfoProps) {
-    return <div css={wrapper}>UserInfo</div>
+    const username: string = 'Wemet User' // Username data For Test
+
+    return <div css={wrapper}>
+        <Link to={'/profile'}>{username}</Link>
+    </div>
 };
 
 const wrapper = css`

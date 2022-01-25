@@ -1,11 +1,12 @@
 import { css } from '@emotion/react'
-import { Avatar, Button, TextField } from '@mui/material'
-import React, { useRef, useState } from 'react'
+import { AutocompleteValue, Avatar, Button, TextField } from '@mui/material'
+import React, { SyntheticEvent, useMemo, useRef, useState } from 'react'
 import { careerStyle, countryWrapper, emailStyle, photoStyle, textStyle } from './InfoViewCardStyle'
 import IconControl from '../IconControl'
 import Input from '../Input/Input'
 import Tag from '../Tag'
 import CountrySelector from '../CountrySelector'
+import { countries, CountryType } from '../CountrySelector/CountrySelector'
 
 export type InfoViewCardProps = {
   children: React.ReactNode
@@ -32,20 +33,22 @@ export type InfoViewCardItemProps = {
   photo?: string
   description?: string
   editable?: boolean
+  isEditMode?: boolean
   minHeight?: number
   fields?: string[]
+  handleField?: () => { add: () => void, remove: (e: React.MouseEvent<SVGSVGElement>) => void, onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }
+  countryValue?: string
+  handleCountry?: (e: SyntheticEvent, v: AutocompleteValue<CountryType, undefined, undefined, undefined>) => void
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 function InfoViewCardItem({
-                            title,
-                            type,
-                            email,
-                            username,
-                            photo,
-                            description,
-                            editable,
+                            title, type, email, username,
+                            photo, description, editable, isEditMode,
                             minHeight = 0,
-                            fields
+                            fields, handleField,
+                            countryValue, handleCountry,
+                            onChange
                           }: InfoViewCardItemProps) {
   const fileRef = useRef<HTMLInputElement>(null)
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,13 +59,16 @@ function InfoViewCardItem({
       }
     }
   }
-  const [editMode, setEditMode] = useState(false)
+  const [editMode, setEditMode] = useState(isEditMode || false)
   const [prevValue, setPrevValue] = useState(description || '')
   const [currentText, setCurrentText] = useState(description || '')
+  const [country, setCountry] = useState(countryValue || '')
   const [prevFields, setPrevFields] = useState(fields)
   const [currentFields, setCurrentFields] = useState(fields)
+  const defaultCountry = useMemo(()=> countryValue || 'KR', [])
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentText(e.target.value)
+    if (onChange) onChange(e)
   }
   const toggle = () => {
     setEditMode(!editMode)
@@ -70,7 +76,6 @@ function InfoViewCardItem({
   const onCancel = () => {
     toggle()
     setCurrentText(prevValue)
-
   }
   const onCancelField = () => {
     toggle()
@@ -85,21 +90,12 @@ function InfoViewCardItem({
     toggle()
     setPrevFields(currentFields)
   }
-  const onClickAdd = () => {
-    if (currentFields === undefined) return
-    if (currentText === undefined) return
-    const findResult = currentFields.find((value) => value === currentText)
-    if (findResult === undefined) {
-      setCurrentFields([...currentFields, currentText])
-      console.log('success')
-      return
-    }
+
+  const onCountryChange = (e: SyntheticEvent, v: AutocompleteValue<CountryType, undefined, undefined, undefined>) => {
+    if (!v) return
+    setCountry(v.code)
   }
 
-  const onDelete = (e: React.MouseEvent<SVGSVGElement>) => {
-    const name = e.currentTarget.getAttribute('name')
-    setCurrentFields(currentFields?.filter(v => v !== name))
-  }
   return <div css={itemStyle}>
     <div className='inner'>
       <div className='title'>
@@ -123,7 +119,7 @@ function InfoViewCardItem({
           style={{ display: 'none' }}
           accept='image/*'
         />
-          <button onClick={() => fileRef?.current?.click()}><IconControl name={'upload'} /></button>
+          <button className={'btn'} onClick={() => fileRef?.current?.click()}><IconControl name={'upload'} /></button>
         </>)
         }
       </div>}
@@ -135,42 +131,44 @@ function InfoViewCardItem({
       {type === 'text' && <div css={textStyle(minHeight)}>
         {!editMode && <div className='text'>
           <div>{currentText}</div>
-          <button onClick={toggle}><IconControl name={'edit'} /></button>
+          <button className={'btn'} onClick={toggle}><IconControl name={'edit'} /></button>
         </div>}
         {editMode && <Input
-          placeholder={currentText}
+          placeholder={title}
           name={title}
           value={currentText || ''}
           onChange={handleChange}
           css={inputStyle}
         />}
-        {editMode && <div className='save-cancel'>
+        {editMode && !isEditMode && <div className='save-cancel'>
           <Button onClick={onSave} disabled={prevValue === currentText || currentText === ''}>Save</Button>
           <Button onClick={onCancel}>Cancel</Button>
         </div>}
       </div>}
       {/*5. Field TYPE*/}
-      {type === 'field' && <div css={textStyle(minHeight)}>
-        {editMode && <div css={css`display: flex`}><Input
-          placeholder={currentText}
-          name={title}
-          value={currentText || ''}
-          onChange={handleChange}
-          css={inputStyle}
-        />
-          <Button disabled={currentText === ''} className='plus' onClick={onClickAdd}>add</Button>
+      {type === 'field' && handleField && <div css={textStyle(minHeight)}>
+        {editMode && <div css={css`display: flex`}>
+          <Input
+            placeholder={title}
+            name={title}
+            value={description || ''}
+            onChange={handleField().onChange}
+            css={inputStyle}
+          />
+          <Button disabled={description === ''} className='plus' onClick={handleField().add}>add</Button>
         </div>}
         <div className='text'>
-          <div css={tagStyle}>  {/*Change TO MAP*/}
-            {currentFields?.map((tagName) => {
-              return <Tag className={'tag'} label={tagName} key={tagName} visible={editMode} onDelete={onDelete} />
+          <div css={tagStyle}>
+            {fields?.map((tagName) => {
+              return <Tag className={'tag'} label={tagName} key={tagName} visible={editMode}
+                          onDelete={handleField().remove} />
             })}
-            {currentFields?.length === 0 && !editMode && <div>Please Input Your Fields</div>}
+            {fields?.length === 0 && !editMode && <div>Please Input Your Fields</div>}
           </div>
           {!editMode && <button onClick={toggle}><IconControl name={'edit'} /></button>}
         </div>
-        {editMode && <div className='save-cancel'>
-          <Button disabled={prevFields === currentFields} onClick={onSaveField}>Save</Button>
+        {editMode && !isEditMode && <div className='save-cancel'>
+          <Button disabled={prevFields === fields} onClick={onSaveField}>Save</Button>
           <Button onClick={onCancelField}>Cancel</Button>
         </div>}
       </div>}
@@ -179,11 +177,13 @@ function InfoViewCardItem({
         <div css={countryWrapper}>
           <div css={css`width: 100%;
             display: flex;`}>
-            <CountrySelector disabled={!editMode} />
+            <CountrySelector disabled={!editMode} onChange={handleCountry || onCountryChange}
+                             defaultValue={countries[countries.findIndex((v) => (defaultCountry) === v.code)]}
+                             />
           </div>
-          <div className='save'>
+          {!isEditMode && <div className='save'>
             <Button onClick={toggle}>{editMode ? 'Save' : 'Edit'}</Button>
-          </div>
+          </div>}
         </div>}
       {/*7. CAREER TYPE*/}
       {type === 'career' &&
@@ -223,7 +223,7 @@ const itemStyle = css`
     }
   }
 
-  button {
+  .btn {
     all: unset;
     display: inline-flex;
   }

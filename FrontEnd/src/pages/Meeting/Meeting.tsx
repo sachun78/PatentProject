@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import { NavLink, Route, Routes } from 'react-router-dom'
-import RequestView from '../../components/RequestView'
+import RequestForm from '../../components/RequestForm'
 
 type MeetingProps = {}
 
@@ -11,7 +11,7 @@ function Meeting({}: MeetingProps) {
         path="/request"
         element={
           <div css={pageStyle}>
-            <RequestView title="Meeting Proposal" />{' '}
+            <RequestForm title="Meeting Proposal" />{' '}
           </div>
         }
       />

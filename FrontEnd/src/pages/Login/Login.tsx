@@ -20,7 +20,6 @@ const pageStyle = css`
   display: flex;
   top: 0;
   left: 0;
-
   align-items: center;
   justify-content: center;
 `

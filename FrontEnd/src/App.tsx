@@ -6,9 +6,9 @@ import { Route, Routes, useNavigate } from 'react-router-dom'
 import Search from './pages/Search'
 import Sidebar from './components/Sidebar'
 import TopNavigation from './components/TopNavigation'
-import MemberShip from './pages/MemberShip'
-import Schedule from './pages/MemberShip/Schedule'
-import Network from './pages/MemberShip/Network'
+import Member from './pages/Member'
+import Schedule from './pages/Member/Schedule'
+import Network from './pages/Member/Network'
 import Meeting from './pages/Meeting'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -47,7 +47,7 @@ function App() {
               <AppLayout.Main>
                 <Routes>
                   <Route path='/' element={<Home />} />
-                  <Route path='/membership' element={<MemberShip />} />
+                  <Route path='/membership' element={<Member />} />
                   <Route path='/schedule' element={<Schedule />} />
                   <Route path='/network' element={<Network />} />
                   <Route path='/meeting/*' element={<Meeting />} />
@@ -81,16 +81,16 @@ const globalStyle = css`
       ::selection {
         background: ${palette.blueGrey[200]};
       }
-
-      a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video {
-        border: 0;
-        font-size: 100%;
-        font: inherit;
-        margin: 0;
-        padding: 0;
-        vertical-align: baseline;
-      }
     }
+    a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video {
+      border: 0;
+      font-size: 100%;
+      font: inherit;
+      margin: 0;
+      padding: 0;
+      vertical-align: baseline;
+    }
+  }
 `
 
 export default App

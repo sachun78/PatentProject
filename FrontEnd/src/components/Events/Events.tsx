@@ -3,7 +3,7 @@ import ViewBase from '../ViewBase'
 
 type EventViewProps = {}
 
-export default function EventView({}: EventViewProps) {
+export default function Events({}: EventViewProps) {
   return (
     <ViewBase title="MY EVENT">
       <div css={wrapper}>Event View</div>

@@ -8,7 +8,7 @@ import { Button } from '@mui/material'
 
 type PostViewProps = {}
 
-function PostView({}: PostViewProps) {
+function Posts({}: PostViewProps) {
   const { list, error, loading } = usePostView()
   const [dataSource, setDataSourece] = useState<PostValue[] | undefined>()
 
@@ -52,4 +52,4 @@ const growStyle = css`
   flex-grow: 1;
 `
 
-export default PostView
+export default Posts

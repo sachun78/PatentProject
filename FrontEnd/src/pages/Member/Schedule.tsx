@@ -1,12 +1,12 @@
 import { css } from '@emotion/react'
-import ScheduleView from '../../components/ScheduleView'
+import Schedules from '../../components/Schedules'
 
 type ScheduleProps = {}
 
 function Schedule({}: ScheduleProps) {
   return (
     <div css={wrapper}>
-      <ScheduleView type="page" />
+      <Schedules type="page" />
     </div>
   )
 }

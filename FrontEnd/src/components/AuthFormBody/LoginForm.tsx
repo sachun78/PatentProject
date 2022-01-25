@@ -44,6 +44,8 @@ export default function LoginForm({}: LoginFormProps) {
       alert('로그인 성공')
       navigate('/')
     } catch (e) {
+      console.error(e)
+      alert('로그인 실패')
     }
   }
 
@@ -143,6 +145,10 @@ const loginFormStyle = css`
     margin-top: 0;
   }
 
+  a {
+    text-decoration: none;
+  }
+
   .foot {
     text-align: right;
     line-height: 1.5rem;
@@ -173,7 +179,6 @@ const loginFormStyle = css`
     }
   }
 `
-
 const inputStyle = css`
   width: 100%;
   margin-bottom: 1.5rem;

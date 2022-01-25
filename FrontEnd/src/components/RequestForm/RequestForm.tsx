@@ -3,7 +3,6 @@ import moment from 'moment'
 import { useState } from 'react'
 import { useDateState } from '../../atoms/dateState'
 import useInputs from '../../hooks/useInputs'
-import DatePickerInput from '../DatePicker/DatePickerInput'
 import Input from '../Input'
 import ViewBase from '../ViewBase'
 import RequestSection from './RequestSection'
@@ -16,7 +15,7 @@ type RequestViewProps = {
   title: string
 }
 
-export default function RequestView({ title }: RequestViewProps) {
+export default function RequestForm({ title }: RequestViewProps) {
   const [timeDatevalue, setTimeDateValue] = useDateState()
   const { proposal, complete, error, loading } = useMeetProposal()
   const [infoVisible, setInfoVisible] = useState(false)
@@ -24,7 +23,7 @@ export default function RequestView({ title }: RequestViewProps) {
     username: '',
     event: '',
     place: '',
-    comment: '',
+    comment: ''
   })
   const format = 'HH:mm'
 
@@ -38,10 +37,6 @@ export default function RequestView({ title }: RequestViewProps) {
     setInfoVisible(false)
   }
 
-  const handleChangeDate = (date: moment.Moment) => {
-    setTimeDateValue({ ...timeDatevalue, date })
-  }
-
   const handleProposal = async () => {
     const guests: subUser[] = []
     guests.push({
@@ -49,7 +44,7 @@ export default function RequestView({ title }: RequestViewProps) {
       company: '',
       email: form.username,
       tel: '',
-      member: true,
+      member: true
     })
     const input: proposalInput = {
       email: 'ryan4321@naver.com', //TODO: TEMPORARY DATA, EMAIL value NEED Change accoding to USER
@@ -58,7 +53,7 @@ export default function RequestView({ title }: RequestViewProps) {
       time: moment(timeDatevalue.time).format(format),
       location: form.place,
       guests: guests,
-      comment: form.comment,
+      comment: form.comment
     }
     await proposal(input)
   }
@@ -72,8 +67,8 @@ export default function RequestView({ title }: RequestViewProps) {
         <div css={sectionStyle}>
           <RequestSection title={'이벤트'}>
             <Input
-              placeholder="event"
-              name="event"
+              placeholder='event'
+              name='event'
               value={form.event}
               onChange={onChange}
             />
@@ -84,8 +79,8 @@ export default function RequestView({ title }: RequestViewProps) {
             onClick={useSearch}
           >
             <Input
-              placeholder="username"
-              name="username"
+              placeholder='username'
+              name='username'
               value={form.username}
               onChange={onChange}
             />
@@ -99,26 +94,23 @@ export default function RequestView({ title }: RequestViewProps) {
             </div>
           )}
           <RequestSection title={'날짜'}>
-            <DatePickerInput
-              value={timeDatevalue.date}
-              onChange={handleChangeDate}
-            />
+            DatePicker
           </RequestSection>
           <RequestSection title={'시간'}>
             시간선택기
           </RequestSection>
           <RequestSection title={'미팅장소'}>
             <Input
-              placeholder="place"
-              name="place"
+              placeholder='place'
+              name='place'
               value={form.place}
               onChange={onChange}
             />
           </RequestSection>
           <RequestSection title={'코멘트'}>
             <Input
-              placeholder="comment"
-              name="comment"
+              placeholder='comment'
+              name='comment'
               value={form.comment}
               onChange={onChange}
             />
@@ -144,6 +136,7 @@ const sectionStyle = css`
   display: flex;
   flex-direction: column;
   margin-right: 1rem;
+
   .ant-btn {
     height: 2.5rem;
     border-radius: 0.5rem;
@@ -163,7 +156,7 @@ const previewStyle = (visible: boolean) => css`
   css`
     display: none;
   `}
-  flex:1;
+  flex: 1;
   align-items: center;
   justify-content: center;
   text-align: center;

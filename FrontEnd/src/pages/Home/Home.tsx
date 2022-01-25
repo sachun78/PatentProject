@@ -1,13 +1,15 @@
 import { css } from '@emotion/react'
-import PostView from '../../components/PostView'
-import SponsorView from '../../components/SponsorView'
+import Posts from '../../components/Posts'
+import Sponsors from '../../components/Sponsors'
+import AddtionalFormModal from '../../components/AddtionalFormModal'
 type HomeProps = {}
 
 function Home({}: HomeProps) {
   return (
     <div css={baseStyle}>
-      <PostView />
-      <SponsorView />
+      <Posts />
+      <Sponsors />
+    <AddtionalFormModal/>
     </div>
   )
 }

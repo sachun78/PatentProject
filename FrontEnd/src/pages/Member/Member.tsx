@@ -1,14 +1,14 @@
 import { css } from '@emotion/react'
-import EventView from '../../components/EventView/EventView'
-import ScheduleView from '../../components/ScheduleView'
+import Events from '../../components/Events/Events'
+import Schedules from '../../components/Schedules'
 
 type MemberShipProps = {}
 
-function MemberShip({}: MemberShipProps) {
+function Member({}: MemberShipProps) {
   return (
     <div css={wrapper} >
-      <ScheduleView />
-      <EventView />
+      <Schedules />
+      <Events />
     </div>
   )
 }
@@ -24,4 +24,4 @@ const wrapper = css`
   }
 `
 
-export default MemberShip
+export default Member

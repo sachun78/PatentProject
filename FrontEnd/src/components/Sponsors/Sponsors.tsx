@@ -2,7 +2,7 @@ import { css } from '@emotion/react'
 
 type SponsorViewProps = {}
 
-function SponsorView({}: SponsorViewProps) {
+function Sponsors({}: SponsorViewProps) {
   return (
     <div css={sponsorViewStyle}>
       스폰서뷰
@@ -18,4 +18,4 @@ const sponsorViewStyle = css`
   flex-direction: row;
 `
 
-export default SponsorView
+export default Sponsors

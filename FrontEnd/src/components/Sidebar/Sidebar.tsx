@@ -6,7 +6,6 @@ import useSelectMenu from '../../hooks/useSelectMenu'
 type SidebarProps = {}
 
 function Sidebar({}: SidebarProps) {
-  const username: string = 'Wemet User' // Username data For Test
   const { current, setCurrent } = useSelectMenu()
 
   const handleClick = (e: any) => {
@@ -20,11 +19,9 @@ function Sidebar({}: SidebarProps) {
   }
   return (
     <div css={baseStyle}>
-      <div className='logo'>WEMET</div>
       <Link to={'/membership'}>MemberShip</Link>
       <Link to={'/schedule'}>Schedule</Link>
       <Link to={'/network'}>Network</Link>
-      <div className='username'><Link to={'/profile'}>{username}</Link></div>
     </div>
   )
 }
@@ -36,13 +33,6 @@ const baseStyle = css`
 
   padding-bottom: 12rem;
   flex-direction: column;
-
-  .logo {
-    font-weight: bold;
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-    user-select: none;
-  }
 
   .username {
     font-weight: 600;

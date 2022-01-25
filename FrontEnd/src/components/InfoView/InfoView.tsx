@@ -1,10 +1,14 @@
 import { css } from '@emotion/react'
 import InfoViewSection from './InfoViewSection'
 import InfoViewCard from './InfoViewCard'
+import { useState } from 'react'
 
 export type InfoViewProps = {}
 
 function InfoView({}: InfoViewProps) {
+  const [fields, ] = useState(['IT/Network', 'IT/Computer', 'Construct/Apart'])
+  const [country, ] = useState('KR');
+
   return <div css={wrapper}>
     <InfoViewSection title='Account'>
       <InfoViewCard.Item title='Email' type={'email'} email='ryan4321@naver.com' />
@@ -15,8 +19,8 @@ function InfoView({}: InfoViewProps) {
       <InfoViewCard.Item title='Company' type={'text'} description={'특허법인'} />
       <InfoViewCard.Item title='Department' type={'text'} description={'~~~'} />
       <InfoViewCard.Item title='Position' type={'text'} description={'~~~'} />
-      <InfoViewCard.Item title='Field' type={'field'} fields={['IT/Network', 'IT/Computer', 'Construct/Apart']}/>
-      <InfoViewCard.Item title='Country' type={'country'} />
+      <InfoViewCard.Item title='Field' type={'field'} fields={fields}/>
+      <InfoViewCard.Item title='Country' type={'country'} countryValue={country}/>
     </InfoViewSection>
     <InfoViewSection title='Additional'>
       <InfoViewCard.Item title='Prev Career' type={'career'}/>

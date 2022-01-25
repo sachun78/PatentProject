@@ -3,15 +3,18 @@ import InfoViewCard from './InfoViewCard'
 
 export type InfoViewSectionProps = {
   title: string
+  description?: string
   children: React.ReactNode
 }
 
-function InfoViewSection({ title,children }: InfoViewSectionProps) {
+function InfoViewSection({ title, children, description }: InfoViewSectionProps) {
   return <div>
     <div css={headerStyle}>
       <h3>{title}</h3>
       <div className='sub-comment'>
-        <p>Where we send important messages about your account </p></div>
+        {!description && <p>Where we send important messages about your account </p>}
+        {description && <p>{description}</p>}
+      </div>
     </div>
     <InfoViewCard>
       {children}

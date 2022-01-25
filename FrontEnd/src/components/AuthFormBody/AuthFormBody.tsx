@@ -32,7 +32,7 @@ const bodyStyle = (width: number, height: number) => css`
   display: flex;
   flex-direction: column;
   background-color: white;
-
+  transform: translate(50%, -10%);
   width: ${width}px;
   height: ${height}px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 40%);
@@ -42,6 +42,7 @@ const wrapStyle = css`
   height: 100%;
   width: 100%;
   display: flex;
+  
   .img-block {
     width: 216px;
     background: ${palette.blueGrey[100]};

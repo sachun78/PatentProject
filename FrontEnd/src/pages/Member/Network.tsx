@@ -1,7 +1,5 @@
 import { css } from '@emotion/react'
 import React from 'react'
-import MyNetwork from '../../components/MyNetwork'
-import useSelectMenu from '../../hooks/useSelectMenu'
 
 type NetworkProps = {}
 
@@ -9,7 +7,7 @@ function Network({}: NetworkProps) {
 
   return (
     <div css={wrapper}>
-      <MyNetwork />
+      네트워크View
     </div>
   )
 }

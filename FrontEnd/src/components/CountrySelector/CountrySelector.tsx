@@ -1,20 +1,20 @@
-import { Autocomplete, Box, TextField } from '@mui/material'
+import { Autocomplete, AutocompleteValue, Box, TextField } from '@mui/material'
 import { css } from '@emotion/react'
-import palette from '../../lib/palette'
+import { SyntheticEvent, useLayoutEffect, useState } from 'react'
 
 export type CountrySelectorProps = {
   disabled?: boolean
+  onChange?: (e: SyntheticEvent, v: AutocompleteValue<CountryType, undefined, undefined, undefined>) => void
+  defaultValue?: CountryType
 }
 
-function CountrySelector({ disabled = false }: CountrySelectorProps) {
+function CountrySelector({ onChange, defaultValue, disabled = false }: CountrySelectorProps) {
   return <Autocomplete options={countries}
                        autoHighlight
-                       defaultValue={countries[0]}
+                       defaultValue={defaultValue || undefined}
                        getOptionLabel={(option) => option.label}
                        isOptionEqualToValue={(option, value) => option.label === value.label}
-                       onChange={(e, value) => {
-                         console.log(value)
-                       }}
+                       onChange={onChange}
                        disabled={disabled}
                        disabledItemsFocusable
                        disableClearable
@@ -52,7 +52,7 @@ const countrySelectorStyle = css`
   flex-grow: 1;
 `
 
-type CountryType = {
+export type CountryType = {
   code: string;
   label: string;
   phone: string;
@@ -60,7 +60,7 @@ type CountryType = {
 }
 
 // From https://bitbucket.org/atlassian/atlaskit-mk-2/raw/4ad0e56649c3e6c973e226b7efaeb28cb240ccb0/packages/core/select/src/data/countries.js
-const countries: readonly CountryType[] = [
+export const countries: CountryType[] = [
   { code: 'AD', label: 'Andorra', phone: '376' },
   {
     code: 'AE',
