@@ -3,12 +3,17 @@ import * as dataCtrl from "data/mynetwork";
 
 export function findMyNetworkUserAdd(req: express.Request, res: express.Response) {
     console.log(req.body.meetpeople[0])
+    dataCtrl.saveMyNetworkUser(req.body)
+    .then((retData:any) => { return res.status(200).json({ message: "mynetwork find and increase meetcount" }) })
+    .catch((error:any) => { return res.status(500).json({ message: "mynetwork increase meetcount error" }) });
+
+    /*
     dataCtrl.findMyNetwork(req.body.email)
         .then(() => {
             dataCtrl.findMyNetworkUser(req.body.email, req.body.meetpeople[0])
             .then((retData) => { 
                 if(retData !== null){
-                dataCtrl.saveMyNetworkUserIncrease(req.body.email, req.body.meetpeople[0])
+                dataCtrl.saveMyNetworkUserIncrease(req.body)
                 .then(() => { return res.status(200).json({ message: "mynetwork find and increase meetcount" }) })
                 .catch(() => { return res.status(500).json({ message: "mynetwork increase meetcount error" }) });
                 } else{
@@ -24,6 +29,7 @@ export function findMyNetworkUserAdd(req: express.Request, res: express.Response
             .then(() => { return res.status(200).json({ message: "mynetwork new save success" })} )
             .catch(() => { return res.status(500).json({ message: "mynetwork new save error" })} );
         });
+        */
 }
 
 export function findMyNetwork(req: express.Request, res: express.Response) {

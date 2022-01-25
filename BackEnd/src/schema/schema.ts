@@ -90,6 +90,31 @@ const MyNetworkSchema = new mongoose.Schema({
   meetpeople: {type: [MeetPeopleSchema]}
 });
 
+
+MyNetworkSchema.methods.saveMyNetworkUserIncrease = function(bodyData) {
+  console.log(bodyData.meetpeople[0].email)
+  console.log('==================================')
+  console.log(this)
+  const total:string = this;
+  const word = bodyData.meetpeople[0].email;
+  console.log(word)
+    if(total.includes(word) == true){
+      console.log('-------------- find people')
+    } else{
+      console.log('-------------- not found people')
+    }
+
+    // findOne({"meetpeople":{"$elemMatch":{"email": bodyData.meetpeople[0].email}}})
+    // .then((result:any) => {
+    //   console.log('-------------- Start increase')
+    //   bodyData.findOneAndUpdate({"meetpeople":{"$elemMatch":{"email": bodyData.meetpeople[0].email}}}, {$inc:{"meetpeople.$.meetcount": 1}}, {returnNewDocument: true});
+    // })
+    // .catch((error:any) => {
+    //   console.log('-------------- Start push')
+    //   bodyData.findOneAndUpdate({$push:{"meetpeople": bodyData.meetpeople[0]}}, {returnNewDocument: true});
+    // })
+}
+
 const NoticeSchema = new mongoose.Schema({
   noti: {type: String, required: true},
   name: {type: String, required: true},

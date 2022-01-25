@@ -35,6 +35,7 @@ export default function LoginForm({}: LoginFormProps) {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const input: signinInput = {
+      name: "",
       email: form.email,
       password: form.password
     }

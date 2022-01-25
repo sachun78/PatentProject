@@ -1,13 +1,14 @@
 import client from '../client'
 
 export type signinInput = {
+  name: string
   email: string
   password: string
 }
 
 export type signupResult = {
   message: string,
-  data: signinInput
+  data: String
 }
 
 export async function signin({

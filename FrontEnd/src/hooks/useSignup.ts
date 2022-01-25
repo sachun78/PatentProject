@@ -83,10 +83,12 @@ export function useSignin() {
     try {
       setLoading(true)
       const result = await signin(input)
-      console.log(result)
     } catch (e: any) {
-      if (e.response.status === 409) {
-        setError('Username already exists')
+      if (e.response.status === 404) {
+        setError('password error')
+        throw e
+      } else {
+        console.log(e)
         throw e
       }
     } finally {
