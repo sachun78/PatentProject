@@ -1,6 +1,7 @@
 import * as jwt from 'jsonwebtoken';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { userInfo } from 'os';
+import { getCookie, setCookie } from './cookie'
 
 export type headers = {
     alg:{ type: String, default: "HS256"},
@@ -25,11 +26,24 @@ export function makeJWTkey(req: Request, res: Response) {
           if(err) {
               console.log(err);
               res.sendStatus(401)
-              res.send(null)
+              //res.send(null)
           } else {
+              if(token){
              //console.log(token);
-             res.send(token)
+             setCookie('WeMettoken', token, {
+                path: '/',
+                httpOnly: true,
+                secure: true,
+                //expires: Math.floor(Date.now() / 1000) + (60 * 60)
+             })
+             console.log('---------------------------------------------')
+             console.log(getCookie('WeMettoken'))
+             res.sendStatus(200)
+             //res.send(token)
+            }
           }
         }
     )
+
+    
 }

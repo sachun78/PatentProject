@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 let nodemailer = require('nodemailer');
+const senderInfo = require('../config/authMailInfo.json');
 
 export const sendAuthMail = async (req: Request, res: Response, next: NextFunction) => {
     let user_email = req.body.email;
@@ -12,16 +13,16 @@ export const sendAuthMail = async (req: Request, res: Response, next: NextFuncti
         , secure: false
         , requireTLS: true
         , auth: {
-            user: 'wemetsuperuser@gmail.com'
-            , pass: 'wemetsuperuser123!@#'
+            user: senderInfo.user
+            , pass: senderInfo.pass
         }
     });
 
     let info = await transporter.sendMail({   
-        from: 'wemetsuperuser@gmail.com',
+        from: senderInfo.user,
         to: user_email,
         subject: 'WeMet 회원 가입 인증을 위한 안내메일 입니다.',
-        text: `WeMet 회원 가입완료를 위해 아래 인증코드를 입력해주세요.\n
+        text: `WeMet 회원 가입완료를 위해 아래 인증코드를 입력해주세요.\n\n\n
             인증코드 : ${authcode}`
       });
     

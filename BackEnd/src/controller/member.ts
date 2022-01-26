@@ -21,7 +21,15 @@ export function loginMemberUser(req: express.Request, res: express.Response, nex
 export function joinMemberUser(req: express.Request, res: express.Response, next: NextFunction) {
     const email = req.body.email;
     dataCtrl.findMemberOneUser(email)
-        .then((retData) => { return res.status(200).json({ message: "이미 가입된 사용자 입니다." }) })
+        .then((retData) => {
+            if(retData === null){
+                dataCtrl.saveMemberUser(req.body)
+                .then((retData:any) => {  return next() })
+                .catch((error:any) => { return res.status(404).json({ message: error.message }) });
+            }else{
+                return res.status(200).json({ message: "이미 가입된 사용자 입니다." }) 
+            }
+        })
         .catch((error) => {
             dataCtrl.saveMemberUser(req.body)
             .then((retData:any) => {  return next() })
