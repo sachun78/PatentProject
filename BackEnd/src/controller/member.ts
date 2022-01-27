@@ -81,3 +81,29 @@ export function findMemberUserName(req: express.Request, res: express.Response) 
         .then((retData) => { return res.status(200).json({ message: "find user!", data: retData }) })
         .catch((error) => { return res.status(500).json({ message: "not found user" }) });
 }
+
+export function updateMemberCompany(req: express.Request, res: express.Response) {
+    dataCtrl.updateUserCompany(req.body)
+        .then((retData) => { return res.status(200).json({ message: "update success!!" }) })
+        .catch((error) => { return res.status(500).json({ message: "not found user" }) });
+}
+export function updateMemberDepartment(req: express.Request, res: express.Response) {
+    dataCtrl.updateUserDepartment(req.body)
+        .then((retData) => { return res.status(200).json({ message: "update success!!" }) })
+        .catch((error) => { return res.status(500).json({ message: "not found user" }) });
+}
+export function updateMemberPosition(req: express.Request, res: express.Response) {
+    dataCtrl.updateUserPosition(req.body)
+        .then((retData) => { return res.status(200).json({ message: "update success!!" }) })
+        .catch((error) => { return res.status(500).json({ message: "not found user" }) });
+}
+export function updateMemberPrevhistory(req: express.Request, res: express.Response) {
+    dataCtrl.updateUserPrevhistory(req.body)
+        .then((retData) => { return res.status(200).json({ message: "update success!!" }) })
+        .catch((error) => { return res.status(500).json({ message: "not found user" }) });
+}
+export function updateMemberField(req: express.Request, res: express.Response) {
+    dataCtrl.updateUserField(req.body)
+        .then((retData) => { return res.status(200).json({ message: "update success!!" }) })
+        .catch((error) => { return res.status(500).json({ message: "not found user" }) });
+}

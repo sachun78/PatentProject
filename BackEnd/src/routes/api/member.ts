@@ -20,4 +20,10 @@ route.post("/likepostfind", authChecker, memberCtrl.registerLikePost);
 route.post("/findname", authChecker, memberCtrl.findMemberUserName);
 route.post("/sendAuthEmail", sendAuthMail);
 
+route.post("/updateCompany", authChecker, memberCtrl.updateMemberCompany);
+route.post("/updateDepartment", authChecker, memberCtrl.updateMemberDepartment);
+route.post("/updatePosition", authChecker, memberCtrl.updateMemberPosition);
+route.post("/updatePrevhistory", authChecker, memberCtrl.updateMemberPrevhistory);
+route.post("/updateField", authChecker, memberCtrl.updateMemberField);
+
 export default route;

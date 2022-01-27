@@ -65,3 +65,23 @@ export function saveLikePostGood(bodyData: any) {
 export function findMemberlikeUserName(bodyData: any) {
     return user.find({email : {$regex: '.*' + bodyData.name + '.*'}});
 }
+
+export function updateUserCompany(bodyData: any) {
+    return user.findOneAndUpdate({email: bodyData.email}, {$set:{"company": bodyData.company}}, {new: true});
+}
+
+export function updateUserDepartment(bodyData: any) {
+    return user.findOneAndUpdate({email: bodyData.email}, {$set:{"department": bodyData.department}}, {new: true});
+}
+
+export function updateUserPosition(bodyData: any) {
+    return user.findOneAndUpdate({email: bodyData.email}, {$set:{"position": bodyData.position}}, {new: true});
+}
+
+export function updateUserPrevhistory(bodyData: any) {
+    return user.findOneAndUpdate({email: bodyData.email}, {$set:{"prevhistory": bodyData.prevhistory}}, {new: true});
+}
+
+export function updateUserField(bodyData: any) {
+    return user.findOneAndUpdate({email: bodyData.email}, {$set:{"field": bodyData.field}}, {new: true});
+}
