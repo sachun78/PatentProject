@@ -1,19 +1,40 @@
-import * as jwt from 'jsonwebtoken';
-import { secretKey } from "../middleware/authSign";
-import { Request, Response, NextFunction } from 'express';
-import { getCookie } from './cookie'
+import jwt from 'jsonwebtoken';
+import * as authData from 'data/member';
+import config from 'config';
+import { Request, Response, NextFunction } from 'express'
 
-export const authChecker = (req: Request, res: Response, next: NextFunction) => {
-    const token = getCookie('WeMettoken');
-    if (token) {
-    jwt.verify(token, secretKey, (err:any) => {
-      if (err) {
-        res.status(401).json({ error: 'Auth Error from authChecker' });
-      } else {
-        next();
-      }
-    });
-  } else {
-    res.status(401).json({ error: 'Auth Error from authChecker' });
-  }
+interface IRequest extends Request {
+  [key: string]: any
 };
+
+const AUTH_ERROR = { message: 'Authentication Error' };
+
+export async function isAuth(req: IRequest, res: Response, next:NextFunction) {
+  let token: any;
+
+  const authHeader = req.get('Authorization');
+  if ((authHeader && authHeader.startsWith('Bearer '))) {
+    token = authHeader.split(' ')[1]; 
+  }
+
+  if (!token) {
+    token = req.cookies['token'];
+  }
+
+  if (!token) {
+    return res.status(401).json(AUTH_ERROR);
+  }
+
+  jwt.verify(token, config.jwt.secure_key, async (error: any, decode : any) => {
+      if (error) {
+          return res.status(401).json(AUTH_ERROR);
+      }
+      const user = await authData.findById(decode.id);
+      if (!user) {
+          return res.status(401).json(AUTH_ERROR);
+      }
+      req.userId = user.id;
+      req.token = token;
+      next();
+  });
+}

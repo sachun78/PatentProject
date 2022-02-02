@@ -2,10 +2,13 @@ import express from "express";
 import morgan from "morgan";
 import compression from "compression";
 import cookieParser from "cookie-Parser";
-import apiRoute from "./routes/api";
 import cors from "cors";
+import helmet from "helmet";
+import apiRoute from "./routes/api";
+import config from 'config';
+import { csrfCheck } from "middleware/csrf";
 
-const PORT: number = 4000;
+const PORT: number = config.host.port;
 
 export default class Server {
   app: express.Application = express();
@@ -21,6 +24,8 @@ export default class Server {
     this.app.use(compression());
     this.app.use(morgan("dev"));
     this.app.use(cookieParser());
+    this.app.use(helmet());
+    this.app.use(csrfCheck);
 
     this.app.use("/api", apiRoute);
   }

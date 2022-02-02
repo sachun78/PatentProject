@@ -1,109 +1,89 @@
-import express, { NextFunction } from "express";
-import * as dataCtrl from "data/member";
+import { Request, Response, NextFunction, CookieOptions } from 'express'
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
-const bcrypt = require("bcrypt");
+import * as memberDB from "data/member";
+import config from 'config';
 
-export function loginMemberUser(req: express.Request, res: express.Response, next: NextFunction) {
-    const email = req.body.email;
-    dataCtrl.findMemberOneUser(email)
-        .then((retData) => {
-            req.body.name = retData.name
-            if(bcrypt.compareSync(req.body.password, retData.password) === true){
-                return next()
-            } else {
-                console.error('compare password error!!!')
-                res.sendStatus(404)
-            }
-    })
-        .catch((error) => { return res.status(500).json({ message: "가입된 정보를 찾을 수 없습니다. 회원가입을 하시기 바랍니다." }) });
-}
+interface IRequest extends Request {
+    [key: string]: any
+};
 
-export function joinMemberUser(req: express.Request, res: express.Response, next: NextFunction) {
-    const email = req.body.email;
-    dataCtrl.findMemberOneUser(email)
-        .then((retData) => {
-            if(retData === null){
-                dataCtrl.saveMemberUser(req.body)
-                .then((retData:any) => {  return next() })
-                .catch((error:any) => { return res.status(404).json({ message: error.message }) });
-            }else{
-                return res.status(200).json({ message: "이미 가입된 사용자 입니다." }) 
-            }
-        })
-        .catch((error) => {
-            dataCtrl.saveMemberUser(req.body)
-            .then((retData:any) => {  return next() })
-            .catch((error:any) => { return res.status(404).json({ message: error.message }) });
-        });
-}
+export async function signup(req: IRequest, res: Response) {
+    const bodyData = req.body;
+    const found = await memberDB.findByEmail(bodyData.email);
+    if (found) {
+        return res.status(409).json({message: `email (${bodyData.email}) is already`})
+    }
 
-export function registerLikeUser(req: express.Request, res: express.Response) {
-    const email = req.body.email;
-    dataCtrl.findLikeUser(email)
-        .then((retData) => {
-            dataCtrl.findLikeUserFriend(req.body)
-            .then((retData:any) => { return res.status(200).json({ message: "like user already add!" }) })
-            .catch((error:any) => { 
-                dataCtrl.saveLikeUserFriend(req.body)
-                .then((retData:any) => { return res.status(200).json({ message: "like user add success!" }) })
-                .catch((error:any) => { return res.status(404).json({ message: error.message }) });
-            });
-    })
-        .catch((error) => { 
-            dataCtrl.saveLikeUser(req.body)
-            .then((retData:any) => { return res.status(200).json({ message: "like user create success!" }) })
-            .catch((error:any) => { return res.status(404).json({ message: error.message }) });
-        });
+    const hashed = await bcrypt.hash(bodyData.password, config.bcrypt.salt_rouunds);
+    const userId = await memberDB.createUser({
+        name: bodyData.name,
+        email: bodyData.email,
+        password: hashed,
+        company: bodyData.company,
+        department: bodyData.department,
+        position: bodyData.position,
+        field: bodyData.field,
+        photopath: bodyData.photopath,
+        status: bodyData.status,
+        prevhistory: bodyData.prevhistory,
+        country: bodyData.country,
+        date: new Date()
+    });
+
+    const token = createJwtToken(userId);
+    console.log('singup', userId);
+    setToken(res, token);
+    res.status(201).json({token, userId});
 }
 
-export function registerLikePost(req: express.Request, res: express.Response) {
-    const email = req.body.email;
-    dataCtrl.findLikePost(email)
-        .then((retData) => {
-            dataCtrl.findLikePostGood(req.body)
-            .then((retData:any) => { return res.status(200).json({ message: "like post already add!" }) })
-            .catch((error:any) => { 
-                dataCtrl.saveLikePostGood(req.body)
-                .then((retData:any) => { return res.status(200).json({ message: "like post add success!" }) })
-                .catch((error:any) => { return res.status(404).json({ message: error.message }) });
-            });
-    })
-        .catch((error) => { 
-            dataCtrl.saveLikePost(req.body)
-            .then((retData:any) => { return res.status(200).json({ message: "like post create success!" }) })
-            .catch((error:any) => { return res.status(404).json({ message: error.message }) });
-        });
+export async function signin(req: IRequest, res: Response) {
+    const {email, password} = req.body;
+    const user = await memberDB.findByEmail(email);
+    if (!user) {
+        return res.status(401).json({ message: 'Invalid user or password' });
+    }
+
+    const isValidPasswd = bcrypt.compare(password, user.password);
+    if (!isValidPasswd) {
+        return res.status(401).json({ message: 'Invalid user or password' });
+    }
+
+    const token = createJwtToken(user.id);
+    console.log('singup', user.id);
+    setToken(res, token);
+    res.status(200).json({token, email});
 }
 
-export function findMemberUserName(req: express.Request, res: express.Response) {
-    const name = req.body.name;
-    dataCtrl.findMemberlikeUserName(name)
-        .then((retData) => { return res.status(200).json({ message: "find user!", data: retData }) })
-        .catch((error) => { return res.status(500).json({ message: "not found user" }) });
+export async function me(req: IRequest, res: Response) {
+    const user = await memberDB.findById(req.userId);
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json({token: req.token, email: user.email});
 }
 
-export function updateMemberCompany(req: express.Request, res: express.Response) {
-    dataCtrl.updateUserCompany(req.body)
-        .then((retData) => { return res.status(200).json({ message: "update success!!" }) })
-        .catch((error) => { return res.status(500).json({ message: "not found user" }) });
+export async function csrfToken(req: IRequest, res: Response) {
+    const csrfToken = await generateCSRFToken();
+    res.status(200).json({ csrfToken });
 }
-export function updateMemberDepartment(req: express.Request, res: express.Response) {
-    dataCtrl.updateUserDepartment(req.body)
-        .then((retData) => { return res.status(200).json({ message: "update success!!" }) })
-        .catch((error) => { return res.status(500).json({ message: "not found user" }) });
+
+async function generateCSRFToken() {
+    return bcrypt.hash(config.csrf.plainToken, 1);
 }
-export function updateMemberPosition(req: express.Request, res: express.Response) {
-    dataCtrl.updateUserPosition(req.body)
-        .then((retData) => { return res.status(200).json({ message: "update success!!" }) })
-        .catch((error) => { return res.status(500).json({ message: "not found user" }) });
+
+function createJwtToken(id: String) {
+    return jwt.sign({id}, config.jwt.secure_key, {expiresIn: config.jwt.expiresInSec});
 }
-export function updateMemberPrevhistory(req: express.Request, res: express.Response) {
-    dataCtrl.updateUserPrevhistory(req.body)
-        .then((retData) => { return res.status(200).json({ message: "update success!!" }) })
-        .catch((error) => { return res.status(500).json({ message: "not found user" }) });
-}
-export function updateMemberField(req: express.Request, res: express.Response) {
-    dataCtrl.updateUserField(req.body)
-        .then((retData) => { return res.status(200).json({ message: "update success!!" }) })
-        .catch((error) => { return res.status(500).json({ message: "not found user" }) });
+
+function setToken(res: Response, token: String) {
+    const options: CookieOptions = {
+      maxAge: config.jwt.expiresInSec * 1000,
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+    };
+
+    res.cookie('token', token, options); 
 }

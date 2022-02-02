@@ -1,14 +1,10 @@
-import "dotenv/config";
 import Server from "./Server";
-import mongoose from "mongoose";
+import { connectDB } from 'database/database';
 
-const url = "mongodb://192.168.11.108:27017/wemet";
-const db = mongoose.connect(url, (err) => {
-  if (err) {
-    console.log(err.message);
-  } else {
+connectDB()
+  .then(() => {
     console.log("Succesfully Conected !!");
     const server = new Server();
     server.start();
-  }
-});
+  })
+  .catch(console.log);

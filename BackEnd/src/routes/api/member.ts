@@ -1,10 +1,27 @@
 import express from "express";
-import { authChecker } from "../../middleware/authChecker";
-import { makeJWTkey } from "../../middleware/authSign";
+import { body } from 'express-validator';
 import * as memberCtrl from "controller/member";
-import { sendAuthMail } from "middleware/authSendMail";
+import { validate } from 'middleware/validator'
+import { isAuth } from "middleware/authChecker";
 
 const route = express.Router();
+
+const validateCredential = [
+  body('email').isEmail().normalizeEmail().withMessage('invalid email'),
+  body('password')
+    .trim()
+    .isLength({ min: 5 })
+    .withMessage('password should be at least 5 characters'),
+  validate,
+];
+
+const validateSignup = [
+  ...validateCredential,
+  body('name').trim()
+  .notEmpty()
+  .withMessage('username should be at least 5 characters'),
+  validate,
+];
 
 route.get(
   "/",
@@ -13,17 +30,9 @@ route.get(
   }
 );
 
-route.post("/signup", memberCtrl.joinMemberUser, makeJWTkey);
-route.post("/signin", memberCtrl.loginMemberUser, makeJWTkey);
-route.post("/likeuserfind", authChecker, memberCtrl.registerLikeUser);
-route.post("/likepostfind", authChecker, memberCtrl.registerLikePost);
-route.post("/findname", authChecker, memberCtrl.findMemberUserName);
-route.post("/sendAuthEmail", sendAuthMail);
-
-route.post("/updateCompany", authChecker, memberCtrl.updateMemberCompany);
-route.post("/updateDepartment", authChecker, memberCtrl.updateMemberDepartment);
-route.post("/updatePosition", authChecker, memberCtrl.updateMemberPosition);
-route.post("/updatePrevhistory", authChecker, memberCtrl.updateMemberPrevhistory);
-route.post("/updateField", authChecker, memberCtrl.updateMemberField);
+route.post("/signup", validateSignup, memberCtrl.signup);
+route.post("/signin", validateCredential, memberCtrl.signin);
+route.get('/me', isAuth, memberCtrl.me);
+route.get('/csrf-token', memberCtrl.csrfToken);
 
 export default route;
