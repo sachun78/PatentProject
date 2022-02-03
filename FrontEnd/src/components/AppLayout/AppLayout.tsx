@@ -1,5 +1,6 @@
 import { css } from '@emotion/react'
 import React from 'react'
+import media from '../../lib/styles/media'
 
 export type AppLayoutProps = {
   children: React.ReactNode
@@ -45,21 +46,29 @@ const headerStyle = css`
   background: #fff;
   z-index: 1000;
   top: 0;
-    position: sticky;
+  position: sticky;
 `
 const mainStyle = css`
   margin-left: 26rem;
   min-height: calc(100vh - 64px);
   background: #f7f7f8;
   position: relative;
+
+  ${media.small} {
+    margin-left: 0;
+  }
 `
 const sidebarStyle = css`
   width: 26rem;
   height: 100%;
   position: fixed;
-  display: flex;
-  padding: 3rem;
-  padding-top: 0;
-  justify-content: center;
   background: #f7f7f8;
+  display: flex;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  padding-left: 3rem;
+
+  ${media.small} {
+    display: none;
+  }
 `

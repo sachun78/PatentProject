@@ -4,18 +4,14 @@ import { NavLink } from 'react-router-dom'
 import AuthFormBody from '.'
 import palette from '../../lib/palette'
 import IconControl from '../IconControl'
-import RegisterFormDefault from './RegisterFormDefault'
-import RegisterSuccess from './RegisterSuccess'
+import RegisterDefault from './RegisterDefault'
+import RegisterEmailAuth from './RegisterEmailAuth'
+import { useRegisterFormState } from '../../atoms/authState'
 
 type RegisterFormProps = {}
 
 export default function RegisterForm({}: RegisterFormProps) {
-  const [type, setType] = useState<'default' | 'success'>('success')
-
-  const toggle = () => {
-    const text = type === 'default' ? 'success' : 'default'
-    setType(text)
-  }
+  const [type] = useRegisterFormState()
 
   return (
     <AuthFormBody width={622} height={500}>
@@ -25,8 +21,8 @@ export default function RegisterForm({}: RegisterFormProps) {
             <IconControl name={'undo'} /> <span>Back</span>
           </NavLink>
         </div>
-        { type === 'default' && <RegisterFormDefault />}
-        { type === 'success' && <RegisterSuccess />}
+        {type === 'default' && <RegisterDefault />}
+        {type === 'email-auth' && <RegisterEmailAuth />}
       </div>
     </AuthFormBody>
   )

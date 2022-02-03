@@ -1,5 +1,4 @@
 import { css } from '@emotion/react'
-import AuthFormBody from '../../components/AuthFormBody'
 import LoginForm from '../../components/AuthFormBody/LoginForm'
 import palette from '../../lib/palette'
 

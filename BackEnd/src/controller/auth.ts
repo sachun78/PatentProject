@@ -19,7 +19,7 @@ export async function signup(req: IRequest, res: Response, next: NextFunction) {
     }
 
     const hashed = await bcrypt.hash(password, config.bcrypt.salt_rouunds)
-    const userId = await UserRepo.createUser({
+    const user = await UserRepo.createUser({
       username,
       email,
       password_hash: hashed,
@@ -27,10 +27,18 @@ export async function signup(req: IRequest, res: Response, next: NextFunction) {
       certified: false
     })
 
-    const token = createJwtToken(userId)
-    console.log('singup', userId)
+    const token = createJwtToken(user.id)
+    console.log('singup', user.id)
     setToken(res, token)
-    res.status(201).json({ token, userId })
+    res.status(201).json({
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        certified: user.certified
+      }
+    })
   } catch (e) {
     console.error(e)
     next(e)
@@ -53,7 +61,15 @@ export async function signin(req: IRequest, res: Response, next: NextFunction) {
     const token = createJwtToken(user.id)
     console.log('singin', user.id)
     setToken(res, token)
-    res.status(200).json({ token, email })
+    res.status(200).json({
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        certified: user.certified
+      }
+    })
   } catch (e) {
     console.error(e)
     next(e)
@@ -62,11 +78,22 @@ export async function signin(req: IRequest, res: Response, next: NextFunction) {
 
 export async function me(req: IRequest, res: Response, next: NextFunction) {
   try {
+    if (!req.userId) {
+      return res.status(404).json({ message: 'User not found' })
+    }
     const user = await UserRepo.findById(req.userId)
     if (!user) {
       return res.status(404).json({ message: 'User not found' })
     }
-    res.status(200).json({ token: req.token, email: user.email })
+
+    res.status(200).json({
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        certified: user.certified
+      }
+    })
   } catch (e) {
     console.error(e)
     next(e)

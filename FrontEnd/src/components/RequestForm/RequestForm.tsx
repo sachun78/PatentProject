@@ -6,8 +6,6 @@ import useInputs from '../../hooks/useInputs'
 import Input from '../Input'
 import ViewBase from '../ViewBase'
 import RequestSection from './RequestSection'
-import { SearchUserResult, useFindName } from '../../hooks/useFindMember'
-import { useMeetProposal } from '../../hooks/useMeeting'
 import { proposalInput, subUser } from '../../lib/api/meeting/proposal'
 import { Button } from '@mui/material'
 
@@ -17,7 +15,6 @@ type RequestViewProps = {
 
 export default function RequestForm({ title }: RequestViewProps) {
   const [timeDatevalue, setTimeDateValue] = useDateState()
-  const { proposal, complete, error, loading } = useMeetProposal()
   const [infoVisible, setInfoVisible] = useState(false)
   const [form, onChange] = useInputs({
     username: '',
@@ -26,16 +23,6 @@ export default function RequestForm({ title }: RequestViewProps) {
     comment: ''
   })
   const format = 'HH:mm'
-
-  const useSearch = async () => {
-    const { list } = useFindName()
-    const data: SearchUserResult[] | undefined = await list(form.username)
-    if (data !== undefined) {
-      setInfoVisible(true)
-    }
-
-    setInfoVisible(false)
-  }
 
   const handleProposal = async () => {
     const guests: subUser[] = []
@@ -55,11 +42,7 @@ export default function RequestForm({ title }: RequestViewProps) {
       guests: guests,
       comment: form.comment
     }
-    await proposal(input)
   }
-
-  if (error) return <div>제안 실패, 에러발생, 재시도 부탁드립니다.</div>
-  if (complete) return <div>제안 성공</div>
 
   return (
     <ViewBase title={title}>
@@ -76,7 +59,6 @@ export default function RequestForm({ title }: RequestViewProps) {
           <RequestSection
             title={'사용자 이름'}
             button_visible
-            onClick={useSearch}
           >
             <Input
               placeholder='username'
@@ -116,7 +98,7 @@ export default function RequestForm({ title }: RequestViewProps) {
             />
           </RequestSection>
           <div css={space}></div>
-          <Button disabled={loading} onClick={handleProposal}>
+          <Button onClick={handleProposal}>
             제안하기
           </Button>
         </div>
@@ -129,7 +111,6 @@ export default function RequestForm({ title }: RequestViewProps) {
 const wrapper = css`
   display: flex;
   flex-direction: row;
-  height: 86vh;
 `
 const sectionStyle = css`
   flex: 2;

@@ -2,28 +2,46 @@ import { css } from '@emotion/react'
 import InfoViewSection from './InfoViewSection'
 import InfoViewCard from './InfoViewCard'
 import { useState } from 'react'
+import { useInput } from '../../hooks/useInput'
+import { useField } from '../../hooks/useField'
 
 export type InfoViewProps = {}
 
 function InfoView({}: InfoViewProps) {
-  const [fields, ] = useState(['IT/Network', 'IT/Computer', 'Construct/Apart'])
-  const [country, ] = useState('KR');
+  const {
+    fields,
+    fieldText,
+    onChangeFieldText,
+    add, remove, reset, save
+  } = useField(['IT/Network', 'IT/Computer', 'Construct/Apart'])
+  const [country] = useState('KR')
+
+  const [company, onCompanyChange, resetCompany, prevCompany] = useInput('company ID')
+  const [department, onDepartmentChange, resetDepartment, prevDepartment] = useInput('department ID')
+  const [position, onPositionChange, resetPosition, prevPosition] = useInput('position ID')
+
+  const handleFields = { onChange: onChangeFieldText, add, remove }
 
   return <div css={wrapper}>
     <InfoViewSection title='Account'>
       <InfoViewCard.Item title='Email' type={'email'} email='ryan4321@naver.com' />
       <InfoViewCard.Item title='Username' type={'username'} username='양희찬' />
-      <InfoViewCard.Item title='Photo' type={'photo'} username='양희찬' editable />
+      <InfoViewCard.Item title='Photo' type={'photo'} username='양희찬' isEditMode />
     </InfoViewSection>
     <InfoViewSection title='Belonging'>
-      <InfoViewCard.Item title='Company' type={'text'} description={'특허법인'} />
-      <InfoViewCard.Item title='Department' type={'text'} description={'~~~'} />
-      <InfoViewCard.Item title='Position' type={'text'} description={'~~~'} />
-      <InfoViewCard.Item title='Field' type={'field'} fields={fields}/>
-      <InfoViewCard.Item title='Country' type={'country'} countryValue={country}/>
+      <InfoViewCard.Item title='Company' type={'text'} description={company} onChange={onCompanyChange}
+                         reset={resetCompany} prevReset={prevCompany} />
+      <InfoViewCard.Item title='Department' type={'text'} description={department} onChange={onDepartmentChange}
+                         reset={resetDepartment} prevReset={prevDepartment} />
+      <InfoViewCard.Item title='Position' type={'text'} description={position} onChange={onPositionChange}
+                         reset={resetPosition} prevReset={prevPosition} />
+      <InfoViewCard.Item title='Field' type={'field'} fields={fields} handleField={handleFields} reset={reset}
+                         prevReset={save}
+                         description={fieldText} />
+      <InfoViewCard.Item title='Country' type={'country'} countryValue={country} />
     </InfoViewSection>
     <InfoViewSection title='Additional'>
-      <InfoViewCard.Item title='Prev Career' type={'career'}/>
+      <InfoViewCard.Item title='Prev Career' type={'career'} />
     </InfoViewSection>
   </div>
 }

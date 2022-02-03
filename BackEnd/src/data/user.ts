@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { Model } from 'mongoose'
 import { useVirtualId } from 'database/database'
 
 const SALT_FACTOR = 10
@@ -23,7 +23,7 @@ export const userSchema = new mongoose.Schema<IUser>({
     type: String, required: true
   },
   email: {
-    type: String, required: true, unique: true,
+    type: String, required: true, unique: true
   },
   password_hash: {
     type: String, required: true
@@ -44,7 +44,7 @@ useVirtualId(userSchema)
 const User = mongoose.model('User', userSchema)
 
 export async function findByEmail(email: string) {
-  return User.findOne({email:email})
+  return User.findOne({ email: email })
 }
 
 export async function findById(id: string) {
@@ -52,5 +52,13 @@ export async function findById(id: string) {
 }
 
 export async function createUser(user: IUser) {
-  return new User(user).save().then((data: any) => data.id)
+  return new User(user).save().then((data: any) => {
+    return {
+      id: data.id,
+      email: data.email,
+      certified: data.certified,
+      username: data.username
+    }
+  })
 }
+

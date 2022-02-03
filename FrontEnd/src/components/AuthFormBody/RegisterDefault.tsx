@@ -7,7 +7,7 @@ import palette from '../../lib/palette'
 
 export type RegisterFormDefaultProps = {}
 
-function RegisterFormDefault({}: RegisterFormDefaultProps) {
+function RegisterDefault({}: RegisterFormDefaultProps) {
   const {
     form, onChange, handleSubmit,
     loading, errorMessage
@@ -25,12 +25,13 @@ function RegisterFormDefault({}: RegisterFormDefaultProps) {
                    InputProps={{ style: { fontSize: 12 } }} />
         <TextField label='Password' variant='outlined' type='password' name='password'
                    value={form.password} onChange={onChange} css={inputStyle}
+                   autoComplete='password'
                    InputProps={{ style: { fontSize: 12 } }} />
         <TextField label='Confirm Password' variant='outlined' type='password'
-                   name='password_confirm'
+                   name='password_confirm'  autoComplete='password-confirm'
                    value={form.password_confirm} onChange={onChange} css={inputStyle}
                    InputProps={{ style: { fontSize: 12 } }} />
-        { errorMessage !== null && <div>ERROR</div>}
+        { errorMessage !== null && <div>{errorMessage}</div>}
         <div css={privacyStyle}><p>By clicking Sign Up, you are indicating that you have read and acknowledge the
           <a> Terms of Service</a> and <a>Privacy Notice</a>.</p></div>
         <div className='button-div'>
@@ -68,4 +69,4 @@ const privacyStyle = css`
 
 `
 
-export default RegisterFormDefault
+export default RegisterDefault

@@ -1,6 +1,4 @@
 import { css } from '@emotion/react'
-import { useEffect, useState } from 'react'
-import { ScheduleValue, useScheduleView } from '../../hooks/useScheduleView'
 import ViewBase from '../ViewBase'
 import React from 'react'
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
@@ -10,18 +8,6 @@ type ScheduleViewProps = {
 }
 
 function Schedules({ type }: ScheduleViewProps) {
-  const { list, error, loading } = useScheduleView()
-  const [dataSource, setDataSourece] = useState<ScheduleValue[] | undefined>()
-
-  useEffect(() => {
-    const loadData = async () => {
-      const data: ScheduleValue[] | undefined = await list('ryan4321@naver.com')
-      setDataSourece(data)
-    }
-    loadData()
-  }, [])
-
-
   function createData(
     name: string,
     calories: number,
@@ -41,7 +27,7 @@ function Schedules({ type }: ScheduleViewProps) {
   ]
 
   return (
-    <ViewBase title='MY SCHEDULE'>
+    <ViewBase title='SCHEDULE'>
       <div css={tableStyle}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label='simple table'>
@@ -80,17 +66,6 @@ function Schedules({ type }: ScheduleViewProps) {
 const tableStyle = css`
   flex: 1;
   width: 100%;
-`
-
-const right = css`
-  display: flex;
-  justify-content: right;
-  margin-top: 2rem;
-
-  .ant-btn {
-    min-width: 10rem;
-    border-radius: 0.25rem;
-  }
 `
 
 export default Schedules

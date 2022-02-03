@@ -9,7 +9,7 @@ type ViewBaseProps = {
 function ViewBase({ title, children }: ViewBaseProps) {
   return (
     <div css={wrapper}>
-      <h2>{title}</h2>
+      <h2 className='title'>{title}</h2>
       {children}
     </div>
   )
@@ -21,13 +21,13 @@ const wrapper = css`
   /* aligin-items: center; this use for miniSize*/
   justify-content: center;
   flex-direction: column;
-  padding-right: 1rem;
-  padding-left: 1rem;
-  h2 {
-    line-hegiht: 1.5rem;
-    background: ${palette.grey[100]};
-    border-radius: 0.25rem; 
-    /* text-align: center; */
+  margin-bottom: 2rem;
+  
+  .title {
+    line-height: 1.2;
+    font-weight: 600;
+    font-size: 1.8rem;
+    padding-bottom: 1rem;
   }
 `
 

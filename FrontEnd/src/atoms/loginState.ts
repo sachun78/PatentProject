@@ -4,17 +4,19 @@ import { useMemo } from 'react'
 
 export type LoginValue = {
   isloggedIn: boolean
+  isVerified: boolean
   loginType: 'USER' | 'NOTUSER'
 }
 
 const defaultLoginState: LoginValue = {
   isloggedIn: false,
-  loginType: 'USER',
+  isVerified: false,
+  loginType: 'USER'
 }
 
 export const loginState = atom<LoginValue>({
   key: 'loginState',
-  default: defaultLoginState,
+  default: defaultLoginState
 })
 
 export function useLoginValue() {
@@ -36,13 +38,20 @@ export function useLoginStateActions() {
           })
         )
       },
-      setLoggedIn(islogin: boolean) {
+      setLoggedIn(is_logged_in: boolean) {
         set((prev) =>
           produce(prev, (draft) => {
-            draft.isloggedIn = islogin
+            draft.isloggedIn = is_logged_in
           })
         )
       },
+      setVerified(is_verified: boolean) {
+        set((prev) =>
+          produce(prev, (draft) => {
+            draft.isloggedIn = is_verified
+          })
+        )
+      }
     }),
     [set]
   )

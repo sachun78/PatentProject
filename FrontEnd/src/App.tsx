@@ -16,10 +16,12 @@ import { useLoginValue } from './atoms/loginState'
 import DebugObserver from './components/DebugObserver'
 import palette from './lib/palette'
 import Profile from './pages/Profile/Profile'
+import useCheckUserEffect from './hooks/useCheckUserEffect'
 
 function App() {
   const navigate = useNavigate()
   const loginValue = useLoginValue()
+  useCheckUserEffect()
 
   useEffect(() => {
     if (!loginValue.isloggedIn) {
@@ -53,6 +55,7 @@ function App() {
                   <Route path='/meeting/*' element={<Meeting />} />
                   <Route path='/search' element={<Search />} />
                   <Route path='/profile' element={<Profile />} />
+                  <Route path='/conference' element={<div>컨퍼런스</div>} />
                 </Routes>
               </AppLayout.Main>
             </AppLayout>
@@ -69,6 +72,7 @@ const globalStyle = css`
   body,
   #root {
     height: 100%;
+    overflow-x: hidden;
   }
 
   html {
@@ -82,10 +86,10 @@ const globalStyle = css`
         background: ${palette.blueGrey[200]};
       }
     }
+
     a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video {
       border: 0;
       font-size: 100%;
-      font: inherit;
       margin: 0;
       padding: 0;
       vertical-align: baseline;

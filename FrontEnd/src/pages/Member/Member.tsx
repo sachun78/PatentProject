@@ -15,13 +15,8 @@ function Member({}: MemberShipProps) {
 
 const wrapper = css`
   display: flex;
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-  height: 88vh;
-
-  .membership + .membership {
-    padding-left: 0;
-  }
+  flex-direction: column;
+  padding: 3rem;
 `
 
 export default Member

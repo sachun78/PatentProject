@@ -4,10 +4,10 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import AuthFormBody from '.'
 import { useLoginStateActions, useLoginValue } from '../../atoms/loginState'
 import useInputs from '../../hooks/useInputs'
-import { useSignin } from '../../hooks/useSignup'
-import { signinInput } from '../../lib/api/member/signin'
+import { signinInput } from '../../lib/api/auth/signin'
 import palette from '../../lib/palette'
 import { TextField, Button, Divider } from '@mui/material'
+import { useSignin } from '../../hooks/useSignIn'
 
 type LoginFormProps = {}
 
@@ -35,15 +35,12 @@ export default function LoginForm({}: LoginFormProps) {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const input: signinInput = {
-      name: "",
+      name: '',
       email: form.email,
       password: form.password
     }
     try {
       await login(input)
-      loginActions.setLoggedIn(true)
-      alert('로그인 성공')
-      navigate('/')
     } catch (e) {
       console.error(e)
       alert('로그인 실패')
