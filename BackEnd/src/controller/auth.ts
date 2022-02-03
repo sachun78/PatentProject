@@ -45,13 +45,13 @@ export async function signin(req: IRequest, res: Response, next: NextFunction) {
       return res.status(401).json({ message: 'Invalid user or password' })
     }
 
-    const isValidPasswd = bcrypt.compare(password, user.password_hash)
+    const isValidPasswd = await bcrypt.compare(password, user.password_hash)
     if (!isValidPasswd) {
       return res.status(401).json({ message: 'Invalid user or password' })
     }
 
     const token = createJwtToken(user.id)
-    console.log('singup', user.id)
+    console.log('singin', user.id)
     setToken(res, token)
     res.status(200).json({ token, email })
   } catch (e) {

@@ -1,7 +1,5 @@
 import mongoose from 'mongoose'
 import { useVirtualId } from 'database/database'
-import validator from 'validator'
-import bcrypt from 'bcrypt'
 
 const SALT_FACTOR = 10
 
@@ -46,7 +44,7 @@ useVirtualId(userSchema)
 const User = mongoose.model('User', userSchema)
 
 export async function findByEmail(email: string) {
-  return User.findOne({ email })
+  return User.findOne({email:email})
 }
 
 export async function findById(id: string) {
