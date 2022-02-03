@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import * as authData from 'data/member';
+import * as authData from 'data/user';
 import config from 'config';
 import { Request, Response, NextFunction } from 'express'
 
@@ -14,7 +14,7 @@ export async function isAuth(req: IRequest, res: Response, next:NextFunction) {
 
   const authHeader = req.get('Authorization');
   if ((authHeader && authHeader.startsWith('Bearer '))) {
-    token = authHeader.split(' ')[1]; 
+    token = authHeader.split(' ')[1];
   }
 
   if (!token) {

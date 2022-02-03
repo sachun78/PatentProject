@@ -1,17 +1,15 @@
-import express from "express";
-import member from "./member";
-import noticeboard from "./noticeboard";
-import post from "./post";
-import meeting from "./meeting";
-import mynetwork from "./mynetwork";
-import event from "./event";
+import express from 'express'
+import auth from './auth'
+import post from './post'
+import meeting from './meeting'
+import network from './network'
+import event from './event'
 
-const apiRoute = express.Router();
-apiRoute.use("/member", member);
-apiRoute.use("/noticeboard", noticeboard);
-apiRoute.use("/post", post);
-apiRoute.use("/meeting", meeting);
-apiRoute.use("/mynetwork", mynetwork);
-apiRoute.use("/event", event);
+const apiRoute = express.Router()
+apiRoute.use('/auth', auth)
+apiRoute.use('/post', post)
+apiRoute.use('/meeting', meeting)
+apiRoute.use('/network', network)
+apiRoute.use('/event', event)
 
-export default apiRoute;
+export default apiRoute

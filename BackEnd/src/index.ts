@@ -1,10 +1,12 @@
-import Server from "./Server";
-import { connectDB } from 'database/database';
+import 'dotenv/config'
+import Server from './Server'
+import mongoose from 'mongoose'
 
-connectDB()
+const url = 'mongodb://192.168.11.108:27017/wemet'
+mongoose.connect(url)
   .then(() => {
-    console.log("Succesfully Conected !!");
-    const server = new Server();
-    server.start();
+    console.log('Database Connected OK')
+    const server = new Server()
+    server.start()
   })
-  .catch(console.log);
+  .catch(err => console.error(err.message))

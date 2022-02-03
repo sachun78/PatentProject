@@ -1,13 +1,36 @@
-import mongoose from "mongoose";
-import { PostSchema } from "schema/schema";
+import mongoose from 'mongoose'
 
-const post = mongoose.model("posts", PostSchema);
-
-export function saveData(bodyData: any) {
-    const new_post = new post(bodyData);
-    return new_post.save();
+interface IPost {
+  user_id: string
+  text: string
+  comment: IComment[]
 }
 
-export function findData(bodyData: any) {
-    return post.find({email : bodyData});
+interface IComment {
+  user_id: string
+  text: string
+  created_at: Date
+  updated_at: Date
+}
+
+export const postSchema = new mongoose.Schema<IPost>({
+  user_id: { type: String, required: true },
+  text: { type: String, required: true },
+  comment: {
+    type:
+      [{
+        user_id: String,
+        text: String,
+        created_at: Date,
+        updated_at: Date
+      }]
+  }
+})
+
+
+const Post = mongoose.model('posts', postSchema)
+
+export function createPost(post: IPost) {
+  const new_post = new Post(post)
+  return new_post.save()
 }

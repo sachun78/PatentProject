@@ -22,7 +22,7 @@ const config = {
         port: parseInt(required('HOST_PORT', 8080))
     },
     db: {
-        host: required('DB_HOST', "mongodb://localhost:27017/wemet")
+        host: required('DB_HOST', "mongodb://192.168.11.108:27017/wemet")
     },
     csrf: {
         plainToken: required('CSRF_SECURE_KEY', "8s25jMpzVBCDG5v9")
