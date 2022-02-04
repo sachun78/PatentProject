@@ -87,12 +87,10 @@ export async function me(req: IRequest, res: Response, next: NextFunction) {
     }
 
     res.status(200).json({
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        certified: user.certified
-      }
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      certified: user.certified
     })
   } catch (e) {
     console.error(e)

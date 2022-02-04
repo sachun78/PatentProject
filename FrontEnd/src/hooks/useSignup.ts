@@ -1,16 +1,20 @@
 import { useState } from 'react'
-import { signin, signinInput } from '../lib/api/member/signin'
-import { signup, signupInput } from '../lib/api/member/signup'
+import { signin, signinInput } from '../lib/api/auth/signin'
+import { signup, signupInput } from '../lib/api/auth/signup'
 import useInputs from './useInputs'
 import Joi from 'joi'
+import useAuth from './useAuth'
+import { useRegisterFormState } from '../atoms/authState'
 
 export default function useSignUp() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { authorize } = useAuth()
   const register = async (input: signupInput) => {
     try {
       setLoading(true)
-      await signup(input)
+      const result = await signup(input)
+      authorize(result.user)
     } catch (e: any) {
       if (e.response.status === 409) {
         setError('email already exists')
@@ -36,20 +40,17 @@ export function useSignUpForm() {
   })
   const { register, loading, error } = useSignUp()
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [, setType] = useRegisterFormState()
   const handleSubmit = async () => {
     const schema = Joi.object().keys({
-      email: Joi.string().email({tlds: false}).required(),
+      email: Joi.string().email({ tlds: false }).required(),
       username: Joi.string().required(),
       password: Joi.string()
         .pattern(new RegExp('^[a-zA-Z0-9]{8,20}$')).required(),
-      password_confirm: Joi.ref('password'),
-    });
+      password_confirm: Joi.ref('password')
+    })
     try {
-      //check validation using JOI
-      // 1. email NOT EMPTY
-      // 2. name NOT EMPTY
-      // 3. password, password_confirm NOT EMPTY
-      const result = await schema.validateAsync(form);
+      const result = await schema.validate(form)
       console.log(result)
     } catch (e) {
       console.log(e)
@@ -59,46 +60,16 @@ export function useSignUpForm() {
 
     try {
       await register({ ...form })
+      setType('email-auth')
       return
     } catch (e) {
-      console.log(error)
-      if (error) {
-        setErrorMessage(error)
-      } else {
-        setErrorMessage('validation Error!')
-      }
+      console.log(e)
+      setErrorMessage(error)
     }
   }
 
   return {
     form, onChange, handleSubmit,
     loading, errorMessage
-  }
-}
-
-export function useSignin() {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const login = async (input: signinInput) => {
-    try {
-      setLoading(true)
-      const result = await signin(input)
-    } catch (e: any) {
-      if (e.response.status === 404) {
-        setError('password error')
-        throw e
-      } else {
-        console.log(e)
-        throw e
-      }
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return {
-    login,
-    loading,
-    error
   }
 }

@@ -1,39 +1,47 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { signin, signinInput } from '../lib/api/auth/signin'
-import { useRegisterFormState } from '../atoms/authState'
+import { useAccessTokenState, useRegisterFormState } from '../atoms/authState'
 import { useNavigate } from 'react-router-dom'
-import { useLoginStateActions } from '../atoms/loginState'
+import useAuth from './useAuth'
 
 export function useSignin() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [, setType] = useRegisterFormState()
+  const [, setAccessToken] = useAccessTokenState()
   const navigate = useNavigate()
-  const loginActions = useLoginStateActions()
-  const login = async (input: signinInput) => {
-    try {
-      setLoading(true)
-      const result = await signin(input)
-      if (!result.user.certified) {
-        setType('email-auth')
-        navigate('/register')
-      } else {
-        navigate('/')
-        loginActions.setLoggedIn(true)
-        alert('로그인 성공')
+  const { authorize } = useAuth()
+
+  useEffect(() => {
+    return () => setLoading(false) // cleanup function을 이용
+  }, [])
+
+  const login = useCallback(
+    async (input: signinInput) => {
+      try {
+        setLoading(true)
+        const { token, user } = await signin(input)
+        setAccessToken(token)
+        if (user.certified) {
+          authorize(user)
+          alert('로그인 성공')
+          navigate('/')
+        } else {
+          setType('email-auth')
+          navigate('/register')
+        }
+      } catch (e: any) {
+        if (e.response.status === 404) {
+          setError('password error')
+          throw e
+        } else {
+          console.log(e)
+          throw e
+        }
+      } finally {
+        setLoading(false)
       }
-    } catch (e: any) {
-      if (e.response.status === 404) {
-        setError('password error')
-        throw e
-      } else {
-        console.log(e)
-        throw e
-      }
-    } finally {
-      setLoading(false)
-    }
-  }
+    }, [authorize, navigate, setAccessToken, setType])
 
   return {
     login,

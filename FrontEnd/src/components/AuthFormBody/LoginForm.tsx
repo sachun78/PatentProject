@@ -1,8 +1,7 @@
 import { css } from '@emotion/react'
-import React, { useEffect } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import React from 'react'
+import { NavLink } from 'react-router-dom'
 import AuthFormBody from '.'
-import { useLoginStateActions, useLoginValue } from '../../atoms/loginState'
 import useInputs from '../../hooks/useInputs'
 import { signinInput } from '../../lib/api/auth/signin'
 import palette from '../../lib/palette'
@@ -12,25 +11,11 @@ import { useSignin } from '../../hooks/useSignIn'
 type LoginFormProps = {}
 
 export default function LoginForm({}: LoginFormProps) {
-  const navigate = useNavigate()
-  const loginActions = useLoginStateActions()
-  const loginValue = useLoginValue()
   const { login, loading, error } = useSignin()
   const [form, onChange] = useInputs({
     email: '',
     password: ''
   })
-
-  useEffect(() => {
-    if (loginValue.isloggedIn) {
-      console.log('already loggedIn')
-      navigate('/')
-    }
-  }, [loginValue, navigate])
-
-  const handleTypeChange = () => {
-    loginActions.toggle()
-  }
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -50,65 +35,45 @@ export default function LoginForm({}: LoginFormProps) {
   return (
     <AuthFormBody width={622} height={480}>
       <div css={loginFormStyle}>
-        {loginValue.loginType === 'USER' ? (
-          <>
-            <h2 className='title'>Log In</h2>
-            <section>
-              <form onSubmit={onSubmit}>
-                <div>
-                  <TextField label='username' variant='outlined' type='email' name='email'
-                             value={form.email} onChange={onChange} css={inputStyle} autoComplete='username'
-                             InputProps={{ style: { fontSize: 15 } }} />
-                </div>
-                <div><TextField label='password' variant='outlined' type='password' name='password'
-                                value={form.password} onChange={onChange} css={inputStyle}
-                                autoComplete='current-password'
-                                InputProps={{ style: { fontSize: 15 } }} />
-                </div>
-                <div className='button-div'>
-                  <Button variant='contained' type='submit' color='primary'>
-                    Log In
-                  </Button>
-                </div>
-              </form>
-            </section>
-            <Divider css={dividerStlye}>OR</Divider>
-            <section>
-              <div css={underBlockStyle}>
-                <div>
-                  <NavLink to={'/register'}>
-                    <h4>Sign Up</h4>
-                  </NavLink>
-                </div>
-                <div>
-                  <h4>Forget Password</h4>
-                </div>
+        <>
+          <h2 className='title'>Log In</h2>
+          <section>
+            <form onSubmit={onSubmit}>
+              <div>
+                <TextField label='username' variant='outlined' type='email' name='email'
+                           value={form.email} onChange={onChange} css={inputStyle} autoComplete='username'
+                           InputProps={{ style: { fontSize: 15 } }} />
               </div>
-            </section>
-          </>
-        ) : (
-          <>
-            <h2 className='title'>비회원 로그인 </h2>
-            <section>
-              <form onSubmit={onSubmit}>
-                <div><TextField label='username' variant='outlined' type='email' css={inputStyle} value='fix' />
-                </div>
-                <div><TextField label='password' variant='outlined' type='password'
-                                css={inputStyle} value='fix' />
-                </div>
-                <div className='button-div'>
-                  <Button type='submit'>
-                    시작하기
-                  </Button>
-                </div>
-              </form>
-            </section>
-          </>
-        )}
+              <div><TextField label='password' variant='outlined' type='password' name='password'
+                              value={form.password} onChange={onChange} css={inputStyle}
+                              autoComplete='current-password'
+                              InputProps={{ style: { fontSize: 15 } }} />
+              </div>
+              <div className='button-div'>
+                <Button variant='contained' type='submit' color='primary'>
+                  Log In
+                </Button>
+              </div>
+            </form>
+          </section>
+          <Divider css={dividerStlye}>OR</Divider>
+          <section>
+            <div css={underBlockStyle}>
+              <div>
+                <NavLink to={'/register'}>
+                  <h4>Sign Up</h4>
+                </NavLink>
+              </div>
+              <div>
+                <h4>Forget Password</h4>
+              </div>
+            </div>
+          </section>
+        </>
         <div className='foot'>
-          <span>{loginValue.loginType === 'USER' ? '비회원으로' : '회원으로'}</span>
-          <div className='link' onClick={handleTypeChange}>
-            {loginValue.loginType === 'USER' ? '사용' : '로그인'}
+          <span>비회원으로</span>
+          <div className='link'>
+            사용
           </div>
         </div>
       </div>

@@ -24,10 +24,9 @@ const wrapper = css`
   margin-bottom: 2rem;
   
   .title {
-    line-height: 1.2;
-    font-weight: 600;
-    font-size: 1.8rem;
-    padding-bottom: 1rem;
+    font-weight: 800;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
   }
 `
 

@@ -1,9 +1,5 @@
 import { useReducer, useCallback } from 'react'
 
-type DefaultValues = {
-  [key: string]: string
-}
-
 type UseInputsAction = {
   name: string
   value: string

@@ -15,7 +15,6 @@ export type signupResult = {
 export async function signup({ username, email, password }: signupInput) {
   try {
     const response = await client.post<signupResult>('/api/auth/signup', { username, email, password })
-    client.defaults.headers.common = { 'Authorization': `bearer ${response.data.token}` }
     return response.data
   } catch (e: any) {
     console.error(e)

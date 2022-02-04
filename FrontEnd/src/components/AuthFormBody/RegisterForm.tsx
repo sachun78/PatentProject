@@ -17,9 +17,9 @@ export default function RegisterForm({}: RegisterFormProps) {
     <AuthFormBody width={622} height={500}>
       <div css={loginFormStyle}>
         <div css={undoStyle}>
-          <NavLink to={'/login'} className='link'>
+          {type === 'default' && <NavLink to={'/login'} className='link'>
             <IconControl name={'undo'} /> <span>Back</span>
-          </NavLink>
+          </NavLink>}
         </div>
         {type === 'default' && <RegisterDefault />}
         {type === 'email-auth' && <RegisterEmailAuth />}

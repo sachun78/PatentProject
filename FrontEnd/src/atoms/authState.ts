@@ -1,13 +1,22 @@
 import { atom, useRecoilState } from 'recoil'
 import { User } from '../lib/api/types'
 
-export const userState = atom<User | null>({
+const userState = atom<User | null>({
   key: 'userState',
   default: null
 })
 
 export function useUserState() {
   return useRecoilState(userState)
+}
+
+const accessTokenState = atom<string | null>({
+  key: 'accessTokenState',
+  default: null
+})
+
+export function useAccessTokenState() {
+  return useRecoilState(accessTokenState)
 }
 
 type formType = 'default' | 'email-auth'
