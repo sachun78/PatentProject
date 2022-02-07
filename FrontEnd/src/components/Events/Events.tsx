@@ -4,10 +4,16 @@ import { Paper } from '@mui/material'
 import React from 'react'
 import palette from '../../lib/palette'
 import CreateEventModal from './CreateEventModal'
+import { useEventModal } from '../../hooks/useEventTitle'
 
 type EventViewProps = {}
 
 export default function Events({}: EventViewProps) {
+  const { setModalState } = useEventModal()
+  const handleClick = () => {
+    setModalState(true)
+  }
+
   return (
     <>
       <CreateEventModal />
@@ -31,7 +37,7 @@ export default function Events({}: EventViewProps) {
           </Paper>
         </div>
       </ViewBase>
-      <button css={createEventButton}>이벤트 생성</button>
+      <button css={createEventButton} onClick={handleClick}>이벤트 생성</button>
     </>
   )
 }

@@ -29,15 +29,15 @@ function Input(
 }
 
 const wrapper = (disabled?: boolean) => css`
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 1.6rem;
+  padding-right: 1.6rem;
   display: flex;
   flex: 1;
   align-items: center;
   cursor: text;
   span {
     color: ${palette.blueGrey[300]};
-    margin-right: 0.5rem;
+    margin-right: 0.8rem;
   }
   ${disabled &&
   css`

@@ -29,11 +29,11 @@ function InputBase(
 
 const wrapper = (disabled: boolean = false) => css`
   border: ${palette.blueGrey[50]} 1px solid;
-  border-radius: 0.5rem;
+  border-radius: 0.8rem;
   background: #fff;
-  height: 2.5rem;
+  height: 4rem;
   color: ${palette.blueGrey[700]};
-  font-size: 1rem;
+  font-size: 1.6rem;
   display: flex;
   ${disabled &&
   css`

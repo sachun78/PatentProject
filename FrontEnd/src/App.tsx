@@ -3,7 +3,6 @@ import AppLayout from './components/AppLayout'
 import React from 'react'
 import Home from './pages/Home'
 import { Route, Routes } from 'react-router-dom'
-import Search from './pages/Search'
 import Sidebar from './components/Sidebar'
 import TopNavigation from './components/TopNavigation'
 import Member from './pages/Member'
@@ -43,7 +42,6 @@ function App() {
                   <Route path='/schedule' element={<Schedule />} />
                   <Route path='/network' element={<Network />} />
                   <Route path='/meeting/*' element={<Meeting />} />
-                  <Route path='/search' element={<Search />} />
                   <Route path='/profile' element={<Profile />} />
                   <Route path='/conference' element={<div>컨퍼런스</div>} />
                 </Routes>
@@ -75,14 +73,6 @@ const globalStyle = css`
       ::selection {
         background: ${palette.blueGrey[200]};
       }
-    }
-
-    a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video {
-      border: 0;
-      font-size: 100%;
-      margin: 0;
-      padding: 0;
-      vertical-align: baseline;
     }
   }
 `
