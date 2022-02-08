@@ -113,7 +113,7 @@ function InfoViewCardItem({
       </div>}
       {/*3. Name TYPE*/}
       {type === 'username' && <div css={emailStyle}>
-        <div className='email-block'>{username}.</div>
+        <div className='email-block'>{username}</div>
       </div>}
       {/*4. Text TYPE*/}
       {type === 'text' && <div css={textStyle(minHeight)}>

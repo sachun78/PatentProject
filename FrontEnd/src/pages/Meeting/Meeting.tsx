@@ -20,7 +20,7 @@ function Meeting({}: MeetingProps) {
 }
 
 const pageStyle = css`
-  height: 100%;
+  min-height: 81rem;
   padding: 3rem;
 `
 

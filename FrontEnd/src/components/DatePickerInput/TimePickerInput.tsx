@@ -1,20 +1,18 @@
-import { CalendarPicker, LocalizationProvider } from '@mui/lab'
+import { LocalizationProvider, StaticTimePicker } from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import InputBase from '../InputBase'
 import { css } from '@emotion/react'
 import { useRef, useState } from 'react'
 import useOnClickOutside from 'use-onclickoutside'
+import { TextField } from '@mui/material'
 
-export type DatePickerProps = {
+export type TimePickerProps = {
   value: Date,
-  maximum?: Date,
-  minimum?: Date,
   onChange(value: Date): void
 }
 
-function DatePickerInput({ value, maximum, minimum, onChange }: DatePickerProps) {
+function TimePickerInput({ value, onChange }: TimePickerProps) {
   const [open, setOpen] = useState(false)
-  const [date, setDate] = useState<Date | null>(new Date())
   const ref = useRef<HTMLDivElement>(null)
 
   const onClose: Parameters<typeof useOnClickOutside>[1] = (e) => {
@@ -24,10 +22,12 @@ function DatePickerInput({ value, maximum, minimum, onChange }: DatePickerProps)
     setOpen(false)
   }
 
-  const handleChange = (value: Date | null) => {
-    if (value) {
-      onChange(value)
-      setOpen(false)
+  const handleChange = (new_value: Date | null) => {
+    if (new_value) {
+      if (value.getMinutes() !== new_value.getMinutes()) {
+        onChange(new_value)
+        setOpen(false)
+      }
     }
   }
 
@@ -46,11 +46,20 @@ function DatePickerInput({ value, maximum, minimum, onChange }: DatePickerProps)
           handleOpen()
         }
       }}>
-      {value?.toDateString()}
+      {value?.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
     </div>
 
     {open && <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <CalendarPicker date={value} onChange={handleChange} css={calendarStyle} minDate={minimum} maxDate={maximum} />
+      <div css={calendarStyle}>
+        <StaticTimePicker ampm
+                          orientation='landscape'
+                          openTo='hours'
+                          value={value}
+                          onChange={handleChange}
+                          minutesStep={5}
+                          showToolbar={false}
+                          renderInput={(params) => <TextField {...params} />} />
+      </div>
     </LocalizationProvider>}
   </InputBase>
 }
@@ -83,4 +92,4 @@ const calendarStyle = css`
   transform: translate3d(0, 100%, 0);
 `
 
-export default DatePickerInput
+export default TimePickerInput

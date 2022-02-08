@@ -4,6 +4,7 @@ import InfoViewCard from './InfoViewCard'
 import { useState } from 'react'
 import { useInput } from '../../hooks/useInput'
 import { useField } from '../../hooks/useField'
+import { useUserState } from '../../atoms/authState'
 
 export type InfoViewProps = {}
 
@@ -15,7 +16,7 @@ function InfoView({}: InfoViewProps) {
     add, remove, reset, save
   } = useField(['IT/Network', 'IT/Computer', 'Construct/Apart'])
   const [country] = useState('KR')
-
+  const [user] = useUserState()
   const [company, onCompanyChange, resetCompany, prevCompany] = useInput('company ID')
   const [department, onDepartmentChange, resetDepartment, prevDepartment] = useInput('department ID')
   const [position, onPositionChange, resetPosition, prevPosition] = useInput('position ID')
@@ -24,9 +25,9 @@ function InfoView({}: InfoViewProps) {
 
   return <div css={wrapper}>
     <InfoViewSection title='Account'>
-      <InfoViewCard.Item title='Email' type={'email'} email='ryan4321@naver.com' />
-      <InfoViewCard.Item title='Username' type={'username'} username='양희찬' />
-      <InfoViewCard.Item title='Photo' type={'photo'} username='양희찬' isEditMode />
+      <InfoViewCard.Item title='Email' type={'email'} email={user?.email} />
+      <InfoViewCard.Item title='Username' type={'username'} username={user?.username} />
+      <InfoViewCard.Item title='Photo' type={'photo'} username={user?.username} isEditMode />
     </InfoViewSection>
     <InfoViewSection title='Belonging'>
       <InfoViewCard.Item title='Company' type={'text'} description={company} onChange={onCompanyChange}

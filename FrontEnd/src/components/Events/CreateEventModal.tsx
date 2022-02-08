@@ -19,7 +19,7 @@ function CreateEventModal({}: CreateEventModalProps) {
   }
 
   return <Modal open={open}>
-    <Box css={eventformStyle}>
+    <Box css={eventFormStyle}>
       <ViewBase title={'Create Event'}>
         <RequestSection title={'Event title'}>
           <Input
@@ -37,7 +37,7 @@ function CreateEventModal({}: CreateEventModalProps) {
   </Modal>
 }
 
-const eventformStyle = css`
+const eventFormStyle = css`
   position: absolute;
   left: 40%;
   top: 20%;

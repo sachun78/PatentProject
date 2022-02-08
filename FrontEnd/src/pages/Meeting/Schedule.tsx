@@ -6,7 +6,7 @@ type ScheduleProps = {}
 function Schedule({}: ScheduleProps) {
   return (
     <div css={wrapper}>
-      <Schedules type="page" />
+      <Schedules />
     </div>
   )
 }
