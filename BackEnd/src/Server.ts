@@ -20,7 +20,8 @@ export default class Server {
   setup() {
     this.app.use(express.json())
     this.app.use(helmet())
-    this.app.use(cors({ credentials: true, origin: ['http://localhost:3000', 'http://localhost:5555', 'http://192.168.11.108:3000'] }))
+    this.app.use(cors({ credentials: true, origin: ['http://localhost:3000', 'http://192.168.11.108:3000'] }))
+    this.app.use(express.static('uploads'))
     this.app.use(cookieParser())
     this.app.use(express.urlencoded({ extended: true }))
     this.app.use(morgan('dev'))

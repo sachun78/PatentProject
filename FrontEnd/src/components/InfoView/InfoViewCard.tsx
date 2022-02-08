@@ -7,6 +7,7 @@ import Input from '../Input/Input'
 import Tag from '../Tag'
 import CountrySelector from '../CountrySelector'
 import { countries, CountryType } from '../CountrySelector/CountrySelector'
+import { upload } from '../../lib/api/user/upload'
 
 export type InfoViewCardProps = {
   children: React.ReactNode
@@ -52,11 +53,14 @@ function InfoViewCardItem({
                             minHeight = 0
                           }: InfoViewCardItemProps) {
   const fileRef = useRef<HTMLInputElement>(null)
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formData = new FormData()
     if (e.target != null) {
       const files = e.target.files
       if (files && files.length >= 1) {
+        formData.append('profile_img', files[0])
         console.log(`${files[0].name} 파일 업로드중`)
+        await upload(formData)
       }
     }
   }
@@ -96,7 +100,7 @@ function InfoViewCardItem({
         </p>
       </div>}
       {/*2. PHOTO TYPE*/}
-      {type === 'photo' && username && <div css={photoStyle}>
+      {type === 'photo' && username && <form encType='multipart/form-data' css={photoStyle}>
         <div><Avatar sx={{ width: 100, height: 100, fontSize: 40 }}>
           {photo === undefined && `${username[0]}`}
         </Avatar></div>
@@ -106,11 +110,15 @@ function InfoViewCardItem({
           type='file'
           style={{ display: 'none' }}
           accept='image/*'
+          name='profile_img'
         />
-          <button className={'btn'} onClick={() => fileRef?.current?.click()}><IconControl name={'upload'} /></button>
+          <button className={'btn'} onClick={(e) => {
+            e.preventDefault()
+            fileRef?.current?.click()
+          }}><IconControl name={'upload'} /></button>
         </>)
         }
-      </div>}
+      </form>}
       {/*3. Name TYPE*/}
       {type === 'username' && <div css={emailStyle}>
         <div className='email-block'>{username}</div>
