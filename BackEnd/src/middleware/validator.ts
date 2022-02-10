@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 
-export const validate = (req: Request, res: Response, next: NextFunction) => {
+interface IRequest extends Request {
+  [key: string]: any
+}
+
+export const validate = (req: IRequest, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     return next();

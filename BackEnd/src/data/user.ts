@@ -6,7 +6,7 @@ const SALT_FACTOR = 10
 interface IUser {
   username: string;
   email: string;
-  password_hash: string;
+  password: string;
   company?: string;
   department?: string;
   position?: string;
@@ -25,7 +25,7 @@ export const userSchema = new mongoose.Schema<IUser>({
   email: {
     type: String, required: true, unique: true
   },
-  password_hash: {
+  password: {
     type: String, required: true
   },
   company: { type: String, default: '' },      // 회사

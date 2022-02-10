@@ -19,13 +19,7 @@ export async function signup(req: IRequest, res: Response, next: NextFunction) {
     }
 
     const hashed = await bcrypt.hash(password, config.bcrypt.salt_rouunds)
-    const user = await UserRepo.createUser({
-      username,
-      email,
-      password_hash: hashed,
-      status: 0,
-      certified: false
-    })
+    const user = await UserRepo.createUser({ ...req.body, password : hashed});
 
     const token = createJwtToken(user.id)
     console.log('singup', user.id)
@@ -53,7 +47,7 @@ export async function signin(req: IRequest, res: Response, next: NextFunction) {
       return res.status(401).json({ message: 'Invalid user or password' })
     }
 
-    const isValidPasswd = await bcrypt.compare(password, user.password_hash)
+    const isValidPasswd = await bcrypt.compare(password, user.password)
     if (!isValidPasswd) {
       return res.status(401).json({ message: 'Invalid user or password' })
     }
