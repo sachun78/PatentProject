@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import * as authData from 'data/user';
+import * as authData from 'data/auth';
 import config from 'config';
 import { Request, Response, NextFunction } from 'express'
 

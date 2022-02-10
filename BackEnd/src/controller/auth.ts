@@ -2,7 +2,7 @@ import { Request, Response, CookieOptions, NextFunction } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
-import * as UserRepo from 'data/user'
+import * as UserRepo from 'data/auth'
 import config from 'config'
 
 interface IRequest extends Request {
