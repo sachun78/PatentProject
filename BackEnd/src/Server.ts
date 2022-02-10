@@ -8,7 +8,7 @@ import helmet from 'helmet'
 import config from 'config'
 import { csrfCheck } from 'middleware/csrf'
 
-const PORT: number = 4000
+const PORT: number = config.host.port;
 
 export default class Server {
   app: express.Application = express()

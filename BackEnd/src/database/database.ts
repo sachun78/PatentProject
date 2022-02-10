@@ -2,6 +2,7 @@ import Mongoose from 'mongoose';
 import config from 'config';
 
 export async function connectDB() {
+    console.log(config.db.host);
     return Mongoose.connect(config.db.host);
 }
 
