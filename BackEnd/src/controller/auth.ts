@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 import * as UserRepo from 'data/auth'
+import * as ProfileRepo from 'data/profile'
 import config from 'config'
 
 interface IRequest extends Request {
@@ -20,6 +21,7 @@ export async function signup(req: IRequest, res: Response, next: NextFunction) {
 
     const hashed = await bcrypt.hash(password, config.bcrypt.salt_rouunds)
     const user = await UserRepo.createUser({ ...req.body, password : hashed});
+    const profile = await ProfileRepo.createProfile(ProfileRepo.defaultProfile , user.id);
 
     const token = createJwtToken(user.id)
     console.log('singup', user.id)
