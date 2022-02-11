@@ -25,16 +25,16 @@ export const userSchema = new mongoose.Schema<IUser>({
   certified: { type: Boolean, default: false },
 }, { timestamps: true })
 
-useVirtualId(userSchema)
+useVirtualId(userSchema);
 
-const User = mongoose.model('User', userSchema)
+const User = mongoose.model('User', userSchema);
 
 export async function findByEmail(email: string) {
-  return User.findOne({ email: email })
+  return User.findOne({ email: email });
 }
 
 export async function findById(id: string) {
-  return User.findById(id)
+  return User.findById(id);
 }
 
 export async function createUser(user: IUser) {
@@ -45,6 +45,10 @@ export async function createUser(user: IUser) {
       certified: data.certified,
       username: data.username
     }
-  })
+  });
+}
+
+export async function updateUrl(id: string, url: string) {
+  return User.findByIdAndUpdate(id, {photo_path: url}, {new: true});
 }
 
