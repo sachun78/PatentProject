@@ -10,11 +10,14 @@ export default function useAuth() {
     setUserState(null)
     try {
       // TODO(call cookie remove api, logout)
-    } catch (e) {}
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return {
     authorize,
     logout,
   }
+
 }
