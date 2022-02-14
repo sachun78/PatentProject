@@ -1,7 +1,6 @@
 import mongoose, { model } from 'mongoose';
 import { useVirtualId } from 'database/database'
 import * as authRepo  from 'data/auth';
-import { profile } from 'console';
 
 interface IProfile {
     userid : string,
@@ -55,7 +54,5 @@ export async function updateProfile(userid: string, data: IProfile) {
 }
 
 export async function getProfile(userId: string) {
-  return authRepo.findById(userId).then((user) => {
     return Profile.findOne({userid: userId},{_id: false});
-  })
 }
