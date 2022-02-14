@@ -23,9 +23,11 @@ export const profileScheme = new mongoose.Schema<IProfile>({
     field: { type: [String], default: [] },      // 분야
     status: { type: Number, enum: [-1, 0, 1, 2], default: -1 },       // -1: 할당 안됨, 0: 삭제된 유저, 1: 정상 등록 유저, 2: 휴먼 유저
     country: { type: String }       // 국가
-}, { timestamps: true })
-  
-useVirtualId(profileScheme);
+}, 
+{ 
+  timestamps: true,
+  versionKey: false
+})
 
 const Profile = mongoose.model('Profile', profileScheme);
 export const defaultProfile = new Profile({
@@ -54,6 +56,6 @@ export async function updateProfile(userid: string, data: IProfile) {
 
 export async function getProfile(userId: string) {
   return authRepo.findById(userId).then((user) => {
-    return Profile.findOne({userid: userId});
+    return Profile.findOne({userid: userId},{_id: false});
   })
 }
