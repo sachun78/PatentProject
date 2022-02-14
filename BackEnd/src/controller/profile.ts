@@ -39,17 +39,17 @@ export function profileImage(req: IRequest, res: Response) {
 //////////////////////////////////////////////////////////////////////////
 export async function createProfile(req: IRequest, res: Response) {
   const profile = await ProfileRepo.createProfile(req.body, req.userId);
-  res.status(201).json({profile});
+  res.status(201).json(profile);
 }
 
 export async function updateProfile(req: IRequest, res: Response) {
   const userId = req.userId;
   const body = req.body;
   const updated = await ProfileRepo.updateProfile(userId, body);
-  res.status(200).json({updated});
+  res.status(200).json(updated);
 }
 
 export async function getProfile(req: IRequest, res: Response) {
   const retProfile = await ProfileRepo.getProfile(req.userId);
-  res.status(200).json({retProfile});
+  res.status(200).json(retProfile);
 }

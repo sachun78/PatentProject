@@ -1,5 +1,5 @@
-import mongoose, { Model } from 'mongoose'
-import { useVirtualId } from 'database/database'
+import mongoose, { Model } from 'mongoose';
+import { useVirtualId } from 'database/database';
 
 const SALT_FACTOR = 10
 
@@ -23,7 +23,11 @@ export const userSchema = new mongoose.Schema<IUser>({
   },
   photo_path: { type: String, default: '' },    // 프로필 사진 위치
   certified: { type: Boolean, default: false },
-}, { timestamps: true })
+}, 
+{ 
+  timestamps: true,
+  versionKey: false, 
+})
 
 useVirtualId(userSchema);
 
@@ -48,7 +52,7 @@ export async function createUser(user: IUser) {
   });
 }
 
-export async function updateUrl(id: string, url: string) {
+export async function updateUrl(id: string, url?: string) {
   return User.findByIdAndUpdate(id, {photo_path: url}, {new: true});
 }
 
