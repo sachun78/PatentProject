@@ -49,3 +49,7 @@ export async function updateProfile(req: IRequest, res: Response) {
   res.status(200).json({updated});
 }
 
+export async function getProfile(req: IRequest, res: Response) {
+  const retProfile = await ProfileRepo.getProfile(req.userId);
+  res.status(200).json({retProfile});
+}

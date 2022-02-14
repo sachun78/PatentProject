@@ -51,3 +51,9 @@ export async function createProfile(_profile: IProfile, userId: string) {
 export async function updateProfile(userid: string, data: IProfile) {
     return Profile.findOneAndUpdate({userid}, data, {new: true});
 }
+
+export async function getProfile(userId: string) {
+  return authRepo.findById(userId).then((user) => {
+    return Profile.findOne({userid: userId});
+  })
+}
