@@ -1,14 +1,13 @@
 import { useState } from 'react'
 
-export default function useModal() {
-  const [open, setOpen] = useState(true)
-  const handleOpen = () => setOpen(true)
+export default function useModal(initialState: boolean) {
+  const [open, setOpen] = useState(initialState)
   const handleClose = (e: object, reason: string) => {
     if (reason === 'backdropClick') return
     setOpen(false)
   }
 
   return {
-    open,setOpen, handleClose
+    open, setOpen, handleClose
   }
 }

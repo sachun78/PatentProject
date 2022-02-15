@@ -13,7 +13,7 @@ function UserInfo({}: UserInfoProps) {
 
   return <div css={wrapper}>
     <Link to={'/profile'}>{username}</Link>
-    <Link css={logoutStyle} to={'/login'} onClick={() => logout}>logout</Link>
+    <Link css={logoutStyle} to={'/login'} onClick={logout}>logout</Link>
   </div>
 }
 

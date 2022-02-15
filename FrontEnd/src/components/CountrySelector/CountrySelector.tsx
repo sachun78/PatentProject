@@ -1,6 +1,7 @@
 import { Autocomplete, AutocompleteValue, Box, TextField } from '@mui/material'
 import { css } from '@emotion/react'
-import { SyntheticEvent, useLayoutEffect, useState } from 'react'
+import { SyntheticEvent } from 'react'
+import palette from '../../lib/palette'
 
 export type CountrySelectorProps = {
   disabled?: boolean
@@ -24,14 +25,7 @@ function CountrySelector({ onChange, defaultValue, disabled = false }: CountrySe
                            '& > img': { mr: 2, flexShrink: 0 },
                            fontSize: 12
                          }} {...props}>
-                           <img
-                             loading='lazy'
-                             width='20'
-                             src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-                             srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
-                             alt=''
-                           />
-                           {option.label} ({option.code}) +{option.phone}
+                           {option.label} ({option.code})
                          </Box>
                        )}
                        renderInput={(params) => (
@@ -40,7 +34,7 @@ function CountrySelector({ onChange, defaultValue, disabled = false }: CountrySe
                            label='country'
                            inputProps={{
                              ...params.inputProps,
-                             style: { fontSize: 15 },
+                             style: { fontSize: 12, padding: 0 },
                              autoComplete: 'country' // disable autocomplete and autofill
                            }}
                          />
@@ -50,6 +44,24 @@ function CountrySelector({ onChange, defaultValue, disabled = false }: CountrySe
 const countrySelectorStyle = css`
   width: 100%;
   flex-grow: 1;
+
+  .MuiFormControl-root {
+    height: 4.5rem;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  .MuiOutlinedInput-root {
+    height: 4rem;
+    border: ${palette.blueGrey[50]} 1px solid;
+    border-radius: 0.8rem;
+    color: ${palette.blueGrey[700]};
+    padding: 0 1.6rem 0 1.6rem;
+  }
+  .MuiOutlinedInput-notchedOutline {
+    border: 0;
+  }
 `
 
 export type CountryType = {

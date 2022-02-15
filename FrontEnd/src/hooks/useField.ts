@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
+import { useProfileState } from '../atoms/profileState'
+import { patchProfile } from '../lib/api/me/getProfile'
 
-export function useField(defaultField: string[] = []) {
+export function useField() {
+  const [profile, setProfile] = useProfileState()
   const [fieldText, setFieldText] = useState('')
-  const [fields, setFields] = useState(defaultField)
-  const [prevFields, setPrevFields] = useState(defaultField)
+  const [fields, setFields] = useState(profile?.field)
+  const [prevFields, setPrevFields] = useState(profile?.field)
 
   const onChangeFieldText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFieldText(e.target.value)
@@ -26,11 +29,20 @@ export function useField(defaultField: string[] = []) {
   const reset = () => {
     setFields(prevFields)
   }
-  const save = () => {
-    setPrevFields(fields)
+  const save = async () => {
+    if (fields === undefined) return
+    try {
+      const result = await patchProfile({ field: fields })
+      if (result) {
+        setProfile(result)
+        setPrevFields(result.field)
+      }
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return {
-    fields, fieldText, onChangeFieldText, remove, add, reset, save
+    field: fields, fieldText, onChangeFieldText, remove, add, reset, save
   }
 }

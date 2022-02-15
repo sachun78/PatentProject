@@ -7,7 +7,10 @@ import Input from '../Input/Input'
 import Tag from '../Tag'
 import CountrySelector from '../CountrySelector'
 import { countries, CountryType } from '../CountrySelector/CountrySelector'
-import { upload } from '../../lib/api/user/upload'
+import { upload } from '../../lib/api/me/upload'
+import { patchProfile } from '../../lib/api/me/getProfile'
+import { IProfile } from '../../lib/api/types'
+import { useProfileState } from '../../atoms/profileState'
 
 export type InfoViewCardProps = {
   children: React.ReactNode
@@ -65,7 +68,8 @@ function InfoViewCardItem({
     }
   }
   const [editMode, setEditMode] = useState(isEditMode || false)
-  const [, setCountry] = useState(countryValue || '')
+  const [country, setCountry] = useState(countryValue || '')
+  const [, setProfile] = useProfileState()
   const defaultCountry = useMemo(() => countryValue || 'KR', [])
 
   const toggle = () => {
@@ -85,7 +89,20 @@ function InfoViewCardItem({
 
   const onCountryChange = (e: SyntheticEvent, v: AutocompleteValue<CountryType, undefined, undefined, undefined>) => {
     if (!v) return
+    console.log(v.code)
     setCountry(v.code)
+  }
+  const onCountrySave = async () => {
+    try {
+      const result = await patchProfile({ country })
+      if (result) {
+        console.log(result)
+        setProfile(result)
+        toggle()
+      }
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return <div css={itemStyle}>
@@ -178,7 +195,7 @@ function InfoViewCardItem({
             />
           </div>
           {!isEditMode && <div className='save'>
-            <Button onClick={toggle}>{editMode ? 'Save' : 'Edit'}</Button>
+            <Button onClick={onCountrySave}>{editMode ? 'Save' : 'Edit'}</Button>
           </div>}
         </div>}
       {/*7. CAREER TYPE*/}

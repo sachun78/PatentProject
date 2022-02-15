@@ -1,5 +1,4 @@
 import { css } from '@emotion/react'
-import { useState } from 'react'
 import useInputs from '../../hooks/useInputs'
 import Input from '../Input'
 import ViewBase from '../ViewBase'
@@ -14,7 +13,6 @@ type RequestViewProps = {
 }
 
 export default function RequestForm({ title }: RequestViewProps) {
-  const [infoVisible, setInfoVisible] = useState(false)
   const { date, time, setDate, setTime } = useDateTimeHook()
   const [form, onChange] = useInputs({
     to: '',
@@ -37,7 +35,6 @@ export default function RequestForm({ title }: RequestViewProps) {
           </RequestSection>
           <RequestSection
             title={'Email'}
-            button_visible
           >
             <Input
               placeholder='to'
@@ -46,14 +43,6 @@ export default function RequestForm({ title }: RequestViewProps) {
               onChange={onChange}
             />
           </RequestSection>
-          {infoVisible && (
-            <div css={infoboxStyle}>
-              Meet People Information <br />
-              회사: --- <br />
-              파트: --- <br />
-              추가정보: ---
-            </div>
-          )}
           <RequestSection title={'Meeting Date'}>
             <DatePickerInput value={date} onChange={(value: Date) => {
               setDate(value)
@@ -109,9 +98,6 @@ const sectionStyle = css`
   .ant-picker {
     flex-grow: 1;
   }
-`
-const infoboxStyle = css`
-  background: green;
 `
 
 const space = css`

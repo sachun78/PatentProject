@@ -3,13 +3,13 @@ import ViewBase from '../ViewBase'
 import React, { useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import ScheduleCard from './ScheduleCard'
-import ScheduleCardPlus from './ScheduleCardPlus'
+import ScheduleCalendar from './ScheduleCalendar'
 
 type ScheduleViewProps = {
-  preview?: boolean
+  isCalendar?: boolean
 }
 
-function Schedules({ preview }: ScheduleViewProps) {
+function Schedules({ isCalendar = false }: ScheduleViewProps) {
   const location = useLocation()
   const testData = useMemo(() => ([{
     from: 'ryanhe4@gamil.com',
@@ -53,15 +53,14 @@ function Schedules({ preview }: ScheduleViewProps) {
     if (location.pathname === '/schedule')
       console.log('스케쥴 뷰')
   }, [location.pathname])
-
+  const titleText = isCalendar ? 'CALENDAR' : 'SCHEDULE'
   return (
-    <ViewBase title='SCHEDULE'>
-      <div css={tableStyle}>
+    <ViewBase title={titleText}>
+      {isCalendar ? <ScheduleCalendar /> : <div css={tableStyle}>
         {testData.map((v) => (
           <ScheduleCard from={v.from} to={v.to} comment={v.comment} place={v.place} date={v.date.toDateString()}
                         time={v.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} />))}
-        <ScheduleCardPlus />
-      </div>
+      </div>}
     </ViewBase>
   )
 }

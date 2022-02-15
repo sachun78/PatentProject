@@ -12,10 +12,8 @@ function Sidebar({}: SidebarProps) {
     </div>
     <ul css={menuStyle}>
       <SidebarItem icon='home' text='Home' to='' />
-      <SidebarItem icon='flip' text='Member' to='/membership' />
-      <SidebarItem icon='schedule' text='Schedule' to='/schedule' />
+      <SidebarItem icon='schedule' text='MemberShip' to='/membership' />
       <SidebarItem icon='network' text='Network' to='/network' />
-      <SidebarItem icon='links' text='Meeting' to='/meeting/request' />
       <SidebarItem icon='links' text='Conference' to='/conference' />
     </ul>
   </div>

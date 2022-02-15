@@ -9,27 +9,50 @@ import useInputs from '../../hooks/useInputs'
 import React, { SyntheticEvent, useState } from 'react'
 import { CountryType } from '../CountrySelector/CountrySelector'
 import { useField } from '../../hooks/useField'
+import { useProfile } from '../../hooks/useProfile'
+import { patchProfile } from '../../lib/api/me/getProfile'
+import { IProfile } from '../../lib/api/types'
 
 export type AddtionalFormModalProps = {}
 
 function AddtionalFormModal({}: AddtionalFormModalProps) {
-  const { open, setOpen, handleClose } = useModal()
-  const { fields, fieldText, onChangeFieldText, add, remove } = useField([])
+  const { profile, loading, setProfile, open, setOpen,handleClose } = useProfile()
+  const { field, fieldText, onChangeFieldText, add, remove } = useField()
   const [form, onChange] = useInputs({
     company: '',
     department: '',
     position: ''
   })
+
+  //TODO(country makes to hook)
   const [country, setCountry] = useState('AD')
   const handleCountry = (e: SyntheticEvent, v: AutocompleteValue<CountryType, undefined, undefined, undefined>) => {
     if (!v) return
     setCountry(v.code)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!form.company || !form.department || !form.position) return alert('입력되지 않은 항목이 있습니다.')
+    if (field?.length === 0) return alert('입력되지 않은 항목이 있습니다.')
+    const request: IProfile = {
+      company: form.company,
+      department: form.department,
+      position: form.position,
+      field,
+      country
+    }
+    try {
+      const result = await patchProfile(request)
+      if (result) {
+        setProfile(result)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
     console.log(form.company, form.department, form.position)
-    console.log(fields)
+    console.log(field)
     console.log(country)
     setOpen(false)
   }
@@ -41,8 +64,6 @@ function AddtionalFormModal({}: AddtionalFormModalProps) {
     onClose={handleClose}
     disableEscapeKeyDown
     disableEnforceFocus
-    aria-labelledby='modal-addtional-input'
-    aria-describedby='modal-addtional-informations'
   >
     <Box css={boxWrapper}>
       <Avatar sx={{ m: 2, bgcolor: 'secondary.main' }}>
@@ -59,7 +80,7 @@ function AddtionalFormModal({}: AddtionalFormModalProps) {
                              onChange={onChange} />
           <InfoViewCard.Item title='position' type={'text'} description={form.position} isEditMode
                              onChange={onChange} />
-          <InfoViewCard.Item title='field' type={'field'} fields={fields} handleField={handleFields}
+          <InfoViewCard.Item title='field' type={'field'} fields={field} handleField={handleFields}
                              description={fieldText} isEditMode />
           <InfoViewCard.Item title='country' type={'country'} handleCountry={handleCountry}
                              countryValue={country} isEditMode />

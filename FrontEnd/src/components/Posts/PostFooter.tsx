@@ -64,7 +64,7 @@ const buttonWrapper = css`
     align-items: center;
     border-radius: 4px;
     .icon {
-      padding: 6px 4px 6px;
+      padding: 6px 4px 1px;
       position: relative;
       max-width: 100%;
     }

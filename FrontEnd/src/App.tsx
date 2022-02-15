@@ -6,7 +6,6 @@ import { Route, Routes } from 'react-router-dom'
 import Sidebar from './components/Sidebar'
 import TopNavigation from './components/TopNavigation'
 import Member from './pages/Member'
-import Schedule from './pages/Meeting/Schedule'
 import Network from './pages/Member/Network'
 import Meeting from './pages/Meeting'
 import Login from './pages/Login'
@@ -39,7 +38,6 @@ function App() {
                 <Routes>
                   <Route path='/' element={<Home />} />
                   <Route path='/membership' element={<Member />} />
-                  <Route path='/schedule' element={<Schedule />} />
                   <Route path='/network' element={<Network />} />
                   <Route path='/meeting/*' element={<Meeting />} />
                   <Route path='/profile' element={<Profile />} />
