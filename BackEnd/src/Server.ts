@@ -5,10 +5,10 @@ import cookieParser from 'cookie-parser'
 import apiRoute from './routes/api'
 import cors from 'cors'
 import helmet from 'helmet'
-import config from 'config'
+import envConfig from 'config'
 import { csrfCheck } from 'middleware/csrf'
 
-const PORT: number = config.host.port;
+const PORT: number = envConfig.host.port;
 
 export default class Server {
   app: express.Application = express()

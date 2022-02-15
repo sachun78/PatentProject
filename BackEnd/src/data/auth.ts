@@ -52,7 +52,7 @@ export async function createUser(user: IUser) {
   });
 }
 
-export async function updateUrl(id: string, url?: string) {
-  return User.findByIdAndUpdate(id, {photo_path: url}, {new: true});
+export async function updateUser(id: string, data: any) {
+  return User.findByIdAndUpdate(id, data, {new: true});
 }
 

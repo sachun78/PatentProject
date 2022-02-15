@@ -28,6 +28,5 @@ route.post('/signup', validateSignup, authCtrl.signup)
 route.post('/signin', validateCredential, authCtrl.signin)
 route.get('/csrf-token', authCtrl.csrfToken)
 route.get('/me', isAuth, authCtrl.me)
-// route.post('/sendmail', sendAuthMail)
-// route.get('/auth-code', authCtrl.test)
+
 export default route

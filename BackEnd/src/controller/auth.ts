@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 
 import * as UserRepo from 'data/auth'
 import * as ProfileRepo from 'data/profile'
-import config from 'config'
+import envConfig from 'config'
 
 interface IRequest extends Request {
   [key: string]: any
@@ -19,7 +19,7 @@ export async function signup(req: IRequest, res: Response, next: NextFunction) {
       return res.status(409).json({ message: `email (${email}) is already` })
     }
 
-    const hashed = await bcrypt.hash(password, config.bcrypt.salt_rouunds)
+    const hashed = await bcrypt.hash(password, envConfig.bcrypt.salt_rouunds)
     const user = await UserRepo.createUser({ ...req.body, password : hashed});
     const profile = await ProfileRepo.createProfile(ProfileRepo.defaultProfile , user.id);
 
@@ -101,16 +101,16 @@ export async function csrfToken(req: IRequest, res: Response) {
 }
 
 async function generateCSRFToken() {
-  return bcrypt.hash(config.csrf.plainToken, 1)
+  return bcrypt.hash(envConfig.csrf.plainToken, 1)
 }
 
 function createJwtToken(id: String) {
-  return jwt.sign({ id }, config.jwt.secure_key, { expiresIn: config.jwt.expiresInSec })
+  return jwt.sign({ id }, envConfig.jwt.secure_key, { expiresIn: envConfig.jwt.expiresInSec })
 }
 
 function setToken(res: Response, token: String) {
   const options: CookieOptions = {
-    maxAge: config.jwt.expiresInSec * 1000,
+    maxAge: envConfig.jwt.expiresInSec * 1000,
     httpOnly: true,
     sameSite: 'none',
     secure: true

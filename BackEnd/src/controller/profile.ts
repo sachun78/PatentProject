@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import * as ProfileRepo from 'data/profile';
-import { updateUrl } from 'data/auth';
+import { updateUser } from 'data/auth';
 import multer from 'multer';
 
 interface IRequest extends Request {
@@ -26,7 +26,7 @@ export function profileImage(req: IRequest, res: Response) {
       console.error(err)
       return res.status(409).json({ success: false, error: 'UPLOAD ERROR' })
     }
-    updateUrl(req.userId, req.file?.filename);
+    updateUser(req.userId, { photo_path: req.file?.filename });
     return res.json({
       success: true,
       fileName: req.file?.filename

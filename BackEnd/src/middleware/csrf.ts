@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import { NextFunction, Request, Response } from 'express'
-import config from 'config'
+import envConfig from 'config'
 
 export const csrfCheck = (req: Request, res: Response, next: NextFunction) => {
   if (req.method === 'GET' ||
@@ -35,5 +35,5 @@ export const csrfCheck = (req: Request, res: Response, next: NextFunction) => {
 }
 
 async function validateCsrfToken(csrfHeader: string) {
-  return bcrypt.compare(config.csrf.plainToken, csrfHeader)
+  return bcrypt.compare(envConfig.csrf.plainToken, csrfHeader)
 }

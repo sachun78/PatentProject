@@ -1,9 +1,9 @@
 import Mongoose from 'mongoose';
-import config from 'config';
+import envConfig from 'config';
 
 export async function connectDB() {
-    console.log(config.db.host);
-    return Mongoose.connect(config.db.host);
+    console.log(envConfig.db.host);
+    return Mongoose.connect(envConfig.db.host);
 }
 
 export function useVirtualId(schema: Mongoose.Schema) {

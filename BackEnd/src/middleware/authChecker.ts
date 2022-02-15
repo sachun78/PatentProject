@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import * as authData from 'data/auth';
-import config from 'config';
+import envConfig from 'config'
 import { Request, Response, NextFunction } from 'express'
 
 interface IRequest extends Request {
@@ -25,7 +25,7 @@ export async function isAuth(req: IRequest, res: Response, next:NextFunction) {
     return res.status(401).json(AUTH_ERROR);
   }
 
-  jwt.verify(token, config.jwt.secure_key, async (error: any, decode : any) => {
+  jwt.verify(token, envConfig.jwt.secure_key, async (error: any, decode : any) => {
       if (error) {
           return res.status(401).json(AUTH_ERROR);
       }
