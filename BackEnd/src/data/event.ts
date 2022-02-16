@@ -1,10 +1,13 @@
 import mongoose from "mongoose";
+import * as authRepo  from 'data/auth';
+import { useVirtualId } from 'database/database'
 
 export interface IEvent {
     user_id: string,
     name: string,
     start_date: Date,
     end_date: Date,
+    meeting_list?: string[]
 }
 
 export const eventSchema = new mongoose.Schema<IEvent>({
@@ -12,16 +15,42 @@ export const eventSchema = new mongoose.Schema<IEvent>({
     name: {type: String, required: true},
     start_date: {type: Date, required: true},
     end_date: {type: Date, required: true},
-}, {timestamps: true});
-
+    meeting_list: {type: [String], default: []}
+}, 
+{
+  timestamps: true,
+  versionKey: false
+});
+useVirtualId(eventSchema);
 
 const Event = mongoose.model("Event", eventSchema);
 
-export function saveEvent(bodyData: any) {
-    const new_event = new Event(bodyData);
-    return new_event.save();
+export async function getAll() {
+  return Event.find().sort({createAt: -1});
 }
 
-export function findEvent(bodyData: any) {
-    return Event.find({email : bodyData});
+export async function getAllByMe(userId: string) {
+  return Event.find({user_id: userId}).sort({creatAt: -1});
+}
+
+export async function getById(eventId: string) {
+  return Event.findById(eventId);
+}
+
+export async function createEvent(eventData: IEvent, userId: string) {
+  return authRepo.findById(userId).then((user) => {
+      return new Event({
+          ...eventData,
+          userid: user?.id,
+          name: user?.username
+      }).save()
+  });
+}
+
+export async function updateEvent(eventId: string, data: any) {
+  return Event.findByIdAndUpdate(eventId, data, {new: true});
+}
+
+export async function deleteEvent(eventId: string) {
+  return Event.findByIdAndDelete(eventId);
 }

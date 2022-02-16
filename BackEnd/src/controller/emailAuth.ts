@@ -56,7 +56,6 @@ const sendmail = async (emailInfo: any) => {
       ...emailTemplete
     });
 
-    console.log(`Authmail send to user: ${user_email}`);
     console.log(info);
     return info;
 }
@@ -107,6 +106,11 @@ export async function isVerifyMail(req: IRequest, res: Response) {
   const updateUser = await authRepo.updateUser(authmail.userid, {certified: true});
   if (!updateUser) {
     return res.status(401).json({ message: 'Fail user info update'});
+  }
+  
+  const diff = new Date().getTime() - new Date(authmail.createdAt).getTime();
+  if (diff > 1000 * 60 * 60 * 24 || authmail.logged) {
+    return res.status(410).json({ message: 'Expired code'});
   }
 
   res.status(200).json({email: authmail.email, certified: updateUser.certified});  
