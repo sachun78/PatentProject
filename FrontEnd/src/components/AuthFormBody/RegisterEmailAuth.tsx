@@ -3,6 +3,7 @@ import { css } from '@emotion/react'
 import { checkCode } from '../../lib/api/auth/sendmail'
 import { useNavigate } from 'react-router-dom'
 import { useUserState } from '../../atoms/authState'
+import { useGlobalDialogActions } from '../../atoms/globalDialogState'
 
 export type RegisterFormEmailAuthProps = {
   code: string | null
@@ -11,6 +12,20 @@ export type RegisterFormEmailAuthProps = {
 function RegisterEmailAuth({ code }: RegisterFormEmailAuthProps) {
   const navigate = useNavigate()
   const [user] = useUserState()
+  const { open } = useGlobalDialogActions()
+
+  const alamError = () => {
+    open({
+      title: 'Error',
+      message: 'Error Occurs on Email Authentication',
+      onConfirm: () => {
+        navigate('/login')
+      },
+      showCancel: false,
+      confirmText: 'OK'
+    })
+  }
+
   useEffect(() => {
     if (!code) return
     const fetchCode = async () => {
@@ -32,8 +47,7 @@ function RegisterEmailAuth({ code }: RegisterFormEmailAuthProps) {
       })
       .catch((e) => {
         console.error(e)
-        alert('error 발생 재시도 부탁드립니다.')
-        navigate('/login')
+        alamError()
       })
     return () => clearTimeout(timer)
   }, [code, navigate])

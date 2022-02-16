@@ -1,12 +1,23 @@
 import { css } from '@emotion/react'
 import { MdAir, MdMoreHoriz } from 'react-icons/md'
 import palette from '../../lib/palette'
+import { useGlobalDialogActions } from '../../atoms/globalDialogState'
 
 export type PostHeaderProps = {}
 
 function PostHeader({}: PostHeaderProps) {
+  const { open } = useGlobalDialogActions()
+
   const onMoreClick = () => {
-    alert('this is more btn!')
+    open({
+      title: 'More Btn Click',
+      message: 'you clicked more btn',
+      onConfirm: () => {
+        console.log('Confirm')
+      },
+      showCancel: false,
+      confirmText: 'OK'
+    })
   }
 
   return <div css={headerStyle}>

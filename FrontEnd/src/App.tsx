@@ -14,6 +14,7 @@ import DebugObserver from './components/DebugObserver'
 import palette from './lib/palette'
 import Profile from './pages/Profile/Profile'
 import useCheckUserEffect from './hooks/useCheckUserEffect'
+import GlobalDialog from './components/GlobalDialog'
 
 function App() {
   useCheckUserEffect()
@@ -50,6 +51,7 @@ function App() {
         />
       </Routes>
       <Global styles={globalStyle} />
+      <GlobalDialog />
     </>
   )
 }

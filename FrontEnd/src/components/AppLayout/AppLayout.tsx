@@ -44,7 +44,7 @@ const headerStyle = css`
   flex-shrink: 0;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15), 0 0 2px rgba(0, 0, 0, 0.1);
   background: #fff;
-  z-index: 1000;
+  z-index: 500;
   top: 0;
   position: sticky;
 `

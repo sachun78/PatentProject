@@ -38,8 +38,7 @@ function EventCard({ title = '' }: EventCardProps) {
 
 const wrapper = css`
   width: calc(33.3333% - 1rem);
-  margin: 0.5rem;
-  margin-bottom: 2rem;
+  margin: 0.5rem 0.5rem 2rem;
   padding: 1.5rem;
   line-height: 1.2;
   border-radius: 0.8rem;
