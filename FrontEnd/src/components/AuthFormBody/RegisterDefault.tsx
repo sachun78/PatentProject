@@ -28,10 +28,10 @@ function RegisterDefault({}: RegisterFormDefaultProps) {
                    autoComplete='password'
                    InputProps={{ style: { fontSize: 12 } }} />
         <TextField label='Confirm Password' variant='outlined' type='password'
-                   name='password_confirm'  autoComplete='password-confirm'
+                   name='password_confirm' autoComplete='password-confirm'
                    value={form.password_confirm} onChange={onChange} css={inputStyle}
                    InputProps={{ style: { fontSize: 12 } }} />
-        { errorMessage !== null && <div>{errorMessage}</div>}
+        {errorMessage !== null && <div>{errorMessage}</div>}
         <div css={privacyStyle}><p>By clicking Sign Up, you are indicating that you have read and acknowledge the
           <a> Terms of Service</a> and <a>Privacy Notice</a>.</p></div>
         <div className='button-div'>

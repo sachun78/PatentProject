@@ -11,14 +11,13 @@ export type InfoViewProps = {}
 
 function InfoView({}: InfoViewProps) {
   const {
-    field,
-    fieldText,
+    field, fieldText,
     onChangeFieldText,
     add, remove, reset, save
   } = useField()
+  const [user] = useUserState()
   const [profile] = useProfileState()
   const [country] = useState(profile?.country)
-  const [user] = useUserState()
   const [company, onCompanyChange, resetCompany, prevCompany] = useInput(profile?.company || 'company is empty error', 'company')
   const [department, onDepartmentChange, resetDepartment, prevDepartment] = useInput(profile?.department || 'department ID', 'department')
   const [position, onPositionChange, resetPosition, prevPosition] = useInput(profile?.position || 'position ID', 'position')
@@ -29,7 +28,7 @@ function InfoView({}: InfoViewProps) {
     <InfoViewSection title='Account'>
       <InfoViewCard.Item title='Email' type={'email'} email={user?.email} />
       <InfoViewCard.Item title='Username' type={'username'} username={user?.username} />
-      <InfoViewCard.Item title='Photo' type={'photo'} username={user?.username} isEditMode />
+      <InfoViewCard.Item title='Photo' type={'photo'} username={user?.username} photo={user?.photh_path} isEditMode />
     </InfoViewSection>
     <InfoViewSection title='Belonging'>
       <InfoViewCard.Item title='Company' type={'text'} description={company} onChange={onCompanyChange}

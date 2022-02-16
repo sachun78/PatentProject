@@ -1,19 +1,9 @@
 import { css } from '@emotion/react'
 import InfoView from '../../components/InfoView'
-import { useUserState } from '../../atoms/authState'
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 export type ProfileProps = {}
 
 function Profile({}: ProfileProps) {
-  const [user] = useUserState()
-  const navigator = useNavigate()
-  useEffect(() => {
-    if (!user) {
-      navigator('/login')
-    }
-  }, [navigator, user])
 
   return <div css={wrapper}>
     <div css={titleStyle}>

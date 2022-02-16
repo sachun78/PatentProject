@@ -1,7 +1,7 @@
 import useAuth from './useAuth'
 import { useEffect } from 'react'
 import { csrf } from '../lib/api/auth/csrf'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { getCurrentUser } from '../lib/api/me/getCurrentUser'
 import { useRegisterFormState, useUserState } from '../atoms/authState'
 
@@ -10,20 +10,16 @@ export default function useCheckUserEffect() {
   const navigate = useNavigate()
   const [user] = useUserState()
   const [, setRegisterForm] = useRegisterFormState()
+  const { pathname } = useLocation()
   useEffect(() => {
     // set csrf-Token to axios Client
-    csrf()
-      .then(console.log)
-      .catch(console.error)
-  }, [])
+    csrf().catch(console.error)
+  }, [user])
 
   useEffect(() => {
-    // TODO(request me API)
     getCurrentUser()
       .then(user => authorize(user))
-      .catch(() => {
-        logout()
-      })
+      .catch(() => logout())
   }, [])
 
   useEffect(() => {
@@ -31,14 +27,20 @@ export default function useCheckUserEffect() {
       console.log(user)
       if (!user.certified) {
         setRegisterForm('email-auth')
-        navigate('/register')
       } else {
         navigate('/')
       }
     } else {
       console.log('isloggedIn is false')
-      navigate('/login')
+      // 현재 위치가 login/register이 아니면 로그인 페이지로 이동
+      console.log(pathname)
+      if (pathname === '/auth-email') {
+        setRegisterForm('email-auth')
+      }
+      if (pathname !== '/login' && pathname !== '/register' && pathname !== '/auth-email') {
+        navigate('/login')
+      }
     }
 
-  }, [user])
+  }, [user?.username])
 }

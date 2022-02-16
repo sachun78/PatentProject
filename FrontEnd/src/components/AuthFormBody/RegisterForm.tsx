@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
-import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { useMemo } from 'react'
+import { NavLink, useSearchParams } from 'react-router-dom'
 import AuthFormBody from '.'
 import palette from '../../lib/palette'
 import IconControl from '../IconControl'
@@ -12,17 +12,20 @@ type RegisterFormProps = {}
 
 export default function RegisterForm({}: RegisterFormProps) {
   const [type] = useRegisterFormState()
-
+  const [params] = useSearchParams()
+  console.log(params.get('code'))
+  const code = useMemo(() => params.get('code'), [params])
   return (
     <AuthFormBody width={622} height={500}>
       <div css={loginFormStyle}>
         <div css={undoStyle}>
-          {type === 'default' && <NavLink to={'/login'} className='link'>
-            <IconControl name={'undo'} /> <span>Back</span>
-          </NavLink>}
+          {type === 'default' &&
+            <NavLink to={'/login'} className='link'>
+              <IconControl name={'undo'} /> <span>Back</span>
+            </NavLink>}
         </div>
         {type === 'default' && <RegisterDefault />}
-        {type === 'email-auth' && <RegisterEmailAuth />}
+        {type === 'email-auth' && <RegisterEmailAuth code={code} />}
       </div>
     </AuthFormBody>
   )

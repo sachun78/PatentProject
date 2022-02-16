@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { signin, signinInput } from '../lib/api/auth/signin'
 import { signup, signupInput } from '../lib/api/auth/signup'
 import useInputs from './useInputs'
 import Joi from 'joi'
 import useAuth from './useAuth'
 import { useRegisterFormState } from '../atoms/authState'
+import { sendmail } from '../lib/api/auth/sendmail'
 
 export default function useSignUp() {
   const [loading, setLoading] = useState(false)
@@ -15,6 +15,7 @@ export default function useSignUp() {
       setLoading(true)
       const result = await signup(input)
       authorize(result.user)
+      await sendmail(result.user.email)
     } catch (e: any) {
       if (e.response.status === 409) {
         setError('email already exists')

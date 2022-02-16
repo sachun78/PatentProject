@@ -9,8 +9,9 @@ import CountrySelector from '../CountrySelector'
 import { countries, CountryType } from '../CountrySelector/CountrySelector'
 import { upload } from '../../lib/api/me/upload'
 import { patchProfile } from '../../lib/api/me/getProfile'
-import { IProfile } from '../../lib/api/types'
 import { useProfileState } from '../../atoms/profileState'
+import { updateUserPhoto, userState } from '../../atoms/authState'
+import { useSetRecoilState } from 'recoil'
 
 export type InfoViewCardProps = {
   children: React.ReactNode
@@ -55,15 +56,20 @@ function InfoViewCardItem({
                             onChange, reset, prevReset,
                             minHeight = 0
                           }: InfoViewCardItemProps) {
+  const setAuthState = useSetRecoilState(userState)
+  const setAuthPhoto = (value: string) => setAuthState((state) => updateUserPhoto(state, value))
   const fileRef = useRef<HTMLInputElement>(null)
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formData = new FormData()
-    if (e.target != null) {
-      const files = e.target.files
-      if (files && files.length >= 1) {
-        formData.append('profile_img', files[0])
-        console.log(`${files[0].name} 파일 업로드중`)
-        await upload(formData)
+    e.preventDefault()
+    const file = e.target.files?.[0]
+    if (file) {
+      const formData = new FormData()
+      formData.append('profile_img', file)
+      const result = await upload(formData)
+
+      if (result) {
+        setAuthPhoto(result.fileName)
       }
     }
   }
@@ -71,7 +77,6 @@ function InfoViewCardItem({
   const [country, setCountry] = useState(countryValue || '')
   const [, setProfile] = useProfileState()
   const defaultCountry = useMemo(() => countryValue || 'KR', [])
-
   const toggle = () => {
     setEditMode(!editMode)
   }
@@ -89,14 +94,12 @@ function InfoViewCardItem({
 
   const onCountryChange = (e: SyntheticEvent, v: AutocompleteValue<CountryType, undefined, undefined, undefined>) => {
     if (!v) return
-    console.log(v.code)
     setCountry(v.code)
   }
   const onCountrySave = async () => {
     try {
       const result = await patchProfile({ country })
       if (result) {
-        console.log(result)
         setProfile(result)
         toggle()
       }
@@ -104,7 +107,6 @@ function InfoViewCardItem({
       console.log(e)
     }
   }
-
   return <div css={itemStyle}>
     <div className='inner'>
       <div className='title'>
@@ -117,25 +119,32 @@ function InfoViewCardItem({
         </p>
       </div>}
       {/*2. PHOTO TYPE*/}
-      {type === 'photo' && username && <form encType='multipart/form-data' css={photoStyle}>
-        <div><Avatar sx={{ width: 100, height: 100, fontSize: 40 }}>
-          {photo === undefined && `${username[0]}`}
-        </Avatar></div>
-        {isEditMode && (<><input
-          ref={fileRef}
-          onChange={handleFileUpload}
-          type='file'
-          style={{ display: 'none' }}
-          accept='image/*'
-          name='profile_img'
-        />
-          <button className={'btn'} onClick={(e) => {
-            e.preventDefault()
-            fileRef?.current?.click()
-          }}><IconControl name={'upload'} /></button>
-        </>)
-        }
-      </form>}
+      {type === 'photo' && username &&
+        <div css={photoStyle}>
+          <div>
+            <Avatar sx={{ width: 100, height: 100, fontSize: 40 }}>
+              {photo === undefined ? `${username[0]}` :
+                (<img src={`/static/${photo}`} alt={username} />)
+              }
+            </Avatar>
+          </div>
+          {isEditMode && (
+            <>
+              <input
+                ref={fileRef}
+                onChange={handleFileUpload}
+                type='file'
+                style={{ display: 'none' }}
+                accept='image/*'
+                name='profile_img'
+              />
+              <button className={'btn'} onClick={(e) => {
+                fileRef?.current?.click()
+                e.preventDefault()
+              }}><IconControl name={'upload'} /></button>
+            </>)
+          }
+        </div>}
       {/*3. Name TYPE*/}
       {type === 'username' && <div css={emailStyle}>
         <div className='email-block'>{username}</div>
