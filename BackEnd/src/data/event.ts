@@ -32,6 +32,7 @@ export async function getAll() {
 export async function getAllByMe(userId: string) {
   return Event.find({user_id: userId}).sort({creatAt: -1});
 }
+// 이벤트 기간 기준으로
 
 export async function getById(eventId: string) {
   return Event.findById(eventId);

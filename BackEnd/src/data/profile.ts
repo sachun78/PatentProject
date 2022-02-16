@@ -1,5 +1,4 @@
 import mongoose, { model } from 'mongoose';
-import { useVirtualId } from 'database/database'
 import * as authRepo  from 'data/auth';
 
 interface IProfile {
