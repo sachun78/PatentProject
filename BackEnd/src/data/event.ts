@@ -29,10 +29,17 @@ export async function getAll() {
   return Event.find().sort({createAt: -1});
 }
 
-export async function getAllByMonth(userId: string) {
-  return Event.find({user_id: userId}).sort({creatAt: -1});
+export async function getAllByMonth(month: string) {
+  const yy = parseInt(month.split('/')[0]);
+  const mm = parseInt(month.split('/')[1]);
+
+  const rngStart = new Date(yy + '/' + mm);
+  const rngEnd = new Date(yy + '/' + (mm + 1));
+  
+  return Event.find().or([
+        {start_date: {$gt: rngStart, $lte: rngEnd}},
+        {end_date: {$gt: rngStart, $lte: rngEnd}} ]);
 }
-// 이벤트 기간 기준으로
 
 export async function getById(eventId: string) {
   return Event.findById(eventId);

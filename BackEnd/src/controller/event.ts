@@ -7,6 +7,7 @@ interface IRequest {
 
 export async function getEvents(req: IRequest, res: Response) {
   const month = req.query.month;
+  
   const data = await (month
     ? eventRepo.getAllByMonth(month)
     : eventRepo.getAll());
