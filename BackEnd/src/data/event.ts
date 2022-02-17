@@ -4,7 +4,7 @@ import { useVirtualId } from 'database/database'
 
 export interface IEvent {
     user_id: string,
-    name: string,
+    title: string,
     start_date: Date,
     end_date: Date,
     meeting_list?: string[]
@@ -12,7 +12,7 @@ export interface IEvent {
 
 export const eventSchema = new mongoose.Schema<IEvent>({
     user_id: {type: String},
-    name: {type: String, required: true},
+    title: {type: String, required: true},
     start_date: {type: Date, required: true},
     end_date: {type: Date, required: true},
     meeting_list: {type: [String], default: []}
@@ -29,7 +29,7 @@ export async function getAll() {
   return Event.find().sort({createAt: -1});
 }
 
-export async function getAllByMe(userId: string) {
+export async function getAllByMonth(userId: string) {
   return Event.find({user_id: userId}).sort({creatAt: -1});
 }
 // 이벤트 기간 기준으로
@@ -42,8 +42,7 @@ export async function createEvent(eventData: IEvent, userId: string) {
   return authRepo.findById(userId).then((user) => {
       return new Event({
           ...eventData,
-          userid: user?.id,
-          name: user?.username
+          user_id: user?.id,
       }).save()
   });
 }
