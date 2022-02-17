@@ -7,7 +7,7 @@ interface IRequest {
 
 export async function getEvents(req: IRequest, res: Response) {
   const month = req.query.month;
-  
+
   const data = await (month
     ? eventRepo.getAllByMonth(month)
     : eventRepo.getAll());
@@ -46,8 +46,30 @@ export async function createEvent(req: IRequest, res: Response) {
 }
 
 export async function updateEvent(req: IRequest, res: Response) {
+  const id = req.params.id;
+  const event = await eventRepo.getById(id);
+  if (!event) {
+    return res.status(404).json({ message: `event not found: ${id}`});
+  }
+  if (event?.user_id !== req.userId) {
+    return res.status(403);
+  }
+
+  const updated = await eventRepo.updateEvent(id, req.body);
+  res.status(200).json(updated);
 }
 
 export async function deleteEvent(req: IRequest, res: Response) {
+  const id = req.params.id;
+  const event = await eventRepo.getById(id);
+  if (!event) {
+    return res.status(404).json({ message: `event not found: ${id}`});
+  }
+  if (event?.user_id !== req.userId) {
+    return res.status(403);
+  }
+
+  await eventRepo.deleteEvent(id);
+  res.status(204);
 }
 
