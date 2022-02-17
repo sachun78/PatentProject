@@ -3,11 +3,12 @@ import * as EventCtrl from 'controller/event'
 
 const route = express.Router();
 
+// GET /event
+// GET /event?month=:month
 route.get('/', EventCtrl.getEvents);
 route.get('/:id', EventCtrl.getEvent);
-route.get('/:month', EventCtrl.getEvents);
 route.post('/', EventCtrl.createEvent);
-route.put('/', EventCtrl.updateEvent);
-route.delete('/', EventCtrl.deleteEvent);
+route.put('/:id', EventCtrl.updateEvent);
+route.delete('/:id', EventCtrl.deleteEvent);
 
 export default route;
