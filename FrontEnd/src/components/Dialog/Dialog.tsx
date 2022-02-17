@@ -54,7 +54,7 @@ const overlay = css`
   background: rgba(0, 0, 0, 0.5);
   left: 0;
   top: 0;
-  z-index: 501;
+  z-index: 1400;
 `
 
 const centerWrapper = css`
@@ -66,7 +66,7 @@ const centerWrapper = css`
   height: 100%;
   left: 0;
   top: 0;
-  z-index: 601;
+  z-index: 1401;
 `
 
 const whiteBox = css`

@@ -27,7 +27,6 @@ export default function RequestForm({ title }: RequestViewProps) {
         <div css={sectionStyle}>
           <RequestSection title={'Event'}>
             <Input
-              placeholder='event'
               name='event'
               value={form.event}
               onChange={onChange}
@@ -37,7 +36,6 @@ export default function RequestForm({ title }: RequestViewProps) {
             title={'Email'}
           >
             <Input
-              placeholder='to'
               name='to'
               value={form.to}
               onChange={onChange}
@@ -53,9 +51,9 @@ export default function RequestForm({ title }: RequestViewProps) {
               setTime(value)
             }} value={time} />
           </RequestSection>
-          <RequestSection title={'Place'}>
+          <RequestSection title={'Location'}>
             <Input
-              placeholder='place'
+              placeholder='Add a location'
               name='place'
               value={form.place}
               onChange={onChange}
@@ -63,7 +61,7 @@ export default function RequestForm({ title }: RequestViewProps) {
           </RequestSection>
           <RequestSection title={'Comment'}>
             <Input
-              placeholder='comment'
+              placeholder='Leave a comment'
               name='comment'
               value={form.comment}
               onChange={onChange}

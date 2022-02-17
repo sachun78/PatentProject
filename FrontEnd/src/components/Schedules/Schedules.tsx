@@ -56,9 +56,10 @@ function Schedules({ isCalendar = false }: ScheduleViewProps) {
   const titleText = isCalendar ? 'CALENDAR' : 'SCHEDULE'
   return (
     <ViewBase title={titleText}>
-      {isCalendar ? <ScheduleCalendar /> : <div css={tableStyle}>
-        {testData.map((v) => (
-          <ScheduleCard from={v.from} to={v.to} comment={v.comment} place={v.place} date={v.date.toDateString()}
+      {isCalendar ? <ScheduleCalendar currentEvents={[]} weekendsVisible={true} /> : <div css={tableStyle}>
+        {testData.map((v, i) => (
+          <ScheduleCard key={v.from + v.to + i} from={v.from} to={v.to} comment={v.comment} place={v.place}
+                        date={v.date.toDateString()}
                         time={v.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} />))}
       </div>}
     </ViewBase>

@@ -66,10 +66,10 @@ export async function deleteEvent(req: IRequest, res: Response) {
     return res.status(404).json({ message: `event not found: ${id}`});
   }
   if (event?.user_id !== req.userId) {
-    return res.status(403);
+    return res.status(403).send('forbidden');
   }
 
   await eventRepo.deleteEvent(id);
-  res.status(204);
+  res.status(204).send('deleted');
 }
 

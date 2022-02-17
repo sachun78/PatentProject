@@ -2,17 +2,30 @@ import { css } from '@emotion/react'
 import palette from '../../lib/palette'
 import { NavLink } from 'react-router-dom'
 import { MdDeleteForever, MdUpdate } from 'react-icons/md'
+import { deleteEvent } from '../../lib/api/event/deleteEvent'
+import useEventQuery from '../../hooks/query/useEventQuery'
 
 export type EventCardProps = {
+  id: string
   title: string
+  startDate: string
+  endDate: string
 }
 
-function EventCard({ title = '' }: EventCardProps) {
+function EventCard({ title = '', startDate, endDate, id }: EventCardProps) {
+  const { refetch } = useEventQuery(1, { enabled: false })
+
   const handleEdit = () => {
     alert(`edit! ${title}`)
   }
-  const handleDel = () => {
-    alert(`del! ${title}`)
+  const handleDel = async () => {
+    try {
+      await deleteEvent(id)
+      refetch()
+    } catch (error) {
+      console.log(error)
+      //TODO(Open ERROR DIALOG)
+    }
   }
 
   return <div css={wrapper}>
@@ -24,13 +37,13 @@ function EventCard({ title = '' }: EventCardProps) {
       </div>
     </div>
     <div css={contentStyle}>
-      <span>Begin: <b>{new Date().toDateString()}</b></span>
-      <span>END: <b>{new Date().toDateString()}</b></span>
+      <span>Begin: <b>{startDate.replace(/T.*$/, '')}</b></span>
+      <span>END: <b>{endDate.replace(/T.*$/, '')}</b></span>
       <span>생성된 스케줄: <b>N개</b></span>
     </div>
     <div css={buttonStyle}>
       <NavLink to={'/meeting/request'}>
-        <div className='text'>미팅 생성</div>
+        <div className='text'>미팅 요청</div>
       </NavLink>
     </div>
   </div>

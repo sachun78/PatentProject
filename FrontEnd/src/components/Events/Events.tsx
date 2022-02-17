@@ -5,27 +5,26 @@ import palette from '../../lib/palette'
 import CreateEventModal from './CreateEventModal'
 import { useEventModal } from '../../hooks/useEventTitle'
 import EventCard from './EventCard'
+import useEventQuery from '../../hooks/query/useEventQuery'
 
 type EventViewProps = {}
 
 export default function Events({}: EventViewProps) {
   const { setModalState } = useEventModal()
-  const handleClick = () => {
-    setModalState(true)
-  }
+  const { data } = useEventQuery(1)
 
   return (
     <>
       <CreateEventModal />
       <ViewBase title='EVENT'>
         <div css={wrapper}>
-          <EventCard title='2022 INTA' />
-          <EventCard title='2022INTA' />
-          <EventCard title='2022INTA' />
-          <EventCard title='2022INTA' />
+          {data?.map((event) => {
+            return <EventCard key={event.id} id={event.id} title={event.title} startDate={event.start_date}
+                              endDate={event.end_date} />
+          })}
         </div>
       </ViewBase>
-      <button css={createEventButton} onClick={handleClick}>이벤트 생성</button>
+      <button css={createEventButton} onClick={() => setModalState(true)}>이벤트 생성</button>
     </>
   )
 }

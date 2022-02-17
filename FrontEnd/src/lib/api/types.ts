@@ -13,3 +13,11 @@ export type IProfile = {
   field?: string[]
   country?: string
 }
+
+export type IEvent = {
+  id: string
+  title: string,
+  start_date: string,
+  end_date: string,
+  meeting_list: string[],
+}
