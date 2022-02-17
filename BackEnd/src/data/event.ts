@@ -38,6 +38,10 @@ export async function getById(eventId: string) {
   return Event.findById(eventId);
 }
 
+export async function findByData(eventData: IEvent) {
+  return Event.findOne(eventData);
+}
+
 export async function createEvent(eventData: IEvent, userId: string) {
   return authRepo.findById(userId).then((user) => {
       return new Event({

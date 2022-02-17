@@ -27,6 +27,13 @@ export async function getEvent(req: IRequest, res: Response) {
 
 export async function createEvent(req: IRequest, res: Response) {
   const body = req.body;
+  const isExist = await eventRepo.findByData(body);
+  if (isExist) {
+    return res.status(409).json({
+       message: `already event - title:${isExist.title}`
+    })
+  }
+
   const event = await eventRepo.createEvent(body, req.userId);
   res.status(201).json({
     id: event.id,
@@ -35,9 +42,6 @@ export async function createEvent(req: IRequest, res: Response) {
     end_date: event.end_date,
     meeting_list: event.meeting_list
   })
-}
-
-export async function getMonthEvent(req: IRequest, res: Response) {
 }
 
 export async function updateEvent(req: IRequest, res: Response) {
