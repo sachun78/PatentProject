@@ -4,6 +4,7 @@ import palette from '../../lib/palette'
 type ViewBaseProps = {
   title: string
   children: React.ReactNode
+  isTopMargin?: boolean
 }
 
 function ViewBase({ title, children }: ViewBaseProps) {
@@ -18,11 +19,10 @@ function ViewBase({ title, children }: ViewBaseProps) {
 const wrapper = css`
   flex: 1;
   display: flex;
-  /* aligin-items: center; this use for miniSize*/
   justify-content: center;
   flex-direction: column;
   margin-bottom: 2rem;
-  
+
   .title {
     font-weight: 800;
     font-size: 2.5rem;

@@ -5,6 +5,7 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import useEventQuery from '../../hooks/query/useEventQuery'
 import { css } from '@emotion/react'
+import palette from '../../lib/palette'
 
 export type ScheduleCalendarProps = {
   weekendsVisible: boolean
@@ -51,10 +52,16 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
     eventContent={renderEventContent}
     eventClick={handleEventClick}
     eventColor={'#00bcd4'}
+    eventMouseEnter={(info) => {
+      info.el.style.backgroundColor = '#00bcd4'
+    }}
+    eventMouseLeave={(info) => {
+      info.el.style.backgroundColor = info.event.backgroundColor
+    }}
     dayMaxEventRows={true}
     views={{
       dayGridMonth: {
-        dayMaxEventRows: true,
+        dayMaxEventRows: true
       }
     }}
   />
@@ -77,6 +84,10 @@ const eventStyle = css`
   line-height: 1.5;
   font-weight: 600;
   padding: 0.5rem;
+
+  &:hover {
+    color: ${palette.lightGreen[100]};
+  }
 `
 
 export default ScheduleCalendar

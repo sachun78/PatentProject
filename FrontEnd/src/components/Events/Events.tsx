@@ -19,7 +19,8 @@ export default function Events({}: EventViewProps) {
       <ViewBase title='EVENT'>
         <div css={wrapper}>
           {data?.map((event) => {
-            return <EventCard key={event.id} id={event.id} title={event.title} startDate={event.start_date}
+            return <EventCard key={event.id} id={event.id} title={event.title}
+                              startDate={event.start_date}
                               endDate={event.end_date} />
           })}
         </div>

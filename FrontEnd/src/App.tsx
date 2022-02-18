@@ -42,6 +42,7 @@ function App() {
                   <Route path='/membership' element={<Member />} />
                   <Route path='/network' element={<Network />} />
                   <Route path='/meeting/*' element={<Meeting />} />
+                  <Route path='/event/*' element={<Meeting />} />
                   <Route path='/profile' element={<Profile />} />
                   <Route path='/conference' element={<div>컨퍼런스</div>} />
                 </Routes>

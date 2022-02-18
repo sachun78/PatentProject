@@ -2,8 +2,8 @@ import { css } from '@emotion/react'
 import palette from '../../lib/palette'
 import React from 'react'
 import { useUserState } from '../../atoms/authState'
-import { Link, NavLink } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
+import { Link } from 'react-router-dom'
 
 export type CategoryPickerProps = {
   visible: boolean;
@@ -17,13 +17,13 @@ function CategoryPicker({ visible, onClose }: CategoryPickerProps) {
 
   return <>
     {visible ? <div css={wrapper}>
-      <div css={blockStyle} onClick={onClose}>
+      <div css={blockStyle}>
         <ul>
-          <li>
+          <li onClick={onClose}>
             <Link css={profileStyle} to={'/profile'}>{username}</Link>
           </li>
           <li onClick={logout}>
-            <NavLink css={logoutStyle} to={'/login'}>logout</NavLink>
+            <Link css={logoutStyle} to={'/login'}>logout</Link>
           </li>
         </ul>
       </div>
@@ -62,7 +62,7 @@ const blockStyle = css`
 
     font-weight: 600;
     font-size: 1.4rem;
-    padding: 1.2rem 1.6rem;
+    padding: 1.2rem 0.8rem;
 
     &.active {
       color: ${palette.blueGrey[900]};
@@ -74,7 +74,6 @@ const blockStyle = css`
   }
 `
 const profileStyle = css`
-  margin-left: 1rem;
   font-size: 1.25rem;
   text-decoration: none;
   font-weight: 600;

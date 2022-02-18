@@ -33,7 +33,7 @@ function EventCard({ title = '', startDate, endDate, id }: EventCardProps) {
     <div css={eventHeaderStyle}>
       <span className='event-header-header'>{title}</span>
       <div className='event-header-tool'>
-        <div onClick={handleEdit}><MdUpdate /></div>
+        <div className='tool-edit' onClick={handleEdit}><MdUpdate /></div>
         <div className='tool-delete' onClick={handleDel}><MdDeleteForever /></div>
       </div>
     </div>
@@ -103,12 +103,11 @@ const eventHeaderStyle = css`
     color: ${palette.blue[400]};
     align-items: center;
 
-    &:hover {
+    .tool-delete:hover {
+      color: ${palette.red[700]};
+    }
+    .tool-edit:hover {
       color: ${palette.blue[700]};
-
-      .tool-delete {
-        color: ${palette.red[700]};
-      }
     }
   }
 `

@@ -44,16 +44,16 @@ function CreateEventModal({}: CreateEventModalProps) {
     const fetchCreateEvent = async () => {
       console.log('Event Create Action', title)
       const result = await createEvent(title, startDate, endDate)
-      //TODO(2. Calendar Event List에 Sync 추가(calendar형))
     }
     fetchCreateEvent().then(() => {
       refetch()
       setModalState(false)
     })
       .catch((e) => {
+        const { message } = e.response.data
         openDialog({
           title: 'ERROR!',
-          message: e.message,
+          message: message,
           onConfirm: () => {
             console.log('Confirm')
           },
