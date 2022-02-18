@@ -15,6 +15,13 @@ function Meeting({}: MeetingProps) {
           </div>
         }
       />
+      <Route
+        path='/*'
+        element={
+          <div css={pageStyle}>
+            <h1>Dispaly Meeting Infomation And State</h1>
+          </div>
+        } />
     </Routes>
   )
 }

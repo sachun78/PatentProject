@@ -21,7 +21,7 @@ export default function Events({}: EventViewProps) {
           {data?.map((event) => {
             return <EventCard key={event.id} id={event.id} title={event.title}
                               startDate={event.start_date}
-                              endDate={event.end_date} />
+                              endDate={event.end_date} count={event.meeting_list.length} />
           })}
         </div>
       </ViewBase>

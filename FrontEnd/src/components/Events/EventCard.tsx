@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import palette from '../../lib/palette'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { MdDeleteForever, MdUpdate } from 'react-icons/md'
 import { deleteEvent } from '../../lib/api/event/deleteEvent'
 import useEventQuery from '../../hooks/query/useEventQuery'
@@ -11,10 +11,12 @@ export type EventCardProps = {
   title: string
   startDate: string
   endDate: string
+  count: number
 }
 
-function EventCard({ title = '', startDate, endDate, id }: EventCardProps) {
+function EventCard({ title = '', startDate, endDate, id,count }: EventCardProps) {
   const { refetch } = useEventQuery(1, { enabled: false })
+  const navigate = useNavigate()
 
   const handleEdit = () => {
     alert(`edit! ${title}`)
@@ -30,21 +32,25 @@ function EventCard({ title = '', startDate, endDate, id }: EventCardProps) {
   }
 
   return <div css={wrapper}>
-    <div css={eventHeaderStyle}>
-      <span className='event-header-header'>{title}</span>
-      <div className='event-header-tool'>
-        <div className='tool-edit' onClick={handleEdit}><MdUpdate /></div>
-        <div className='tool-delete' onClick={handleDel}><MdDeleteForever /></div>
+    <div onClick={() => {
+      navigate(`/membership/event/${id}`)
+    }}>
+      <div css={eventHeaderStyle}>
+        <span className='event-header-header'>{title}</span>
+        <div className='event-header-tool'>
+          <div className='tool-edit' onClick={handleEdit}><MdUpdate /></div>
+          <div className='tool-delete' onClick={handleDel}><MdDeleteForever /></div>
+        </div>
       </div>
-    </div>
-    <div css={contentStyle}>
-      <span>Begin: <b>{startDate.replace(/T.*$/, '')}</b></span>
-      <span>END: <b>{endDate.replace(/T.*$/, '')}</b></span>
-      <span>생성된 스케줄: <b>N개</b></span>
+      <div css={contentStyle}>
+        <span>Begin: <b>{startDate.replace(/T.*$/, '')}</b></span>
+        <span>END: <b>{endDate.replace(/T.*$/, '')}</b></span>
+        <span>Meeting Count: <b>{count}</b></span>
+      </div>
     </div>
     <div css={buttonStyle}>
       <NavLink to={'/meeting/request'}>
-        <div className='text'>미팅 요청</div>
+        <div className='text'>Propose a meeting</div>
       </NavLink>
     </div>
   </div>
@@ -106,6 +112,7 @@ const eventHeaderStyle = css`
     .tool-delete:hover {
       color: ${palette.red[700]};
     }
+
     .tool-edit:hover {
       color: ${palette.blue[700]};
     }

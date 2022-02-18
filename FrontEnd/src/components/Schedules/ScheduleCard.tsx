@@ -1,5 +1,6 @@
 import { css } from '@emotion/react'
 import palette from '../../lib/palette'
+import { useNavigate } from 'react-router-dom'
 
 export type ScheduleCardProps = {
   from: string
@@ -11,7 +12,10 @@ export type ScheduleCardProps = {
 }
 
 function ScheduleCard({ from, to, comment, place, time, date }: ScheduleCardProps) {
-  return <div css={wrapper}>
+  const navigate = useNavigate()
+  return <div css={wrapper} onClick={() => {
+    navigate('/meeting/' + date + place)
+  }}>
     <div css={headerStyle}>
       <h3>Schedule Event Title</h3>
       <p className='from'>from<span> {from} </span></p>
