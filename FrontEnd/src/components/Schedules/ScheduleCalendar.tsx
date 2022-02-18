@@ -6,6 +6,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import useEventQuery from '../../hooks/query/useEventQuery'
 import { css } from '@emotion/react'
 import palette from '../../lib/palette'
+import { useNavigate } from 'react-router-dom'
 
 export type ScheduleCalendarProps = {
   weekendsVisible: boolean
@@ -14,6 +15,7 @@ export type ScheduleCalendarProps = {
 
 function ScheduleCalendar({}: ScheduleCalendarProps) {
   const { data } = useEventQuery(1, { enabled: false })
+  const navigate = useNavigate()
   const calendarEvents = useMemo(() => {
     const retArr = []
     if (data) {
@@ -31,8 +33,7 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
     return retArr
   }, [data])
   const handleEventClick = (clickInfo: EventClickArg) => {
-    if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-    }
+    navigate('/membership/event/' + clickInfo.event.id)
   }
 
   return <FullCalendar

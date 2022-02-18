@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import { AutocompleteValue, Avatar, Button, TextField } from '@mui/material'
-import React, { SyntheticEvent, useMemo, useRef, useState } from 'react'
+import React, { memo, SyntheticEvent, useMemo, useRef, useState } from 'react'
 import { careerStyle, countryWrapper, emailStyle, photoStyle, textStyle } from './InfoViewCardStyle'
 import IconControl from '../IconControl'
 import Input from '../Input/Input'
@@ -217,7 +217,7 @@ function InfoViewCardItem({
   </div>
 }
 
-InfoViewCard.Item = InfoViewCardItem
+InfoViewCard.Item = memo(InfoViewCardItem)
 
 const itemStyle = css`
   padding: 2rem;

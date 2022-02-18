@@ -34,7 +34,7 @@ function EventCard({ title = '', startDate, endDate, id, count }: EventCardProps
   }
 
   return <div css={wrapper}>
-    <div onClick={() => {
+    <div className={'inner'} onClick={() => {
       navigate(`/membership/event/${id}`)
     }}>
       <div css={eventHeaderStyle}>
@@ -68,7 +68,7 @@ const wrapper = css`
   background-color: #fff;
   text-align: left;
 
-  &:hover {
+  .inner:hover {
     .event-header-tool {
       visibility: visible
     }
@@ -110,7 +110,10 @@ const eventHeaderStyle = css`
     font-size: 1.6rem;
     color: ${palette.blue[400]};
     align-items: center;
-
+    svg {
+      width: 2rem;
+      height: 2rem;
+    }
     .tool-delete:hover {
       color: ${palette.red[700]};
     }

@@ -1,13 +1,14 @@
 import { css } from '@emotion/react'
 import palette from '../../lib/palette'
-import React from 'react'
+import React, { useRef } from 'react'
 import { useUserState } from '../../atoms/authState'
 import useAuth from '../../hooks/useAuth'
 import { Link } from 'react-router-dom'
+import useOnClickOutside from 'use-onclickoutside'
 
 export type CategoryPickerProps = {
   visible: boolean;
-  onClose: (e: React.MouseEvent<HTMLElement>) => void;
+  onClose: () => void;
 }
 
 function CategoryPicker({ visible, onClose }: CategoryPickerProps) {
@@ -15,8 +16,18 @@ function CategoryPicker({ visible, onClose }: CategoryPickerProps) {
   const username: string = user?.username || ''
   const { logout } = useAuth()
 
+  const ref = useRef<HTMLDivElement>(null)
+
+  const onOutsideClick: Parameters<typeof useOnClickOutside>[1] = (e) => {
+    if (ref.current === e.target || ref.current?.contains(e.target as Node)) {
+      return
+    }
+    onClose()
+  }
+  useOnClickOutside(ref, onOutsideClick)
+
   return <>
-    {visible ? <div css={wrapper}>
+    {visible ? <div css={wrapper} ref={ref}>
       <div css={blockStyle}>
         <ul>
           <li onClick={onClose}>

@@ -14,7 +14,6 @@ export type DatePickerProps = {
 
 function DatePickerInput({ value, maximum, minimum, onChange }: DatePickerProps) {
   const [open, setOpen] = useState(false)
-  const [date, setDate] = useState<Date | null>(new Date())
   const ref = useRef<HTMLDivElement>(null)
 
   const onClose: Parameters<typeof useOnClickOutside>[1] = (e) => {

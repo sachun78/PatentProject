@@ -9,11 +9,7 @@ type AuthFormBodyProps = {
   height: number
 }
 
-export default function AuthFormBody({
-                                       children,
-                                       width,
-                                       height
-                                     }: AuthFormBodyProps) {
+export default function AuthFormBody({ children, width, height }: AuthFormBodyProps) {
   return (
     <div css={bodyStyle(width, height)}>
       <div css={wrapStyle}>

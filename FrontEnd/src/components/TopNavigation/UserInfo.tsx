@@ -1,7 +1,5 @@
 import { css } from '@emotion/react'
-import React, { useRef } from 'react'
-import { useUserState } from '../../atoms/authState'
-import useAuth from '../../hooks/useAuth'
+import React from 'react'
 import palette from '../../lib/palette'
 import useToggle from '../../hooks/useToggle'
 import {
@@ -9,31 +7,18 @@ import {
 } from 'react-icons/md'
 import CategoryPicker from './UserInfoPicker'
 import { BiUser } from 'react-icons/bi'
-
 export type UserInfoProps = {}
 
 function UserInfo({}: UserInfoProps) {
   const [categoryPicker, toggleCategoryPicker] = useToggle(false)
-  const timeframeRef = useRef<HTMLDivElement | null>(null)
-
-  const onClose = (e: React.MouseEvent<HTMLElement>) => {
-    if (!timeframeRef.current) return
-    if (
-      e.target === timeframeRef.current ||
-      timeframeRef.current.contains(e.target as Node)
-    ) {
-      return
-    }
-    toggleCategoryPicker()
-  }
 
   return <div css={wrapper}>
-    <div css={HomeTabStyle} onClick={toggleCategoryPicker} ref={timeframeRef}>
+    <div css={HomeTabStyle} onClick={toggleCategoryPicker}>
       <BiUser />
       <MdArrowDropDown />
     </div>
 
-    <CategoryPicker onClose={onClose} visible={categoryPicker} />
+    <CategoryPicker onClose={toggleCategoryPicker} visible={categoryPicker} />
   </div>
 }
 

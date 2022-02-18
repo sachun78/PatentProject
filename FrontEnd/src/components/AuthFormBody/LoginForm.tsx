@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 import AuthFormBody from '.'
 import useInputs from '../../hooks/useInputs'
@@ -7,11 +7,13 @@ import { signinInput } from '../../lib/api/auth/signin'
 import palette from '../../lib/palette'
 import { TextField, Button, Divider } from '@mui/material'
 import { useSignin } from '../../hooks/useSignIn'
+import { useGlobalDialogActions } from '../../atoms/globalDialogState'
 
 type LoginFormProps = {}
 
 export default function LoginForm({}: LoginFormProps) {
   const { login, loading, error } = useSignin()
+
   const [form, onChange] = useInputs({
     email: '',
     password: ''
@@ -27,8 +29,6 @@ export default function LoginForm({}: LoginFormProps) {
     try {
       await login(input)
     } catch (e) {
-      console.error(e)
-      alert('로그인 실패')
     }
   }
 
@@ -50,7 +50,7 @@ export default function LoginForm({}: LoginFormProps) {
                               InputProps={{ style: { fontSize: 15 } }} />
               </div>
               <div className='button-div'>
-                <Button variant='contained' type='submit' color='primary'>
+                <Button variant='contained' type='submit' color='primary' disabled={loading}>
                   Log In
                 </Button>
               </div>

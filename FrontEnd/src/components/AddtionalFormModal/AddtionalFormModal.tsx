@@ -1,6 +1,5 @@
 import { AutocompleteValue, Avatar, Box, Button, Modal, Typography } from '@mui/material'
 import { css } from '@emotion/react'
-import useModal from '../../hooks/useModal'
 import IconControl from '../IconControl'
 import palette from '../../lib/palette'
 import InfoViewSection from '../InfoView/InfoViewSection'
@@ -16,7 +15,7 @@ import { IProfile } from '../../lib/api/types'
 export type AddtionalFormModalProps = {}
 
 function AddtionalFormModal({}: AddtionalFormModalProps) {
-  const { profile, loading, setProfile, open, setOpen,handleClose } = useProfile()
+  const { setProfile, open, setOpen, handleClose } = useProfile()
   const { field, fieldText, onChangeFieldText, add, remove } = useField()
   const [form, onChange] = useInputs({
     company: '',
