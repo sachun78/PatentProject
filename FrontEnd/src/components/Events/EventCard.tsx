@@ -14,14 +14,16 @@ export type EventCardProps = {
   count: number
 }
 
-function EventCard({ title = '', startDate, endDate, id,count }: EventCardProps) {
+function EventCard({ title = '', startDate, endDate, id, count }: EventCardProps) {
   const { refetch } = useEventQuery(1, { enabled: false })
   const navigate = useNavigate()
 
-  const handleEdit = () => {
+  const handleEdit = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation()
     alert(`edit! ${title}`)
   }
-  const handleDel = async () => {
+  const handleDel = async (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation()
     try {
       await deleteEvent(id)
       refetch()
@@ -45,7 +47,7 @@ function EventCard({ title = '', startDate, endDate, id,count }: EventCardProps)
       <div css={contentStyle}>
         <span>Begin: <b>{startDate.replace(/T.*$/, '')}</b></span>
         <span>END: <b>{endDate.replace(/T.*$/, '')}</b></span>
-        <span>Meeting Count: <b>{count}</b></span>
+        <span>Associated Meetings: <b>{count}</b></span>
       </div>
     </div>
     <div css={buttonStyle}>
