@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import RequestSection from '../RequestForm/RequestSection'
 import DatePickerInput from '../DatePickerInput'
 import useDateRangeHook from '../../hooks/useDateRangeHook'
@@ -25,4 +25,4 @@ function EventDateSections({}: EventDateSectionsProps) {
   </>
 }
 
-export default EventDateSections
+export default memo(EventDateSections)

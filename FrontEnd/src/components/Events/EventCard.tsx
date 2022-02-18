@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom'
 import { MdDeleteForever, MdUpdate } from 'react-icons/md'
 import { deleteEvent } from '../../lib/api/event/deleteEvent'
 import useEventQuery from '../../hooks/query/useEventQuery'
+import { memo } from 'react'
 
 export type EventCardProps = {
   id: string
@@ -124,4 +125,4 @@ const contentStyle = css`
     margin-bottom: 0.5rem
   }
 `
-export default EventCard
+export default memo(EventCard)

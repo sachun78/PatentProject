@@ -4,6 +4,7 @@ import { csrf } from '../lib/api/auth/csrf'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { getCurrentUser } from '../lib/api/me/getCurrentUser'
 import { useRegisterFormState, useUserState } from '../atoms/authState'
+import userStorage from '../lib/storage/userStorage'
 
 export default function useCheckUserEffect() {
   const { authorize, logout } = useAuth()
@@ -17,14 +18,17 @@ export default function useCheckUserEffect() {
   }, [user])
 
   useEffect(() => {
+    const storedUser = userStorage.get()
+    if (!storedUser) {
+      return
+    }
     getCurrentUser()
-      .then(user => authorize(user))
+      // .then(user => authorize(user))
       .catch(() => logout())
-  }, [])
+  }, [logout])
 
   useEffect(() => {
     if (user) {
-      console.log(user)
       if (!user.certified) {
         setRegisterForm('email-auth')
       } else {

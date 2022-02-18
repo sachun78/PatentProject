@@ -14,7 +14,6 @@ export type UserInfoProps = {}
 
 function UserInfo({}: UserInfoProps) {
   const [user] = useUserState()
-  const { logout } = useAuth()
   const username: string = user?.username || ''
   const [categoryPicker, toggleCategoryPicker] = useToggle(false)
   const timeframeRef = useRef<HTMLDivElement | null>(null)
@@ -33,7 +32,7 @@ function UserInfo({}: UserInfoProps) {
 
   return <div css={wrapper}>
     <div css={HomeTabStyle} onClick={toggleCategoryPicker} ref={timeframeRef} >
-      <BiUser />      
+      <BiUser />
       <MdArrowDropDown />
     </div>
 
