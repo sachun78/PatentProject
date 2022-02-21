@@ -25,18 +25,18 @@ useVirtualId(eventSchema);
 
 const Event = mongoose.model("Event", eventSchema);
 
-export async function getAll() {
-  return Event.find().sort({createAt: -1});
+export async function getAll(userId: string) {
+  return Event.find({user_id: userId}).sort({createAt: -1});
 }
 
-export async function getAllByMonth(month: string) {
+export async function getAllByMonth(userId: string, month: string) {
   const yy = parseInt(month.split('/')[0]);
   const mm = parseInt(month.split('/')[1]);
 
   const rngStart = new Date(yy + '/' + mm);
   const rngEnd = new Date(yy + '/' + (mm + 1));
   
-  return Event.find().or([
+  return Event.find({user_id: userId}).or([
         {start_date: {$gt: rngStart, $lte: rngEnd}},
         {end_date: {$gt: rngStart, $lte: rngEnd}} ]);
 }
