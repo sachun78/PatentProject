@@ -1,5 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close'
 import { css } from '@emotion/react'
+import React from 'react'
 
 export type TagProps = {
   onDelete?: (e: React.MouseEvent<SVGSVGElement>) => void

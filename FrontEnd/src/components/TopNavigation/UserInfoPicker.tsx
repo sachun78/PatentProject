@@ -3,7 +3,7 @@ import palette from '../../lib/palette'
 import React, { useRef } from 'react'
 import { useUserState } from '../../atoms/authState'
 import useAuth from '../../hooks/useAuth'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import useOnClickOutside from 'use-onclickoutside'
 
 export type CategoryPickerProps = {
@@ -14,6 +14,7 @@ export type CategoryPickerProps = {
 function CategoryPicker({ visible, onClose }: CategoryPickerProps) {
   const [user] = useUserState()
   const username: string = user?.username || ''
+  const navigate = useNavigate()
   const { logout } = useAuth()
 
   const ref = useRef<HTMLDivElement>(null)
@@ -30,11 +31,14 @@ function CategoryPicker({ visible, onClose }: CategoryPickerProps) {
     {visible ? <div css={wrapper} ref={ref}>
       <div css={blockStyle}>
         <ul>
-          <li onClick={onClose}>
-            <Link css={profileStyle} to={'/profile'}>{username}</Link>
+          <li onClick={() => {
+            onClose()
+            navigate('/profile')
+          }}>
+            {username}
           </li>
-          <li onClick={logout}>
-            <Link css={logoutStyle} to={'/login'}>logout</Link>
+          <li onClick={() => logout()}>
+            logout
           </li>
         </ul>
       </div>
@@ -44,18 +48,18 @@ function CategoryPicker({ visible, onClose }: CategoryPickerProps) {
 
 const wrapper = css`
   position: absolute;
-  right: 0;
+  right: 1rem;
   top: 100%;
   z-index: 5;`
 
 const blockStyle = css`
-
   margin-right: 1rem;
-  width: 10.2rem;
+  width: 16rem;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
   background: ${palette.grey[50]};
   color: ${palette.blueGrey[600]};
-  transform-origin: top right;
+  transform-origin: right top;
+  transform: scale(1);
 
   ul {
     list-style: none;
@@ -83,18 +87,6 @@ const blockStyle = css`
   li + li {
     border-top: 1px solid ${palette.grey[100]};
   }
-`
-const profileStyle = css`
-  font-size: 1.25rem;
-  text-decoration: none;
-  font-weight: 600;
-
-`
-const logoutStyle = css`
-  margin-left: 1rem;
-  font-size: 1.25rem;
-  text-decoration: none;
-  font-weight: 600;
 `
 
 export default CategoryPicker

@@ -14,7 +14,7 @@ import useEventQuery from '../../hooks/query/useEventQuery'
 
 export type CreateEventModalProps = {}
 
-function CreateEventModal({}: CreateEventModalProps) {
+function EventModal({}: CreateEventModalProps) {
   const { title, setEventTitle } = useEventTitle()
   const { open, setModalState } = useEventModal()
   const { endDate, startDate } = useDateRangeHook()
@@ -24,6 +24,7 @@ function CreateEventModal({}: CreateEventModalProps) {
     setEventTitle(e.target.value)
   }
   const handleCancel = () => {
+    setEventTitle('')
     setModalState(false)
   }
 
@@ -47,6 +48,7 @@ function CreateEventModal({}: CreateEventModalProps) {
     }
     fetchCreateEvent().then(() => {
       refetch()
+      setEventTitle('')
       setModalState(false)
     })
       .catch((e) => {
@@ -66,7 +68,7 @@ function CreateEventModal({}: CreateEventModalProps) {
 
   return <Modal open={open}>
     <Box css={eventFormStyle}>
-      <ViewBase title={'Create Event'}>
+      <ViewBase title={'Create Your Event'}>
         <RequestSection title={'Event title'}>
           <Input
             placeholder='Input your event title'
@@ -95,7 +97,7 @@ const eventFormStyle = css`
 `
 
 const buttonStyle = css`
-  ${resetButton}
+  ${resetButton};
   padding-left: 1rem;
   padding-right: 1rem;
   align-items: center;
@@ -112,4 +114,4 @@ const buttonStyle = css`
   }
 `
 
-export default CreateEventModal
+export default EventModal

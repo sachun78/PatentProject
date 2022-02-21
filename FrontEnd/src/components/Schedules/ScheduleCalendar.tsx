@@ -38,6 +38,7 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
 
   return <FullCalendar
     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+    height={650}
     headerToolbar={{
       left: 'prev,next today',
       center: 'title',

@@ -2,17 +2,17 @@ import { css } from '@emotion/react'
 import React from 'react'
 import palette from '../../lib/palette'
 import useToggle from '../../hooks/useToggle'
-import {
-  MdArrowDropDown
-} from 'react-icons/md'
+import { MdArrowDropDown, MdOutlineEmail } from 'react-icons/md'
 import CategoryPicker from './UserInfoPicker'
 import { BiUser } from 'react-icons/bi'
+
 export type UserInfoProps = {}
 
 function UserInfo({}: UserInfoProps) {
   const [categoryPicker, toggleCategoryPicker] = useToggle(false)
 
   return <div css={wrapper}>
+    <div><MdOutlineEmail /></div>
     <div css={HomeTabStyle} onClick={toggleCategoryPicker}>
       <BiUser />
       <MdArrowDropDown />
@@ -31,12 +31,15 @@ const wrapper = css`
   justify-content: flex-end;
   margin-right: 2rem;
 
+  svg {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
 `
 
 const HomeTabStyle = css`
-  background: ${palette.grey[50]};
   height: 3.2rem;
-  width: 9.6rem;
+  width: 6.4rem;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -46,18 +49,13 @@ const HomeTabStyle = css`
   font-weight: 600;
   color: ${palette.blueGrey[600]};
   font-size: 1.4rem;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
-
-
-  svg {
-    width: 2.4rem;
-    height: 2.4rem;
-  }
+  margin-left: 1rem;
 
   cursor: pointer;
   @media (hover: hover) and (pointer: fine) {
     &:hover {
       opacity: 0.75;
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     }
   }
 `

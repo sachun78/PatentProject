@@ -64,7 +64,8 @@ const wrapper = css`
   padding: 1.5rem;
   line-height: 1.2;
   border-radius: 0.8rem;
-
+  box-shadow: rgb(0 0 0 / 4%) 0 4px 16px 0;
+  
   background-color: #fff;
   text-align: left;
 
@@ -87,6 +88,11 @@ const buttonStyle = css`
     font-size: 1.5rem;
     font-weight: 600;
     padding-bottom: 0.5rem;
+    color: #fff;
+  }
+
+  &:hover {
+    background-color: ${palette.blue[500]};
   }
 
   a {
@@ -100,7 +106,7 @@ const eventHeaderStyle = css`
 
   .event-header-header {
     flex-grow: 1;
-    font-weight: 600;
+    font-weight: 800;
     font-size: 1.5rem;
   }
 
@@ -110,10 +116,12 @@ const eventHeaderStyle = css`
     font-size: 1.6rem;
     color: ${palette.blue[400]};
     align-items: center;
+
     svg {
       width: 2rem;
       height: 2rem;
     }
+
     .tool-delete:hover {
       color: ${palette.red[700]};
     }

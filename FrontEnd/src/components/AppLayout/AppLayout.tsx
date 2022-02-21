@@ -42,7 +42,7 @@ const headerStyle = css`
   height: 5rem;
   width: 100%;
   flex-shrink: 0;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15), 0 0 2px rgba(0, 0, 0, 0.1);
+  //box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15), 0 0 2px rgba(0, 0, 0, 0.1);
   background: #fff;
   z-index: 500;
   top: 0;

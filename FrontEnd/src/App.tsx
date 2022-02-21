@@ -15,7 +15,7 @@ import palette from './lib/palette'
 import Profile from './pages/Profile/Profile'
 import useCheckUserEffect from './hooks/useCheckUserEffect'
 import GlobalDialog from './components/GlobalDialog'
-import Event from './pages/Event'
+import EventDetail from './pages/EventDetail'
 
 function App() {
   useCheckUserEffect()
@@ -41,7 +41,7 @@ function App() {
                 <Routes>
                   <Route path='/' element={<Home />} />
                   <Route path='/membership' element={<Member />} />
-                  <Route path='/membership/event/*' element={<Event />} />
+                  <Route path='/membership/event/*' element={<EventDetail />} />
                   <Route path='/network' element={<Network />} />
                   <Route path='/meeting/*' element={<Meeting />} />
                   <Route path='/profile' element={<Profile />} />

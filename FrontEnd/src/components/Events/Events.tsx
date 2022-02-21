@@ -2,7 +2,7 @@ import { css } from '@emotion/react'
 import ViewBase from '../ViewBase'
 import React from 'react'
 import palette from '../../lib/palette'
-import CreateEventModal from './CreateEventModal'
+import EventModal from './EventModal'
 import { useEventModal } from '../../hooks/useEventTitle'
 import EventCard from './EventCard'
 import useEventQuery from '../../hooks/query/useEventQuery'
@@ -15,7 +15,7 @@ export default function Events({}: EventViewProps) {
 
   return (
     <>
-      <CreateEventModal />
+      <EventModal />
       <ViewBase title='EVENT'>
         <div css={wrapper}>
           {data?.map((event) => {

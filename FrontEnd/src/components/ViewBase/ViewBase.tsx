@@ -1,5 +1,4 @@
 import { css } from '@emotion/react'
-import palette from '../../lib/palette'
 
 type ViewBaseProps = {
   title: string
@@ -24,9 +23,10 @@ const wrapper = css`
   margin-bottom: 2rem;
 
   .title {
-    font-weight: 800;
+    font-weight: 600;
     font-size: 2.5rem;
     margin-bottom: 1.5rem;
+    margin-top: 1.5rem;
   }
 `
 

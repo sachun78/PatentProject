@@ -50,7 +50,7 @@ const wrapper = css`
 
   &:hover {
     transform: translate(5px, -10px);
-    background: lightgrey;
+    background: ${palette.grey[100]};
   }
 
   h3 {
