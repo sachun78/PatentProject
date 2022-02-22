@@ -1,9 +1,6 @@
 import { Request, Response } from 'express';
 import shortid from 'shortid';
-import nodemailer from 'nodemailer';
-import SMTPTransport from 'nodemailer/lib/smtp-transport';
-import envConfig from 'config';
-import { sendmail } from 'middleware/sendMailProc'
+import { EMAILTYPE, sendmail } from 'middleware/sendMailProc'
 
 import * as EmaiAuthlRepo from 'data/emailAuth';
 import * as authRepo from 'data/auth';
@@ -34,8 +31,7 @@ export async function sendAuthEmail(req: IRequest, res: Response) {
   const savedMail = await EmaiAuthlRepo.saveAuthMaiil(emailInfo);
 
   try {
-    const mailType = { type: 'auth-email', text: 'Email verification'}
-    const sendInfo = sendmail(savedMail, mailType);
+    const sendInfo = sendmail(savedMail, EMAILTYPE.AUTH);
     if (!sendInfo) {
       return res.status(500).json({ message: `Failed email send ${emailInfo.email}`});
     }

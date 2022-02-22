@@ -8,7 +8,7 @@ export interface IEvent {
     start_date: Date,
     end_date: Date,
     meeting_list?: string[]
-}
+};
 
 export const eventSchema = new mongoose.Schema<IEvent>({
     user_id: {type: String},
