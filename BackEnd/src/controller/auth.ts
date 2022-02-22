@@ -63,6 +63,7 @@ export async function signin(req: IRequest, res: Response, next: NextFunction) {
         id: user.id,
         email: user.email,
         username: user.username,
+        photo_path: user.photo_path,
         certified: user.certified
       }
     })
@@ -86,7 +87,7 @@ export async function me(req: IRequest, res: Response, next: NextFunction) {
       id: user.id,
       email: user.email,
       username: user.username,
-      photh_path: user.photo_path,
+      photo_path: user.photo_path,
       certified: user.certified
     })
   } catch (e) {

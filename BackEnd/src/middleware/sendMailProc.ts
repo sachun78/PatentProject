@@ -34,7 +34,7 @@ const createInviteEmail = (data: any) => {
     type: 'invitation-letter',
     text: 'invitation letter'
   };
-  const subject = `Wemet [${keywords.text}]`;
+  const subject = `Wemet [${keywords.text}] - ${data.ownerName}`;
   const html = `<a href="http://localhost:3000"
   ><img
     src="http://localhost:8080/undraw_People_re_ueqm.png"
@@ -68,7 +68,7 @@ const createInviteEmail = (data: any) => {
           <b style="color: black">location:</b> ${data.location}
         </div>
         <div style="margin: 0; color: #495057; margin-bottom: 0.5rem;">
-          <b style="color: black">member:</b> sachun78@naver.com(owner), sachun78@gmail.com
+          <b style="color: black">member:</b> ${data.ownerEmail}(owner), ${data.toEmail}
         </div>
         <div style="margin: 0; color: #495057; margin-bottom: 0.5rem;">
           <b style="color: black">comment:</b> ${data.comment}
@@ -76,7 +76,7 @@ const createInviteEmail = (data: any) => {
         <a
           href="http://localhost:3000/${keywords.type}?code=${data.code}"
           style="outline: none; border: none; background: #845ef7; color: white; padding-top: 0.5rem; padding-bottom: 0.5rem; font-size: 1rem; font-weight: 600; display: inline-block; background: #845ef7; padding-left: 1rem; padding-right: 1rem; align-items: center; margin-top: 1rem; border-radius: 4px; text-decoration: none;"
-          >확인 하기</a
+          >View meeting detail</a
         >
       </div>
     </div>

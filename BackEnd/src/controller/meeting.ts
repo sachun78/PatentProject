@@ -55,7 +55,7 @@ async function createMeeting(userId: string, body: any) {
     comment: body.comment,
     status: 'none',
     code: shortid.generate()
-  }
+  };
 
   const meeting = await meetingRepo.createMeeting(revMeeting);
   if (!meeting) {
@@ -63,6 +63,11 @@ async function createMeeting(userId: string, body: any) {
       reject(new Error('message: Failed create meeting'));
     });
   }
-  console.log({meeting});
-  return meeting;
+  
+  const retMeetingData = {
+    ...revMeeting,
+    ownerEmail: user.email,
+    ownerName: user.username
+  };
+  return retMeetingData;
 }
