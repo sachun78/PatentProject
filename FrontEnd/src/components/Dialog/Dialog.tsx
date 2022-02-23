@@ -21,7 +21,7 @@ function Dialog({
   if (!visible) return null
   return (
     <>
-      <div css={overlay}/>
+      <div css={overlay} />
       <div css={centerWrapper}>
         <div css={whiteBox}>
           <h3>{title}</h3>
@@ -66,10 +66,10 @@ const centerWrapper = css`
 
 const whiteBox = css`
   width: 380px;
-  padding: 1.5rem;
+  padding: 2.4rem;
   background: white;
-  border-radius: 1rem;
-  box-shadow: 0 1rem 1rem rgba(67, 67, 67, 0.03);
+  border-radius: 1.6rem;
+  box-shadow: 0 1.6rem 1.6rem rgba(67, 67, 67, 0.03);
   color: ${palette.blueGrey[900]};
 
   h3 {
@@ -80,8 +80,8 @@ const whiteBox = css`
   p {
     line-height: 1.5;
     font-size: 1.6rem;
-    margin-top: 1rem;
-    margin-bottom: 3rem;
+    margin-top: 1.6rem;
+    margin-bottom: 4.8rem;
   }
 `
 
@@ -90,19 +90,19 @@ const buttons = css`
   justify-content: flex-end;
 
   button + button {
-    margin-left: 0.5rem;
+    margin-left: 0.8rem;
   }
 `
 
 const buttonStyle = css`
-  ${resetButton}
+  ${resetButton};
   display: flex;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 1.6rem;
+  padding-right: 1.6rem;
   align-items: center;
-  height: 2.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
+  height: 4rem;
+  border-radius: 0.4rem;
+  font-size: 1.4rem;
   font-weight: bold;
   cursor: pointer;
 `

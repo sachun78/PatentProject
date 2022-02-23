@@ -7,6 +7,8 @@ import { BrowserRouter } from 'react-router-dom'
 import { RecoilRoot } from 'recoil'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import recoilInitializer from './atoms/recoilInitializer'
+import { ThemeProvider } from '@mui/material'
+import theme from './lib/styles/theme'
 
 const queryClient = new QueryClient()
 ReactDOM.render(
@@ -14,7 +16,9 @@ ReactDOM.render(
     <RecoilRoot initializeState={recoilInitializer}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <App />
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
         </BrowserRouter>
       </QueryClientProvider>
     </RecoilRoot>

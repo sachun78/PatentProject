@@ -21,11 +21,6 @@ function BookingSide({}: BookingSideProps) {
       <div><MdSimCard /> <h3>Company</h3></div>
     </section>
     <section css={sectionStyle}>
-      <div><MdPerson /> <h3>Offer to</h3></div>
-      <div><MdEmail /> <h3>Email</h3></div>
-      <div><MdSimCard /> <h3>Company (if exist or if user?)</h3></div>
-    </section>
-    <section css={sectionStyle}>
       <h3>Comment Messages</h3>
     </section>
   </div>

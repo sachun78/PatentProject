@@ -31,7 +31,6 @@ function CountrySelector({ onChange, defaultValue, disabled = false }: CountrySe
                        renderInput={(params) => (
                          <TextField
                            {...params}
-                           label='country'
                            inputProps={{
                              ...params.inputProps,
                              style: { fontSize: 12, padding: 0 },

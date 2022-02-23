@@ -28,11 +28,10 @@ const postViewStyle = css`
   min-width: 68rem;
   height: 100%;
   margin-left: 1.5rem;
-  margin-right: 20rem;
   padding-top: 3rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   ${media.small} {
     margin-right: 0;
   }

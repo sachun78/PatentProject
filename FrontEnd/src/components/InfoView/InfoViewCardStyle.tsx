@@ -1,6 +1,5 @@
 import { css } from '@emotion/react'
 import palette from '../../lib/palette'
-import { commonButton } from '../../lib/styles/commonButton'
 
 export const emailStyle = css`
   flex-grow: 1;
@@ -41,24 +40,19 @@ export const countryWrapper = css`
   width: 100%;
   flex-direction: column;
 
+  div {
+    height: 4rem;
+  }
+
   button {
     margin-left: 1rem;
+    margin-top: 1rem;
   }
 
   svg {
     width: 1.5rem;
     height: 1.5rem;
     cursor: pointer;
-  }
-
-  .save {
-    display: flex;
-    justify-content: flex-end;
-
-    button {
-      margin-top: 1rem;
-      ${commonButton}
-    }
   }
 `
 
@@ -94,7 +88,6 @@ export const textStyle = (minWidth: number) => css`
     display: inline-flex;
 
     button {
-      ${commonButton}
       &:hover {
         background-color: ${palette.grey[200]};
       }

@@ -197,15 +197,17 @@ function InfoViewCardItem({
       {/*6. COUNTRY TYPE*/}
       {type === 'country' &&
         <div css={countryWrapper}>
-          <div css={css`width: 100%;
-            display: flex;`}>
-            <CountrySelector disabled={!editMode} onChange={handleCountry || onCountryChange}
-                             defaultValue={countries[countries.findIndex((v) => (defaultCountry) === v.code)]}
-            />
+          <div css={css`display: flex;
+            justify-content: space-between;
+            width: 100%;`}>
+            {editMode && <CountrySelector onChange={handleCountry || onCountryChange}
+                                          defaultValue={countries[countries.findIndex((v) => (defaultCountry) === v.code)]}
+            />}
+            {!editMode && <div>{countries[countries.findIndex((v) => (defaultCountry) === v.code)].label}</div>}
+            {!isEditMode && <div>
+              <Button variant='contained' color='primary' onClick={onCountrySave}>{editMode ? 'Save' : 'Edit'}</Button>
+            </div>}
           </div>
-          {!isEditMode && <div className='save'>
-            <Button onClick={onCountrySave}>{editMode ? 'Save' : 'Edit'}</Button>
-          </div>}
         </div>}
       {/*7. CAREER TYPE*/}
       {type === 'career' &&

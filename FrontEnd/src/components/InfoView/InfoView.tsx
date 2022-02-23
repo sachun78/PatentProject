@@ -37,9 +37,8 @@ function InfoView({}: InfoViewProps) {
                          reset={resetDepartment} prevReset={prevDepartment} />
       <InfoViewCard.Item title='Position' type={'text'} description={position} onChange={onPositionChange}
                          reset={resetPosition} prevReset={prevPosition} />
-      <InfoViewCard.Item title='Field' type={'field'} fields={field} handleField={handleFields} reset={reset}
-                         prevReset={save}
-                         description={fieldText} />
+      <InfoViewCard.Item title='Field' type={'field'} fields={field} handleField={handleFields}
+                         reset={reset} prevReset={save} description={fieldText} />
       <InfoViewCard.Item title='Country' type={'country'} countryValue={country} />
     </InfoViewSection>
     <InfoViewSection title='Additional'>

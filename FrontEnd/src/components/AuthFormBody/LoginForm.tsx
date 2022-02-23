@@ -1,11 +1,11 @@
 import { css } from '@emotion/react'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { NavLink } from 'react-router-dom'
 import AuthFormBody from '.'
 import useInputs from '../../hooks/useInputs'
 import { signinInput } from '../../lib/api/auth/signin'
 import palette from '../../lib/palette'
-import { TextField, Button, Divider } from '@mui/material'
+import { Button, Divider, TextField } from '@mui/material'
 import { useSignin } from '../../hooks/useSignIn'
 
 type LoginFormProps = {}
@@ -49,7 +49,7 @@ export default function LoginForm({}: LoginFormProps) {
                               InputProps={{ style: { fontSize: 15 } }} />
               </div>
               <div className='button-div'>
-                <Button variant='contained' type='submit' color='primary' disabled={loading}>
+                <Button variant='contained' type='submit' color='primary' disabled={loading} size='large'>
                   Log In
                 </Button>
               </div>

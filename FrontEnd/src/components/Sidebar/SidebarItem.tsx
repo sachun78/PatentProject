@@ -57,11 +57,11 @@ const linkStyle = css`
 
   &.active {
     background: ${palette.blueGrey[50]};
-    color: ${palette.blue[900]};
+    color: ${palette.blueGrey[900]};
 
     span {
       font-weight: bold;
-      border-bottom: 3px solid ${palette.blue[900]};
+      border-bottom: 3px solid ${palette.blueGrey[900]};
       padding-bottom: 0.5rem;
     }
 

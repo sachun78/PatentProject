@@ -84,7 +84,7 @@ const wrapper = css`
 `
 
 const buttonStyle = css`
-  background-color: ${palette.blue[200]};
+  background-color: ${palette.cyan[500]};
   margin: 1.5rem -1.5rem -1.5rem -1.5rem;
   border-bottom-right-radius: 0.8rem;
   border-bottom-left-radius: 0.8rem;
@@ -99,7 +99,7 @@ const buttonStyle = css`
   }
 
   &:hover {
-    background-color: ${palette.blue[500]};
+    background-color: ${palette.cyan[400]};
   }
 
   a {
@@ -121,7 +121,7 @@ const eventHeaderStyle = css`
     visibility: hidden;
     display: flex;
     font-size: 1.6rem;
-    color: ${palette.blue[400]};
+    color: ${palette.cyan[500]};
     align-items: center;
 
     svg {
@@ -134,7 +134,7 @@ const eventHeaderStyle = css`
     }
 
     .tool-edit:hover {
-      color: ${palette.blue[700]};
+      color: ${palette.cyan[400]};
     }
   }
 `

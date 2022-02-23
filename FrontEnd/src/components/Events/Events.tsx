@@ -43,7 +43,7 @@ const createEventButton = css`
   position: fixed;
   bottom: 2rem;
   right: 4rem;
-  background: ${palette.blue[200]};
+  background: ${palette.cyan[500]};
   border: none;
   border-radius: 999rem;
   width: 9rem;
@@ -52,7 +52,7 @@ const createEventButton = css`
   user-select: none;
 
   &:hover {
-    background: ${palette.blue[500]};
+    background: ${palette.cyan[400]};
     font-weight: 400;
     cursor: pointer;
   }
