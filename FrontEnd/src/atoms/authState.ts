@@ -11,12 +11,12 @@ export function useUserState() {
   return useRecoilState(userState)
 }
 
-export const photoState = selector<User['photh_path']>({
+export const photoState = selector<User['photo_path']>({
   key: 'phothPathState',
   get: ({ get }) => {
     const user = get(userState)
     if (user) {
-      return user.photh_path
+      return user.photo_path
     }
     return ''
   }
@@ -28,7 +28,7 @@ export const updateUserPhoto = (
 ) =>
   produce(state, (draft) => {
     if (draft) {
-      draft.photh_path = value
+      draft.photo_path = value
     }
   })
 

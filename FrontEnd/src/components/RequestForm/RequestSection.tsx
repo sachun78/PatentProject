@@ -1,16 +1,13 @@
 import { css } from '@emotion/react'
-import { Button } from '@mui/material'
 import palette from '../../lib/palette'
+import { memo } from 'react'
 
 type RequestSectionProps = {
   title: string
   children: React.ReactNode
 }
 
-export default function RequestSection({
-                                         title,
-                                         children
-                                       }: RequestSectionProps) {
+function RequestSection({ title, children }: RequestSectionProps) {
   return (
     <section css={sectionStyle}>
       <h3>{title}</h3>
@@ -21,15 +18,21 @@ export default function RequestSection({
   )
 }
 
+export default memo(RequestSection)
+
 const sectionStyle = css`
   section + & {
     margin-top: 1.25rem;
   }
-
+  max-width: 60rem;
+  margin-bottom: 1.5rem;
+  &:first-of-type {
+    margin-bottom: 0;
+  }
+  
   h3 {
     color: ${palette.blueGrey[800]};
-    font-size: 1rem;
-    font-weight: bold;
+    font-size: 1.6rem;
     line-height: 1.5rem;
     margin-top: 0;
     margin-bottom: 0.75rem;
@@ -37,15 +40,16 @@ const sectionStyle = css`
 
   & > div {
     position: relative;
-    flex-direction: row;
     display: flex;
     width: 100%;
-
+    
     align-items: center;
-    justify-content: center;
-
-    .ant-btn {
-      margin-left: 1rem;
-    }
+    justify-content: flex-start;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: ${palette.blueGrey[400]};
   }
 `

@@ -2,6 +2,7 @@ import React from 'react'
 import { css } from '@emotion/react'
 import palette from '../../lib/palette'
 import { resetButton } from '../../lib/styles/resetButton'
+
 export type DialogProps = {
   visible: boolean
   title: string
@@ -14,19 +15,13 @@ export type DialogProps = {
 }
 
 function Dialog({
-                  title,
-                  message,
-                  confirmText = 'OK',
-                  cancelText = 'CANCEL',
-                  onConfirm,
-                  onCancel,
-                  isDestructive = false,
-                  visible,
+                  title, message, confirmText = 'OK', cancelText = 'CANCEL',
+                  onConfirm, onCancel, isDestructive = false, visible
                 }: DialogProps) {
   if (!visible) return null
   return (
     <>
-      <div css={overlay}></div>
+      <div css={overlay}/>
       <div css={centerWrapper}>
         <div css={whiteBox}>
           <h3>{title}</h3>
@@ -76,10 +71,12 @@ const whiteBox = css`
   border-radius: 1rem;
   box-shadow: 0 1rem 1rem rgba(67, 67, 67, 0.03);
   color: ${palette.blueGrey[900]};
+
   h3 {
     margin: 0;
     font-size: 2.4rem;
   }
+
   p {
     line-height: 1.5;
     font-size: 1.6rem;
@@ -91,6 +88,7 @@ const whiteBox = css`
 const buttons = css`
   display: flex;
   justify-content: flex-end;
+
   button + button {
     margin-left: 0.5rem;
   }
@@ -110,19 +108,22 @@ const buttonStyle = css`
 `
 
 const cancelButton = css`
-  ${buttonStyle}
+  ${buttonStyle};
   color: ${palette.blueGrey[300]};
+
   &:hover {
     background: ${palette.grey[100]};
   }
 `
 
 const confirmButton = (isDestructive: boolean) => css`
-  ${buttonStyle}
+  ${buttonStyle};
   background: ${isDestructive ? palette.red[400] : palette.cyan[500]};
+
   &:hover {
     background: ${isDestructive ? palette.red[300] : palette.cyan[400]};
   }
+
   color: white;
 `
 

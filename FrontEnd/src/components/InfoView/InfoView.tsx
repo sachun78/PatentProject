@@ -28,7 +28,7 @@ function InfoView({}: InfoViewProps) {
     <InfoViewSection title='Account'>
       <InfoViewCard.Item title='Email' type={'email'} email={user?.email} />
       <InfoViewCard.Item title='Username' type={'username'} username={user?.username} />
-      <InfoViewCard.Item title='Photo' type={'photo'} username={user?.username} photo={user?.photh_path} isEditMode />
+      <InfoViewCard.Item title='Photo' type={'photo'} username={user?.username} photo={user?.photo_path} isEditMode />
     </InfoViewSection>
     <InfoViewSection title='Belonging'>
       <InfoViewCard.Item title='Company' type={'text'} description={company} onChange={onCompanyChange}

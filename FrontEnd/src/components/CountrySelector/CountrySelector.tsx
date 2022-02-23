@@ -4,8 +4,8 @@ import { SyntheticEvent } from 'react'
 import palette from '../../lib/palette'
 
 export type CountrySelectorProps = {
-  disabled?: boolean
-  onChange?: (e: SyntheticEvent, v: AutocompleteValue<CountryType, undefined, undefined, undefined>) => void
+  disabled?: boolean,
+  onChange?: (e: SyntheticEvent, v: AutocompleteValue<CountryType, undefined, undefined, undefined>) => void,
   defaultValue?: CountryType
 }
 
@@ -59,6 +59,7 @@ const countrySelectorStyle = css`
     color: ${palette.blueGrey[700]};
     padding: 0 1.6rem 0 1.6rem;
   }
+
   .MuiOutlinedInput-notchedOutline {
     border: 0;
   }

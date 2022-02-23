@@ -4,10 +4,9 @@ import { IEvent } from '../../lib/api/types'
 
 export default function useEventQuery(
   id: number,
-  options: UseQueryOptions<IEvent[], unknown, IEvent[]> = {}
+  options: UseQueryOptions<IEvent[]> = {}
 ) {
-  // @ts-ignore
-  return useQuery(createKey(id), () => getEvents(), { ...options })
+  return useQuery<IEvent[]>(createKey(id), () => getEvents(), { ...options })
 }
 
 const createKey = (id: number) => ['events', id]

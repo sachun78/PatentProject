@@ -7,7 +7,6 @@ import { signinInput } from '../../lib/api/auth/signin'
 import palette from '../../lib/palette'
 import { TextField, Button, Divider } from '@mui/material'
 import { useSignin } from '../../hooks/useSignIn'
-import { useGlobalDialogActions } from '../../atoms/globalDialogState'
 
 type LoginFormProps = {}
 

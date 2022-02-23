@@ -1,4 +1,4 @@
-import { atom, selector } from 'recoil'
+import { atom, selector, useRecoilState } from 'recoil'
 import produce from 'immer'
 
 export type EventState = {
@@ -23,6 +23,18 @@ export const eventState = atom({
   key: 'eventState',
   default: initialState
 })
+
+const currentEventState = atom({
+  key: 'currentEventState',
+  default: {
+    id: '',
+    title: ''
+  }
+})
+
+export function useCurrentEventState() {
+  return useRecoilState(currentEventState)
+}
 
 export const eventTitleState = selector<EventState['title']>({
   key: 'eventTitleState',

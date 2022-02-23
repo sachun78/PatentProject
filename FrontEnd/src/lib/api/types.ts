@@ -2,7 +2,7 @@ export type User = {
   id: string,
   email: string,
   username: string,
-  photh_path: string
+  photo_path: string
   certified: boolean
 }
 

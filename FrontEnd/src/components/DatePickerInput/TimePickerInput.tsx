@@ -46,17 +46,25 @@ function TimePickerInput({ value, onChange }: TimePickerProps) {
           handleOpen()
         }
       }}>
-      {value?.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+      {value?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
     </div>
 
     {open && <LocalizationProvider dateAdapter={AdapterDateFns}>
       <div css={calendarStyle}>
-        <StaticTimePicker ampm
-                          orientation='landscape'
+        <StaticTimePicker ampm={true}
+                          ampmInClock={true}
+                          orientation='portrait'
                           openTo='hours'
                           value={value}
+                          onAccept={(new_value) => {
+                            if (new_value) {
+                              onChange(new_value)
+                              setOpen(false)
+                            }
+                          }}
                           onChange={handleChange}
                           minutesStep={5}
+                          displayStaticWrapperAs='desktop'
                           showToolbar={false}
                           renderInput={(params) => <TextField {...params} />} />
       </div>
@@ -67,6 +75,7 @@ function TimePickerInput({ value, onChange }: TimePickerProps) {
 const wrapper = css`
   position: relative;
   width: 100%;
+  max-width: 16rem;
 `
 
 const textStyle = css`
@@ -75,6 +84,8 @@ const textStyle = css`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  padding-left: 1.6rem;
+  padding-right: 1.6rem;
 
   &:focus-visible {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);

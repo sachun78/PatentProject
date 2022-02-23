@@ -3,43 +3,64 @@ import useInputs from '../../hooks/useInputs'
 import Input from '../Input'
 import ViewBase from '../ViewBase'
 import RequestSection from './RequestSection'
-import { Button } from '@mui/material'
 import DatePickerInput from '../DatePickerInput'
 import TimePickerInput from '../DatePickerInput/TimePickerInput'
 import useDateTimeHook from '../../hooks/useDateTimeHook'
+import { useCurrentEventState } from '../../atoms/eventState'
+import { resetButton } from '../../lib/styles/resetButton'
+import palette from '../../lib/palette'
+import { createMeeting } from '../../lib/api/meeting/createMeeting'
 
 type RequestViewProps = {
   title: string
 }
 
 export default function RequestForm({ title }: RequestViewProps) {
+  const [curEvent] = useCurrentEventState()
   const { date, time, setDate, setTime } = useDateTimeHook()
+
   const [form, onChange] = useInputs({
     to: '',
-    event: '',
     place: '',
-    comment: ''
+    comment: '',
+    title: ''
   })
+
+  const onSubmit = async () => {
+    console.log(form, date.toLocaleDateString(), time.toLocaleTimeString(), curEvent)
+    const { title, to, place, comment } = form
+    if (!to || !place || !title) {
+      alert('모든 항목을 입력해주세요.')
+      return
+    }
+
+    try {
+      await createMeeting({
+        title,
+        date,
+        time,
+        toEmail: to,
+        location: place,
+        comment,
+        eventId: curEvent.id
+      })
+    } catch (e) {
+      console.error()
+    }
+  }
 
   return (
     <ViewBase title={title}>
       <div css={wrapper}>
         <div css={sectionStyle}>
           <RequestSection title={'Event'}>
-            <Input
-              name='event'
-              value={form.event}
-              onChange={onChange}
-            />
+            <span>{curEvent.title}</span>
           </RequestSection>
-          <RequestSection
-            title={'Email'}
-          >
-            <Input
-              name='to'
-              value={form.to}
-              onChange={onChange}
-            />
+          <RequestSection title={'Meeting Title'}>
+            <Input name='title' value={form.title} onChange={onChange} />
+          </RequestSection>
+          <RequestSection title={'Email'}>
+            <Input name='to' value={form.to} onChange={onChange} />
           </RequestSection>
           <RequestSection title={'Meeting Date'}>
             <DatePickerInput value={date} onChange={(value: Date) => {
@@ -68,9 +89,7 @@ export default function RequestForm({ title }: RequestViewProps) {
             />
           </RequestSection>
           <div css={space} />
-          <Button>
-            제안하기
-          </Button>
+          <button css={buttonStyle} onClick={onSubmit}>OK</button>
         </div>
       </div>
     </ViewBase>
@@ -96,6 +115,22 @@ const sectionStyle = css`
   .ant-picker {
     flex-grow: 1;
   }
+`
+
+const buttonStyle = css`
+  ${resetButton};
+  height: 2.8rem;
+  color: white;
+  background: ${palette.cyan[500]};
+  max-width: 60rem;
+
+  &:hover,
+  &:focus-visible {
+    background: ${palette.cyan[400]};
+  }
+
+  border-radius: 0.8rem;
+  margin-left: 1rem;
 `
 
 const space = css`

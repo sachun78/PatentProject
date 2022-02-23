@@ -17,7 +17,7 @@ function ScheduleCard({ from, to, comment, place, time, date }: ScheduleCardProp
     navigate('/meeting/' + date + place)
   }}>
     <div css={headerStyle}>
-      <h3>Schedule Event Title</h3>
+      <h3>Meeting Title</h3>
       <p className='from'>from<span> {from} </span></p>
       <p className='to'>to <span> {to}</span></p>
     </div>

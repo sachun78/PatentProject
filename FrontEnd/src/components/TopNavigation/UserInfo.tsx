@@ -5,6 +5,7 @@ import useToggle from '../../hooks/useToggle'
 import { MdArrowDropDown, MdOutlineEmail } from 'react-icons/md'
 import CategoryPicker from './UserInfoPicker'
 import { BiUser } from 'react-icons/bi'
+import { Badge } from '@mui/material'
 
 export type UserInfoProps = {}
 
@@ -12,7 +13,9 @@ function UserInfo({}: UserInfoProps) {
   const [categoryPicker, toggleCategoryPicker] = useToggle(false)
 
   return <div css={wrapper}>
-    <div><MdOutlineEmail /></div>
+    <div>
+      <Badge variant="dot" color='warning'> <MdOutlineEmail /> </Badge>
+    </div>
     <div css={HomeTabStyle} onClick={toggleCategoryPicker}>
       <BiUser />
       <MdArrowDropDown />

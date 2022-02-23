@@ -5,6 +5,7 @@ import { MdDeleteForever, MdUpdate } from 'react-icons/md'
 import { deleteEvent } from '../../lib/api/event/deleteEvent'
 import useEventQuery from '../../hooks/query/useEventQuery'
 import { memo } from 'react'
+import { useCurrentEventState } from '../../atoms/eventState'
 
 export type EventCardProps = {
   id: string
@@ -17,7 +18,7 @@ export type EventCardProps = {
 function EventCard({ title = '', startDate, endDate, id, count }: EventCardProps) {
   const { refetch } = useEventQuery(1, { enabled: false })
   const navigate = useNavigate()
-
+  const [, setCurEvent] = useCurrentEventState()
   const handleEdit = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
     alert(`edit! ${title}`)
@@ -31,6 +32,12 @@ function EventCard({ title = '', startDate, endDate, id, count }: EventCardProps
       console.log(error)
       //TODO(Open ERROR DIALOG)
     }
+  }
+  const handleNewMeet = async () => {
+    setCurEvent({
+      id,
+      title
+    })
   }
 
   return <div css={wrapper}>
@@ -50,7 +57,7 @@ function EventCard({ title = '', startDate, endDate, id, count }: EventCardProps
         <span>Associated Meetings: <b>{count}</b></span>
       </div>
     </div>
-    <div css={buttonStyle}>
+    <div css={buttonStyle} onClick={handleNewMeet}>
       <NavLink to={'/meeting/request'}>
         <div className='text'>Propose a meeting</div>
       </NavLink>
@@ -65,7 +72,7 @@ const wrapper = css`
   line-height: 1.2;
   border-radius: 0.8rem;
   box-shadow: rgb(0 0 0 / 4%) 0 4px 16px 0;
-  
+
   background-color: #fff;
   text-align: left;
 

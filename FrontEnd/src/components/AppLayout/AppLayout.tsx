@@ -1,12 +1,14 @@
 import { css } from '@emotion/react'
 import React from 'react'
 import media from '../../lib/styles/media'
+import useCheckUserEffect from '../../hooks/useCheckUserEffect'
 
 export type AppLayoutProps = {
   children: React.ReactNode
 }
 
 export default function AppLayout({ children }: AppLayoutProps) {
+  useCheckUserEffect()
   return <>{children}</>
 }
 

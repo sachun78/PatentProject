@@ -1,4 +1,4 @@
-import { Global, css } from '@emotion/react'
+import { css, Global } from '@emotion/react'
 import AppLayout from './components/AppLayout'
 import React from 'react'
 import Home from './pages/Home'
@@ -13,12 +13,15 @@ import Register from './pages/Register'
 import DebugObserver from './components/DebugObserver'
 import palette from './lib/palette'
 import Profile from './pages/Profile/Profile'
-import useCheckUserEffect from './hooks/useCheckUserEffect'
 import GlobalDialog from './components/GlobalDialog'
 import EventDetail from './pages/EventDetail'
+import MeetingBook from './pages/Meeting/MeetingBook'
+import useCsrfQuery from './hooks/query/useCsrfQuery'
+import { usePageRelocationEffect } from './hooks/usePageRelocationEffect'
 
 function App() {
-  useCheckUserEffect()
+  useCsrfQuery({ refetchOnWindowFocus: false })
+  usePageRelocationEffect()
 
   return (
     <>
@@ -27,6 +30,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/auth-email' element={<Register />} />
+        <Route path='/invitation-letter' element={<MeetingBook />} />
         <Route
           path='/*'
           element={
@@ -46,6 +50,7 @@ function App() {
                   <Route path='/meeting/*' element={<Meeting />} />
                   <Route path='/profile' element={<Profile />} />
                   <Route path='/conference' element={<div>컨퍼런스</div>} />
+                  <Route path='/*' element={<div>404 NOT FOUND</div>} />
                 </Routes>
               </AppLayout.Main>
             </AppLayout>

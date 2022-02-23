@@ -20,7 +20,7 @@ function Sidebar({}: SidebarProps) {
 }
 
 const sidebarStyle = css`
-  flex: 1;
+  flex: 1 1 100%;
   display: flex;
   flex-direction: column;
 
