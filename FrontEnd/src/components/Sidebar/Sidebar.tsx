@@ -2,6 +2,7 @@ import { css } from '@emotion/react'
 import React from 'react'
 import palette from '../../lib/palette'
 import SidebarItem from './SidebarItem'
+import media from '../../lib/styles/media'
 
 type SidebarProps = {}
 
@@ -20,6 +21,10 @@ function Sidebar({}: SidebarProps) {
 }
 
 const sidebarStyle = css`
+  ${media.xlarge} {
+    display: none;
+  }
+  
   flex: 1 1 100%;
   display: flex;
   flex-direction: column;

@@ -18,6 +18,7 @@ import EventDetail from './pages/EventDetail'
 import MeetingBook from './pages/Meeting/MeetingBook'
 import useCsrfQuery from './hooks/query/useCsrfQuery'
 import { usePageRelocationEffect } from './hooks/usePageRelocationEffect'
+import VerticalBar from './components/Sidebar/VerticalBar'
 
 function App() {
   useCsrfQuery({ refetchOnWindowFocus: false })
@@ -40,6 +41,7 @@ function App() {
               </AppLayout.Header>
               <AppLayout.Sidebar>
                 <Sidebar />
+                <VerticalBar />
               </AppLayout.Sidebar>
               <AppLayout.Main>
                 <Routes>
