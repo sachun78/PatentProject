@@ -37,6 +37,17 @@ export async function getMeeting(req: IRequest, res: Response) {
   }
 }
 
+export async function getMeetingByCode(req: IRequest, res: Response) {
+  const code = req.params.code;
+
+  const data = await meetingRepo.getByCode(code);
+  if (!data) {
+    return res.status(404).json({ message: `meeting code:(${code}) not found`});
+  }
+
+  res.status(200).json(data);
+}
+
 export async function confirmMeeting(req: IRequest, res: Response) {
   const code = req.params.code;
 
@@ -65,7 +76,7 @@ export async function sendInvitMail(req: IRequest, res: Response) {
     if (!meetingData) {
       return res.status(500).json({ message: `Failed save meeting ${bodyData.toEmail}`});
     }
-    console.log({meetingData});
+
     const mailInfo = sendmail(meetingData, EMAILTYPE.INVI);
     if (!mailInfo) {
       return res.status(500).json({ message: `Failed email send ${bodyData.toEmail}`});
@@ -89,6 +100,8 @@ async function createMeeting(userId: string, body: any) {
 
   let revMeeting = {
     ownerId: user.id,
+    ownerEmail: user.email,
+    ownerName: user.username,
     toEmail: body.toEmail,
     eventId: body.eventId, 
     title: body.title,
@@ -123,8 +136,6 @@ async function createMeeting(userId: string, body: any) {
   
   const retMeetingData = {
     ...revMeeting,
-    ownerEmail: user.email,
-    ownerName: user.username,
     ownerPhoto: user.photo_path
   };
   return retMeetingData;

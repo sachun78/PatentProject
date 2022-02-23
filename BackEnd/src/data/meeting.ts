@@ -4,6 +4,8 @@ import { useVirtualId } from 'database/database'
 
 export interface IMeeting {
   ownerId: string,
+  ownerName: string,
+  ownerEmail: string,
   toEmail: string,
   eventId: string,
   title: string,
@@ -17,6 +19,8 @@ export interface IMeeting {
 
 export const meetingSchema = new mongoose.Schema<IMeeting>({
   ownerId: { type: String, required: true },
+  ownerName: { type: String, required: true },
+  ownerEmail: { type: String, required: true },
   toEmail: { type: String, required: true },
   eventId: { type: String, requierd: true },
   title: { type: String, defalut: ""},
@@ -42,11 +46,29 @@ export async function getById(meetingId: string) {
   return meeting.findById(meetingId);
 }
 
+export async function getByCode(meetingCode: string) {
+  return meeting.findOne({code: meetingCode}).then((data: any) => {
+    return {
+      ownerName: data.ownerName,
+      ownerEmail: data.ownerEmail,
+      toEmail: data.toEmail,
+      eventId: data.eventId,
+      title: data.title,
+      date: data.date,
+      time: data.time,
+      location: data.location,
+      comment: data.comment,
+    }
+  });
+}
+
 export async function findByCode(code: string) {
   return meeting.findOne({code}).then((data: any) => {
     return {
       id: data.id,
       ownerId: data.ownerId,
+      ownerName: data.ownerName,
+      ownerEmail: data.ownerEmail,
       toEmail: data.toEmail,
       eventId: data.eventId,
       title: data.title,
@@ -65,6 +87,8 @@ export async function createMeeting(meetingData: any) {
     return {
       id: data.id,
       ownerId: data.ownerId,
+      ownerName: data.ownerName,
+      ownerEmail: data.ownerEmail,
       toEmail: data.toEmail,
       eventId: data.eventId,
       title: data.title,
