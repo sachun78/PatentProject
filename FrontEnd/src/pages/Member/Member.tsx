@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import { Box, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Tab, Tabs } from '@mui/material'
 import Events from '../../components/Events/Events'
 import Schedules from '../../components/Schedules'
 import { useState } from 'react'

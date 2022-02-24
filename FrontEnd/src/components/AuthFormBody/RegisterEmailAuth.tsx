@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { memo, useEffect } from 'react'
 import { css } from '@emotion/react'
 import { checkCode } from '../../lib/api/auth/sendmail'
 import { useNavigate } from 'react-router-dom'
 import { useUserState } from '../../atoms/authState'
 import { useGlobalDialogActions } from '../../atoms/globalDialogState'
+import useAuth from '../../hooks/useAuth'
 
 export type RegisterFormEmailAuthProps = {
   code: string | null
@@ -12,6 +13,7 @@ export type RegisterFormEmailAuthProps = {
 function RegisterEmailAuth({ code }: RegisterFormEmailAuthProps) {
   const navigate = useNavigate()
   const [user] = useUserState()
+  const { authorize } = useAuth()
   const { open } = useGlobalDialogActions()
 
   const alamError = () => {
@@ -37,6 +39,7 @@ function RegisterEmailAuth({ code }: RegisterFormEmailAuthProps) {
         console.log('fetch code success')
         if (user) {
           timer = setTimeout(() => {
+            authorize({ ...user, certified: true })
             navigate('/')
           }, 3000)
         } else {
@@ -47,10 +50,11 @@ function RegisterEmailAuth({ code }: RegisterFormEmailAuthProps) {
       })
       .catch((e) => {
         console.error(e)
+        console.log(e.response.data)
         alamError()
       })
     return () => clearTimeout(timer)
-  }, [code, navigate])
+  }, [code])
 
   return <div css={wrapper}>
     <h2 className='title'>Verified Code</h2>
@@ -66,4 +70,4 @@ const wrapper = css`
   }
 `
 
-export default RegisterEmailAuth
+export default memo(RegisterEmailAuth)

@@ -75,8 +75,9 @@ function InfoViewCardItem({
   }
   const [editMode, setEditMode] = useState(isEditMode || false)
   const [country, setCountry] = useState(countryValue || '')
+  const defaultCountry = countryValue || 'KR'
   const [, setProfile] = useProfileState()
-  const defaultCountry = useMemo(() => countryValue || 'KR', [])
+
   const toggle = () => {
     setEditMode(!editMode)
   }
