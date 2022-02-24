@@ -1,5 +1,4 @@
 import { css } from '@emotion/react'
-import ViewBase from '../ViewBase'
 import React from 'react'
 import palette from '../../lib/palette'
 import EventModal from './EventModal'
@@ -16,16 +15,13 @@ export default function Events({}: EventViewProps) {
   return (
     <>
       <EventModal />
-      <ViewBase title='EVENT'>
-        <div css={wrapper}>
-          {data?.map((event) => {
-            return <EventCard key={event.id} id={event.id} title={event.title}
-                              startDate={event.start_date}
-                              endDate={event.end_date} count={event.meeting_list.length} />
-          })}
-        </div>
-      </ViewBase>
-      <button css={createEventButton} onClick={() => setModalState(true)}>이벤트 생성</button>
+      <div css={wrapper}>
+        {data?.map((event) => {
+          return <EventCard key={event.id} id={event.id} title={event.title} startDate={event.start_date}
+                            endDate={event.end_date} count={event.meeting_list.length} />
+        })}
+      </div>
+      <button css={createEventButton} onClick={() => setModalState(true)}>새로운 이벤트</button>
     </>
   )
 }
@@ -46,8 +42,7 @@ const createEventButton = css`
   background: ${palette.cyan[500]};
   border: none;
   border-radius: 999rem;
-  width: 9rem;
-  height: 9rem;
+  padding: 2.5rem;
   color: #fff;
   user-select: none;
 

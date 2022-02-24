@@ -1,6 +1,5 @@
 import { Box, Modal } from '@mui/material'
 import { css } from '@emotion/react'
-import ViewBase from '../ViewBase'
 import RequestSection from '../RequestForm/RequestSection'
 import Input from '../Input/Input'
 import EventDateSections from './EventDateSections'
@@ -44,21 +43,18 @@ function EventModal({}: CreateEventModalProps) {
     }
     const fetchCreateEvent = async () => {
       console.log('Event Create Action', title)
-      const result = await createEvent(title, startDate, endDate)
+      return await createEvent(title, startDate, endDate)
     }
     fetchCreateEvent().then(() => {
-      refetch()
       setEventTitle('')
       setModalState(false)
+      refetch()
     })
       .catch((e) => {
         const { message } = e.response.data
         openDialog({
           title: 'ERROR!',
           message: message,
-          onConfirm: () => {
-            console.log('Confirm')
-          },
           showCancel: false,
           confirmText: 'OK',
           isDestructive: true
@@ -68,19 +64,17 @@ function EventModal({}: CreateEventModalProps) {
 
   return <Modal open={open}>
     <Box css={eventFormStyle}>
-      <ViewBase title={'Create Your Event'}>
-        <RequestSection title={'Event title'}>
-          <Input
-            placeholder='Input your event title'
-            name='event'
-            onChange={handleChange}
-            value={title}
-          />
-        </RequestSection>
-        <EventDateSections />
-      </ViewBase>
-      <button css={buttonStyle} onClick={handleOk}> 전송</button>
-      <button css={buttonStyle} onClick={handleCancel}> 취소</button>
+      <RequestSection title={'Event title'}>
+        <Input placeholder='Input your event title'
+               name='event'
+               onChange={handleChange}
+               value={title} />
+      </RequestSection>
+      <EventDateSections />
+      <div css={buttonBlock}>
+        <button css={buttonStyle} onClick={handleOk}>생성</button>
+        <button css={buttonStyle} onClick={handleCancel}> 취소</button>
+      </div>
     </Box>
   </Modal>
 }
@@ -95,11 +89,14 @@ const eventFormStyle = css`
   border-radius: 0.8rem;
 
 `
-
+const buttonBlock = css`
+  display: flex;
+  justify-content: center;
+`
 const buttonStyle = css`
   ${resetButton};
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 4rem;
+  padding-right: 4rem;
   align-items: center;
   height: 2.5rem;
   border-radius: 0.25rem;
@@ -107,10 +104,16 @@ const buttonStyle = css`
   font-weight: bold;
   cursor: pointer;
 
-  color: ${palette.blueGrey[300]};
+  background-color: ${palette.cyan[500]};
+
+  color: #fff;
+
+  &:first-of-type {
+    margin-right: 3rem;
+  }
 
   &:hover {
-    background: ${palette.grey[100]};
+    background: ${palette.cyan[400]};
   }
 `
 

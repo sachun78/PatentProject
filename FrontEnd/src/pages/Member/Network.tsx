@@ -1,6 +1,5 @@
 import { css } from '@emotion/react'
 import React from 'react'
-import ViewBase from '../../components/ViewBase'
 
 type NetworkProps = {}
 
@@ -8,9 +7,7 @@ function Network({}: NetworkProps) {
 
   return (
     <div css={wrapper}>
-      <ViewBase title="NETWORK">
-        네트워크 View
-      </ViewBase>
+      네트워크 View
     </div>
   )
 }

@@ -1,7 +1,6 @@
 import { css } from '@emotion/react'
 import useInputs from '../../hooks/useInputs'
 import Input from '../Input'
-import ViewBase from '../ViewBase'
 import RequestSection from './RequestSection'
 import DatePickerInput from '../DatePickerInput'
 import TimePickerInput from '../DatePickerInput/TimePickerInput'
@@ -50,49 +49,47 @@ export default function RequestForm({ title }: RequestViewProps) {
   }
 
   return (
-    <ViewBase title={title}>
-      <div css={wrapper}>
-        <div css={sectionStyle}>
-          <RequestSection title={'Event'}>
-            <span>{curEvent.title}</span>
-          </RequestSection>
-          <RequestSection title={'Meeting Title'}>
-            <Input name='title' value={form.title} onChange={onChange} />
-          </RequestSection>
-          <RequestSection title={'Email'}>
-            <Input name='to' value={form.to} onChange={onChange} />
-          </RequestSection>
-          <RequestSection title={'Meeting Date'}>
-            <DatePickerInput value={date} onChange={(value: Date) => {
-              setDate(value)
-            }} />
-          </RequestSection>
-          <RequestSection title={'Meeting Time'}>
-            <TimePickerInput onChange={(value: Date) => {
-              setTime(value)
-            }} value={time} />
-          </RequestSection>
-          <RequestSection title={'Location'}>
-            <Input
-              placeholder='Add a location'
-              name='place'
-              value={form.place}
-              onChange={onChange}
-            />
-          </RequestSection>
-          <RequestSection title={'Comment'}>
-            <Input
-              placeholder='Leave a comment'
-              name='comment'
-              value={form.comment}
-              onChange={onChange}
-            />
-          </RequestSection>
-          <div css={space} />
-          <button css={buttonStyle} onClick={onSubmit}>OK</button>
-        </div>
+    <div css={wrapper}>
+      <div css={sectionStyle}>
+        <RequestSection title={'Event'}>
+          <span>{curEvent.title}</span>
+        </RequestSection>
+        <RequestSection title={'Meeting Title'}>
+          <Input name='title' value={form.title} onChange={onChange} />
+        </RequestSection>
+        <RequestSection title={'Email'}>
+          <Input name='to' value={form.to} onChange={onChange} />
+        </RequestSection>
+        <RequestSection title={'Meeting Date'}>
+          <DatePickerInput value={date} onChange={(value: Date) => {
+            setDate(value)
+          }} />
+        </RequestSection>
+        <RequestSection title={'Meeting Time'}>
+          <TimePickerInput onChange={(value: Date) => {
+            setTime(value)
+          }} value={time} />
+        </RequestSection>
+        <RequestSection title={'Location'}>
+          <Input
+            placeholder='Add a location'
+            name='place'
+            value={form.place}
+            onChange={onChange}
+          />
+        </RequestSection>
+        <RequestSection title={'Comment'}>
+          <Input
+            placeholder='Leave a comment'
+            name='comment'
+            value={form.comment}
+            onChange={onChange}
+          />
+        </RequestSection>
+        <div css={space} />
+        <button css={buttonStyle} onClick={onSubmit}>OK</button>
       </div>
-    </ViewBase>
+    </div>
   )
 }
 
