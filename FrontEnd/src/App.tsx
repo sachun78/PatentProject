@@ -21,7 +21,7 @@ import { usePageRelocationEffect } from './hooks/usePageRelocationEffect'
 import VerticalBar from './components/Sidebar/VerticalBar'
 
 function App() {
-  useCsrfQuery({ refetchOnWindowFocus: false })
+  useCsrfQuery({ refetchOnWindowFocus: false, retry: true })
   usePageRelocationEffect()
 
   return (

@@ -1,7 +1,6 @@
 import { css } from '@emotion/react'
 import InfoViewSection from './InfoViewSection'
 import InfoViewCard from './InfoViewCard'
-import { useState } from 'react'
 import { useInput } from '../../hooks/useInput'
 import { useField } from '../../hooks/useField'
 import { useUserState } from '../../atoms/authState'
@@ -12,12 +11,10 @@ export type InfoViewProps = {}
 function InfoView({}: InfoViewProps) {
   const {
     field, fieldText,
-    onChangeFieldText,
-    add, remove, reset, save
+    onChangeFieldText, add, remove, reset, save
   } = useField()
   const [user] = useUserState()
   const [profile] = useProfileState()
-  const [country] = useState(profile?.country)
   const [company, onCompanyChange, resetCompany, prevCompany] = useInput(profile?.company || 'company is empty error', 'company')
   const [department, onDepartmentChange, resetDepartment, prevDepartment] = useInput(profile?.department || 'department ID', 'department')
   const [position, onPositionChange, resetPosition, prevPosition] = useInput(profile?.position || 'position ID', 'position')
@@ -39,7 +36,7 @@ function InfoView({}: InfoViewProps) {
                          reset={resetPosition} prevReset={prevPosition} />
       <InfoViewCard.Item title='Field' type={'field'} fields={field} handleField={handleFields}
                          reset={reset} prevReset={save} description={fieldText} />
-      <InfoViewCard.Item title='Country' type={'country'} countryValue={country} />
+      <InfoViewCard.Item title='Country' type={'country'} countryValue={profile?.country} />
     </InfoViewSection>
     <InfoViewSection title='Additional'>
       <InfoViewCard.Item title='Prev Career' type={'career'} />

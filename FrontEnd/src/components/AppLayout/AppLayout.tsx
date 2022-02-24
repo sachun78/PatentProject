@@ -55,9 +55,11 @@ const mainStyle = css`
   min-height: calc(100vh - 64px);
   background: #f7f7f8;
   position: relative;
+
   ${media.xlarge} {
     margin-left: 8rem;
   }
+
   ${media.small} {
     margin-left: 0;
   }
@@ -76,7 +78,7 @@ const sidebarStyle = css`
     width: 8rem;
     padding: 0;
   }
-  
+
   ${media.small} {
     display: none;
   }

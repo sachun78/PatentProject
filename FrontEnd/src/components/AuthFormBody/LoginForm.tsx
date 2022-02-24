@@ -7,12 +7,13 @@ import { signinInput } from '../../lib/api/auth/signin'
 import palette from '../../lib/palette'
 import { Button, Divider, TextField } from '@mui/material'
 import { useSignin } from '../../hooks/useSignIn'
+import { useRegisterFormState } from '../../atoms/authState'
 
 type LoginFormProps = {}
 
 export default function LoginForm({}: LoginFormProps) {
   const { login, loading, error } = useSignin()
-
+  const [, setRegisterForm] = useRegisterFormState()
   const [form, onChange] = useInputs({
     email: '',
     password: ''
@@ -58,7 +59,7 @@ export default function LoginForm({}: LoginFormProps) {
           <Divider css={dividerStlye}>OR</Divider>
           <section>
             <div css={underBlockStyle}>
-              <div>
+              <div onClick={() => setRegisterForm('default')}>
                 <NavLink to={'/register'}>
                   <h4>Sign Up</h4>
                 </NavLink>
