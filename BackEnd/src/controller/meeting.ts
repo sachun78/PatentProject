@@ -10,8 +10,29 @@ interface IRequest {
   [key:string]: any
 }
 
-const checkInviteCode = (code: string) => {
+const enum MEETING_STATUS {
+  NONE = 'none',
+  CONFIRM = 'confirm',
+  CANCEL = 'cancel',
+  RESCHEDULE = 'reschedule'
+}
 
+const checkInviteCode = async (code: string, _status: MEETING_STATUS): Promise<any> => {
+  const meeting = await meetingRepo.findByCode(code);
+  if (!meeting) {
+    return new Promise((resolve, reject) => {
+      reject(new Error('message: Not found meeting'));
+    });
+  }
+
+  const meetingUpdate = await meetingRepo.updateMeeting(meeting.id, {status: _status});
+  if (!meetingUpdate) {
+    return new Promise((resolve, reject) => {
+      reject(new Error('message: Failed meeting info update'));
+    });
+  }
+
+  return meetingUpdate;
 }
 
 export async function getMeetings(req: IRequest, res: Response) {
@@ -51,20 +72,27 @@ export async function getMeetingByCode(req: IRequest, res: Response) {
 export async function confirmMeeting(req: IRequest, res: Response) {
   const code = req.params.code;
 
-  const meeting = await meetingRepo.findByCode(code);
-  if (!meeting) {
-    return res.status(404).json({message: `Invalid code: ${code}`});
+  try {
+    const check = await checkInviteCode(code, MEETING_STATUS.CONFIRM);
+    res.status(200).json({ message: `Success update status[${check.status}]`});
   }
-
-  const meetingUpdate = await meetingRepo.updateMeeting(meeting.id, {status: 'confirm'});
-  if (!meetingUpdate) {
+  catch(e) {
+    console.error(e);
     return res.status(401).json({ message: 'Failed meeting info update'});
   }
-
-  res.status(200).json({ message: 'Success update meeting info'});
 }
 
 export async function cancelMeeting(req: IRequest, res: Response) {
+  const code = req.params.code;
+
+  try {
+    const check = await checkInviteCode(code, MEETING_STATUS.CANCEL);
+    res.status(200).json({ message: `Success update status[${check.status}]`});
+  }
+  catch(e) {
+    console.error(e);
+    return res.status(401).json({ message: 'Failed meeting info update'});
+  }
 }
 
 export async function sendInvitMail(req: IRequest, res: Response) {

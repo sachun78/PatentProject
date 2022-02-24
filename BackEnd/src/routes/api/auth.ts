@@ -24,9 +24,10 @@ const validateSignup = [
   validate
 ]
 
-route.post('/signup', validateSignup, authCtrl.signup)
-route.post('/signin', validateCredential, authCtrl.signin)
-route.get('/csrf-token', authCtrl.csrfToken)
-route.get('/me', isAuth, authCtrl.me)
+route.post('/signup', validateSignup, authCtrl.signup);
+route.post('/signin', validateCredential, authCtrl.signin);
+route.post('/logout', isAuth, authCtrl.logout);
+route.get('/csrf-token', authCtrl.csrfToken);
+route.get('/me', isAuth, authCtrl.me);
 
 export default route

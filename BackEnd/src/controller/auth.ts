@@ -73,6 +73,18 @@ export async function signin(req: IRequest, res: Response, next: NextFunction) {
   }
 }
 
+export async function logout(req: IRequest, res: Response, next: NextFunction) {
+  const user_id = req.userId;
+
+  const user = await UserRepo.findById(user_id);
+  if (!user) {
+    return res.status(401).json({ message: 'Invalid user or password' })
+  }
+
+  clearToken(res);
+  res.status(200).json({ message: `${user.username} is logout`});
+}
+
 export async function me(req: IRequest, res: Response, next: NextFunction) {
   try {
     if (!req.userId) {
@@ -118,4 +130,8 @@ function setToken(res: Response, token: String) {
   }
 
   res.cookie('token', token, options)
+}
+
+function clearToken(res: Response) {
+  res.clearCookie('token');
 }
