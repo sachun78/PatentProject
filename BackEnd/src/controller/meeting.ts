@@ -78,7 +78,7 @@ export async function confirmMeeting(req: IRequest, res: Response) {
   }
   catch(e) {
     console.error(e);
-    return res.status(401).json({ message: 'Failed meeting info update'});
+    return res.status(403).json({ message: 'Failed meeting info update'});
   }
 }
 
@@ -91,7 +91,7 @@ export async function cancelMeeting(req: IRequest, res: Response) {
   }
   catch(e) {
     console.error(e);
-    return res.status(401).json({ message: 'Failed meeting info update'});
+    return res.status(403).json({ message: 'Failed meeting info update'});
   }
 }
 
