@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import shortid from 'shortid';
 import { EMAILTYPE, sendmail } from 'middleware/sendMailProc'
 
@@ -9,28 +9,27 @@ interface IRequest extends Request {
   [key: string]: any
 }
 
-export async function sendAuthEmail(req: IRequest, res: Response) {
-  const user = await authRepo.findById(req.userId);
-  if (!user) {
-    return res.status(404).json({message: 'User not found'});
-  }
-
-  const emailInfo = {
-    userid: "",
-    email: "",
-    code: "",
-    logged: false
-  }
-
-  emailInfo.userid = user.id;
-  emailInfo.email = user.email;
-  emailInfo.code = shortid.generate();
-
-  console.log("emailInfo", emailInfo);
-
-  const savedMail = await EmaiAuthlRepo.saveAuthMaiil(emailInfo);
-
+export async function sendAuthEmail(req: IRequest, res: Response, next: NextFunction) {
   try {
+    const user = await authRepo.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({message: 'User not found'});
+    }
+
+    const emailInfo = {
+      userid: "",
+      email: "",
+      code: "",
+      logged: false
+    }
+
+    emailInfo.userid = user.id;
+    emailInfo.email = user.email;
+    emailInfo.code = shortid.generate();
+
+    console.log("emailInfo", emailInfo);
+
+    const savedMail = await EmaiAuthlRepo.saveAuthMaiil(emailInfo);
     const sendInfo = sendmail(savedMail, EMAILTYPE.AUTH);
     if (!sendInfo) {
       return res.status(500).json({ message: `Failed email send ${emailInfo.email}`});
@@ -40,11 +39,11 @@ export async function sendAuthEmail(req: IRequest, res: Response) {
   }
   catch(e) {
     console.error(e);
-    return res.status(500).json({ message: `Exception email send ${emailInfo.email}`});
+    next(e);
   }
 }
 
-export async function isVerifyMail(req: IRequest, res: Response) {
+export async function isVerifyMail(req: IRequest, res: Response, next: NextFunction) {
   const reqCode: string = req.params.code;
   
   try {
@@ -71,6 +70,6 @@ export async function isVerifyMail(req: IRequest, res: Response) {
     res.status(200).json({email: authmail.email, certified: updateUser.certified});
   } catch(e) {
     console.error(e);
-    res.status(401).send('forbidden');
+    next(e);
   }  
 }
