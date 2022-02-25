@@ -9,13 +9,13 @@ import { useCurrentEventState } from '../../atoms/eventState'
 import { resetButton } from '../../lib/styles/resetButton'
 import palette from '../../lib/palette'
 import { createMeeting } from '../../lib/api/meeting/createMeeting'
+import { useState } from 'react'
 
-type RequestViewProps = {
-  title: string
-}
+type RequestViewProps = {}
 
-export default function RequestForm({ title }: RequestViewProps) {
+export default function RequestForm({}: RequestViewProps) {
   const [curEvent] = useCurrentEventState()
+  const [complete, setComplete] = useState(false)
   const { date, time, setDate, setTime } = useDateTimeHook()
 
   const [form, onChange] = useInputs({
@@ -43,14 +43,16 @@ export default function RequestForm({ title }: RequestViewProps) {
         comment,
         eventId: curEvent.id
       })
+      setComplete(true)
     } catch (e) {
-      console.error()
     }
   }
 
   return (
     <div css={wrapper}>
-      <div css={sectionStyle}>
+      {complete ? (<div>
+        미팅 요청 완료
+      </div>) : (<div css={sectionStyle}>
         <RequestSection title={'Event'}>
           <span>{curEvent.title}</span>
         </RequestSection>
@@ -88,7 +90,8 @@ export default function RequestForm({ title }: RequestViewProps) {
         </RequestSection>
         <div css={space} />
         <button css={buttonStyle} onClick={onSubmit}>OK</button>
-      </div>
+      </div>)}
+
     </div>
   )
 }

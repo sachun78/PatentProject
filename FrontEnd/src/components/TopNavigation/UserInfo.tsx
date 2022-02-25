@@ -1,9 +1,9 @@
 import { css } from '@emotion/react'
-import React from 'react'
+import React, { memo } from 'react'
 import palette from '../../lib/palette'
 import useToggle from '../../hooks/useToggle'
 import { MdArrowDropDown, MdOutlineEmail } from 'react-icons/md'
-import CategoryPicker from './UserInfoPicker'
+import UserInfoPicker from './UserInfoPicker'
 import { BiUser } from 'react-icons/bi'
 import { Badge } from '@mui/material'
 
@@ -21,7 +21,7 @@ function UserInfo({}: UserInfoProps) {
       <MdArrowDropDown />
     </div>
 
-    <CategoryPicker onClose={toggleCategoryPicker} visible={categoryPicker} />
+    <UserInfoPicker onClose={toggleCategoryPicker} visible={categoryPicker} />
   </div>
 }
 
@@ -63,4 +63,4 @@ const HomeTabStyle = css`
   }
 `
 
-export default UserInfo
+export default memo(UserInfo)

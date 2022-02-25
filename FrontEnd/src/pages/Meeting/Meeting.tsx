@@ -11,7 +11,7 @@ function Meeting({}: MeetingProps) {
         path='/request'
         element={
           <div css={pageStyle}>
-            <RequestForm title='Meeting Proposal' />{' '}
+            <RequestForm />
           </div>
         }
       />

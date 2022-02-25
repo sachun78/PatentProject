@@ -1,6 +1,6 @@
 import { Autocomplete, AutocompleteValue, Box, TextField } from '@mui/material'
 import { css } from '@emotion/react'
-import { SyntheticEvent } from 'react'
+import { memo, SyntheticEvent } from 'react'
 import palette from '../../lib/palette'
 
 export type CountrySelectorProps = {
@@ -497,4 +497,4 @@ export const countries: CountryType[] = [
   { code: 'ZW', label: 'Zimbabwe', phone: '263' }
 ]
 
-export default CountrySelector
+export default memo(CountrySelector)

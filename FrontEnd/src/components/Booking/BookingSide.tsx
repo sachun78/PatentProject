@@ -1,27 +1,33 @@
 import { css } from '@emotion/react'
 import { BsCalendarDate, BsClock } from 'react-icons/bs'
 import { MdEmail, MdOutlineLocationOn, MdPerson, MdSimCard } from 'react-icons/md'
+import { IMeeting } from '../../lib/api/types'
 
-export type BookingSideProps = {}
+export type BookingSideProps = {
+  meeting: IMeeting
+}
 
-function BookingSide({}: BookingSideProps) {
+function BookingSide({ meeting }: BookingSideProps) {
   return <div css={sideStyle}>
     <section css={sectionStyle}>
-      <span css={nameStyle}>Name</span>
-      <h1 css={eventNameStyle}>Event Title</h1>
+      <span css={nameStyle}>{meeting.ownerName}</span>
+      <h1 css={eventNameStyle}>{meeting.title}</h1>
     </section>
     <section css={sectionStyle}>
-      <div><BsCalendarDate /> <h3>Date</h3></div>
-      <div><BsClock /> <h3>Time</h3></div>
-      <div><MdOutlineLocationOn /> <h3>Location</h3></div>
+      <div><BsCalendarDate /> <h3>{new Date(meeting.date).toLocaleDateString()}</h3></div>
+      <div><BsClock /> <h3>{new Date(meeting.time).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit'
+      })}</h3></div>
+      <div><MdOutlineLocationOn /> <h3>{meeting.location}</h3></div>
     </section>
     <section css={sectionStyle}>
       <div><MdPerson /> <h3>Offer from</h3></div>
-      <div><MdEmail /> <h3>Email</h3></div>
-      <div><MdSimCard /> <h3>Company</h3></div>
+      <div><MdEmail /> <h3>{meeting.ownerEmail}</h3></div>
+      <div><MdSimCard /> <h3>{meeting.ownerName}</h3></div>
     </section>
     <section css={sectionStyle}>
-      <h3>Comment Messages</h3>
+      <h3>{meeting.comment}</h3>
     </section>
   </div>
 }

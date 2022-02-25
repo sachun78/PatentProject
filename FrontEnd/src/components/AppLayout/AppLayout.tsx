@@ -53,6 +53,7 @@ const headerStyle = css`
 const mainStyle = css`
   margin-left: 26rem;
   min-height: calc(100vh - 64px);
+  min-width: 76.8rem;
   background: #f7f7f8;
   position: relative;
 

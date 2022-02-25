@@ -5,6 +5,7 @@ import { useInput } from '../../hooks/useInput'
 import { useField } from '../../hooks/useField'
 import { useUserState } from '../../atoms/authState'
 import { useProfileState } from '../../atoms/profileState'
+import { memo } from 'react'
 
 export type InfoViewProps = {}
 
@@ -49,4 +50,4 @@ const wrapper = css`
   padding-bottom: 2rem;
 `
 
-export default InfoView
+export default memo(InfoView)

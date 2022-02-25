@@ -1,13 +1,9 @@
 import { css } from '@emotion/react'
 import Booking from '../../components/Booking'
-import { useSearchParams } from 'react-router-dom'
 
 export type MeetingConfirmProps = {}
 
 function MeetingBook({}: MeetingConfirmProps) {
-  const [param] = useSearchParams()
-  console.log( param.get('code'))
-
   return <div css={pageStyle}>
     <div css={wrapper}>
       <Booking />

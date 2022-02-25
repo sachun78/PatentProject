@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import React from 'react'
+import React, { memo } from 'react'
 import Logo from './Logo'
 import UserInfo from './UserInfo'
 
@@ -22,4 +22,4 @@ const wrapper = css`
   height: 100%;
 `
 
-export default TopNavigation
+export default memo(TopNavigation)

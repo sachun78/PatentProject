@@ -3,30 +3,36 @@ import palette from '../../lib/palette'
 import { useNavigate } from 'react-router-dom'
 
 export type ScheduleCardProps = {
+  id: string
   from: string
   to: string
   comment: string
   place: string
-  time: string
-  date: string
+  time: Date
+  date: Date
+  state: string
+  title: string
 }
 
-function ScheduleCard({ from, to, comment, place, time, date }: ScheduleCardProps) {
+function ScheduleCard({ from, to, comment, place, time, date, state, id,title }: ScheduleCardProps) {
   const navigate = useNavigate()
   return <div css={wrapper} onClick={() => {
-    navigate('/meeting/' + date + place)
+    navigate('/meeting/' + id)
   }}>
     <div css={headerStyle}>
-      <h3>Meeting Title</h3>
+      <h3>{title}</h3>
       <p className='from'>from<span> {from} </span></p>
       <p className='to'>to <span> {to}</span></p>
     </div>
     <p css={commentStyle}>{comment}</p>
     <div css={bottomStyle}>
-      <div>IMAGE(PROGRESS Status)</div>
+      <div>{state}</div>
       <div>
         {place}
-        <div>{date} {time}</div>
+        <div>{new Date(date).toLocaleDateString()} {new Date(time).toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit'
+        })}</div>
       </div>
     </div>
   </div>
@@ -51,6 +57,7 @@ const wrapper = css`
   &:hover {
     transform: translate(5px, -10px);
     background: ${palette.grey[100]};
+    cursor: pointer;
   }
 
   h3 {

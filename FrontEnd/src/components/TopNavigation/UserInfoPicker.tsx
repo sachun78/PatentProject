@@ -1,17 +1,17 @@
 import { css } from '@emotion/react'
 import palette from '../../lib/palette'
-import React, { useRef } from 'react'
+import React, { memo, useRef } from 'react'
 import { useUserState } from '../../atoms/authState'
 import useAuth from '../../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 import useOnClickOutside from 'use-onclickoutside'
 
-export type CategoryPickerProps = {
+export type UserInfoPickerProps = {
   visible: boolean;
   onClose: () => void;
 }
 
-function CategoryPicker({ visible, onClose }: CategoryPickerProps) {
+function UserInfoPicker({ visible, onClose }: UserInfoPickerProps) {
   const [user] = useUserState()
   const username: string = user?.username || ''
   const navigate = useNavigate()
@@ -89,4 +89,4 @@ const blockStyle = css`
   }
 `
 
-export default CategoryPicker
+export default memo(UserInfoPicker)
