@@ -47,39 +47,11 @@ export async function getById(meetingId: string) {
 }
 
 export async function getByCode(meetingCode: string) {
-  return meeting.findOne({code: meetingCode}).then((data: any) => {
-    return {
-      ownerName: data.ownerName,
-      ownerEmail: data.ownerEmail,
-      toEmail: data.toEmail,
-      eventId: data.eventId,
-      title: data.title,
-      date: data.date,
-      time: data.time,
-      location: data.location,
-      comment: data.comment,
-    }
-  });
+  return meeting.findOne({code: meetingCode});
 }
 
 export async function findByCode(code: string) {
-  return meeting.findOne({code}).then((data: any) => {
-    return {
-      id: data.id,
-      ownerId: data.ownerId,
-      ownerName: data.ownerName,
-      ownerEmail: data.ownerEmail,
-      toEmail: data.toEmail,
-      eventId: data.eventId,
-      title: data.title,
-      date: data.date,
-      time: data.time,
-      location: data.location,
-      comment: data.comment,
-      status: data.status,
-      code: data.code
-    }
-  });
+  return meeting.findOne({code});
 }
 
 export async function createMeeting(meetingData: any) {
