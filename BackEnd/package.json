@@ -4,6 +4,7 @@
   "main": "index.js",
   "author": "heechan",
   "license": "MIT",
+  "engines": { "node": "16.11.7" },
   "devDependencies": {
     "@types/cors": "^2.8.12",
     "@types/node": "^16.11.7",
