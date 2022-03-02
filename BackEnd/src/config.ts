@@ -19,7 +19,7 @@ const config = {
     salt_rouunds: parseInt(required('BCRYPT_SALT_ROUNDS', 10))
   },
   host: {
-    port: parseInt(required('HOST_PORT', 8080))
+    port: parseInt(required('PORT', 8080))
   },
   db: {
     host: required('DB_HOST', "mongodb://localhost:27017/wemet")
