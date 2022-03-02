@@ -45,9 +45,9 @@
     "validator": "^13.7.0"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "start": "ts-node src/index.ts",
-    "start:dev": "cross-env NODE_PATH=./src ts-node-dev --respawn --transpile-only src/index.ts",
-    "start:prod": "node -r ts-node/register/transpile-only -r tsconfig-paths/register build/index.js"
+	"start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register build/index.js",
+    "postinstall": "tsc -p tsconfig.json",
+    "watch-ts": "tsc -w",
+    "deploy": "git add . && git commit -m Heroku && git subtree push --prefix server heroku master"
   }
 }
