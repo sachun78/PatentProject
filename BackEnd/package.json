@@ -5,7 +5,7 @@
   "author": "heechan",
   "license": "MIT",
   "engines": {
-    "node": "16.14.0"
+    "node": "16.x"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
@@ -49,7 +49,7 @@
   },
   "scripts": {
     "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register build/index.js",
-    "postinstall": "npm i @types/node@16.11.7 --save-dev && tsc -p tsconfig.json",
+    "postinstall": "tsc -p tsconfig.json",
     "watch-ts": "tsc -w",
     "deploy": "git add . && git commit -m Heroku && git subtree push --prefix server heroku master"
   }
