@@ -10,6 +10,7 @@ import { resetButton } from '../../lib/styles/resetButton'
 import palette from '../../lib/palette'
 import { createMeeting } from '../../lib/api/meeting/createMeeting'
 import { useState } from 'react'
+import LocationInput from '../Location/LocationInput'
 
 type RequestViewProps = {}
 
@@ -19,7 +20,7 @@ export default function RequestForm({}: RequestViewProps) {
   const { date, time, setDate, setTime } = useDateTimeHook()
 
   const [form, onChange] = useInputs({
-    to: '',
+    to: '서울시 성동구 성수일로 10길 26',
     place: '',
     comment: '',
     title: ''
@@ -73,12 +74,7 @@ export default function RequestForm({}: RequestViewProps) {
           }} value={time} />
         </RequestSection>
         <RequestSection title={'Location'}>
-          <Input
-            placeholder='Add a location'
-            name='place'
-            value={form.place}
-            onChange={onChange}
-          />
+          <LocationInput address={form.to} onChange={() => {}} />          
         </RequestSection>
         <RequestSection title={'Comment'}>
           <Input
