@@ -2,6 +2,7 @@ import { css } from '@emotion/react'
 import React from 'react'
 import media from '../../lib/styles/media'
 import useCheckUserEffect from '../../hooks/useCheckUserEffect'
+import palette from "../../lib/palette";
 
 export type AppLayoutProps = {
   children: React.ReactNode
@@ -36,9 +37,18 @@ function Sidebar({ children }: SidebarProps) {
   return <aside css={sidebarStyle}>{children}</aside>
 }
 
+export type FooterProps = {
+  children: React.ReactNode
+}
+
+function Footer({ children }: FooterProps) {
+  return <footer css={footerStyle}>{children}</footer>
+}
+
 AppLayout.Header = Header
 AppLayout.Sidebar = Sidebar
 AppLayout.Main = Main
+AppLayout.Footer = Footer
 
 const headerStyle = css`
   height: 5rem;
@@ -83,4 +93,12 @@ const sidebarStyle = css`
   ${media.small} {
     display: none;
   }
+`
+
+const footerStyle = css`
+  width: 100%;
+  height: 5rem;
+  background: ${palette.purple[200]};
+  position: sticky;
+  bottom: 0;
 `

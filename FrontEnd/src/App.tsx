@@ -19,6 +19,8 @@ import MeetingBook from './pages/Meeting/MeetingBook'
 import useCsrfQuery from './hooks/query/useCsrfQuery'
 import { usePageRelocationEffect } from './hooks/usePageRelocationEffect'
 import VerticalBar from './components/Sidebar/VerticalBar'
+import media from "./lib/styles/media";
+import Sponsor from "./components/Sponsor";
 
 function App() {
   useCsrfQuery({ refetchOnWindowFocus: false, retry: true })
@@ -55,6 +57,9 @@ function App() {
                   <Route path='/*' element={<div>404 NOT FOUND</div>} />
                 </Routes>
               </AppLayout.Main>
+              <AppLayout.Footer>
+                <Sponsor/>
+              </AppLayout.Footer>
             </AppLayout>
           }
         />
@@ -71,6 +76,9 @@ const globalStyle = css`
   #root {
     height: 100%;
     overflow-x: hidden;
+    ${media.small} {
+      overflow-x: auto;
+    }
   }
 
   html {
@@ -79,7 +87,6 @@ const globalStyle = css`
 
     * {
       box-sizing: inherit;
-
       ::selection {
         background: ${palette.blueGrey[200]};
       }
