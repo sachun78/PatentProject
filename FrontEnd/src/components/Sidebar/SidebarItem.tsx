@@ -38,11 +38,11 @@ const linkStyle = css`
   align-items: center;
   padding-left: 1.6rem;
   padding-right: 1.6rem;
-  color: ${palette.blueGrey[600]};
+  color: ${palette.purple[200]}; //NON SELECTED ITEM
   text-decoration: none;
 
   &:hover {
-    background: ${palette.blueGrey[50]};
+    background: ${palette.purple[50]};
   }
 
   svg {
@@ -56,16 +56,14 @@ const linkStyle = css`
   }
 
   &.active {
-    background: ${palette.blueGrey[50]};
-    color: ${palette.blueGrey[900]};
+    background: none;
+    color: ${palette.purple[400]};
 
     span {
       font-weight: bold;
-      border-bottom: 3px solid ${palette.blueGrey[900]};
+      border-bottom: 3px solid ${palette.purple[400]};
       padding-bottom: 0.5rem;
     }
-
-    background: none;
   }
 `
 

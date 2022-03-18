@@ -20,6 +20,8 @@ const wrapper = css`
   align-items: stretch;
   flex-wrap: nowrap;
   height: 100%;
+  background: #f7f7f8;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 `
 
 export default memo(TopNavigation)

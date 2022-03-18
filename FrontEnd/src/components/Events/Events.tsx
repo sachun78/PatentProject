@@ -52,7 +52,7 @@ const createEventButton = css`
   position: fixed;
   bottom: 6rem; // FooterSize + 2rem Margin
   right: 4rem;
-  background: ${palette.cyan[500]};
+  background: ${palette.purple[500]};
   border: none;
   border-radius: 999rem;
   padding: 2.5rem;
@@ -60,7 +60,7 @@ const createEventButton = css`
   user-select: none;
 
   &:hover {
-    background: ${palette.cyan[400]};
+    background: ${palette.purple[400]};
     font-weight: 400;
     cursor: pointer;
   }
@@ -74,8 +74,8 @@ const noScheduleStyle = css`
   text-align: center;
 
   svg {
-    width: 50%;
-    height: 50%;
+    width: 33%;
+    height: 33%;
     margin-top: 5rem;
     min-width: 20rem;
   }
@@ -84,7 +84,7 @@ const noScheduleStyle = css`
     margin-top: 10px;
     font-size: 3rem;
     font-weight: 600;
-    color: ${palette.blueGrey[600]};
+    color: ${palette.purple[600]};
     user-select: none;
   }
 `

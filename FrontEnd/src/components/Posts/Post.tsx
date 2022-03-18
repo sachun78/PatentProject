@@ -2,6 +2,7 @@ import { css } from '@emotion/react'
 import React from 'react'
 import PostHeader from './PostHeader'
 import PostFooter from './PostFooter'
+import palette from "../../lib/palette";
 
 type PostProps = {
   id?: string
@@ -21,7 +22,7 @@ function Post({ id, contents }: PostProps) {
 }
 
 const postStyle = css`
-  width: 68rem;
+  width: 98%;
   display: flex;
   flex-direction: column;
   background: #fff;

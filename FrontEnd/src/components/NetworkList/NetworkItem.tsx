@@ -27,8 +27,8 @@ const itemStyle = css`
   line-height: 1.5;
   
   &:hover {
-    border: 2px solid ${palette.purple[100]};
-    color: ${palette.purple[500]};
+    border: 2px solid ${palette.purple[400]};
+    color: ${palette.purple[400]};
   }
   
   & + & {

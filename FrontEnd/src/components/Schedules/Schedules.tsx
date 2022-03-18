@@ -58,7 +58,7 @@ const noScheduleStyle = css`
     margin-top: 10px;
     font-size: 3rem;
     font-weight: 600;
-    color: ${palette.blueGrey[600]};
+    color: ${palette.purple[600]};
     user-select: none;
   }
 `

@@ -55,7 +55,7 @@ const headerStyle = css`
   width: 100%;
   flex-shrink: 0;
   //box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15), 0 0 2px rgba(0, 0, 0, 0.1);
-  background: #fff;
+  background: #f7f7f8;
   z-index: 500;
   top: 0;
   position: sticky;
@@ -79,6 +79,7 @@ const sidebarStyle = css`
   width: 26rem;
   height: 100%;
   position: fixed;
+  //background: linear-gradient(0deg, ${palette.purple[400]} 0%, #f7f7f8  100%);
   background: #f7f7f8;
   display: flex;
   padding-top: 3rem;
@@ -98,7 +99,7 @@ const sidebarStyle = css`
 const footerStyle = css`
   width: 100%;
   height: 5rem;
-  background: ${palette.purple[200]};
+  background: ${palette.purple[400]};
   position: sticky;
   bottom: 0;
 `

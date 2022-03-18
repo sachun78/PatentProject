@@ -88,7 +88,7 @@ const globalStyle = css`
     * {
       box-sizing: inherit;
       ::selection {
-        background: ${palette.blueGrey[200]};
+        background: ${palette.purple[50]};
       }
     }
   }

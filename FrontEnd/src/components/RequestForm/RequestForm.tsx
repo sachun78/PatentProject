@@ -97,7 +97,6 @@ export default function RequestForm({}: RequestViewProps) {
 }
 
 const wrapper = css`
-  max-width: 90rem;
   height: 100%;
 `
 const sectionStyle = css`
@@ -119,18 +118,19 @@ const sectionStyle = css`
 
 const buttonStyle = css`
   ${resetButton};
-  height: 2.8rem;
+  height: 3.6rem;
   color: white;
-  background: ${palette.cyan[500]};
+  background: ${palette.purple[500]};
   max-width: 60rem;
 
   &:hover,
   &:focus-visible {
-    background: ${palette.cyan[400]};
+    background: ${palette.purple[400]};
   }
 
   border-radius: 0.8rem;
   margin-left: 1rem;
+  margin-top: 2rem;
 `
 
 const space = css`

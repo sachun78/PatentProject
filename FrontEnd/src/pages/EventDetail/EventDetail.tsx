@@ -21,10 +21,10 @@ function EventDetail({}: EventProps) {
 const pageStyle = css`
   display: flex;
   justify-content: center;
-  height: calc(100% - 6rem);
+  height: 90rem;
   width: 90rem;
   padding: 3rem;
-  margin-top: 1rem;
+  margin-top: 2rem;
   background: #fff;
   position: fixed;
 `

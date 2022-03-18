@@ -57,7 +57,7 @@ const blockStyle = css`
   width: 16rem;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
   background: ${palette.grey[50]};
-  color: ${palette.blueGrey[600]};
+  color: ${palette.purple[600]};
   transform-origin: right top;
   transform: scale(1);
 
@@ -78,10 +78,6 @@ const blockStyle = css`
     font-weight: 600;
     font-size: 1.4rem;
     padding: 1.2rem 0.8rem;
-
-    &.active {
-      color: ${palette.blueGrey[900]};
-    }
   }
 
   li + li {

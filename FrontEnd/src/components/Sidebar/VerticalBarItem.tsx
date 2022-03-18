@@ -46,15 +46,15 @@ const item = css`
     margin-top: 0.8rem;
   }
 
-  color: ${palette.blueGrey[600]};
+  color: ${palette.purple[600]};
 
   &:hover {
-    color: ${palette.blueGrey[500]};
+    color: ${palette.purple[500]};
   }
 
   &.active {
-    background: ${palette.blueGrey[50]};
-    color: ${palette.blueGrey[900]};
+    background: ${palette.purple[50]};
+    color: ${palette.purple[400]};
     border-radius: 0.4rem;
   }
 `

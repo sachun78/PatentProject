@@ -1,5 +1,6 @@
 import {css} from "@emotion/react";
 import IconControl from "../IconControl";
+import palette from "../../lib/palette";
 
 export type SponsorProps = {}
 function Sponsor({}: SponsorProps) {
@@ -10,7 +11,7 @@ function Sponsor({}: SponsorProps) {
             <IconControl name={'plus'}  />
             <IconControl name={'plus'}  />
             <IconControl name={'plus'}  />
-            <IconControl name={'plus'}  />
+            <IconControl name={'links'}  />
         </div>
     </div>
 };
@@ -24,6 +25,7 @@ const bodyStyle = css`
     font-size: 2rem;
     line-height: 1.5;
     text-align: center;
+    color: #fff;
   }
   
   .sponsors {
@@ -35,6 +37,7 @@ const bodyStyle = css`
     svg {
       width: 8rem;
       height: 3rem;
+      color:${palette.purple[900]};
     }
   }
 `
