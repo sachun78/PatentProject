@@ -20,12 +20,13 @@ const bodyStyle = css`
   display: flex;
   justify-content: center;
   h2 {
-    flex:1;
     height: 100%;
     font-size: 2rem;
     line-height: 1.5;
     text-align: center;
     color: #fff;
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
   
   .sponsors {

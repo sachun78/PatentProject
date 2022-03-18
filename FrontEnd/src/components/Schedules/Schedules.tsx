@@ -48,8 +48,8 @@ const noScheduleStyle = css`
   text-align: center;
 
   svg {
-    width: 50%;
-    height: 50%;
+    width: 33%;
+    height: 33%;
     margin-top: 5rem;
     min-width: 20rem;
   }

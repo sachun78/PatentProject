@@ -58,7 +58,7 @@ function EventCard({ title = '', startDate, endDate, id, count }: EventCardProps
       </div>
     </div>
     <div css={buttonStyle} onClick={handleNewMeet}>
-      <NavLink to={'/meeting/request'}>
+      <NavLink to={'/membership/meeting/request'}>
         <div className='text'>Propose a meeting</div>
       </NavLink>
     </div>

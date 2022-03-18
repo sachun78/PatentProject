@@ -51,7 +51,7 @@ function App() {
                   <Route path='/membership' element={<Member />} />
                   <Route path='/membership/event/*' element={<EventDetail />} />
                   <Route path='/network' element={<Network />} />
-                  <Route path='/meeting/*' element={<Meeting />} />
+                  <Route path='/membership/meeting/*' element={<Meeting />} />
                   <Route path='/profile' element={<Profile />} />
                   <Route path='/conference' element={<div>컨퍼런스</div>} />
                   <Route path='/*' element={<div>404 NOT FOUND</div>} />

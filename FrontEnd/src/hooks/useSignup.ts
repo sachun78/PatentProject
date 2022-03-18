@@ -53,19 +53,18 @@ export function useSignUpForm() {
     try {
       const result = await schema.validate(form)
       console.log(result)
+
+      if (form.password !== form.password_confirm) {
+        setErrorMessage('password does not match')
+        return
+      }
+
+      await register({ ...form })
+      setType('email-auth')
     } catch (e) {
       console.log(e)
       setErrorMessage(e as string)
       return
-    }
-
-    try {
-      await register({ ...form })
-      setType('email-auth')
-      return
-    } catch (e) {
-      console.log(e)
-      setErrorMessage(error)
     }
   }
 

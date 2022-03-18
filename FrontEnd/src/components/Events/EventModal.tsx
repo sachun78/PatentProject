@@ -104,7 +104,7 @@ const buttonStyle = css`
   font-weight: bold;
   cursor: pointer;
 
-  background-color: ${palette.cyan[500]};
+  background-color: ${palette.purple[500]};
 
   color: #fff;
 
@@ -113,7 +113,7 @@ const buttonStyle = css`
   }
 
   &:hover {
-    background: ${palette.cyan[400]};
+    background: ${palette.purple[400]};
   }
 `
 
