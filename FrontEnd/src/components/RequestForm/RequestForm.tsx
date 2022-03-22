@@ -1,30 +1,31 @@
 import { css } from '@emotion/react'
+import { SetStateAction, useState } from 'react'
+import { useCurrentEventState } from '../../atoms/eventState'
+import useDateTimeHook from '../../hooks/useDateTimeHook'
 import useInputs from '../../hooks/useInputs'
-import Input from '../Input'
-import RequestSection from './RequestSection'
+import { createMeeting } from '../../lib/api/meeting/createMeeting'
+import palette from '../../lib/palette'
+import { resetButton } from '../../lib/styles/resetButton'
 import DatePickerInput from '../DatePickerInput'
 import TimePickerInput from '../DatePickerInput/TimePickerInput'
-import useDateTimeHook from '../../hooks/useDateTimeHook'
-import { useCurrentEventState } from '../../atoms/eventState'
-import { resetButton } from '../../lib/styles/resetButton'
-import palette from '../../lib/palette'
-import { createMeeting } from '../../lib/api/meeting/createMeeting'
-import { useState } from 'react'
-import LocationInput from '../Location/LocationInput'
+import Input from '../Input'
+import LocationInput from '../LocationMap/LocationInput'
+import LocationMap from '../LocationMap/LocationMap'
+import RequestSection from './RequestSection'
 
 type RequestViewProps = {}
 
 export default function RequestForm({}: RequestViewProps) {
   const [curEvent] = useCurrentEventState()
   const [complete, setComplete] = useState(false)
-  const { date, time, setDate, setTime } = useDateTimeHook()
+  const { date, time, setDate, setTime } = useDateTimeHook()   
 
   const [form, onChange] = useInputs({
-    to: '서울시 성동구 성수일로 10길 26',
-    place: '',
+    to: '',
+    place: '',  
     comment: '',
     title: ''
-  })
+  })  
 
   const onSubmit = async () => {
     console.log(form, date.toLocaleDateString(), time.toLocaleTimeString(), curEvent)
@@ -72,9 +73,9 @@ export default function RequestForm({}: RequestViewProps) {
           <TimePickerInput onChange={(value: Date) => {
             setTime(value)
           }} value={time} />
-        </RequestSection>
+        </RequestSection>``
         <RequestSection title={'Location'}>
-          <LocationInput address={form.to} onChange={() => {}} />          
+          <LocationInput />
         </RequestSection>
         <RequestSection title={'Comment'}>
           <Input
@@ -93,6 +94,7 @@ export default function RequestForm({}: RequestViewProps) {
 }
 
 const wrapper = css`
+  max-width: 90rem;
   height: 100%;
 `
 const sectionStyle = css`
@@ -114,19 +116,18 @@ const sectionStyle = css`
 
 const buttonStyle = css`
   ${resetButton};
-  height: 3.6rem;
+  height: 2.8rem;
   color: white;
-  background: ${palette.purple[500]};
+  background: ${palette.cyan[500]};
   max-width: 60rem;
 
   &:hover,
   &:focus-visible {
-    background: ${palette.purple[400]};
+    background: ${palette.cyan[400]};
   }
 
   border-radius: 0.8rem;
   margin-left: 1rem;
-  margin-top: 2rem;
 `
 
 const space = css`
