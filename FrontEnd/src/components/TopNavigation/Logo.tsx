@@ -38,12 +38,12 @@ const logoStyle = css`
 
     div {
       line-height: 1.2;
-      color: #0e0e10;
+      color: ${palette.purple[600]};
       font-weight: 700;
       font-size: 1.8rem;
 
       &:hover {
-        color: ${palette.blueGrey[600]};
+        color: ${palette.purple[400]};
       }
     }
   }

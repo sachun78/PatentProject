@@ -48,8 +48,8 @@ const noScheduleStyle = css`
   text-align: center;
 
   svg {
-    width: 50%;
-    height: 50%;
+    width: 33%;
+    height: 33%;
     margin-top: 5rem;
     min-width: 20rem;
   }
@@ -58,7 +58,7 @@ const noScheduleStyle = css`
     margin-top: 10px;
     font-size: 3rem;
     font-weight: 600;
-    color: ${palette.blueGrey[600]};
+    color: ${palette.purple[600]};
     user-select: none;
   }
 `

@@ -14,7 +14,7 @@ function UserInfo({}: UserInfoProps) {
 
   return <div css={wrapper}>
     <div>
-      <Badge variant="dot" color='warning'> <MdOutlineEmail /> </Badge>
+      <Badge variant="dot" color='secondary'> <MdOutlineEmail /> </Badge>
     </div>
     <div css={HomeTabStyle} onClick={toggleCategoryPicker}>
       <BiUser />
@@ -50,7 +50,7 @@ const HomeTabStyle = css`
   padding-left: 0.8rem;
   padding-right: 0.8rem;
   font-weight: 600;
-  color: ${palette.blueGrey[600]};
+  color: ${palette.purple[600]};
   font-size: 1.4rem;
   margin-left: 1rem;
 

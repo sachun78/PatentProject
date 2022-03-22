@@ -10,8 +10,8 @@ export type CircularIconButtonProps = {
 } & React.ButtonHTMLAttributes<HTMLButtonElement>
 
 function CircularIconButton({
-                              color = palette.cyan[500],
-                              hoverColor = palette.cyan[400],
+                              color = palette.purple[500],
+                              hoverColor = palette.purple[400],
                               icon,
                               ...rest
                             }: CircularIconButtonProps) {

@@ -36,21 +36,23 @@ export default function LoginForm({}: LoginFormProps) {
     <AuthFormBody width={622} height={480}>
       <div css={loginFormStyle}>
         <>
-          <h2 className='title'>Log In</h2>
+          <h2 className='title'>Sign In</h2>
           <section>
             <form onSubmit={onSubmit}>
               <div>
-                <TextField label='username' variant='outlined' type='email' name='email'
-                           value={form.email} onChange={onChange} css={inputStyle} autoComplete='username'
+                <TextField label='Email' variant='outlined' type='email' name='email'
+                           value={form.email} onChange={onChange} css={inputStyle}
+                           autoComplete='username'
                            InputProps={{ style: { fontSize: 15 } }} />
               </div>
-              <div><TextField label='password' variant='outlined' type='password' name='password'
+              <div><TextField label='Password' variant='outlined' type='password' name='password'
                               value={form.password} onChange={onChange} css={inputStyle}
                               autoComplete='current-password'
                               InputProps={{ style: { fontSize: 15 } }} />
               </div>
               <div className='button-div'>
-                <Button variant='contained' type='submit' color='primary' disabled={loading} size='large'>
+                <Button variant='contained' type='submit' color='primary' disabled={loading}
+                        size='large'>
                   Log In
                 </Button>
               </div>

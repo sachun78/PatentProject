@@ -73,14 +73,16 @@ const buttonWrapper = css`
       min-width: 0;
       font-size: 1.5rem;
       font-weight: 600;
+      color: ${palette.purple[400]};
     }
     svg {
       width: 1.8rem;
       height: 1.8rem;
+      color: ${palette.purple[400]};
     }
 
     &:hover {
-      background: ${palette.blueGrey[50]};
+      background: ${palette.purple[50]};
     }
   }
 `

@@ -58,7 +58,7 @@ function EventCard({ title = '', startDate, endDate, id, count }: EventCardProps
       </div>
     </div>
     <div css={buttonStyle} onClick={handleNewMeet}>
-      <NavLink to={'/meeting/request'}>
+      <NavLink to={'/membership/meeting/request'}>
         <div className='text'>Propose a meeting</div>
       </NavLink>
     </div>
@@ -67,7 +67,7 @@ function EventCard({ title = '', startDate, endDate, id, count }: EventCardProps
 
 const wrapper = css`
   width: calc(33.3333% - 1rem);
-  margin: 0.5rem 0.5rem 2rem;
+  margin: 2rem 0.5rem 2rem;
   padding: 1.5rem;
   line-height: 1.2;
   border-radius: 0.8rem;
@@ -84,7 +84,7 @@ const wrapper = css`
 `
 
 const buttonStyle = css`
-  background-color: ${palette.cyan[500]};
+  background-color: ${palette.purple[500]};
   margin: 1.5rem -1.5rem -1.5rem -1.5rem;
   border-bottom-right-radius: 0.8rem;
   border-bottom-left-radius: 0.8rem;
@@ -99,7 +99,7 @@ const buttonStyle = css`
   }
 
   &:hover {
-    background-color: ${palette.cyan[400]};
+    background-color: ${palette.purple[400]};
   }
 
   a {
@@ -121,7 +121,7 @@ const eventHeaderStyle = css`
     visibility: hidden;
     display: flex;
     font-size: 1.6rem;
-    color: ${palette.cyan[500]};
+    color: ${palette.purple[500]};
     align-items: center;
 
     svg {
@@ -134,7 +134,7 @@ const eventHeaderStyle = css`
     }
 
     .tool-edit:hover {
-      color: ${palette.cyan[400]};
+      color: ${palette.purple[400]};
     }
   }
 `

@@ -25,7 +25,7 @@ function PostHeader({}: PostHeaderProps) {
     <div css={titleStyle}><h4>
       <span>TitleTitle</span>
     </h4>
-      <div>posted time-date</div>
+      <div className={'time-date'}>posted time-date</div>
     </div>
     <div css={moreStyle} onClick={onMoreClick}><MdMoreHoriz /></div>
   </div>
@@ -44,14 +44,15 @@ const moreStyle = css`
   height: 3.6rem;
   padding: 0.8rem;
   border-radius: 9999px;
-
+  
   &:hover {
-    background: ${palette.blueGrey[50]};
+    background: ${palette.purple[50]};
   }
 
   svg {
     width: 2rem;
     height: 2rem;
+    color: ${palette.purple[400]};
   }
 
 `
@@ -71,6 +72,10 @@ const titleStyle = css`
   span {
     font-weight: 600;
     font-size: 1.5rem;
+    color: ${palette.purple[600]};
+  }
+  .time-date {
+    color: ${palette.purple[300]};
   }
 `
 const iconStyle = css`
