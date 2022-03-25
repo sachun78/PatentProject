@@ -11,16 +11,15 @@ function EventDateSections({}: EventDateSectionsProps) {
     setEndDate,
     setStartDate,
     startDate,
-    maxDate,
-    minDate
+    maxDate
   } = useDateRangeHook()
 
   return <>
     <RequestSection title={'Start Date'}>
-      <DatePickerInput value={startDate} onChange={setStartDate} maximum={maxDate} minimum={minDate} />
+      <DatePickerInput value={startDate} onChange={setStartDate} maximum={maxDate} />
     </RequestSection>
     <RequestSection title={'End Date'}>
-      <DatePickerInput value={endDate} onChange={setEndDate} maximum={maxDate} minimum={minDate} />
+      <DatePickerInput value={endDate} onChange={setEndDate} maximum={maxDate} />
     </RequestSection>
   </>
 }

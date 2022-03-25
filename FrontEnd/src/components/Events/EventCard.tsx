@@ -6,6 +6,8 @@ import { deleteEvent } from '../../lib/api/event/deleteEvent'
 import useEventQuery from '../../hooks/query/useEventQuery'
 import { memo } from 'react'
 import { useCurrentEventState } from '../../atoms/eventState'
+import useEventTitle, { useEventModal } from '../../hooks/useEventTitle'
+import useDateRangeHook from '../../hooks/useDateRangeHook'
 
 export type EventCardProps = {
   id: string
@@ -18,10 +20,16 @@ export type EventCardProps = {
 function EventCard({ title = '', startDate, endDate, id, count }: EventCardProps) {
   const { refetch } = useEventQuery(1, { enabled: false })
   const navigate = useNavigate()
+  const { setModalState } = useEventModal()
+  const { setEventTitle } = useEventTitle()
+  const { setStartDate, setEndDate } = useDateRangeHook()
   const [, setCurEvent] = useCurrentEventState()
   const handleEdit = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
-    alert(`edit! ${title}`)
+    setModalState(true)
+    setEventTitle(title)
+    setStartDate(new Date(startDate))
+    setEndDate(new Date(endDate))
   }
   const handleDel = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()

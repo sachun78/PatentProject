@@ -14,18 +14,18 @@ export function usePageRelocationEffect() {
     console.log(pathname)
     if (user) {
       if (!user.certified) {
-        if (!['/login', '/register', '/auth-email'].includes(pathname)) {
+        if (!['/login', '/signup', '/auth-email'].includes(pathname)) {
           console.log('to login')
           navigate('/login')
         } else {
-          if (pathname === '/register') {
+          if (pathname === '/signup') {
             setRegisterForm('email-auth')
           } else if (pathname === '/auth-email') {
             setRegisterForm('email-auth')
           }
         }
       } else {
-        if (['/login', '/register'].includes(pathname)) {
+        if (['/login', '/signup'].includes(pathname)) {
           console.log('to main?')
           navigate('/')
         } else if (['/profile', '/event', '/membership', '/network'].includes(pathname)) {
@@ -41,7 +41,7 @@ export function usePageRelocationEffect() {
       } else {
         setRegisterForm('default')
       }
-      if (!['/login', '/register', '/auth-email'].includes(pathname)) {
+      if (!['/login', '/signup', '/auth-email'].includes(pathname)) {
         navigate('/login')
       }
     }

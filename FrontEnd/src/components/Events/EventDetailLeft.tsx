@@ -36,8 +36,16 @@ function EventDetailLeft({ id }: EventDetailLeftProps) {
     <section css={dateSectionStyle}><MdCalendarToday />
       <span>End : <b>{event.end_date.replace(/T.*$/, '')}</b></span>
     </section>
-    <h3 css={titleNameStyle}>Related Meet [{event.meeting_list.length}]</h3>
+    {event.meeting_list.length > 0 && <>
+      <h3 css={titleNameStyle}>Related Meet [{event.meeting_list.length}]</h3>
+      <ul>
+        {event.meeting_list.map((meeting: any) => {
+          return <li key={meeting}>{meeting}</li>
+        })}
+      </ul>
+    </>}
   </>
+
 }
 
 const titleNameStyle = css`

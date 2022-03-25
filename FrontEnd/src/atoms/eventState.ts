@@ -8,6 +8,7 @@ export type EventState = {
     endDate: Date
   }
   open: boolean
+  isEdit: boolean
 }
 
 const initialState: EventState = {
@@ -16,7 +17,8 @@ const initialState: EventState = {
     startDate: new Date(),
     endDate: new Date()
   },
-  open: false
+  open: false,
+  isEdit: false
 }
 
 export const eventState = atom({
@@ -60,6 +62,14 @@ export const eventModalState = selector<EventState['open']>({
   }
 })
 
+export const eventEditState = selector<EventState['isEdit']>({
+  key: 'eventEditState',
+  get: ({ get }) => {
+    const event = get(eventState)
+    return event.open
+  }
+})
+
 export const updateDateRange = (
   state: EventState,
   key: keyof EventState['dateRange'],
@@ -83,4 +93,12 @@ export const updateEventModalOpen = (
 ) =>
   produce(state, (draft) => {
     draft.open = value
+  })
+
+export const updateEventEdit = (
+  state: EventState,
+  value: boolean
+) =>
+  produce(state, (draft) => {
+    draft.isEdit = value
   })
