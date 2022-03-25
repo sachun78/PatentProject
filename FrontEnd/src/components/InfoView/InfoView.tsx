@@ -3,9 +3,10 @@ import InfoViewSection from './InfoViewSection'
 import InfoViewCard from './InfoViewCard'
 import { useInput } from '../../hooks/useInput'
 import { useField } from '../../hooks/useField'
-import { useUserState } from '../../atoms/authState'
 import { useProfileState } from '../../atoms/profileState'
 import { memo } from 'react'
+import { useQueryClient } from 'react-query'
+import { User } from '../../lib/api/types'
 
 export type InfoViewProps = {}
 
@@ -14,7 +15,9 @@ function InfoView({}: InfoViewProps) {
     field, fieldText,
     onChangeFieldText, add, remove, reset, save
   } = useField()
-  const [user] = useUserState()
+  const queryClient = useQueryClient()
+  const user = queryClient.getQueryData<User>('user')
+
   const [profile] = useProfileState()
   const [company, onCompanyChange, resetCompany, prevCompany] = useInput(profile?.company || 'company is empty error', 'company')
   const [department, onDepartmentChange, resetDepartment, prevDepartment] = useInput(profile?.department || 'department ID', 'department')
@@ -26,7 +29,7 @@ function InfoView({}: InfoViewProps) {
     <InfoViewSection title='Account'>
       <InfoViewCard.Item title='Email' type={'email'} email={user?.email} />
       <InfoViewCard.Item title='Username' type={'username'} username={user?.username} />
-      <InfoViewCard.Item title='Photo' type={'photo'} username={user?.username} photo={user?.photo_path} isEditMode />
+      <InfoViewCard.Item title='Photo' type={'photo'} email={user?.email} photo={user?.photo_path} isEditMode />
     </InfoViewSection>
     <InfoViewSection title='Belonging'>
       <InfoViewCard.Item title='Company' type={'text'} description={company} onChange={onCompanyChange}

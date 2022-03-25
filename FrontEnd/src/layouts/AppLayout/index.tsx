@@ -2,21 +2,27 @@ import React from 'react'
 import TopNavigation from 'components/TopNavigation/TopNavigation'
 import VerticalBar from 'components/Sidebar/VerticalBar'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import Home from 'pages/Home'
-import Member from 'pages/Member'
 import EventDetail from 'pages/EventDetail'
-import Network from 'pages/Member/Network'
-import Meeting from 'pages/Meeting'
-import Profile from 'pages/Profile'
 import Sponsor from 'components/Sponsor'
 import Sidebar from 'components/Sidebar'
 import { footerStyle, headerStyle, mainStyle, sidebarStyle } from './styles'
 import useUserQuery from '../../hooks/query/useUserQuery'
+import loadable from '@loadable/component'
+
+const Home = loadable(() => import('pages/Home'))
+const Profile = loadable(() => import('pages/Profile'))
+const Member = loadable(() => import('pages/Member'))
+const Network = loadable(() => import('pages/Member/Network'))
+const Meeting = loadable(() => import('pages/Meeting'))
 
 export type AppLayoutProps = {}
 
 export default function AppLayout({}: AppLayoutProps) {
-  const { data } = useUserQuery()
+  const { data, isLoading } = useUserQuery()
+
+  if(isLoading){
+    return <div>Loading...</div>
+  }
 
   if (!data) {
     return <Navigate replace to={'/login'} />
@@ -44,7 +50,8 @@ export default function AppLayout({}: AppLayoutProps) {
     </AppLayout.Main>
     <AppLayout.Footer>
       <Sponsor />
-    </AppLayout.Footer></>
+    </AppLayout.Footer>
+  </>
 }
 
 export type HeaderProps = {

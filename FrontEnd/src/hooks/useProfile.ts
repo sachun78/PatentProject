@@ -8,10 +8,6 @@ export function useProfile() {
   const [loading, setLoading] = useState(true)
   const { open, setOpen, handleClose } = useModal(false)
 
-  const resetProfile = () => {
-    setProfile(null)
-  }
-
   useEffect(() => {
     const fetchProfile = async () => {
       const result = await getCurrentProfile()

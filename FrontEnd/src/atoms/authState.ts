@@ -31,24 +31,3 @@ export const updateUserPhoto = (
       draft.photo_path = value
     }
   })
-
-
-const accessTokenState = atom<string | null>({
-  key: 'accessTokenState',
-  default: null
-})
-
-export function useAccessTokenState() {
-  return useRecoilState(accessTokenState)
-}
-
-type formType = 'default' | 'email-auth'
-
-export const registerFormState = atom<formType>({
-  key: 'registerFormState',
-  default: 'default'
-})
-
-export function useRegisterFormState() {
-  return useRecoilState(registerFormState)
-}

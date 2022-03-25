@@ -49,10 +49,6 @@ function AddtionalFormModal({}: AddtionalFormModalProps) {
     } catch (error) {
       console.log(error)
     }
-
-    console.log(form.company, form.department, form.position)
-    console.log(field)
-    console.log(country)
     setOpen(false)
   }
 

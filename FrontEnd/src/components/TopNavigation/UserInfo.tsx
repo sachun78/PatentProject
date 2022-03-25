@@ -4,20 +4,27 @@ import palette from '../../lib/palette'
 import useToggle from '../../hooks/useToggle'
 import { MdArrowDropDown, MdOutlineEmail } from 'react-icons/md'
 import UserInfoPicker from './UserInfoPicker'
-import { BiUser } from 'react-icons/bi'
 import { Badge } from '@mui/material'
+import { User } from '../../lib/api/types'
+import { useQueryClient } from 'react-query'
+import gravatar from 'gravatar'
 
 export type UserInfoProps = {}
 
 function UserInfo({}: UserInfoProps) {
   const [categoryPicker, toggleCategoryPicker] = useToggle(false)
 
+  const queryClient = useQueryClient()
+  const user = queryClient.getQueryData<User>('user')
+
+  if (!user) return null
+
   return <div css={wrapper}>
     <div>
-      <Badge variant="dot" color='secondary'> <MdOutlineEmail /> </Badge>
+      <Badge variant='dot' color='secondary'> <MdOutlineEmail /> </Badge>
     </div>
     <div css={HomeTabStyle} onClick={toggleCategoryPicker}>
-      <BiUser />
+      <img src={gravatar.url(user.email, { s: '28px', d: 'retro' })} alt={user.username} />
       <MdArrowDropDown />
     </div>
 

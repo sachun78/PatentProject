@@ -1,7 +1,8 @@
 import client from '../client'
 import { User } from '../types'
 
-export async function getCurrentUser() {
-  const response = await client.get<User>('/api/auth/me')
-  return response.data
+export function getCurrentUser() {
+  return client.get<User>('/api/auth/me')
+    .then(res => res.data)
+    .catch(err => null)
 }

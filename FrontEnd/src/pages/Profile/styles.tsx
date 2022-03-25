@@ -1,28 +1,13 @@
 import { css } from '@emotion/react'
-import InfoView from '../../components/InfoView'
 
-export type ProfileProps = {}
-
-function Profile({}: ProfileProps) {
-
-  return <div css={wrapper}>
-    <div css={titleStyle}>
-      <div className='line'>
-        <h2>Profile</h2>
-      </div>
-    </div>
-    <div css={infoStyle}><InfoView /></div>
-  </div>
-}
-
-const wrapper = css`
+export const wrapper = css`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   height: 100%;
   width: 100%;
 `
-const titleStyle = css`
+export const titleStyle = css`
   padding-top: 3rem;
   padding-left: 3rem;
   padding-right: 3rem;
@@ -39,7 +24,7 @@ const titleStyle = css`
     margin-bottom: 1rem;
   }
 `
-const infoStyle = css`
+export const infoStyle = css`
   padding-left: 3rem;
   padding-right: 3rem;
   height: 100%;
@@ -47,5 +32,3 @@ const infoStyle = css`
   display: flex;
   flex-flow: column;
 `
-
-export default Profile

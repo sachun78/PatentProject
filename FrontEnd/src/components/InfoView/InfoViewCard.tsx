@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import { AutocompleteValue, Avatar, Button, TextField } from '@mui/material'
-import React, { memo, SyntheticEvent, useMemo, useRef, useState } from 'react'
+import React, { memo, SyntheticEvent, useRef, useState } from 'react'
 import { careerStyle, countryWrapper, emailStyle, photoStyle, textStyle } from './InfoViewCardStyle'
 import IconControl from '../IconControl'
 import Input from '../Input/Input'
@@ -12,6 +12,7 @@ import { patchProfile } from '../../lib/api/me/getProfile'
 import { useProfileState } from '../../atoms/profileState'
 import { updateUserPhoto, userState } from '../../atoms/authState'
 import { useSetRecoilState } from 'recoil'
+import gravatar from 'gravatar'
 
 export type InfoViewCardProps = {
   children: React.ReactNode
@@ -120,12 +121,13 @@ function InfoViewCardItem({
         </p>
       </div>}
       {/*2. PHOTO TYPE*/}
-      {type === 'photo' && username &&
+      {type === 'photo' && email &&
         <div css={photoStyle}>
           <div>
             <Avatar sx={{ width: 100, height: 100, fontSize: 40 }}>
-              {photo === undefined ? `${username[0]}` :
-                (<img src={`/static/${photo}`} alt={username} />)
+              {!photo
+                ? (<img src={gravatar.url(email, { s: '100px', d: 'retro' })} alt={email} />)
+                : (<img crossOrigin="anonymous" src={`http://localhost:4000/static/${photo}`} alt={username} />)
               }
             </Avatar>
           </div>
