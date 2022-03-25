@@ -105,11 +105,13 @@ export const sendmail = async (emailInfo: any, mailType: EMAILTYPE) => {
     service: 'gmail',
     port: 587,
     host: 'smtp.gmlail.com',
-    secure: false,
-    requireTLS: true,
+    secure: true,
     auth: {
         user: envConfig.email.userid,
         pass: envConfig.email.passwd
+    },
+    tls: {
+      rejectUnauthorized: false
     }
   }
   let transporter = nodemailer.createTransport(serviceContent);
