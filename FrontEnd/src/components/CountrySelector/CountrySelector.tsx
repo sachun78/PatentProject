@@ -1,6 +1,6 @@
 import { Autocomplete, AutocompleteValue, Box, TextField } from '@mui/material'
 import { css } from '@emotion/react'
-import { memo, SyntheticEvent } from 'react'
+import { SyntheticEvent } from 'react'
 import palette from '../../lib/palette'
 
 export type CountrySelectorProps = {
@@ -12,7 +12,7 @@ export type CountrySelectorProps = {
 function CountrySelector({ onChange, defaultValue, disabled = false }: CountrySelectorProps) {
   return <Autocomplete options={countries}
                        autoHighlight
-                       defaultValue={defaultValue || undefined}
+                       value={defaultValue}
                        getOptionLabel={(option) => option.label}
                        isOptionEqualToValue={(option, value) => option.label === value.label}
                        onChange={onChange}
@@ -497,4 +497,4 @@ export const countries: CountryType[] = [
   { code: 'ZW', label: 'Zimbabwe', phone: '263' }
 ]
 
-export default memo(CountrySelector)
+export default CountrySelector

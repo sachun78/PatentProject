@@ -1,13 +1,13 @@
 import { css } from '@emotion/react'
-import InfoViewCard from './InfoViewCard'
+import InfoViewCard from './ProfileCard'
 
-export type InfoViewSectionProps = {
+export type ProfileSectionProps = {
   title: string
   description?: string
   children: React.ReactNode
 }
 
-function InfoViewSection({ title, children, description }: InfoViewSectionProps) {
+function ProfileSection({ title, children, description }: ProfileSectionProps) {
   return <div>
     <div css={headerStyle}>
       <h3>{title}</h3>
@@ -43,4 +43,4 @@ const headerStyle = css`
   }
 `
 
-export default InfoViewSection
+export default ProfileSection

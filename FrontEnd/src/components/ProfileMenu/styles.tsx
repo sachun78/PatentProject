@@ -56,11 +56,10 @@ export const countryWrapper = css`
   }
 `
 
-export const textStyle = (minWidth: number) => css`
-  flex-grow: 1;
+export const textStyle = css`
+  flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: ${minWidth}rem;
 
   div {
     flex-grow: 1;
@@ -127,9 +126,55 @@ export const textStyle = (minWidth: number) => css`
       background-color: ${palette.grey[200]};
     }
   }
-
 `
 
 export const careerStyle = css`
   width: 100%;
+`
+// PROFILECARD STYLES
+export const itemStyle = css`
+  padding: 2rem;
+  width: 100%;
+
+  &:not(:first-of-type) {
+    border-top: 1px solid rgba(0, 0, 0, .1);
+  }
+
+  .inner {
+    display: flex;
+    flex-wrap: nowrap;
+    position: relative;
+    flex-grow: 1;
+    font-size: 1.3rem;
+  }
+
+  .title {
+    width: 18rem;
+    flex-shrink: 0;
+    padding-right: 2rem;
+
+    label {
+      font-weight: 700;
+    }
+  }
+
+  .btn {
+    all: unset;
+    display: inline-flex;
+  }
+`
+export const inputStyle = css`
+  font-size: 1.3rem;
+  line-height: 1.2;
+  min-height: 3.5rem;
+  flex-grow: 1;
+`
+export const tagStyle = css`
+  display: block;
+  flex-direction: column;
+  margin-top: 0.5rem;
+
+  .tag + .tag {
+    margin-left: 0.5rem;
+  }
 `

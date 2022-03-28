@@ -2,7 +2,7 @@ import { css } from '@emotion/react'
 import React from 'react'
 import PostHeader from './PostHeader'
 import PostFooter from './PostFooter'
-import palette from "../../lib/palette";
+import palette from '../../lib/palette'
 
 type PostProps = {
   id?: string

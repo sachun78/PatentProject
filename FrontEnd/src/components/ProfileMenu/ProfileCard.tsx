@@ -1,7 +1,16 @@
 import { css } from '@emotion/react'
 import { AutocompleteValue, Avatar, Button, TextField } from '@mui/material'
-import React, { memo, SyntheticEvent, useRef, useState } from 'react'
-import { careerStyle, countryWrapper, emailStyle, photoStyle, textStyle } from './InfoViewCardStyle'
+import React, { SyntheticEvent, useRef, useState } from 'react'
+import {
+  careerStyle,
+  countryWrapper,
+  emailStyle,
+  inputStyle,
+  itemStyle,
+  photoStyle,
+  tagStyle,
+  textStyle
+} from './styles'
 import IconControl from '../IconControl'
 import Input from '../Input/Input'
 import Tag from '../Tag'
@@ -13,12 +22,16 @@ import { useProfileState } from '../../atoms/profileState'
 import { updateUserPhoto, userState } from '../../atoms/authState'
 import { useSetRecoilState } from 'recoil'
 import gravatar from 'gravatar'
+import ProfileCardText from './ProfileCardText'
+import ProfileCardField from './ProfileCardField'
+import ProfileCardEmail from './ProfileCardEmail'
+import ProfileCardCountry from './ProfileCardCountry'
 
-export type InfoViewCardProps = {
+export type ProfileCardProps = {
   children: React.ReactNode
 }
 
-function InfoViewCard({ children }: InfoViewCardProps) {
+function ProfileCard({ children }: ProfileCardProps) {
   return <div css={wrapper}>{children}</div>
 }
 
@@ -31,7 +44,7 @@ const wrapper = css`
 
 type cardItemType = 'email' | 'photo' | 'country' | 'username' | 'text' | 'field' | 'career'
 // INFOVIEW CARD ITEM
-export type InfoViewCardItemProps = {
+export type ProfileCardItemProps = {
   title: string
   type: cardItemType
   email?: string
@@ -49,14 +62,14 @@ export type InfoViewCardItemProps = {
   prevReset?: () => void
 }
 
-function InfoViewCardItem({
-                            title, type, email, username,
-                            photo, description, isEditMode,
-                            fields, handleField,
-                            countryValue, handleCountry,
-                            onChange, reset, prevReset,
-                            minHeight = 0
-                          }: InfoViewCardItemProps) {
+function ProfileCardItem({
+                           title, type, email, username,
+                           photo, description, isEditMode,
+                           fields, handleField,
+                           countryValue, handleCountry,
+                           onChange, reset, prevReset,
+                           minHeight = 0
+                         }: ProfileCardItemProps) {
   const setAuthState = useSetRecoilState(userState)
   const setAuthPhoto = (value: string) => setAuthState((state) => updateUserPhoto(state, value))
   const fileRef = useRef<HTMLInputElement>(null)
@@ -127,7 +140,7 @@ function InfoViewCardItem({
             <Avatar sx={{ width: 100, height: 100, fontSize: 40 }}>
               {!photo
                 ? (<img src={gravatar.url(email, { s: '100px', d: 'retro' })} alt={email} />)
-                : (<img crossOrigin="anonymous" src={`http://localhost:4000/static/${photo}`} alt={username} />)
+                : (<img crossOrigin='anonymous' src={`http://localhost:4000/static/${photo}`} alt={username} />)
               }
             </Avatar>
           </div>
@@ -152,26 +165,8 @@ function InfoViewCardItem({
       {type === 'username' && <div css={emailStyle}>
         <div className='email-block'>{username}</div>
       </div>}
-      {/*4. Text TYPE*/}
-      {type === 'text' && <div css={textStyle(minHeight)}>
-        {!editMode && <div className='text'>
-          <div>{description}</div>
-          <button className={'btn'} onClick={toggle}><IconControl name={'edit'} /></button>
-        </div>}
-        {editMode && <Input
-          placeholder={title}
-          name={title}
-          value={description || ''}
-          onChange={onChange}
-          css={inputStyle}
-        />}
-        {editMode && !isEditMode && <div className='save-cancel'>
-          <Button onClick={onSave} disabled={description === ''}>Save</Button>
-          <Button onClick={onCancel}>Cancel</Button>
-        </div>}
-      </div>}
       {/*5. Field TYPE*/}
-      {type === 'field' && <div css={textStyle(minHeight)}>
+      {type === 'field' && <div css={textStyle}>
         {editMode && <div css={css`display: flex`}>
           <Input
             placeholder={title}
@@ -222,53 +217,10 @@ function InfoViewCardItem({
   </div>
 }
 
-InfoViewCard.Item = memo(InfoViewCardItem)
+ProfileCard.Item = ProfileCardItem
+ProfileCard.Text = ProfileCardText
+ProfileCard.Field = ProfileCardField
+ProfileCard.Email = ProfileCardEmail
+ProfileCard.Country = ProfileCardCountry
 
-const itemStyle = css`
-  padding: 2rem;
-  width: 100%;
-
-  &:not(:first-of-type) {
-    border-top: 1px solid rgba(0, 0, 0, .1);
-  }
-
-  .inner {
-    display: flex;
-    flex-wrap: nowrap;
-    position: relative;
-    flex-grow: 1;
-    font-size: 1.3rem;
-  }
-
-  .title {
-    width: 18rem;
-    flex-shrink: 0;
-    padding-right: 2rem;
-
-    label {
-      font-weight: 700;
-    }
-  }
-
-  .btn {
-    all: unset;
-    display: inline-flex;
-  }
-`
-const inputStyle = css`
-  font-size: 1.3rem;
-  line-height: 1.2;
-  min-height: 3.5rem;
-  flex-grow: 1;
-`
-const tagStyle = css`
-  display: block;
-  flex-direction: column;
-  margin-top: 0.5rem;
-
-  .tag + .tag {
-    margin-left: 0.5rem;
-  }
-`
-
-export default InfoViewCard
+export default ProfileCard
