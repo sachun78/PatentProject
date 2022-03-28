@@ -1,7 +1,6 @@
 import mongoose, { Types, Date, Model } from 'mongoose'
 
 interface IEmailAuth {
-  userid: string;
   email: string;
   code: string;
   logged: boolean;
@@ -9,7 +8,6 @@ interface IEmailAuth {
 }
 
 const emailAuthSchema = new mongoose.Schema<IEmailAuth, Model<IEmailAuth>>({
-    userid: { type: String, required: true },
     email: { type: String, required: true },
     code: { type: String, required: true },
     logged: { type: Boolean, default: false }
@@ -21,7 +19,7 @@ const emailAuthSchema = new mongoose.Schema<IEmailAuth, Model<IEmailAuth>>({
 
 const EmailAuth = mongoose.model('EmailAuth', emailAuthSchema)
 
-export async function saveAuthMaiil(_mailInfo: { code: string; logged: boolean; userid: string; email: string }) {
+export async function saveAuthMaiil(_mailInfo: { code: string; logged: boolean; email: string }) {
   return new EmailAuth(_mailInfo).save()
 }
 
@@ -31,4 +29,8 @@ export async function updateAuthMail(_code: string, data: any) {
 
 export async function findAuthMail(_code: string) {
   return EmailAuth.findOne({ code: _code }, { _id: false })
+}
+
+export async function findByEmail(_email: string) {
+  return EmailAuth.findOne({ email: _email}, { _id: false })
 }
