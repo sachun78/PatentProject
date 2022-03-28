@@ -19,10 +19,11 @@ const config = {
     salt_rouunds: parseInt(required('BCRYPT_SALT_ROUNDS', 10))
   },
   host: {
-    port: parseInt(required('PORT', 8080))
+    port: parseInt(required('PORT', 8080)),
+    url: required('HOST_URL', "http://localhost:3000")
   },
   db: {
-    host: required('DB_HOST', "mongodb://192.168.11.108:27017/wemet")
+    host: required('DB_HOST', "mongodb://localhost:27017/wemet")
   },
   csrf: {
     plainToken: required('CSRF_SECURE_KEY', "8s25jMpzVBCDG5v9")
