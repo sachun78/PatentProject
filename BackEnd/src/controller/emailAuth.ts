@@ -20,6 +20,11 @@ export async function sendAuthEmail(req: IRequest, res: Response, next: NextFunc
     emailInfo.email = req.body.email;
     emailInfo.code = shortid.generate();
 
+    const check = await EmaiAuthlRepo.findByEmail(req.body.email);
+    if (check && check.logged === true) {
+      return res.status(409).json({ message: `email (${req.body.email}) is already` })
+    }
+
     console.log("emailInfo", emailInfo);
 
     const savedMail = await EmaiAuthlRepo.saveAuthMaiil(emailInfo);
