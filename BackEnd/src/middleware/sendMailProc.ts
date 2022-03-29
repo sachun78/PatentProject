@@ -117,16 +117,16 @@ export const sendmail = async (emailInfo: any, mailType: EMAILTYPE) => {
   }
   let transporter = nodemailer.createTransport(serviceContent);
 
-  let info = await transporter.sendMail({
+  let info = transporter.sendMail({
     from: envConfig.email.userid,
     to: user_email,
     ...emailTemplete
   }).then((value) => {
-    console.error("[HJBAE]", value.envelope, value.response);
+    console.error("[HJBAE11]", value.envelope, value.response);
   }).catch((e) => {
-    console.error("[HJBAE]", e.message);
+    console.error("[HJBAE22]", e.message);
   });
 
-  console.error("[HJBAE]", info);
+  console.error("[HJBAE33]", {info});
   return info;
 }
