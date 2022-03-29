@@ -111,7 +111,8 @@ export const sendmail = async (emailInfo: any, mailType: EMAILTYPE) => {
       user: "wemetmaster@gmail.com",
       clientId: "431745332301-6g5maknvsi737hu677ppts4hfksketmp.apps.googleusercontent.com",
       clientSecret: "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",
-      refreshToken: "1//04-RmgHS7r60QCgYIARAAGAQSNwF-L9IreBdSoZDuVFF10peC0wbX5JkCOdqmK-Mss6Bqi7efsxSvxmPmLb_Rbwkt5xA5R5d-RZ4"
+      refreshToken: "1//04mtHrbnate7nCgYIARAAGAQSNwF-L9IrozvFYlUqmVMUpavEcsSF3Y4PNpgnMgPFBY2-cwyQZclbdnUrHBpMd71SJGnREQkwRZw",
+      accessToken: "ya29.A0ARrdaM_jNPbMfqK5P3qBc39uVufi4WeFzwhHmpWDr1tWpj-9a5imxc9Cw6Y9B-W_OlnjpFvCILDcok_-INNRSSdREoN3rlg9L0cjLTHQI5vqNzKmL0N5auOmbGG1w1MJ2LT1QaQIssTI7LRDh967IhR-_ovJ"
     },
   }
   let transporter = nodemailer.createTransport(serviceContent);
@@ -126,6 +127,6 @@ export const sendmail = async (emailInfo: any, mailType: EMAILTYPE) => {
     console.error("[HJBAE]", e.message);
   });
 
-  console.log(info);
+  console.error("[HJBAE]", info);
   return info;
 }
