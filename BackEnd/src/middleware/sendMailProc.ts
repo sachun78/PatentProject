@@ -107,8 +107,11 @@ export const sendmail = async (emailInfo: any, mailType: EMAILTYPE) => {
     host: 'smtp.gmlail.com',
     secure: true,
     auth: {
-        user: envConfig.email.userid,
-        pass: envConfig.email.passwd
+      type: "OAuth2",
+      user: "wemetmaster@gmail.com",
+      clientId: "431745332301-6g5maknvsi737hu677ppts4hfksketmp.apps.googleusercontent.com",
+      clientSecret: "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",
+      refreshToken: "1//04-RmgHS7r60QCgYIARAAGAQSNwF-L9IreBdSoZDuVFF10peC0wbX5JkCOdqmK-Mss6Bqi7efsxSvxmPmLb_Rbwkt5xA5R5d-RZ4"
     },
     tls: {
       rejectUnauthorized: false
