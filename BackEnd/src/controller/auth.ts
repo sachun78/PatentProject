@@ -29,7 +29,7 @@ export async function signup(req: IRequest, res: Response, next: NextFunction) {
     }
 
     const token = createJwtToken(user.id)
-    console.log('singup', user.id)
+    console.log('signup', user.id)
     setToken(res, token)
     res.status(201).json({
       token,
@@ -59,7 +59,7 @@ export async function signin(req: IRequest, res: Response, next: NextFunction) {
     }
 
     const token = createJwtToken(user.id)
-    console.log('singin', user.id)
+    console.log('signin', user.id)
     setToken(res, token)
     res.status(200).json({
       token,
@@ -98,7 +98,7 @@ export async function me(req: IRequest, res: Response, next: NextFunction) {
     if (!user) {
       return res.status(404).json({ message: 'User not found' })
     }
-
+    console.log('me', user.id)
     res.status(200).json({
       id: user.id,
       email: user.email,

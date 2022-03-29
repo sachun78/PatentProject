@@ -9,7 +9,7 @@ export const enum EMAILTYPE {
 
 const createAuthEmail = (code: string) => {
   const keywords = {
-        type: 'auth-email',
+        type: 'signup',
         text: 'Email verification'
   };
 
