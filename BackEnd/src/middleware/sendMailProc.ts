@@ -104,7 +104,7 @@ export const sendmail = async (emailInfo: any, mailType: EMAILTYPE) => {
   let serviceContent: SMTPTransport.Options = {
     service: 'gmail',
     port: 587,
-    host: 'smtp.gmlail.com',
+    host: 'smtp.google.com',
     secure: true,
     auth: {
       type: "OAuth2",
@@ -113,9 +113,6 @@ export const sendmail = async (emailInfo: any, mailType: EMAILTYPE) => {
       clientSecret: "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",
       refreshToken: "1//04-RmgHS7r60QCgYIARAAGAQSNwF-L9IreBdSoZDuVFF10peC0wbX5JkCOdqmK-Mss6Bqi7efsxSvxmPmLb_Rbwkt5xA5R5d-RZ4"
     },
-    tls: {
-      rejectUnauthorized: false
-    }
   }
   let transporter = nodemailer.createTransport(serviceContent);
 
@@ -123,6 +120,10 @@ export const sendmail = async (emailInfo: any, mailType: EMAILTYPE) => {
     from: envConfig.email.userid,
     to: user_email,
     ...emailTemplete
+  }).then((value) => {
+    console.error("[HJBAE]", value.envelope, value.response);
+  }).catch((e) => {
+    console.error("[HJBAE]", e.message);
   });
 
   console.log(info);
