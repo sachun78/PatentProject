@@ -1,15 +1,14 @@
-import { css } from '@emotion/react'
-import palette from 'lib/palette'
 import { Button, Divider, TextField } from '@mui/material'
 import { Navigate, NavLink } from 'react-router-dom'
 import React, { useCallback, useState } from 'react'
 import useInputs from 'hooks/useInputs'
 import { signin } from 'lib/api/auth/signin'
-import { dividerStlye, errorMessageStyle, inputStyle, loginFormStyle, underBlockStyle } from './styles'
+import { dividerStlye, errorMessageStyle, inputStyle, loginFormStyle, pageStyle, underBlockStyle } from './styles'
 import Auth from '../../layouts/Auth'
 import useUserQuery from '../../hooks/query/useUserQuery'
 import { useMutation, useQueryClient } from 'react-query'
 import { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
 
 type LoginProps = {}
 
@@ -22,6 +21,7 @@ function Login({}: LoginProps) {
   }, {
     onSuccess: (res) => {
       console.log(res.user)
+      toast('Login Success', { type: 'success', position: 'top-center', autoClose: 2000, hideProgressBar: true })
       queryClient.setQueryData('user', res.user)
     },
     onError: (err: AxiosError) => {
@@ -57,7 +57,7 @@ function Login({}: LoginProps) {
               </div>
               <div><TextField label='Password' variant='outlined' type='password' name='password'
                               value={form.password} onChange={onChange} css={inputStyle} required
-                              InputProps={{ style: { fontSize: 15 } }} />
+                              autoComplete='password' InputProps={{ style: { fontSize: 15 } }} />
               </div>
               {loginError && <span css={errorMessageStyle}> {loginError}</span>}
               <div className='button-div'>
@@ -72,7 +72,7 @@ function Login({}: LoginProps) {
           <section>
             <div css={underBlockStyle}>
               <div>
-                <NavLink to={'/signup'}>
+                <NavLink to={'/email/check'}>
                   <h4>Sign Up</h4>
                 </NavLink>
               </div>
@@ -86,17 +86,6 @@ function Login({}: LoginProps) {
     </div>
   )
 }
-
-const pageStyle = css`
-  background-color: ${palette.blueGrey[50]};
-  width: 100%;
-  height: 100%;
-  display: flex;
-  top: 0;
-  left: 0;
-  align-items: center;
-  justify-content: center;
-`
 
 
 export default Login

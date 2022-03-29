@@ -13,7 +13,6 @@ import {
 } from './styles'
 import IconControl from '../IconControl'
 import Input from '../Input/Input'
-import Tag from '../Tag'
 import CountrySelector from '../CountrySelector'
 import { countries, CountryType } from '../CountrySelector/CountrySelector'
 import { upload } from '../../lib/api/me/upload'
@@ -180,8 +179,8 @@ function ProfileCardItem({
         <div className='text'>
           <div css={tagStyle}>
             {fields?.map((tagName) => {
-              return <Tag className={'tag'} label={tagName} key={tagName} visible={editMode}
-                          onDelete={handleField && handleField.remove} />
+              return <div>{tagName}</div>/*<Tag className={'tag'} label={tagName} key={tagName} visible={editMode}
+                          onDelete={handleField && handleField.remove} />*/
             })}
             {fields?.length === 0 && !editMode && <div>Please Input Your Fields</div>}
           </div>

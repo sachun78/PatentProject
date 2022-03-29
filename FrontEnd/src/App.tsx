@@ -9,6 +9,8 @@ import media from 'lib/styles/media'
 import loadable from '@loadable/component'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import useUserQuery from 'hooks/query/useUserQuery'
+import 'react-toastify/dist/ReactToastify.min.css'
+import { ToastContainer } from 'react-toastify'
 
 const Login = loadable(() => import('pages/Login'))
 const SignUp = loadable(() => import('pages/Signup'))
@@ -17,7 +19,7 @@ const MeetingBook = loadable(() => import('pages/Meeting/MeetingBook'))
 const AppLayout = loadable(() => import('layouts/AppLayout'))
 
 function App() {
-  useCsrfQuery({ retry: true, staleTime: 300000 })
+  useCsrfQuery({ retry: true, staleTime: Infinity })
   useUserQuery()
 
   return (
@@ -27,12 +29,13 @@ function App() {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />
-        <Route path='/mail-check' element={<MailCheck />} />
+        <Route path='/email/check' element={<MailCheck />} />
         <Route path='/invitation-letter' element={<MeetingBook />} />
         <Route path='/*' element={<AppLayout />} />
       </Routes>
       <Global styles={globalStyle} />
       <GlobalDialog />
+      <ToastContainer />
     </>
   )
 }

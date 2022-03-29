@@ -13,11 +13,6 @@ export type signupResult = {
 }
 
 export async function signup({ username, email, password }: signupInput) {
-  try {
-    const response = await client.post<signupResult>('/api/auth/signup', { username, email, password })
-    return response.data
-  } catch (e: any) {
-    console.error(e)
-    return e
-  }
+  const response = await client.post<signupResult>('/api/auth/signup', { username, email, password })
+  return response.data
 }

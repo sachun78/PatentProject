@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 import InfoViewSection from './ProfileSection'
 import InfoViewCard from './ProfileCard'
-import { useInput } from '../../hooks/useInput'
+import { useInputProfile } from '../../hooks/useInputProfile'
 import { useField } from '../../hooks/useField'
 import { useQueryClient } from 'react-query'
 import { User } from '../../lib/api/types'
@@ -18,9 +18,9 @@ function ProfileMenu({}: ProfileMenuProps) {
   const user = queryClient.getQueryData<User>('user')
   const { data } = useProfileQuery()
 
-  const [company, onCompanyChange, resetCompany, prevCompany] = useInput(data?.company || 'company is empty error', 'company')
-  const [department, onDepartmentChange, resetDepartment, prevDepartment] = useInput(data?.department || 'department ID', 'department')
-  const [position, onPositionChange, resetPosition, prevPosition] = useInput(data?.position || 'position ID', 'position')
+  const [company, onCompanyChange, resetCompany, prevCompany] = useInputProfile(data?.company || 'company is empty error', 'company')
+  const [department, onDepartmentChange, resetDepartment, prevDepartment] = useInputProfile(data?.department || 'department ID', 'department')
+  const [position, onPositionChange, resetPosition, prevPosition] = useInputProfile(data?.position || 'position ID', 'position')
 
   const handleFields = { onChange: onChangeFieldText, add, remove }
 

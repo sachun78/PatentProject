@@ -1,55 +1,48 @@
 import { css } from '@emotion/react'
 import palette from 'lib/palette'
-import { Navigate, NavLink, useNavigate } from 'react-router-dom'
+import { Navigate, NavLink } from 'react-router-dom'
 import React, { FormEvent, useCallback, useState } from 'react'
 import { inputStyle, signupFormStyle, undoStyle } from 'pages/Signup/styles'
 import Auth from 'layouts/Auth'
 import useUserQuery from 'hooks/query/useUserQuery'
 import { Button, TextField } from '@mui/material'
-import useInputs from '../../hooks/useInputs'
 import Joi from 'joi'
 import { errorMessageStyle } from '../Login/styles'
-import { useQueryClient } from 'react-query'
+import useInput from '../../hooks/useInput'
+import { sendmail } from '../../lib/api/auth/sendmail'
 
 type RegisterProps = {}
 
 export default function MailCheck({}: RegisterProps) {
-  const qc = useQueryClient()
   const { data } = useUserQuery()
-  const [codeMode, setCodeMode] = useState(false)
   const [mailTypeError, setMailTypeError] = useState('')
-  const [form, onChange] = useInputs({
-    email: '',
-    code: ''
-  })
+  const [email, onChangeEmail] = useInput('')
+  const [sendMail, setSendMail] = useState(false)
 
-  const { email, code } = form
-  const onSendMail = useCallback(() => {
+  const onSubmit = useCallback((e: FormEvent) => {
+    e.preventDefault()
     setMailTypeError('')
     const schema = Joi.object().keys({
       email: Joi.string().email({ tlds: false }).required().messages({
         'string.email': 'Check your email type',
         'string.empty': 'Input your email',
         'any.required': 'Input your email'
-      }),
-      code: Joi.string().allow('')
+      })
     })
 
-    schema.validateAsync(form)
-      .then(res => {
-        setCodeMode(true)
+    schema.validateAsync({ email })
+      .catch(err => {
+        setMailTypeError(err.message)
+      })
+    // TODO(hc): USE MUTATION
+    sendmail(email)
+      .then(() => {
+        setSendMail(true)
       })
       .catch(err => {
         setMailTypeError(err.message)
       })
-  }, [form])
-  const navigate = useNavigate()
-  const onSubmit = useCallback((e: FormEvent) => {
-    e.preventDefault()
-    console.log('test')
-    qc.setQueryData('checkMail', 'ryanhe4@gmail.com')
-    navigate('/signup')
-  }, [navigate, qc])
+  }, [email])
 
   if (data) {
     return <Navigate replace to={'/'} />
@@ -57,32 +50,27 @@ export default function MailCheck({}: RegisterProps) {
 
   return (
     <div css={wrapper}>
-      <Auth width={622} height={500}>
+      <Auth width={622} height={240}>
         <div css={signupFormStyle}>
           <div css={undoStyle}>
-            <NavLink to={'/signup'} className='link'>
-              <span>Back</span>
-            </NavLink>
+            <NavLink to={'/login'} className='link'> <span>Back</span> </NavLink>
           </div>
-          <form onSubmit={onSubmit}>
-            <h2 className='title'>Check Code</h2>
-            {!codeMode && <>
+          {sendMail
+            ? <div>
+              <h2 className='title'>Check Email</h2>
+              <p>We sent a verification email to <span>{email}</span></p>
+              <p>Please check your email and click the link to verify your email address.</p>
+              <Button variant='contained' size='large'>OK</Button>
+            </div>
+            : <form onSubmit={onSubmit}>
+              <h2 className='title'>Check Email</h2>
               <TextField label='Email' variant='outlined' type='email' name='email' placeholder='Input your email'
                          autoComplete='off'
-                         value={email} onChange={onChange} css={inputStyle}
+                         value={email} onChange={onChangeEmail} css={inputStyle}
                          InputProps={{ style: { fontSize: 12 } }} />
               {mailTypeError && <span css={errorMessageStyle}>{mailTypeError}</span>}
-              <Button variant='contained' onClick={onSendMail} size='large'>send</Button>
-            </>}
-            {codeMode && <>
-              <TextField label='CODE' variant='outlined' type='text' name='code'
-                         placeholder='Check your email and input access code'
-                         autoComplete='off'
-                         value={code} onChange={onChange} css={inputStyle}
-                         InputProps={{ style: { fontSize: 12 } }} />
-              <Button variant='contained' type='submit' size='large'> verify </Button>
-            </>}
-          </form>
+              <Button variant='contained' type='submit' size='large'>send</Button>
+            </form>}
         </div>
       </Auth>
     </div>
@@ -90,7 +78,7 @@ export default function MailCheck({}: RegisterProps) {
 }
 
 const wrapper = css`
-  background-color: ${palette.blueGrey[50]};
+  background-color: ${palette.purple[50]};
   width: 100%;
   height: 100%;
   display: flex;

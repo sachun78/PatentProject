@@ -3,7 +3,7 @@ import IconControl from '../IconControl'
 import ProfileSection from '../ProfileMenu/ProfileSection'
 import ProfileCard from '../ProfileMenu/ProfileCard'
 import useInputs from '../../hooks/useInputs'
-import React, { SyntheticEvent, useEffect, useState } from 'react'
+import React, { SyntheticEvent, useCallback, useEffect, useState } from 'react'
 import { CountryType } from '../CountrySelector/CountrySelector'
 import { patchProfile } from '../../lib/api/me/getProfile'
 import { boxWrapper, formWrapper } from './styles'
@@ -51,25 +51,25 @@ function InitialInputModal({}: InitialInputModalProps) {
   const onChangeFieldText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFieldText(e.target.value)
   }
-  const remove = (e: React.MouseEvent<SVGSVGElement>) => {
+  const onFieldRemove = useCallback((e: React.MouseEvent<SVGSVGElement>) => {
     const name = e.currentTarget.getAttribute('name')
-    setFields(fields?.filter(v => v !== name))
-  }
-  const add = () => {
-    if (fields === undefined) return
-    if (fieldText === undefined) return
+    setFields(prevFields => prevFields.filter(v => v !== name))
+  }, [])
+  const onFieldAdd = useCallback(() => {
+    if (!fieldText && !fieldText.trim()) return
     const result = fields.find((value) => value === fieldText)
     if (result === undefined) {
       setFields([...fields, fieldText])
       setFieldText('')
-      return
     }
-  }
+  }, [fieldText, fields])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
-    if (!form.company || !form.department || !form.position) {
+    if (!form.company || !form.company.trim()
+      || !form.department || !form.department.trim()
+      || !form.position || !form.position.trim()) {
       setError('Please fill all fields')
       return
     }
@@ -80,12 +80,10 @@ function InitialInputModal({}: InitialInputModalProps) {
 
     // MUTATION
     mutation.mutate()
-  }
-
-  const handleFields = { onChange: onChangeFieldText, add, remove }
+  }, [fields?.length, form.company, form.department, form.position, mutation])
 
   useEffect(() => {
-    if (data?.company !== '') {
+    if (data?.company === '') {
       setOpen(true)
     }
   }, [data?.company])
@@ -104,14 +102,12 @@ function InitialInputModal({}: InitialInputModalProps) {
         Welcome Your First Connetion
       </Typography>
       <form css={formWrapper} onSubmit={handleSubmit}>
-        <ProfileSection title='Belonging' description={'This information also change on Profile page.'}>s
+        <ProfileSection title='Belonging' description={'This information also change on Profile page.'}>
           <ProfileCard.Text title='company' text={company} editable onChange={onChange} />
           <ProfileCard.Text title='department' text={department} editable onChange={onChange} />
           <ProfileCard.Text title='position' text={position} editable onChange={onChange} />
-          {/*<ProfileCard.Item title='field' type={'field'} fields={field} handleField={handleFields}*/}
-          {/*                  description={fieldText} isEditMode />*/}
           <ProfileCard.Field title='field' text={fieldText} onChange={onChangeFieldText}
-                             onAdd={add} fields={fields} onRemove={() => {
+                             onAdd={onFieldAdd} fields={fields} onRemove={() => {
           }} editable />
           <ProfileCard.Country title='country' onChange={handleCountry}
                                country={country} editable />

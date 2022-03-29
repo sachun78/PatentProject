@@ -1,11 +1,12 @@
 import client from '../client'
+import { IAuthCode } from '../types'
 
-export async function sendmail(code: string) {
-  const response = await client.post('/api/authemail/send-authemail')
+export async function sendmail(email: string) {
+  const response = await client.post('/api/authemail/send-authemail', { email })
   return response.data
 }
 
 export async function checkCode(code: string) {
-  const response = await client.get('/api/authemail/code/' + code)
+  const response = await client.get<IAuthCode>('/api/authemail/code/' + code)
   return response.data
 }
