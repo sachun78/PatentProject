@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken'
 
 import * as UserRepo from 'data/auth'
 import * as ProfileRepo from 'data/profile'
+import * as EmailAutoRepo from 'data/emailAuth'
 import envConfig from 'config'
 
 interface IRequest extends Request {
@@ -19,12 +20,16 @@ export async function signup(req: IRequest, res: Response, next: NextFunction) {
       return res.status(409).json({ message: `email (${email}) is already` })
     }
 
-    const hashed = await bcrypt.hash(password, envConfig.bcrypt.salt_rouunds)
+    const hashed = await bcrypt.hash(password, envConfig.bcrypt.salt_rouunds);
     const user = await UserRepo.createUser({ ...req.body, password : hashed});
     const profile = await ProfileRepo.createProfile(ProfileRepo.defaultProfile , user.id);
+    const emailAuth = await EmailAutoRepo.findByEmail(email);
+    if (emailAuth?.logged === true) {
+      const updated = await UserRepo.updateUser(user.id, {certified: true});
+    }
 
     const token = createJwtToken(user.id)
-    console.log('singup', user.id)
+    console.log('signup', user.id)
     setToken(res, token)
     res.status(201).json({
       token,
@@ -32,7 +37,6 @@ export async function signup(req: IRequest, res: Response, next: NextFunction) {
         id: user.id,
         email: user.email,
         username: user.username,
-        certified: user.certified
       }
     })
   } catch (e) {
@@ -55,7 +59,7 @@ export async function signin(req: IRequest, res: Response, next: NextFunction) {
     }
 
     const token = createJwtToken(user.id)
-    console.log('singin', user.id)
+    console.log('signin', user.id)
     setToken(res, token)
     res.status(200).json({
       token,
@@ -94,7 +98,7 @@ export async function me(req: IRequest, res: Response, next: NextFunction) {
     if (!user) {
       return res.status(404).json({ message: 'User not found' })
     }
-
+    console.log('me', user.id)
     res.status(200).json({
       id: user.id,
       email: user.email,
