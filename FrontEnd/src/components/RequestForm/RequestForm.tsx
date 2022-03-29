@@ -18,14 +18,14 @@ type RequestViewProps = {}
 export default function RequestForm({}: RequestViewProps) {
   const [curEvent] = useCurrentEventState()
   const [complete, setComplete] = useState(false)
-  const { date, time, setDate, setTime } = useDateTimeHook()   
+  const { date, time, setDate, setTime } = useDateTimeHook()
 
   const [form, onChange] = useInputs({
     to: '',
-    place: '',  
+    place: '1234',
     comment: '',
     title: ''
-  })  
+  })
 
   const onSubmit = async () => {
     console.log(form, date.toLocaleDateString(), time.toLocaleTimeString(), curEvent)
