@@ -137,5 +137,11 @@ function setToken(res: Response, token: String) {
 }
 
 function clearToken(res: Response) {
-  res.clearCookie('token');
+  const options: CookieOptions = {
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true
+  }
+
+  res.clearCookie('token', options);
 }
