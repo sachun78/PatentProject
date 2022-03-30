@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import palette from '../../lib/palette'
-import { useNavigate } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 export type ScheduleCardProps = {
   id: string
@@ -14,11 +14,8 @@ export type ScheduleCardProps = {
   title: string
 }
 
-function ScheduleCard({ from, to, comment, place, time, date, state, id,title }: ScheduleCardProps) {
-  const navigate = useNavigate()
-  return <div css={wrapper} onClick={() => {
-    navigate('/meeting/' + id)
-  }}>
+function ScheduleCard({ from, to, comment, place, time, date, state, id, title }: ScheduleCardProps) {
+  return <NavLink css={wrapper} to={'/membership/meeting/' + id}>
     <div css={headerStyle}>
       <h3>{title}</h3>
       <p className='from'>from<span> {from} </span></p>
@@ -29,13 +26,15 @@ function ScheduleCard({ from, to, comment, place, time, date, state, id,title }:
       <div>{state}</div>
       <div>
         {place}
-        <div>{new Date(date).toLocaleDateString()} {new Date(time).toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit'
-        })}</div>
+        <div>
+          {new Date(date).toLocaleDateString()}
+          {new Date(time).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit'
+          })}</div>
       </div>
     </div>
-  </div>
+  </NavLink>
 }
 
 const wrapper = css`
@@ -53,6 +52,8 @@ const wrapper = css`
   box-shadow: rgb(0 0 0 / 4%) 0 4px 16px 0;
   overflow: hidden;
   transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
+  color: black;
+  text-decoration: none;
 
   &:hover {
     transform: translate(5px, -10px);

@@ -6,9 +6,9 @@ export default function useAuth() {
   const [, setProfile] = useProfileState()
   const queryClient = useQueryClient()
   const logout = () => {
-    queryClient.setQueryData('user', null)
+    // queryClient.setQueryData('user', null)
     setProfile(null)
-    logoutAPI()
+    logoutAPI().then(() => queryClient.invalidateQueries('user'))
     console.log('logout')
   }
 

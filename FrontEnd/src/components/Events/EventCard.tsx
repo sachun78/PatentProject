@@ -3,11 +3,12 @@ import palette from '../../lib/palette'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { MdDeleteForever, MdUpdate } from 'react-icons/md'
 import { deleteEvent } from '../../lib/api/event/deleteEvent'
-import useEventQuery from '../../hooks/query/useEventQuery'
-import { memo } from 'react'
 import { useCurrentEventState } from '../../atoms/eventState'
-import useEventTitle, { useEventModal } from '../../hooks/useEventTitle'
+import { useEventModal } from '../../hooks/useEventTitle'
 import useDateRangeHook from '../../hooks/useDateRangeHook'
+import { useCallback } from 'react'
+import { useQueryClient } from 'react-query'
+import { toast } from 'react-toastify'
 
 export type EventCardProps = {
   id: string
@@ -17,35 +18,41 @@ export type EventCardProps = {
   count: number
 }
 
-function EventCard({ title = '', startDate, endDate, id, count }: EventCardProps) {
-  const { refetch } = useEventQuery(1, { enabled: false })
+function EventCard({ title, startDate, endDate, id, count }: EventCardProps) {
+  const qc = useQueryClient()
   const navigate = useNavigate()
-  const { setModalState } = useEventModal()
-  const { setEventTitle } = useEventTitle()
+  const { setOpen, setEdit } = useEventModal()
   const { setStartDate, setEndDate } = useDateRangeHook()
-  const [, setCurEvent] = useCurrentEventState()
-  const handleEdit = (e: React.MouseEvent<HTMLDivElement>) => {
+  const [, setEvent] = useCurrentEventState()
+
+  const handleEdit = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
-    setModalState(true)
-    setEventTitle(title)
+    setOpen(true)
+    setEdit(true)
+    setEvent({ id, title })
     setStartDate(new Date(startDate))
     setEndDate(new Date(endDate))
-  }
-  const handleDel = async (e: React.MouseEvent<HTMLDivElement>) => {
+  }, [endDate, id, startDate, title])
+
+  const onDelete = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
-    try {
-      await deleteEvent(id)
-      refetch()
-    } catch (error) {
-      console.log(error)
-      //TODO(Open ERROR DIALOG)
-    }
+    deleteEvent(id)
+      .then(() => {
+        qc.invalidateQueries(['events', 1])
+      })
+      .catch((e) => {
+        const { message } = e.response?.data
+        toast.error(message, {
+          position: 'top-center',
+          pauseOnHover: false,
+          pauseOnFocusLoss: false,
+          autoClose: 3000
+        })
+      })
   }
+
   const handleNewMeet = async () => {
-    setCurEvent({
-      id,
-      title
-    })
+    setEvent({ id, title })
   }
 
   return <div css={wrapper}>
@@ -56,7 +63,7 @@ function EventCard({ title = '', startDate, endDate, id, count }: EventCardProps
         <span className='event-header-header'>{title}</span>
         <div className='event-header-tool'>
           <div className='tool-edit' onClick={handleEdit}><MdUpdate /></div>
-          <div className='tool-delete' onClick={handleDel}><MdDeleteForever /></div>
+          <div className='tool-delete' onClick={onDelete}><MdDeleteForever /></div>
         </div>
       </div>
       <div css={contentStyle}>
@@ -159,4 +166,4 @@ const contentStyle = css`
     margin-bottom: 0.5rem
   }
 `
-export default memo(EventCard)
+export default EventCard

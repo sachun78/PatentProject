@@ -8,6 +8,7 @@ import Sidebar from 'components/Sidebar'
 import { footerStyle, headerStyle, mainStyle, sidebarStyle } from './styles'
 import useUserQuery from '../../hooks/query/useUserQuery'
 import loadable from '@loadable/component'
+import { CircularProgress } from '@mui/material'
 
 const Home = loadable(() => import('pages/Home'))
 const Profile = loadable(() => import('pages/Profile'))
@@ -20,8 +21,19 @@ export type AppLayoutProps = {}
 export default function AppLayout({}: AppLayoutProps) {
   const { data, isLoading } = useUserQuery()
 
-  if(isLoading){
-    return <div>Loading...</div>
+  if (isLoading) {
+    return (<>
+      <AppLayout.Header>
+        <TopNavigation />
+      </AppLayout.Header>
+      <AppLayout.Sidebar>
+        <Sidebar />
+        <VerticalBar />
+      </AppLayout.Sidebar>
+      <AppLayout.Main>
+        <div><CircularProgress /></div>
+      </AppLayout.Main>
+    </>)
   }
 
   if (!data) {
@@ -41,8 +53,8 @@ export default function AppLayout({}: AppLayoutProps) {
         <Route path='/' element={<Home />} />
         <Route path='/membership' element={<Member />} />
         <Route path='/membership/event/*' element={<EventDetail />} />
-        <Route path='/network' element={<Network />} />
         <Route path='/membership/meeting/*' element={<Meeting />} />
+        <Route path='/network' element={<Network />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/conference' element={<div>컨퍼런스</div>} />
         <Route path='/*' element={<div>404 NOT FOUND</div>} />

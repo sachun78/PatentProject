@@ -9,8 +9,6 @@ type SidebarProps = {}
 function Sidebar({}: SidebarProps) {
 
   return <div css={sidebarStyle}>
-    <div className='logo'>
-    </div>
     <ul css={menuStyle}>
       <SidebarItem icon='home' text='Home' to='' />
       <SidebarItem icon='schedule' text='MemberShip' to='/membership' />

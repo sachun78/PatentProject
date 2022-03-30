@@ -10,9 +10,6 @@ function VerticalBar({}: VerticalBarProps) {
   return (
     <div css={bar}>
       <div css={endBlock('top')}>
-        <Link to='/'>
-          <IconControl name={'plus'} />
-        </Link>
       </div>
       <div css={links}>
         <VerticalBarItem icon='home' text='Home' to='' />
