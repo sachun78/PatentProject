@@ -90,10 +90,11 @@ export async function logout(req: IRequest, res: Response, next: NextFunction) {
 }
 
 export async function me(req: IRequest, res: Response, next: NextFunction) {
+  if (!req.userId) {
+    return res.status(404).json({ message: 'User not found' })
+  }
+
   try {
-    if (!req.userId) {
-      return res.status(404).json({ message: 'User not found' })
-    }
     const user = await UserRepo.findById(req.userId)
     if (!user) {
       return res.status(404).json({ message: 'User not found' })
