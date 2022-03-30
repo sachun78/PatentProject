@@ -29,8 +29,9 @@ const config = {
     plainToken: required('CSRF_SECURE_KEY', "8s25jMpzVBCDG5v9")
   },
   email: {
-    userid: required('EMAIL_SEND_ID', "wemetsuperuser@gmail.com"),
-    passwd: required("EMAIL_SEND_PW", "Wemetadmin12!@")
+    userid: required('SEND_EMAIL_ID', "wemetmaster@gmail.com"),
+    client_id: required('CLIENT_ID', "431745332301-6g5maknvsi737hu677ppts4hfksketmp.apps.googleusercontent.com"),
+    client_secret: required('CLIENT_SECRET', "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")
   }
 
 };
