@@ -122,11 +122,10 @@ export const sendmail = async (emailInfo: any, mailType: EMAILTYPE) => {
     to: user_email,
     ...emailTemplete
   }).then((value) => {
-    console.error("[HJBAE11]", value.envelope, value.response);
+    console.error(`[sendMailProc] env(${value.envelope}) res(${value.response})`);
   }).catch((e) => {
-    console.error("[HJBAE22]", e.message);
+    console.error("[sendMailProc][ERROR]", e.message);
   });
 
-  console.error("[HJBAE33]", {info});
   return info;
 }

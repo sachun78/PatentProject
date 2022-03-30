@@ -25,7 +25,7 @@ export async function sendAuthEmail(req: IRequest, res: Response, next: NextFunc
       return res.status(409).json({ message: `email (${req.body.email}) is already` })
     }
 
-    console.log("emailInfo", emailInfo);
+    console.log("[emailInfo]", emailInfo);
 
     const savedMail = await EmaiAuthlRepo.saveAuthMaiil(emailInfo);
     const sendInfo = sendmail(savedMail, EMAILTYPE.AUTH);
