@@ -35,3 +35,7 @@ export type IMeeting = {
   comment: string
   status: string
 }
+
+export type IAuthCode = {
+  email: string
+}

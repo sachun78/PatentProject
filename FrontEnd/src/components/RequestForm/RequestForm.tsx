@@ -1,58 +1,70 @@
 import { css } from '@emotion/react'
+import { useCallback } from 'react'
+import { useCurrentEventState } from '../../atoms/eventState'
+import useDateTimeHook from '../../hooks/useDateTimeHook'
 import useInputs from '../../hooks/useInputs'
-import Input from '../Input'
-import RequestSection from './RequestSection'
+import { createMeeting } from '../../lib/api/meeting/createMeeting'
+import palette from '../../lib/palette'
+import { resetButton } from '../../lib/styles/resetButton'
 import DatePickerInput from '../DatePickerInput'
 import TimePickerInput from '../DatePickerInput/TimePickerInput'
-import useDateTimeHook from '../../hooks/useDateTimeHook'
-import { useCurrentEventState } from '../../atoms/eventState'
-import { resetButton } from '../../lib/styles/resetButton'
-import palette from '../../lib/palette'
-import { createMeeting } from '../../lib/api/meeting/createMeeting'
-import { useState } from 'react'
+import Input from '../Input'
+import LocationInput from '../LocationMap/LocationInput'
+import RequestSection from './RequestSection'
+import { toast } from 'react-toastify'
 
 type RequestViewProps = {}
 
 export default function RequestForm({}: RequestViewProps) {
   const [curEvent] = useCurrentEventState()
-  const [complete, setComplete] = useState(false)
   const { date, time, setDate, setTime } = useDateTimeHook()
 
   const [form, onChange] = useInputs({
     to: '',
-    place: '',
+    place: '1234',
     comment: '',
     title: ''
   })
 
-  const onSubmit = async () => {
+  const onSubmit = useCallback(() => {
     console.log(form, date.toLocaleDateString(), time.toLocaleTimeString(), curEvent)
     const { title, to, place, comment } = form
-    if (!to || !place || !title) {
-      alert('모든 항목을 입력해주세요.')
+    if (!to || !to.trim() || !place || !place.trim() || !title || !title.trim()) {
+      toast.error('Please fill out all fields', {
+        position: toast.POSITION.TOP_CENTER,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000
+      })
       return
     }
 
-    try {
-      await createMeeting({
-        title,
-        date,
-        time,
-        toEmail: to,
-        location: place,
-        comment,
-        eventId: curEvent.id
+    createMeeting({
+      eventId: curEvent.id,
+      title, date, time,
+      toEmail: to, location: place,
+      comment
+    }).then(() => {
+      toast.success('Meeting Request Success', {
+        position: toast.POSITION.TOP_CENTER,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000
       })
-      setComplete(true)
-    } catch (e) {
-    }
-  }
+    }).catch(e => {
+      toast.error('Something went wrong', {
+        position: toast.POSITION.TOP_CENTER,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000
+      })
+    })
+  }, [curEvent, date, form, time])
 
   return (
     <div css={wrapper}>
-      {complete ? (<div>
-        미팅 요청 완료
-      </div>) : (<div css={sectionStyle}>
+      <div css={headerStyle}> Request Meeting</div>
+      <div css={sectionStyle}>
         <RequestSection title={'Event'}>
           <span>{curEvent.title}</span>
         </RequestSection>
@@ -71,14 +83,9 @@ export default function RequestForm({}: RequestViewProps) {
           <TimePickerInput onChange={(value: Date) => {
             setTime(value)
           }} value={time} />
-        </RequestSection>
+        </RequestSection>``
         <RequestSection title={'Location'}>
-          <Input
-            placeholder='Add a location'
-            name='place'
-            value={form.place}
-            onChange={onChange}
-          />
+          <LocationInput />
         </RequestSection>
         <RequestSection title={'Comment'}>
           <Input
@@ -90,8 +97,7 @@ export default function RequestForm({}: RequestViewProps) {
         </RequestSection>
         <div css={space} />
         <button css={buttonStyle} onClick={onSubmit}>OK</button>
-      </div>)}
-
+      </div>
     </div>
   )
 }
@@ -135,4 +141,9 @@ const buttonStyle = css`
 
 const space = css`
   flex: 1;
+`
+const headerStyle = css`
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1.6rem;
 `

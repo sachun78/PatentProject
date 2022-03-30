@@ -118,10 +118,10 @@ const cancelButton = css`
 
 const confirmButton = (isDestructive: boolean) => css`
   ${buttonStyle};
-  background: ${isDestructive ? palette.red[400] : palette.cyan[500]};
+  background: ${isDestructive ? palette.red[400] : palette.purple[500]};
 
   &:hover {
-    background: ${isDestructive ? palette.red[300] : palette.cyan[400]};
+    background: ${isDestructive ? palette.red[300] : palette.purple[400]};
   }
 
   color: white;

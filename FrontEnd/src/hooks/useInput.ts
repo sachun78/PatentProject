@@ -1,34 +1,13 @@
-import { useState } from 'react'
-import { patchProfile } from '../lib/api/me/getProfile'
-import { IProfile } from '../lib/api/types'
-import { useProfileState } from '../atoms/profileState'
+import { Dispatch, SetStateAction, useCallback, useState, ChangeEvent } from 'react';
 
-export function useInput(initialValue: string, type: string) {
-  const [value, setValue] = useState(initialValue)
-  const [prevValue, setPrevValue] = useState(initialValue)
-  const [, setProfile] = useProfileState()
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value)
-  }
+type ReturnTypes<T> = [T, (e: ChangeEvent<HTMLInputElement>) => void, Dispatch<SetStateAction<T>>];
 
-  const reset = () => {
-    setValue(prevValue)
-  }
-  const prev_to_current = async () => {
-    try {
-      const profileRequest: IProfile = {}
-      if (type === 'company') profileRequest.company = value
-      if (type === 'position') profileRequest.position = value
-      if (type === 'department') profileRequest.department = value
-      const result = await patchProfile(profileRequest)
-      if (result) {
-        setProfile(result)
-        setPrevValue(value)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+const useInput = <T>(initialData: T): ReturnTypes<T> => {
+  const [value, setValue] = useState(initialData);
+  const handler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setValue((e.target.value as unknown) as T);
+  }, []);
+  return [value, handler, setValue];
+};
 
-  return [value, onChange, reset, prev_to_current] as const
-}
+export default useInput;

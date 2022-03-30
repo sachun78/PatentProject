@@ -1,30 +1,16 @@
-import { useUserState } from '../atoms/authState'
-import { User } from '../lib/api/types'
 import { useProfileState } from '../atoms/profileState'
-import userStorage from '../lib/storage/userStorage'
+import { useQueryClient } from 'react-query'
+import logoutAPI from 'lib/api/auth/logout'
 
 export default function useAuth() {
-  const [, setUserState] = useUserState()
   const [, setProfile] = useProfileState()
-  const authorize = (user: User) => {
-    setUserState(user)
-    userStorage.set(user)
-  }
+  const queryClient = useQueryClient()
   const logout = () => {
-    setUserState(null)
+    // queryClient.setQueryData('user', null)
     setProfile(null)
+    logoutAPI().then(() => queryClient.invalidateQueries('user'))
     console.log('logout')
-    userStorage.clear()
-    try {
-      // TODO(call cookie remove api, logout)
-    } catch (e) {
-      console.log(e)
-    }
   }
 
-  return {
-    authorize,
-    logout
-  }
-
+  return { logout }
 }

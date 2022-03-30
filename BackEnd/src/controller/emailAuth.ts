@@ -11,23 +11,21 @@ interface IRequest extends Request {
 
 export async function sendAuthEmail(req: IRequest, res: Response, next: NextFunction) {
   try {
-    const user = await authRepo.findById(req.userId);
-    if (!user) {
-      return res.status(404).json({message: 'User not found'});
-    }
-
     const emailInfo = {
-      userid: "",
       email: "",
       code: "",
       logged: false
     }
 
-    emailInfo.userid = user.id;
-    emailInfo.email = user.email;
+    emailInfo.email = req.body.email;
     emailInfo.code = shortid.generate();
 
-    console.log("emailInfo", emailInfo);
+    const check = await EmaiAuthlRepo.findByEmail(req.body.email);
+    if (check && check.logged === true) {
+      return res.status(409).json({ message: `email (${req.body.email}) is already` })
+    }
+
+    console.log("[emailInfo]", emailInfo);
 
     const savedMail = await EmaiAuthlRepo.saveAuthMaiil(emailInfo);
     const sendInfo = sendmail(savedMail, EMAILTYPE.AUTH);
@@ -61,13 +59,8 @@ export async function isVerifyMail(req: IRequest, res: Response, next: NextFunct
     if (!authmail) {
       return res.status(404).json({ message: 'Email info not found' });
     }
-  
-    const updateUser = await authRepo.updateUser(authmail.userid, {certified: true});
-    if (!updateUser) {
-      return res.status(401).json({ message: 'Fail user info update'});
-    }
 
-    res.status(200).json({email: authmail.email, certified: updateUser.certified});
+    res.status(200).json({email: authmail.email, message: "verified success !!!"});
   } catch(e) {
     console.error(e);
     next(e);

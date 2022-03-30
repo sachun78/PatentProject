@@ -1,65 +1,109 @@
-import { Box, Modal } from '@mui/material'
+import { Box, Button, Modal } from '@mui/material'
 import { css } from '@emotion/react'
 import RequestSection from '../RequestForm/RequestSection'
 import Input from '../Input/Input'
 import EventDateSections from './EventDateSections'
-import useEventTitle, { useEventModal } from '../../hooks/useEventTitle'
+import { useEventModal } from '../../hooks/useEventTitle'
 import { resetButton } from '../../lib/styles/resetButton'
 import palette from '../../lib/palette'
 import useDateRangeHook from '../../hooks/useDateRangeHook'
-import { useGlobalDialogActions } from '../../atoms/globalDialogState'
 import { createEvent } from '../../lib/api/event/createEvent'
-import useEventQuery from '../../hooks/query/useEventQuery'
+import { toast } from 'react-toastify'
+import { ChangeEvent } from 'react'
+import { useMutation, useQueryClient } from 'react-query'
+import { AxiosError } from 'axios'
+import { useCurrentEventState } from '../../atoms/eventState'
+import { updateEvent } from '../../lib/api/event/updateEvent'
 
 export type CreateEventModalProps = {}
 
 function EventModal({}: CreateEventModalProps) {
-  const { title, setEventTitle } = useEventTitle()
-  const { open, setModalState } = useEventModal()
   const { endDate, startDate } = useDateRangeHook()
-  const { open: openDialog } = useGlobalDialogActions()
-  const { refetch } = useEventQuery(1)
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEventTitle(e.target.value)
-  }
-  const handleCancel = () => {
-    setEventTitle('')
-    setModalState(false)
+  const { open, setOpen, isEdit } = useEventModal()
+  const [event, setEvent] = useCurrentEventState()
+  const qc = useQueryClient()
+
+  const updateMutation = useMutation(() => updateEvent(event.id, event.title, startDate, endDate), {
+    onSuccess: () => {
+      setEvent({ title: '', id: '' })
+      setOpen(false)
+      toast.success('Update event success', {
+        position: 'top-center',
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000
+      })
+      qc.invalidateQueries(['events', 1])
+    },
+    onError: (e: AxiosError) => {
+      const { message } = e.response?.data
+      toast.error(message, {
+        position: 'top-center',
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000
+      })
+    }
+  })
+
+  const createMutation = useMutation(() => createEvent(event.title, startDate, endDate), {
+    onSuccess: () => {
+      setEvent({ title: '', id: '' })
+      setOpen(false)
+      toast.success('create new event success', {
+        position: 'top-center',
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000
+      })
+      qc.invalidateQueries(['events', 1])
+    },
+    onError: (e: AxiosError) => {
+      const { message } = e.response?.data
+      toast.error(message, {
+        position: 'top-center',
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000
+      })
+    }
+  })
+
+  const onChangeEventTitle = (e: ChangeEvent<HTMLInputElement>) => {
+    setEvent(prev => ({ ...prev, title: e.target.value }))
   }
 
-  const handleOk = () => {
-    if (startDate > endDate) {
-      openDialog({
-        title: 'ERROR!',
-        message: 'StartDate must be before EndDate',
-        onConfirm: () => {
-          console.log('Confirm')
-        },
-        showCancel: false,
-        confirmText: 'OK',
-        isDestructive: true
+  const onCancel = () => {
+    setEvent({ title: '', id: '' })
+    setOpen(false)
+  }
+
+  const onCreate = () => {
+    if (!event.title || !event.title.trim()) {
+      toast.error('input title error', {
+        position: 'top-center',
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000,
+        hideProgressBar: true
       })
       return
     }
-    const fetchCreateEvent = async () => {
-      console.log('Event Create Action', title)
-      return await createEvent(title, startDate, endDate)
-    }
-    fetchCreateEvent().then(() => {
-      setEventTitle('')
-      setModalState(false)
-      refetch()
-    })
-      .catch((e) => {
-        const { message } = e.response.data
-        openDialog({
-          title: 'ERROR!',
-          message: message,
-          showCancel: false,
-          confirmText: 'OK',
-          isDestructive: true
-        })
+    if (startDate > endDate) {
+      toast.error('StartDate must be before EndDate', {
+        position: 'top-center',
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000
       })
+      return
+    }
+
+    if (isEdit) {
+      updateMutation.mutate()
+    } else {
+      createMutation.mutate()
+    }
   }
 
   return <Modal open={open}>
@@ -67,13 +111,16 @@ function EventModal({}: CreateEventModalProps) {
       <RequestSection title={'Event title'}>
         <Input placeholder='Input your event title'
                name='event'
-               onChange={handleChange}
-               value={title} />
+               onChange={onChangeEventTitle}
+               value={event.title} />
       </RequestSection>
       <EventDateSections />
       <div css={buttonBlock}>
-        <button css={buttonStyle} onClick={handleOk}>생성</button>
-        <button css={buttonStyle} onClick={handleCancel}> 취소</button>
+        <Button css={buttonStyle} disabled={createMutation.isLoading || updateMutation.isLoading}
+                onClick={onCreate}>{isEdit ? 'EDIT' : 'OK'}</Button>
+        <Button css={buttonStyle} disabled={createMutation.isLoading || updateMutation.isLoading}
+                onClick={onCancel}> 취소
+        </Button>
       </div>
     </Box>
   </Modal>
@@ -104,7 +151,7 @@ const buttonStyle = css`
   font-weight: bold;
   cursor: pointer;
 
-  background-color: ${palette.cyan[500]};
+  background-color: ${palette.purple[500]};
 
   color: #fff;
 
@@ -113,7 +160,7 @@ const buttonStyle = css`
   }
 
   &:hover {
-    background: ${palette.cyan[400]};
+    background: ${palette.purple[400]};
   }
 `
 

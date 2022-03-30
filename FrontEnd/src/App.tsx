@@ -1,66 +1,41 @@
 import { css, Global } from '@emotion/react'
-import AppLayout from './components/AppLayout'
 import React from 'react'
-import Home from './pages/Home'
 import { Route, Routes } from 'react-router-dom'
-import Sidebar from './components/Sidebar'
-import TopNavigation from './components/TopNavigation'
-import Member from './pages/Member'
-import Network from './pages/Member/Network'
-import Meeting from './pages/Meeting'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import DebugObserver from './components/DebugObserver'
-import palette from './lib/palette'
-import Profile from './pages/Profile/Profile'
-import GlobalDialog from './components/GlobalDialog'
-import EventDetail from './pages/EventDetail'
-import MeetingBook from './pages/Meeting/MeetingBook'
-import useCsrfQuery from './hooks/query/useCsrfQuery'
-import { usePageRelocationEffect } from './hooks/usePageRelocationEffect'
-import VerticalBar from './components/Sidebar/VerticalBar'
+import DebugObserver from 'components/DebugObserver'
+import palette from 'lib/palette'
+import GlobalDialog from 'components/GlobalDialog'
+import useCsrfQuery from 'hooks/query/useCsrfQuery'
+import media from 'lib/styles/media'
+import loadable from '@loadable/component'
+import { ReactQueryDevtools } from 'react-query/devtools'
+import useUserQuery from 'hooks/query/useUserQuery'
+import 'react-toastify/dist/ReactToastify.min.css'
+import { ToastContainer } from 'react-toastify'
+
+const Login = loadable(() => import('pages/Login'))
+const SignUp = loadable(() => import('pages/Signup'))
+const MailCheck = loadable(() => import('pages/MailCheck'))
+const MeetingBook = loadable(() => import('pages/Meeting/MeetingBook'))
+const AppLayout = loadable(() => import('layouts/AppLayout'))
 
 function App() {
-  useCsrfQuery({ refetchOnWindowFocus: false, retry: true })
-  usePageRelocationEffect()
+  useCsrfQuery({ retry: true, staleTime: Infinity })
+  useUserQuery()
 
   return (
     <>
       <DebugObserver />
+      <ReactQueryDevtools initialIsOpen={false} />
       <Routes>
         <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/auth-email' element={<Register />} />
+        <Route path='/signup' element={<SignUp />} />
+        <Route path='/email/check' element={<MailCheck />} />
         <Route path='/invitation-letter' element={<MeetingBook />} />
-        <Route
-          path='/*'
-          element={
-            <AppLayout>
-              <AppLayout.Header>
-                <TopNavigation />
-              </AppLayout.Header>
-              <AppLayout.Sidebar>
-                <Sidebar />
-                <VerticalBar />
-              </AppLayout.Sidebar>
-              <AppLayout.Main>
-                <Routes>
-                  <Route path='/' element={<Home />} />
-                  <Route path='/membership' element={<Member />} />
-                  <Route path='/membership/event/*' element={<EventDetail />} />
-                  <Route path='/network' element={<Network />} />
-                  <Route path='/meeting/*' element={<Meeting />} />
-                  <Route path='/profile' element={<Profile />} />
-                  <Route path='/conference' element={<div>컨퍼런스</div>} />
-                  <Route path='/*' element={<div>404 NOT FOUND</div>} />
-                </Routes>
-              </AppLayout.Main>
-            </AppLayout>
-          }
-        />
+        <Route path='/*' element={<AppLayout />} />
       </Routes>
       <Global styles={globalStyle} />
       <GlobalDialog />
+      <ToastContainer />
     </>
   )
 }
@@ -71,6 +46,10 @@ const globalStyle = css`
   #root {
     height: 100%;
     overflow-x: hidden;
+
+    ${media.small} {
+      overflow-x: auto;
+    }
   }
 
   html {
@@ -81,7 +60,7 @@ const globalStyle = css`
       box-sizing: inherit;
 
       ::selection {
-        background: ${palette.blueGrey[200]};
+        background: ${palette.purple[50]};
       }
     }
   }

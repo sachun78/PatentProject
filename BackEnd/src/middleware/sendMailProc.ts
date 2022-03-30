@@ -9,7 +9,7 @@ export const enum EMAILTYPE {
 
 const createAuthEmail = (code: string) => {
   const keywords = {
-        type: 'auth-email',
+        type: 'signup',
         text: 'Email verification'
   };
 
@@ -19,9 +19,9 @@ const createAuthEmail = (code: string) => {
     <b style="black">Hello! </b>Click the link below to continue ${keywords.text}. If you made a request by mistake, or if you did not request it, please disregard this email.
   </div>
   
-  <a href="http://localhost:3000/${keywords.type}?code=${code}" style="text-decoration: none; width: 400px; text-align:center; display:block; margin: 0 auto; margin-top: 1rem; background: #845ef7; padding-top: 1rem; color: white; font-size: 1.25rem; padding-bottom: 1rem; font-weight: 600; border-radius: 4px;">continue</a>
+  <a href="${envConfig.host.url}/${keywords.type}?code=${code}" style="text-decoration: none; width: 400px; text-align:center; display:block; margin: 0 auto; margin-top: 1rem; background: #845ef7; padding-top: 1rem; color: white; font-size: 1.25rem; padding-bottom: 1rem; font-weight: 600; border-radius: 4px;">continue</a>
   
-  <div style="text-align: center; margin-top: 1rem; color: #868e96; font-size: 0.85rem;"><div>Click the button above or open the following link: <br/> <a style="color: #b197fc;" href="http://localhost:3000/${keywords.type}?code=${code}">http://localhost:3000/${keywords.type}?code=${code}</a></div><br/><div>This link is valid for 24 hours. </div></div>`;
+  <div style="text-align: center; margin-top: 1rem; color: #868e96; font-size: 0.85rem;"><div>Click the button above or open the following link: <br/> <a style="color: #b197fc;" href="${envConfig.host.url}/${keywords.type}?code=${code}">${envConfig.host.url}/${keywords.type}?code=${code}</a></div><br/><div>This link is valid for 24 hours. </div></div>`;
 
   return {
     subject,
@@ -104,22 +104,28 @@ export const sendmail = async (emailInfo: any, mailType: EMAILTYPE) => {
   let serviceContent: SMTPTransport.Options = {
     service: 'gmail',
     port: 587,
-    host: 'smtp.gmlail.com',
-    secure: false,
-    requireTLS: true,
+    host: 'smtp.google.com',
+    secure: true,
     auth: {
-        user: envConfig.email.userid,
-        pass: envConfig.email.passwd
-    }
+      type: "OAuth2",
+      user: envConfig.email.userid,
+      clientId: envConfig.email.client_id,
+      clientSecret: envConfig.email.client_secret,
+      refreshToken: "1//04mtHrbnate7nCgYIARAAGAQSNwF-L9IrozvFYlUqmVMUpavEcsSF3Y4PNpgnMgPFBY2-cwyQZclbdnUrHBpMd71SJGnREQkwRZw",
+      accessToken: "ya29.A0ARrdaM_jNPbMfqK5P3qBc39uVufi4WeFzwhHmpWDr1tWpj-9a5imxc9Cw6Y9B-W_OlnjpFvCILDcok_-INNRSSdREoN3rlg9L0cjLTHQI5vqNzKmL0N5auOmbGG1w1MJ2LT1QaQIssTI7LRDh967IhR-_ovJ"
+    },
   }
   let transporter = nodemailer.createTransport(serviceContent);
 
-  let info = await transporter.sendMail({
+  let info = transporter.sendMail({
     from: envConfig.email.userid,
     to: user_email,
     ...emailTemplete
+  }).then((value) => {
+    console.error(`[sendMailProc] env(${value.envelope}) res(${value.response})`);
+  }).catch((e) => {
+    console.error("[sendMailProc][ERROR]", e.message);
   });
 
-  console.log(info);
   return info;
 }

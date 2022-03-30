@@ -3,9 +3,12 @@ import palette from '../../lib/palette'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { MdDeleteForever, MdUpdate } from 'react-icons/md'
 import { deleteEvent } from '../../lib/api/event/deleteEvent'
-import useEventQuery from '../../hooks/query/useEventQuery'
-import { memo } from 'react'
 import { useCurrentEventState } from '../../atoms/eventState'
+import { useEventModal } from '../../hooks/useEventTitle'
+import useDateRangeHook from '../../hooks/useDateRangeHook'
+import { useCallback } from 'react'
+import { useQueryClient } from 'react-query'
+import { toast } from 'react-toastify'
 
 export type EventCardProps = {
   id: string
@@ -15,29 +18,41 @@ export type EventCardProps = {
   count: number
 }
 
-function EventCard({ title = '', startDate, endDate, id, count }: EventCardProps) {
-  const { refetch } = useEventQuery(1, { enabled: false })
+function EventCard({ title, startDate, endDate, id, count }: EventCardProps) {
+  const qc = useQueryClient()
   const navigate = useNavigate()
-  const [, setCurEvent] = useCurrentEventState()
-  const handleEdit = (e: React.MouseEvent<HTMLDivElement>) => {
+  const { setOpen, setEdit } = useEventModal()
+  const { setStartDate, setEndDate } = useDateRangeHook()
+  const [, setEvent] = useCurrentEventState()
+
+  const handleEdit = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
-    alert(`edit! ${title}`)
-  }
-  const handleDel = async (e: React.MouseEvent<HTMLDivElement>) => {
+    setOpen(true)
+    setEdit(true)
+    setEvent({ id, title })
+    setStartDate(new Date(startDate))
+    setEndDate(new Date(endDate))
+  }, [endDate, id, startDate, title])
+
+  const onDelete = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
-    try {
-      await deleteEvent(id)
-      refetch()
-    } catch (error) {
-      console.log(error)
-      //TODO(Open ERROR DIALOG)
-    }
+    deleteEvent(id)
+      .then(() => {
+        qc.invalidateQueries(['events', 1])
+      })
+      .catch((e) => {
+        const { message } = e.response?.data
+        toast.error(message, {
+          position: 'top-center',
+          pauseOnHover: false,
+          pauseOnFocusLoss: false,
+          autoClose: 3000
+        })
+      })
   }
+
   const handleNewMeet = async () => {
-    setCurEvent({
-      id,
-      title
-    })
+    setEvent({ id, title })
   }
 
   return <div css={wrapper}>
@@ -48,7 +63,7 @@ function EventCard({ title = '', startDate, endDate, id, count }: EventCardProps
         <span className='event-header-header'>{title}</span>
         <div className='event-header-tool'>
           <div className='tool-edit' onClick={handleEdit}><MdUpdate /></div>
-          <div className='tool-delete' onClick={handleDel}><MdDeleteForever /></div>
+          <div className='tool-delete' onClick={onDelete}><MdDeleteForever /></div>
         </div>
       </div>
       <div css={contentStyle}>
@@ -58,7 +73,7 @@ function EventCard({ title = '', startDate, endDate, id, count }: EventCardProps
       </div>
     </div>
     <div css={buttonStyle} onClick={handleNewMeet}>
-      <NavLink to={'/meeting/request'}>
+      <NavLink to={'/membership/meeting/request'}>
         <div className='text'>Propose a meeting</div>
       </NavLink>
     </div>
@@ -67,7 +82,7 @@ function EventCard({ title = '', startDate, endDate, id, count }: EventCardProps
 
 const wrapper = css`
   width: calc(33.3333% - 1rem);
-  margin: 0.5rem 0.5rem 2rem;
+  margin: 2rem 0.5rem 2rem;
   padding: 1.5rem;
   line-height: 1.2;
   border-radius: 0.8rem;
@@ -84,7 +99,7 @@ const wrapper = css`
 `
 
 const buttonStyle = css`
-  background-color: ${palette.cyan[500]};
+  background-color: ${palette.purple[500]};
   margin: 1.5rem -1.5rem -1.5rem -1.5rem;
   border-bottom-right-radius: 0.8rem;
   border-bottom-left-radius: 0.8rem;
@@ -99,7 +114,7 @@ const buttonStyle = css`
   }
 
   &:hover {
-    background-color: ${palette.cyan[400]};
+    background-color: ${palette.purple[400]};
   }
 
   a {
@@ -121,7 +136,7 @@ const eventHeaderStyle = css`
     visibility: hidden;
     display: flex;
     font-size: 1.6rem;
-    color: ${palette.cyan[500]};
+    color: ${palette.purple[500]};
     align-items: center;
 
     svg {
@@ -134,7 +149,7 @@ const eventHeaderStyle = css`
     }
 
     .tool-edit:hover {
-      color: ${palette.cyan[400]};
+      color: ${palette.purple[400]};
     }
   }
 `
@@ -151,4 +166,4 @@ const contentStyle = css`
     margin-bottom: 0.5rem
   }
 `
-export default memo(EventCard)
+export default EventCard

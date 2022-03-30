@@ -4,20 +4,25 @@ import palette from '../../lib/palette'
 import useToggle from '../../hooks/useToggle'
 import { MdArrowDropDown, MdOutlineEmail } from 'react-icons/md'
 import UserInfoPicker from './UserInfoPicker'
-import { BiUser } from 'react-icons/bi'
 import { Badge } from '@mui/material'
+import gravatar from 'gravatar'
+import useUserQuery from '../../hooks/query/useUserQuery'
 
 export type UserInfoProps = {}
 
 function UserInfo({}: UserInfoProps) {
   const [categoryPicker, toggleCategoryPicker] = useToggle(false)
 
+  const { data, isLoading } = useUserQuery()
+
+  if (!data) {
+    return null
+  }
+
   return <div css={wrapper}>
-    <div>
-      <Badge variant="dot" color='warning'> <MdOutlineEmail /> </Badge>
-    </div>
+    <Badge variant='dot' color='secondary'> <MdOutlineEmail /> </Badge>
     <div css={HomeTabStyle} onClick={toggleCategoryPicker}>
-      <BiUser />
+      <img src={gravatar.url(data?.email, { s: '28px', d: 'retro' })} alt={data?.username} />
       <MdArrowDropDown />
     </div>
 
@@ -50,7 +55,7 @@ const HomeTabStyle = css`
   padding-left: 0.8rem;
   padding-right: 0.8rem;
   font-weight: 600;
-  color: ${palette.blueGrey[600]};
+  color: ${palette.purple[600]};
   font-size: 1.4rem;
   margin-left: 1rem;
 

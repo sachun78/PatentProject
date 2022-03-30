@@ -1,15 +1,15 @@
 import { createTheme } from '@mui/material/styles';
-import { red,cyan } from '@mui/material/colors';
+import { red,purple } from '@mui/material/colors';
 
 // Create a theme instance.
 const theme = createTheme({
   palette: {
     primary: {
-      main: cyan['500'],
-      contrastText: "#fff"
+      main: purple['400'],
+      contrastText: "#f7f7f8",
     },
     secondary: {
-      main: '#19857b',
+      main: purple['600'],
     },
     error: {
       main: red.A400,

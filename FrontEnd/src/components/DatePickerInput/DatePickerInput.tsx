@@ -57,7 +57,6 @@ function DatePickerInput({ value, maximum, minimum, onChange }: DatePickerProps)
 const wrapper = css`
   position: relative;
   width: 100%;
-  max-width: 20rem;
 `
 
 const textStyle = css`

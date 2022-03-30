@@ -1,10 +1,12 @@
 import { css } from '@emotion/react'
 import palette from '../../lib/palette'
 import React, { memo, useRef } from 'react'
-import { useUserState } from '../../atoms/authState'
 import useAuth from '../../hooks/useAuth'
-import { useNavigate } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import useOnClickOutside from 'use-onclickoutside'
+import { useQueryClient } from 'react-query'
+import { User } from '../../lib/api/types'
+import gravatar from 'gravatar'
 
 export type UserInfoPickerProps = {
   visible: boolean;
@@ -12,9 +14,9 @@ export type UserInfoPickerProps = {
 }
 
 function UserInfoPicker({ visible, onClose }: UserInfoPickerProps) {
-  const [user] = useUserState()
+  const queryClient = useQueryClient()
+  const user = queryClient.getQueryData<User>('user')
   const username: string = user?.username || ''
-  const navigate = useNavigate()
   const { logout } = useAuth()
 
   const ref = useRef<HTMLDivElement>(null)
@@ -27,15 +29,21 @@ function UserInfoPicker({ visible, onClose }: UserInfoPickerProps) {
   }
   useOnClickOutside(ref, onOutsideClick)
 
+  if (!user) {
+    return null
+  }
+
   return <>
     {visible ? <div css={wrapper} ref={ref}>
       <div css={blockStyle}>
         <ul>
           <li onClick={() => {
             onClose()
-            navigate('/profile')
           }}>
-            {username}
+            <NavLink to={'/profile'}>
+              <img src={gravatar.url(user.email, { s: '20px', d: 'retro' })} alt={user.username} />
+              {username}
+            </NavLink>
           </li>
           <li onClick={() => logout()}>
             logout
@@ -57,7 +65,7 @@ const blockStyle = css`
   width: 16rem;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
   background: ${palette.grey[50]};
-  color: ${palette.blueGrey[600]};
+  color: ${palette.purple[600]};
   transform-origin: right top;
   transform: scale(1);
 
@@ -78,10 +86,6 @@ const blockStyle = css`
     font-weight: 600;
     font-size: 1.4rem;
     padding: 1.2rem 0.8rem;
-
-    &.active {
-      color: ${palette.blueGrey[900]};
-    }
   }
 
   li + li {

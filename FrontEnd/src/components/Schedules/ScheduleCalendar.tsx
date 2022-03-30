@@ -25,7 +25,7 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
           title: event.title,
           start: event.start_date.replace(/T.*$/, ''),
           end: event.end_date.replace(/T.*$/, ''),
-          backgroundColor: getRandomColor()
+          backgroundColor: palette.cyan[500]
         }
         retArr.push(eventObj)
       }
@@ -53,9 +53,9 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
     weekends={true}
     eventContent={renderEventContent}
     eventClick={handleEventClick}
-    eventColor={'#00bcd4'}
+    eventColor={'#4dd0e1'}
     eventMouseEnter={(info) => {
-      info.el.style.backgroundColor = '#00bcd4'
+      info.el.style.backgroundColor = '#4dd0e1'
     }}
     eventMouseLeave={(info) => {
       info.el.style.backgroundColor = info.event.backgroundColor
@@ -71,14 +71,8 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
 
 function renderEventContent(eventContent: EventContentArg) {
   return (
-    <>
-      <i css={eventStyle}>{eventContent.event.title}</i>
-    </>
+    <><i css={eventStyle}>{eventContent.event.title}</i></>
   )
-}
-
-function getRandomColor() {
-  return 'hsl(' + Math.random() * 360 + ', 100%, 40%)'
 }
 
 const eventStyle = css`
@@ -86,10 +80,6 @@ const eventStyle = css`
   line-height: 1.5;
   font-weight: 600;
   padding: 0.5rem;
-
-  &:hover {
-    color: ${palette.lightGreen[100]};
-  }
 `
 
 export default ScheduleCalendar
