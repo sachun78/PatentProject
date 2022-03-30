@@ -104,22 +104,28 @@ export const sendmail = async (emailInfo: any, mailType: EMAILTYPE) => {
   let serviceContent: SMTPTransport.Options = {
     service: 'gmail',
     port: 587,
-    host: 'smtp.gmlail.com',
-    secure: false,
-    requireTLS: true,
+    host: 'smtp.google.com',
+    secure: true,
     auth: {
-        user: envConfig.email.userid,
-        pass: envConfig.email.passwd
-    }
+      type: "OAuth2",
+      user: envConfig.email.userid,
+      clientId: envConfig.email.client_id,
+      clientSecret: envConfig.email.client_secret,
+      refreshToken: "1//04mtHrbnate7nCgYIARAAGAQSNwF-L9IrozvFYlUqmVMUpavEcsSF3Y4PNpgnMgPFBY2-cwyQZclbdnUrHBpMd71SJGnREQkwRZw",
+      accessToken: "ya29.A0ARrdaM_jNPbMfqK5P3qBc39uVufi4WeFzwhHmpWDr1tWpj-9a5imxc9Cw6Y9B-W_OlnjpFvCILDcok_-INNRSSdREoN3rlg9L0cjLTHQI5vqNzKmL0N5auOmbGG1w1MJ2LT1QaQIssTI7LRDh967IhR-_ovJ"
+    },
   }
   let transporter = nodemailer.createTransport(serviceContent);
 
-  let info = await transporter.sendMail({
+  let info = transporter.sendMail({
     from: envConfig.email.userid,
     to: user_email,
     ...emailTemplete
+  }).then((value) => {
+    console.error(`[sendMailProc] env(${value.envelope}) res(${value.response})`);
+  }).catch((e) => {
+    console.error("[sendMailProc][ERROR]", e.message);
   });
 
-  console.log(info);
   return info;
 }
