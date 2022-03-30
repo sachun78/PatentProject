@@ -23,7 +23,6 @@ const config = {
     url: required('HOST_URL', "http://localhost:3000")
   },
   db: {
-    host: required('DB_HOST', "mongodb://localhost:27017/wemet"),
     id: required('MONGODB_ID', "wemet"),
     pwd: required('MONGODB_PW', "WmL9XiWZ5WXQKHTi")
   },
