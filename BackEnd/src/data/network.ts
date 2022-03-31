@@ -10,7 +10,6 @@ export const networkSchema = new mongoose.Schema<INetwork>({
   networks: { type: [String] } //user's network array by ID
 })
 
-
 const network = mongoose.model('networks', networkSchema)
 
 export function create(bodyData: any) {

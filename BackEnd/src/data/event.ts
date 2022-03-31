@@ -15,7 +15,7 @@ export const eventSchema = new mongoose.Schema<IEvent>({
     title: {type: String, required: true},
     start_date: {type: Date, required: true},
     end_date: {type: Date, required: true},
-    meeting_list: {type: [String], default: []}
+    meeting_list: {type: [String], ref: 'meetings', default: []}
 }, 
 {
   timestamps: true,
@@ -42,7 +42,7 @@ export async function getAllByMonth(userId: string, month: string) {
 }
 
 export async function getById(eventId: string) {
-  return Event.findById(eventId);
+  return Event.findById(eventId).populate('meeting_list');
 }
 
 export async function findByData(eventData: IEvent) {
