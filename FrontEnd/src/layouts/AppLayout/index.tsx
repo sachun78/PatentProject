@@ -5,7 +5,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import EventDetail from 'pages/EventDetail'
 import Sponsor from 'components/Sponsor'
 import Sidebar from 'components/Sidebar'
-import { footerStyle, headerStyle, mainStyle, sidebarStyle } from './styles'
+import { footerStyle, headerStyle, loadStyle, mainStyle, sidebarStyle } from './styles'
 import useUserQuery from '../../hooks/query/useUserQuery'
 import loadable from '@loadable/component'
 import { CircularProgress } from '@mui/material'
@@ -31,7 +31,7 @@ export default function AppLayout({}: AppLayoutProps) {
         <VerticalBar />
       </AppLayout.Sidebar>
       <AppLayout.Main>
-        <div><CircularProgress /></div>
+        <div css={loadStyle}><CircularProgress /></div>
       </AppLayout.Main>
     </>)
   }

@@ -12,10 +12,10 @@ function Home({}: HomeProps) {
       <div css={postViewStyle}>
         <HomeTab />
         {/*  POST BLOCK */}
-        <Post />
-        <Post />
-        <Post />
-        <Post />
+        <Post id='1' />
+        <Post id='2' />
+        <Post id='3' />
+        <Post id='4' />
       </div>
       <InitialInputModal />
     </div>
