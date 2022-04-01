@@ -10,8 +10,8 @@ export type ProfileCardTextProps = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-function ProfileCardText({ editable, text, title, onChange }: ProfileCardTextProps) {
-  const [edit, setEdit] = React.useState(editable ?? false)
+function ProfileCardText({ editable = false, text, title, onChange }: ProfileCardTextProps) {
+  const [edit, setEdit] = React.useState(editable)
   const toggle = useCallback(() => setEdit(prevState => !prevState), [])
 
   return <div css={itemStyle}>

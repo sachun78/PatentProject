@@ -2,7 +2,6 @@ import { atom, selector, useRecoilState } from 'recoil'
 import produce from 'immer'
 
 export type EventState = {
-  title: string
   dateRange: {
     startDate: Date
     endDate: Date
@@ -12,7 +11,6 @@ export type EventState = {
 }
 
 const initialState: EventState = {
-  title: '',
   dateRange: {
     startDate: new Date(),
     endDate: new Date()
@@ -38,14 +36,6 @@ export function useCurrentEventState() {
   return useRecoilState(currentEventState)
 }
 
-export const eventTitleState = selector<EventState['title']>({
-  key: 'eventTitleState',
-  get: ({ get }) => {
-    const event = get(eventState)
-    return event.title
-  }
-})
-
 export const dateRangeState = selector<EventState['dateRange']>({
   key: 'dateRangeState',
   get: ({ get }) => {
@@ -66,7 +56,7 @@ export const eventEditState = selector<EventState['isEdit']>({
   key: 'eventEditState',
   get: ({ get }) => {
     const event = get(eventState)
-    return event.open
+    return event.isEdit
   }
 })
 
@@ -77,14 +67,6 @@ export const updateDateRange = (
 ) =>
   produce(state, (draft) => {
     draft.dateRange[key] = value
-  })
-
-export const updateEventTitle = (
-  state: EventState,
-  value: string
-) =>
-  produce(state, (draft) => {
-    draft.title = value
   })
 
 export const updateEventModalOpen = (

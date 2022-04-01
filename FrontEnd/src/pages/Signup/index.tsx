@@ -39,7 +39,7 @@ export default function Signup({}: RegisterProps) {
   const mutation = useMutation('signUp', () => (signup({ ...form, email: data?.email || '' })), {
     onSuccess: () => {
       // Global Toast 표시, 로그인 페이지로 이동
-      toast.success('register success')
+      toast.success('register success', { position: 'top-center' })
       navigate('/login')
     },
     onError(err: AxiosError) {
@@ -87,11 +87,10 @@ export default function Signup({}: RegisterProps) {
     return <Navigate replace to={'/'} />
   }
 
-  if (codeError) {
-    console.log(1)
-    // toast.error('code is not valid', { position: 'top-center' })
-    return <Navigate replace to={'/login'} />
-  }
+  // if (codeError) {
+  //   toast.error('code is not valid', { position: 'top-center' })
+  //   return <Navigate replace to={'/login'} />
+  // }
 
   if (!data) {
     toast.error('code is empty', { position: 'top-center' })

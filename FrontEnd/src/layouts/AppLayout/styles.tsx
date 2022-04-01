@@ -55,3 +55,10 @@ export const footerStyle = css`
   position: sticky;
   bottom: 0;
 `
+
+export const loadStyle = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10rem;
+`

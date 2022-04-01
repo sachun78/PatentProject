@@ -24,4 +24,4 @@ function EventDateSections({}: EventDateSectionsProps) {
   </>
 }
 
-export default memo(EventDateSections)
+export default EventDateSections

@@ -2,16 +2,16 @@ import { AutocompleteValue, Avatar, Box, Button, Modal, Typography } from '@mui/
 import IconControl from '../IconControl'
 import ProfileSection from '../ProfileMenu/ProfileSection'
 import ProfileCard from '../ProfileMenu/ProfileCard'
-import useInputs from '../../hooks/useInputs'
+import useInputs from 'hooks/useInputs'
 import React, { SyntheticEvent, useCallback, useEffect, useState } from 'react'
 import { CountryType } from '../CountrySelector/CountrySelector'
-import { patchProfile } from '../../lib/api/me/getProfile'
+import { patchProfile } from 'lib/api/me/getProfile'
 import { boxWrapper, formWrapper } from './styles'
-import useModal from '../../hooks/useModal'
-import useProfileQuery from '../../hooks/query/useProfileQuery'
+import useModal from 'hooks/useModal'
+import useProfileQuery from 'hooks/query/useProfileQuery'
 import { useMutation, useQueryClient } from 'react-query'
-import { errorMessageStyle } from '../../pages/Login/styles'
 import { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
 
 export type InitialInputModalProps = {}
 
@@ -48,13 +48,15 @@ function InitialInputModal({}: InitialInputModalProps) {
   // FIELD CONTROL
   const [fields, setFields] = useState<string[]>([])
   const [fieldText, setFieldText] = useState('')
+
   const onChangeFieldText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFieldText(e.target.value)
   }
-  const onFieldRemove = useCallback((e: React.MouseEvent<SVGSVGElement>) => {
-    const name = e.currentTarget.getAttribute('name')
-    setFields(prevFields => prevFields.filter(v => v !== name))
+
+  const onFieldRemove = useCallback((tag_name: string) => {
+    setFields(prevFields => prevFields.filter(v => v !== tag_name))
   }, [])
+
   const onFieldAdd = useCallback(() => {
     if (!fieldText && !fieldText.trim()) return
     const result = fields.find((value) => value === fieldText)
@@ -88,18 +90,25 @@ function InitialInputModal({}: InitialInputModalProps) {
     }
   }, [data?.company])
 
-  return <Modal
-    open={open}
-    onClose={handleClose}
-    disableEscapeKeyDown
-    disableEnforceFocus
-  >
+  useEffect(() => {
+    if (error === '') return
+    toast.error(error, {
+      position: 'bottom-center',
+      pauseOnHover: false,
+      pauseOnFocusLoss: false,
+      autoClose: 3000
+    })
+    setError('')
+  }, [error])
+
+  return <Modal open={open} onClose={handleClose}
+                disableEscapeKeyDown disableEnforceFocus>
     <Box css={boxWrapper}>
       <Avatar sx={{ m: 2, bgcolor: 'secondary.main' }}>
         <IconControl name={'edit'} />
       </Avatar>
       <Typography component='h1' variant='h3'>
-        Welcome Your First Connetion
+        Welcome Your First Login
       </Typography>
       <form css={formWrapper} onSubmit={handleSubmit}>
         <ProfileSection title='Belonging' description={'This information also change on Profile page.'}>
@@ -107,12 +116,10 @@ function InitialInputModal({}: InitialInputModalProps) {
           <ProfileCard.Text title='department' text={department} editable onChange={onChange} />
           <ProfileCard.Text title='position' text={position} editable onChange={onChange} />
           <ProfileCard.Field title='field' text={fieldText} onChange={onChangeFieldText}
-                             onAdd={onFieldAdd} fields={fields} onRemove={() => {
-          }} editable />
+                             onAdd={onFieldAdd} fields={fields} onRemove={onFieldRemove} editable />
           <ProfileCard.Country title='country' onChange={handleCountry}
                                country={country} editable />
         </ProfileSection>
-        {error && <span css={errorMessageStyle}>{error}</span>}
         <Button className={'bot-button'} type='submit' fullWidth color='primary' variant='contained'>OK</Button>
       </form>
     </Box>
