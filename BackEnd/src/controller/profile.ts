@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import * as ProfileRepo from 'data/profile';
-import { updateUser } from 'data/auth';
+import * as userRepo from 'data/auth';
 import multer from 'multer';
 
 interface IRequest extends Request {
@@ -20,13 +20,13 @@ const upload = multer({
   storage: storage
 }).single('profile_img')
 
-export function profileImage(req: IRequest, res: Response) {
+export function profileImage(req: IRequest, res: Response, next: NextFunction) {
   upload(req, res, (err) => {
     if (err) {
       console.error(err)
       return res.status(409).json({ success: false, error: 'UPLOAD ERROR' })
     }
-    updateUser(req.userId, { photo_path: req.file?.filename });
+    userRepo.updateUser(req.userId, { photo_path: req.file?.filename });
     return res.json({
       success: true,
       fileName: req.file?.filename
@@ -37,19 +37,37 @@ export function profileImage(req: IRequest, res: Response) {
 //////////////////////////////////////////////////////////////////////////
 ////////////////////////////   Profile  //////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-export async function createProfile(req: IRequest, res: Response) {
-  const profile = await ProfileRepo.createProfile(req.body, req.userId);
-  res.status(201).json(profile);
+export async function createProfile(req: IRequest, res: Response, next: NextFunction) {
+  try {
+    const profile = await ProfileRepo.createProfile(req.body, req.userId);
+    return res.status(201).json(profile);
+  }
+  catch(e) {
+    console.error("[Profile][createProfile] ", e);
+    next(e);
+  }
 }
 
-export async function updateProfile(req: IRequest, res: Response) {
+export async function updateProfile(req: IRequest, res: Response, next: NextFunction) {
   const userId = req.userId;
   const body = req.body;
-  const updated = await ProfileRepo.updateProfile(userId, body);
-  res.status(200).json(updated);
+  try{
+    const updated = await ProfileRepo.updateProfile(userId, body);
+    res.status(200).json(updated);
+  }
+  catch(e) {
+    console.error("[Profile][updateProfile] ", e);
+    next(e);
+  }
 }
 
-export async function getProfile(req: IRequest, res: Response) {
-  const retProfile = await ProfileRepo.getProfile(req.userId);
-  res.status(200).json(retProfile);
+export async function getProfile(req: IRequest, res: Response, next: NextFunction) {
+  try{
+    const retProfile = await ProfileRepo.getProfile(req.userId);
+    res.status(200).json(retProfile);
+  }
+  catch(e) {
+    console.error("[Profile][getProfile] ", e);
+    next(e);
+  }
 }
