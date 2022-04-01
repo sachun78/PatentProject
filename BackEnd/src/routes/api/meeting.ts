@@ -9,6 +9,7 @@ route.get('/:id', isAuth, meetingCtrl.getMeeting);
 route.get('/show/:code', meetingCtrl.getMeetingByCode);
 route.get('/cancel/:code', meetingCtrl.cancelMeeting);
 route.get('/confirm/:code', meetingCtrl.confirmMeeting);
+route.get('/replan/:code', meetingCtrl.replanlMeeting);
 route.post('/send-invitemail', isAuth, meetingCtrl.sendInvitMail);
 
 export default route

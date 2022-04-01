@@ -14,10 +14,10 @@ const enum MEETING_STATUS {
   NONE = 'none',
   CONFIRM = 'confirm',
   CANCEL = 'cancel',
-  RESCHEDULE = 'reschedule'
+  REPLAN = 'replan'
 }
 
-const checkInviteCode = async (code: string, _status: MEETING_STATUS): Promise<any> => {
+const checkInviteCode = async (code: string, data: any): Promise<any> => {
   const meeting = await meetingRepo.findByCode(code);
   if (!meeting) {
     return new Promise((resolve, reject) => {
@@ -25,7 +25,7 @@ const checkInviteCode = async (code: string, _status: MEETING_STATUS): Promise<a
     });
   }
 
-  const meetingUpdate = await meetingRepo.updateMeeting(meeting.id, {status: _status});
+  const meetingUpdate = await meetingRepo.updateMeeting(meeting.id, data);
   if (!meetingUpdate) {
     return new Promise((resolve, reject) => {
       reject(new Error('message: Failed meeting info update'));
@@ -73,7 +73,8 @@ export async function confirmMeeting(req: IRequest, res: Response) {
   const code = req.params.code;
 
   try {
-    const check = await checkInviteCode(code, MEETING_STATUS.CONFIRM);
+    const data = {status: MEETING_STATUS.CONFIRM};
+    const check = await checkInviteCode(code, data);
     res.status(200).json({ message: `Success update status[${check.status}]`});
   }
   catch(e) {
@@ -86,7 +87,23 @@ export async function cancelMeeting(req: IRequest, res: Response) {
   const code = req.params.code;
 
   try {
-    const check = await checkInviteCode(code, MEETING_STATUS.CANCEL);
+    const data = {status: MEETING_STATUS.CANCEL};
+    const check = await checkInviteCode(code, data);
+    res.status(200).json({ message: `Success update status[${check.status}]`});
+  }
+  catch(e) {
+    console.error(e);
+    return res.status(403).json({ message: 'Failed meeting info update'});
+  }
+}
+
+export async function replanlMeeting(req: IRequest, res: Response) {
+  const code = req.params.code;
+
+  try {
+    const data = {status: MEETING_STATUS.REPLAN, ...req.body};
+    console.log(data);
+    const check = await checkInviteCode(code, data);
     res.status(200).json({ message: `Success update status[${check.status}]`});
   }
   catch(e) {

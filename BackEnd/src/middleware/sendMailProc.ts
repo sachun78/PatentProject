@@ -31,7 +31,8 @@ const createAuthEmail = (code: string) => {
 
 const createInviteEmail = (data: any) => {
   const keywords = {
-    type: 'invitation-letter',
+    type: 'invitation',
+    subType: ['detail', 'replan'],
     text: 'invitation letter'
   };
   const subject = `Wemet [${keywords.text}] - ${data.ownerName}`;
@@ -74,9 +75,14 @@ const createInviteEmail = (data: any) => {
           <b style="color: black">comment:</b> ${data.comment}
         </div>
         <a
-          href="http://localhost:3000/${keywords.type}?code=${data.code}"
+          href="http://localhost:3000/${keywords.type}/${keywords.subType[0]}?code=${data.code}"
           style="outline: none; border: none; background: #845ef7; color: white; padding-top: 0.5rem; padding-bottom: 0.5rem; font-size: 1rem; font-weight: 600; display: inline-block; background: #845ef7; padding-left: 1rem; padding-right: 1rem; align-items: center; margin-top: 1rem; border-radius: 4px; text-decoration: none;"
           >View meeting detail</a
+        >
+        <a
+          href="http://localhost:3000/${keywords.type}/${keywords.subType[1]}?code=${data.code}"
+          style="outline: none; border: none; background: #845ef7; color: white; padding-top: 0.5rem; padding-bottom: 0.5rem; font-size: 1rem; font-weight: 600; display: inline-block; background: #845ef7; padding-left: 1rem; padding-right: 1rem; align-items: center; margin-top: 1rem; border-radius: 4px; text-decoration: none;"
+          >Change meeting schedule</a
         >
       </div>
     </div>
