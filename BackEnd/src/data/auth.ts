@@ -9,20 +9,16 @@ interface IUser {
   password: string;
   photo_path?: string;
   certified: boolean;
+  profile: string;
 }
 
 export const userSchema = new mongoose.Schema<IUser>({
-  username: {
-    type: String, required: true
-  },
-  email: {
-    type: String, required: true, unique: true
-  },
-  password: {
-    type: String, required: true
-  },
+  username: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
   photo_path: { type: String, default: '' },    // 프로필 사진 위치
   certified: { type: Boolean, default: false },
+  profile: { type: String, default: '', ref: 'Profile'}
 }, 
 { 
   timestamps: true,
