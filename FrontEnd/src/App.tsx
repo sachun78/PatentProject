@@ -30,7 +30,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/email/check' element={<MailCheck />} />
-        <Route path='/invitation-letter' element={<MeetingBook />} />
+        <Route path='/invitation/*' element={<MeetingBook />} />
         <Route path='/*' element={<AppLayout />} />
       </Routes>
       <Global styles={globalStyle} />
@@ -54,7 +54,6 @@ const globalStyle = css`
 
   html {
     box-sizing: border-box;
-    font-size: 62.5%;
 
     * {
       box-sizing: inherit;

@@ -45,7 +45,7 @@ function Login({}: LoginProps) {
 
   return (
     <div css={pageStyle}>
-      <Auth width={622} height={480}>
+      <Auth width={800} height={600}>
         <div css={loginFormStyle}>
           <h2 className='title'>Sign In</h2>
           <section>

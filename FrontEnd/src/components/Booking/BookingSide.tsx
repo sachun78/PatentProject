@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 import { BsCalendarDate, BsClock } from 'react-icons/bs'
 import { MdEmail, MdOutlineLocationOn, MdPerson, MdSimCard } from 'react-icons/md'
-import { IMeeting } from '../../lib/api/types'
+import { IMeeting } from 'lib/api/types'
 
 export type BookingSideProps = {
   meeting: IMeeting
@@ -36,7 +36,7 @@ const sideStyle = css`
   display: flex;
   flex-direction: column;
   width: 50%;
-  min-width: 300px;
+  min-width: 600px;
   border-right: 1px solid rgba(26, 26, 26, 0.1);
   transition: all 0.22s ease-out;
   padding-top: 2.5rem;
@@ -48,22 +48,22 @@ const nameStyle = css`
   color: rgba(26, 26, 26, 0.6);
   font-weight: bold;
   font-size: 1.6rem;
-  line-height: 24px;
+  line-height: 1.4;
 `
 
 const eventNameStyle = css`
   margin: 0;
   font-weight: bold;
   font-size: 2.8rem;
-  line-height: 32px;
+  line-height: 1.4;
 `
 const sectionStyle = css`
-  margin-bottom: 2.4rem;
+  margin-bottom: 1.5rem;
 
   > div {
     display: flex;
 
-    margin-bottom: 1.2rem;
+    margin-bottom: 0.8rem;
     align-items: center;
 
     h3 {

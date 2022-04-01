@@ -1,12 +1,19 @@
 import { css } from '@emotion/react'
-import Booking from '../../components/Booking'
+import { Route, Routes } from 'react-router-dom'
+import loadable from '@loadable/component'
 
 export type MeetingConfirmProps = {}
+
+const Booking = loadable(() => import('components/Booking'))
+const Reschedule = loadable(() => import('components/Reschedule'))
 
 function MeetingBook({}: MeetingConfirmProps) {
   return <div css={pageStyle}>
     <div css={wrapper}>
-      <Booking />
+      <Routes>
+        <Route path='/detail' element={<Booking />} />
+        <Route path='/replan' element={<Reschedule />} />
+      </Routes>
     </div>
   </div>
 }

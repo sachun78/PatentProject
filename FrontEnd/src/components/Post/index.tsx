@@ -45,7 +45,7 @@ const bodyStlye = css`
   margin-bottom: 5px;
   font-size: 1.5rem;
   font-weight: 400;
-  line-height: 20px;
+  line-height: 32.5px;
 `
 
 export default Post

@@ -25,11 +25,24 @@ function Events({}: EventViewProps) {
     </div>
 
   if (data && data.length === 0) {
-    return <div css={noScheduleStyle}>
-      <IconControl name={'welcome'} />
-      <div>There's no event created.</div>
-      <div>Please make a new event.</div>
-    </div>
+    return <>
+      <div css={noScheduleStyle}>
+        <IconControl name={'welcome'} />
+        <div>There's no event created.</div>
+        <div>Please make a new event.</div>
+      </div>
+      <Fab sx={{ position: 'fixed', bottom: 60, right: 32 }}
+           color='primary'
+           onClick={() => {
+             setOpen(true)
+             setEdit(false)
+             setStartDate(new Date())
+             setEndDate(new Date())
+           }}>
+        <AddIcon />
+      </Fab>
+      <EventModal />
+    </>
   }
 
   return <>

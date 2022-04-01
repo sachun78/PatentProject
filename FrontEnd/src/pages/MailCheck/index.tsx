@@ -50,7 +50,7 @@ export default function MailCheck({}: RegisterProps) {
 
   return (
     <div css={wrapper}>
-      <Auth width={622} height={240}>
+      <Auth width={800} height={360}>
         <div css={signupFormStyle}>
           <div css={undoStyle}>
             <NavLink to={'/login'} className='link'> <span>Back</span> </NavLink>

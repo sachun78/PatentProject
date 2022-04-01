@@ -5,29 +5,38 @@ import { useMutation, useQueryClient } from 'react-query'
 import { User } from '../../lib/api/types'
 import useProfileQuery from '../../hooks/query/useProfileQuery'
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react'
-import { AutocompleteValue } from '@mui/material'
+import { AutocompleteValue, Button } from '@mui/material'
 import { CountryType } from '../CountrySelector/CountrySelector'
 import { css } from '@emotion/react'
 import _ from 'lodash'
 import { patchProfile } from '../../lib/api/me/getProfile'
+import HistoryDrawer from '../HistoryDrawer'
 
 export type ProfileMenuProps = {}
 
 function ProfileMenu({}: ProfileMenuProps) {
   const queryClient = useQueryClient()
   const user = queryClient.getQueryData<User>('user')
-  const { data, isLoading, refetch } = useProfileQuery()
-  const [fields, setFields] = useState<string[]>(data?.field ?? [])
-  const [fieldText, setFieldText] = useState('')
 
-  const company_default = useMemo(() => data?.company, [data])
-  const department_default = useMemo(() => data?.department, [data])
-  const position_default = useMemo(() => data?.position, [data])
+  const { data, isLoading } = useProfileQuery()
 
   const [company, setCompany] = useState(data?.company)
   const [department, setDepartment] = useState(data?.department)
   const [position, setPosition] = useState(data?.position)
   const [country, setCountry] = useState(data?.country ?? 'KR')
+
+  const [fields, setFields] = useState<string[]>(data?.field ?? [])
+  const [fieldText, setFieldText] = useState('')
+
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false)
+
+  const company_default = useMemo(() => data?.company, [data])
+  const department_default = useMemo(() => data?.department, [data])
+  const position_default = useMemo(() => data?.position, [data])
+
+  const toggleHistoryDrawer = useCallback(() => {
+    setIsHistoryOpen(prev => !prev)
+  }, [])
 
   const difference = useMemo(() => _.difference(data?.field, fields), [data, fields])
   const isSaveActive = company_default !== company || department_default !== department || position_default !== position || difference.length > 0 || country !== data?.country
@@ -37,7 +46,7 @@ function ProfileMenu({}: ProfileMenuProps) {
 
   const saveMutation = useMutation(patchProfile, {
     onSuccess: () => {
-      refetch()
+      queryClient.invalidateQueries('profile')
     },
     onError: (e) => {
       console.error(e)
@@ -111,6 +120,8 @@ function ProfileMenu({}: ProfileMenuProps) {
     <InfoViewSection title='Additional'>
       <InfoViewCard.Item title='Prev Career' type={'career'} />
     </InfoViewSection>
+    <Button variant='outlined' onClick={toggleHistoryDrawer}> Open History</Button>
+    <HistoryDrawer open={isHistoryOpen} onClose={toggleHistoryDrawer} />
   </div>
 }
 

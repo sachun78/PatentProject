@@ -1,17 +1,16 @@
-import { LocalizationProvider, StaticTimePicker } from '@mui/lab'
+import { LocalizationProvider } from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import InputBase from '../InputBase'
 import { css } from '@emotion/react'
 import { SetStateAction, useRef, useState } from 'react'
 import useOnClickOutside from 'use-onclickoutside'
-import { TextField } from '@mui/material'
 import LocationMap from './LocationMap'
 
 function LocationInput() {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
-  const [address, setAddress] = useState("156 E Cedar 54, Livingston, NJ 07039 미국")
+  const [address, setAddress] = useState('156 E Cedar 54, Livingston, NJ 07039 미국')
 
   const getLocation = (newLoc: SetStateAction<string>) => {
     setAddress(newLoc)
@@ -42,11 +41,12 @@ function LocationInput() {
       {address}
     </div>
 
-    {open && <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <div css={calendarStyle}>
-        <LocationMap location={address} getLocation={getLocation} />
-      </div>
-    </LocalizationProvider>}
+    {open &&
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <div css={calendarStyle}>
+          <LocationMap location={address} getLocation={getLocation} />
+        </div>
+      </LocalizationProvider>}
   </InputBase>
 }
 
@@ -63,7 +63,7 @@ const textStyle = css`
   justify-content: center;
   cursor: pointer;
   padding-left: 1.6rem;
-  padding-right: 1.6rem;  
+  padding-right: 1.6rem;
 
   &:focus-visible {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);

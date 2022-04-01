@@ -1,6 +1,5 @@
 import { css } from '@emotion/react'
 import InitialInputModal from '../../components/InitialInputModal'
-import HomeTab from '../../components/HomeTab'
 import Post from '../../components/Post/'
 import media from '../../lib/styles/media'
 
@@ -10,7 +9,6 @@ function Home({}: HomeProps) {
   return (
     <div css={baseStyle}>
       <div css={postViewStyle}>
-        <HomeTab />
         {/*  POST BLOCK */}
         <Post id='1' />
         <Post id='2' />
