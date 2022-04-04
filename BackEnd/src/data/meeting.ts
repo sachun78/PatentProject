@@ -52,7 +52,7 @@ export async function getAll(userId: string, data?: any) {
 }
 
 export async function getById(meetingId: string) {
-  return meeting.findById(meetingId).populate('mhistory');
+  return meeting.findById(meetingId).populate('history');
 }
 
 export async function getByCode(meetingCode: string) {
