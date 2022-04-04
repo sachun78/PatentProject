@@ -2,9 +2,9 @@ import React, { useMemo } from 'react'
 import FullCalendar, { EventClickArg, EventContentArg } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import useEventQuery from '../../hooks/query/useEventQuery'
+import useEventQuery from 'hooks/query/useEventQuery'
 import { css } from '@emotion/react'
-import palette from '../../lib/palette'
+import palette from 'lib/palette'
 import { useNavigate } from 'react-router-dom'
 import listPlugin from '@fullcalendar/list'
 
@@ -22,7 +22,7 @@ function EventCalendar({}: ScheduleCalendarProps) {
           title: event.title,
           start: event.start_date.replace(/T.*$/, ''),
           end: event.end_date.replace(/T.*$/, ''),
-          backgroundColor: palette.cyan[500]
+          backgroundColor: palette.purple[500]
         }
         retArr.push(eventObj)
       }
@@ -50,13 +50,6 @@ function EventCalendar({}: ScheduleCalendarProps) {
     showNonCurrentDates={false}
     eventContent={renderEventContent}
     eventClick={handleEventClick}
-    // eventColor={'#4dd0e1'}
-    // eventMouseEnter={(info) => {
-    //   info.el.style.backgroundColor = '#4dd0e1'
-    // }}
-    // eventMouseLeave={(info) => {
-    //   info.el.style.backgroundColor = info.event.backgroundColor
-    // }}
     dayMaxEventRows={true}
     fixedWeekCount={false}
     views={{ dayGridMonth: { dayMaxEventRows: true } }}

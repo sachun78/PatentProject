@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import EventModal from './EventModal'
 import EventCard from './EventCard'
 import useEventQuery from 'hooks/query/useEventQuery'
@@ -9,6 +9,8 @@ import { useEventModal } from 'hooks/useEventTitle'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import EventCalendar from './EventCalendar'
 import { noScheduleStyle, wrapper } from './styles'
+import { eventSwitchState } from '../../atoms/memberShipTabState'
+import { useRecoilState } from 'recoil'
 
 type EventViewProps = {}
 
@@ -16,7 +18,7 @@ function Events({}: EventViewProps) {
   const { data, isLoading } = useEventQuery(1)
   const { setOpen, setEdit } = useEventModal()
   const { setStartDate, setEndDate } = useDateRangeHook()
-  const [checked, setChecked] = useState(false)
+  const [checked, setChecked] = useRecoilState(eventSwitchState)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked)

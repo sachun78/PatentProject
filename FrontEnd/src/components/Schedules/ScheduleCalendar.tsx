@@ -1,21 +1,23 @@
-import FullCalendar from '@fullcalendar/react'
+import FullCalendar, { EventClickArg } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
 import useMeetingQuery from 'hooks/query/useMeetingQuery'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { calendarStyle } from './styles'
+import { useNavigate } from 'react-router-dom'
 
 export type ScheduleCalendarProps = {}
 
 function ScheduleCalendar({}: ScheduleCalendarProps) {
   const { data } = useMeetingQuery(1, { enabled: false })
+  const navigate = useNavigate()
+
   const scheduleEvents = useMemo(() => {
     const ret = []
     if (data) {
       for (const meeting of data) {
-        console.log(meeting)
         const eventObj = {
           id: meeting.id,
           title: meeting.title,
@@ -28,6 +30,10 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
     }
   }, [data])
 
+  const onScheduleClick = useCallback((clickInfo: EventClickArg) => {
+    navigate('/membership/meeting/' + clickInfo.event.id)
+  }, [navigate])
+
   return <div css={calendarStyle}><FullCalendar
     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
     headerToolbar={{
@@ -37,6 +43,7 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
     initialEvents={scheduleEvents}
     showNonCurrentDates={false}
     fixedWeekCount={false}
+    eventClick={onScheduleClick}
   />
   </div>
 }

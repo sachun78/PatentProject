@@ -5,12 +5,14 @@ import useMeetingQuery from '../../hooks/query/useMeetingQuery'
 import { noScheduleStyle, tableStyle } from './styles'
 import { FormControlLabel, Switch } from '@mui/material'
 import ScheduleCalendar from './ScheduleCalendar'
+import { meetingSwitchState } from '../../atoms/memberShipTabState'
+import { useRecoilState } from 'recoil'
 
 type ScheduleViewProps = {}
 
 function Schedules({}: ScheduleViewProps) {
   const { data, isLoading } = useMeetingQuery(1)
-  const [checked, setChecked] = useState(false)
+  const [checked, setChecked] = useRecoilState(meetingSwitchState)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked)

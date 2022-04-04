@@ -23,6 +23,12 @@ function Sidebar({}: SidebarProps) {
 
   return <div css={sidebarStyle}>
     <Logo />
+    <ul css={menuStyle}>
+      <SidebarItem icon='home' text='Home' to='' />
+      <SidebarItem icon='schedule' text='MemberShip' to='/membership' />
+      <SidebarItem icon='network' text='Network' to='/network' />
+      <SidebarItem icon='links' text='Conference' to='/conference' />
+    </ul>
     <List sx={{marginTop: 8}}>
       <ListItem disablePadding>
         <ListItemButton onClick={() => navigate('/profile')}>
@@ -38,12 +44,6 @@ function Sidebar({}: SidebarProps) {
         </ListItemButton>
       </ListItem>
     </List>
-    <ul css={menuStyle}>
-      <SidebarItem icon='home' text='Home' to='' />
-      <SidebarItem icon='schedule' text='MemberShip' to='/membership' />
-      <SidebarItem icon='network' text='Network' to='/network' />
-      <SidebarItem icon='links' text='Conference' to='/conference' />
-    </ul>
   </div>
 }
 
@@ -71,7 +71,7 @@ const menuStyle = css`
   list-style: none;
   padding: 0;
   margin-top: 5.625rem;
-  margin-left: -1.6rem;
+  margin-left: -1rem;
   flex: 1;
 `
 

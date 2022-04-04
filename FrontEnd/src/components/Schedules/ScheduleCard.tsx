@@ -15,7 +15,7 @@ export type ScheduleCardProps = {
 }
 
 function ScheduleCard({ from, to, comment, place, time, date, state, id, title }: ScheduleCardProps) {
-  return <NavLink css={wrapper} to={'/membership/meeting/' + id}>
+  return <NavLink css={wrapper(state)} to={'/membership/meeting/' + id}>
     <div css={headerStyle}>
       <h3>{title}</h3>
       <p className='from'>from<span> {from} </span></p>
@@ -37,9 +37,12 @@ function ScheduleCard({ from, to, comment, place, time, date, state, id, title }
   </NavLink>
 }
 
-const wrapper = css`
+const wrapper = (state: string) => css`
   height: 20rem;
   background: #fff;
+  ${state === 'replan' && css`
+    background: ${palette.lightGreen[200]};
+  `}
   width: calc(33.3333% - 3rem);
   min-width: 20rem;
   margin: 1rem;
@@ -47,28 +50,27 @@ const wrapper = css`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  justify-content: space-around;
   border-radius: 0.4rem;
   box-shadow: rgb(0 0 0 / 4%) 0 4px 16px 0;
   overflow: hidden;
   transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
-  color: black;
+  color: ${palette.purple[900]};
   text-decoration: none;
 
   &:hover {
     transform: translate(5px, -10px);
-    background: ${palette.grey[100]};
+    border: 1px solid ${palette.grey[300]};
     cursor: pointer;
   }
 
   h3 {
-    font-size: 1.5rem;
-    line-height: 1.3;
+    font-size: 1.3rem;
+    line-height: 1.1;
   }
 `
 const commentStyle = css`
   height: 100%;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   font-size: 1.4rem;
   line-height: 1.2;
   word-break: break-all
@@ -86,8 +88,8 @@ const headerStyle = css`
 
   .from, .to {
     color: ${palette.grey[500]};
-    margin-left: 0.5rem;
     align-self: flex-end;
+    margin: 0.2rem;
   }
 
   span {

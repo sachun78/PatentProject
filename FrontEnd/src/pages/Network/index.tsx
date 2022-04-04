@@ -18,7 +18,6 @@ function Network({}: NetworkProps) {
 const wrapper = css`
   display: flex;
   flex-direction: column;
-  padding: 3rem;
 `
 
 export default Network

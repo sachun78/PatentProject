@@ -5,16 +5,17 @@ import React, { useCallback, useState } from 'react'
 import { inputStyle, privacyStyle, signupFormStyle, undoStyle } from './styles'
 import Auth from 'layouts/Auth'
 import useUserQuery from 'hooks/query/useUserQuery'
-import { Button, CircularProgress, InputAdornment, TextField } from '@mui/material'
+import { Button, CircularProgress, FormHelperText, InputAdornment, TextField } from '@mui/material'
 import useInputs from 'hooks/useInputs'
 import Joi from 'joi'
-import { errorMessageStyle } from 'pages/Login/styles'
 import { useMutation, useQuery } from 'react-query'
-import { signup } from '../../lib/api/auth/signup'
+import { signup } from 'lib/api/auth/signup'
 import { AxiosError } from 'axios'
 import { MdLock } from 'react-icons/md'
-import { checkCode } from '../../lib/api/auth/sendmail'
+import { checkCode } from 'lib/api/auth/sendmail'
 import { toast } from 'react-toastify'
+import { replanState } from 'atoms/replanState'
+import { useRecoilState } from 'recoil'
 
 type RegisterProps = {}
 
@@ -26,6 +27,8 @@ export default function Signup({}: RegisterProps) {
     password: '',
     password_confirm: ''
   })
+  const [replan] = useRecoilState(replanState)
+
   const code = useSearchParams()[0].get('code')
   const navigate = useNavigate()
   const { data, error: codeError, isLoading: isLoadingCode } = useQuery('authCode', () => checkCode(code ?? ''), {
@@ -40,10 +43,13 @@ export default function Signup({}: RegisterProps) {
     onSuccess: () => {
       // Global Toast 표시, 로그인 페이지로 이동
       toast.success('register success', { position: 'top-center' })
-      navigate('/login')
+      if (replan?.code) {
+        navigate('/invitation/replan?code=' + replan.code)
+      } else
+        navigate('/login')
     },
     onError(err: AxiosError) {
-      setError(err.message)
+      setError(err.response?.data.message)
     }
   })
 
@@ -69,8 +75,7 @@ export default function Signup({}: RegisterProps) {
       password_confirm: Joi.ref('password')
     })
     schema.validateAsync(form)
-      .then(res => {
-        console.log(res)
+      .then(() => {
         //mutate with register
         mutation.mutate()
       })
@@ -84,7 +89,10 @@ export default function Signup({}: RegisterProps) {
   }
 
   if (userData) {
-    return <Navigate replace to={'/'} />
+    if (replan?.code) {
+      return <Navigate replace to={'/invitation/replan?code=' + replan.code} />
+    } else
+      return <Navigate replace to={'/'} />
   }
 
   if (codeError) {
@@ -99,7 +107,7 @@ export default function Signup({}: RegisterProps) {
   }
   return (
     <div css={wrapper}>
-      <Auth width={622} height={500}>
+      <Auth width={622} height={670}>
         <div css={signupFormStyle}>
           <div css={undoStyle}>
             <NavLink to={'/login'} className='link'>
@@ -126,11 +134,10 @@ export default function Signup({}: RegisterProps) {
                          name='password_confirm' autoComplete='password-confirm'
                          value={form.password_confirm} onChange={onChange} css={inputStyle}
                          InputProps={{ style: { fontSize: 12 } }} />
-              <div css={privacyStyle}><p>By clicking Sign Up, you are indicating that you have read and acknowledge
-                the
+              <div css={privacyStyle}><p>By clicking Sign Up, you are indicating that you have read and acknowledge the
                 <NavLink to={'/login'}> Terms of Service</NavLink> and <NavLink to={'/'}>Privacy Notice</NavLink>.</p>
               </div>
-              {error && <span css={errorMessageStyle}>{error}</span>}
+              {error && <FormHelperText error id='helper-text-signup-error'>{error}</FormHelperText>}
               <div className='button-div'>
                 <Button variant='contained' disabled={mutation.isLoading} type='submit' size='large'>Sign Up</Button>
               </div>

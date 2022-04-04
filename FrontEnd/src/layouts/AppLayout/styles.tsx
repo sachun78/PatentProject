@@ -7,7 +7,10 @@ export const mainStyle = css`
   min-height: 100%;
   background: #f7f7f8;
   position: relative;
-
+  padding-left: 2rem;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  
   ${media.xlarge} {
     margin-left: 8rem;
   }

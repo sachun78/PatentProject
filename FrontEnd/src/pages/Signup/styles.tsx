@@ -77,15 +77,14 @@ export const undoStyle = css`
 `
 
 export const privacyStyle = css`
-  margin: 0;
-  margin-bottom: 2rem;
+  margin: 0 0 2rem;
   text-align: center;
   padding: 0;
   vertical-align: baseline;
 
   p {
     color: #53535f;
-    font-size: 1.2rem;
+    font-size: 0.75rem;
     line-height: 1.5;
   }
 

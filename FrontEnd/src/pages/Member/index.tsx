@@ -2,7 +2,9 @@ import { css } from '@emotion/react'
 import { Box, Tab, Tabs } from '@mui/material'
 import Events from 'components/Events/'
 import Schedules from 'components/Schedules'
-import React, { useState } from 'react'
+import React from 'react'
+import { useRecoilState } from 'recoil'
+import { memberShipTabState } from 'atoms/memberShipTabState'
 
 type MemberShipProps = {}
 
@@ -25,8 +27,8 @@ function TabPanel({ children, value, index, ...other }: TabPanelProps) {
     <div
       role='tabpanel'
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={`member-tabpanel-${index}`}
+      aria-labelledby={`member-tab-${index}`}
       {...other}
     >
       {value === index && (
@@ -39,7 +41,7 @@ function TabPanel({ children, value, index, ...other }: TabPanelProps) {
 }
 
 function Member({}: MemberShipProps) {
-  const [value, setValue] = useState(0)
+  const [value, setValue] = useRecoilState(memberShipTabState)
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)

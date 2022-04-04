@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import useUserQuery from 'hooks/query/useUserQuery'
 import { Button, Modal, Paper, Stack, TextField, Typography } from '@mui/material'
 import { inputStyle } from 'pages/Login/styles'
@@ -75,6 +75,10 @@ function MeetingReschedule({}: MeetingRescheduleProps) {
       code: code ?? ''
     })
   }, [code, navi, setReplan])
+
+  useEffect(() => {
+    setReplan(null)
+  }, [])
 
   if (!userData) {
     return <div>

@@ -26,10 +26,8 @@ const baseStyle = css`
 
 const postViewStyle = css`
   min-height: calc(100vh - 7rem);
-  min-width: 68rem;
+  max-width: 68rem;
   height: 100%;
-  margin-left: 1.5rem;
-  padding-top: 3rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
