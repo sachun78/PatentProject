@@ -37,8 +37,16 @@ const checkInviteCode = async (code: string, data: any): Promise<any> => {
 
 export async function getMeetings(req: IRequest, res: Response) {
   const user_id = req.userId;
+  const bodyData: Object = req.body;
 
-  const data = await meetingRepo.getAll(user_id);
+  let data;
+  if (bodyData.constructor === Object && Object.keys(bodyData).length === 0) {
+    data = await meetingRepo.getAll(user_id);
+  }
+  else {
+    data = await meetingRepo.getAll(user_id, bodyData);
+  }
+
   res.status(200).json(data);
 }
 
@@ -102,7 +110,6 @@ export async function replanlMeeting(req: IRequest, res: Response) {
 
   try {
     const data = {status: MEETING_STATUS.REPLAN, ...req.body};
-    console.log(data);
     const check = await checkInviteCode(code, data);
     res.status(200).json({ message: `Success update status[${check.status}]`});
   }
