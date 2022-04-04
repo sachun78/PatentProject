@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
-import { css } from '@emotion/react'
 import { MdCalendarToday } from 'react-icons/md'
 import { getEvent } from '../../lib/api/event/getEvent'
 import { useUserState } from '../../atoms/authState'
+import ScheduleCard from '../Schedules/ScheduleCard'
+import { css } from '@emotion/react'
 
 export type EventDetailLeftProps = {
   id: string
@@ -37,15 +38,19 @@ function EventDetailLeft({ id }: EventDetailLeftProps) {
       <span>End : <b>{event.end_date.replace(/T.*$/, '')}</b></span>
     </section>
     {event.meeting_list.length > 0 && <>
-      <h3 css={titleNameStyle}>Related Meet [{event.meeting_list.length}]</h3>
-      <ul>
-        {event.meeting_list.map((meeting: any) => {
-          return <li key={meeting}>{meeting}</li>
-        })}
-      </ul>
+      <h3 css={titleNameStyle}>Created Meet [{event.meeting_list.length}]</h3>
+      <div>{event.meeting_list.map((meeting: any) => {
+        return <ScheduleCard key={meeting.id}
+                             from={meeting.ownerEmail} to={meeting.toEmail}
+                             comment={meeting.comment}
+                             place={meeting.location}
+                             date={meeting.date} time={meeting.time}
+                             title={meeting.title}
+                             state={meeting.status} id={meeting.id} />
+      })}
+      </div>
     </>}
   </>
-
 }
 
 const titleNameStyle = css`
@@ -71,6 +76,10 @@ const dateSectionStyle = css`
 
   font-size: 1.5rem;
   margin-bottom: 1rem;
+`
+
+const createdMeetStyle =css`
+  
 `
 
 export default EventDetailLeft

@@ -9,6 +9,7 @@ import useDateRangeHook from '../../hooks/useDateRangeHook'
 import { useCallback } from 'react'
 import { useQueryClient } from 'react-query'
 import { toast } from 'react-toastify'
+import media from '../../lib/styles/media'
 
 export type EventCardProps = {
   id: string
@@ -81,13 +82,17 @@ function EventCard({ title, startDate, endDate, id, count }: EventCardProps) {
 }
 
 const wrapper = css`
-  width: calc(33.3333% - 1rem);
+  width: calc(50% - 1rem);
   margin: 2rem 0.5rem 2rem;
   padding: 1.5rem;
   line-height: 1.2;
   border-radius: 0.8rem;
   box-shadow: rgb(0 0 0 / 4%) 0 4px 16px 0;
 
+  ${media.xsmall} {
+    width: calc(100% - 1rem);
+  }
+  
   background-color: #fff;
   text-align: left;
 

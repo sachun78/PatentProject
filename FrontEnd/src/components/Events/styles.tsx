@@ -1,6 +1,19 @@
 import { css } from '@emotion/react'
 import palette from '../../lib/palette'
 
+export const wrapper = css`
+  height: 100%;
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 60rem;
+
+  &:hover, &:focus {
+    cursor: pointer;
+  }
+`
+
 export const noScheduleStyle = css`
   display: flex;
   flex-direction: column;
@@ -21,23 +34,5 @@ export const noScheduleStyle = css`
     font-weight: 600;
     color: ${palette.purple[600]};
     user-select: none;
-  }
-`
-export const tableStyle = css`
-  display: flex;
-  flex-wrap: wrap;
-  flex: 1;
-
-  height: 100%;
-`
-
-export const calendarStyle = css`
-  .fc-today-button {
-    &:disabled {
-      background-color: ${palette.grey[900]} !important; 
-      color: ${palette.grey[400]} !important;
-    }
-    background-color: ${palette.purple[900]} !important;
-    color: ${palette.grey[100]} !important;
   }
 `

@@ -1,15 +1,20 @@
 import { css } from '@emotion/react'
 import { Route, Routes } from 'react-router-dom'
-import RequestForm from 'components/RequestForm'
+import loadable from '@loadable/component'
 
 type MeetingProps = {}
 
+const RequestForm = loadable(() => import('components/RequestForm'))
+const MeetingDetail = loadable(() => import('./MeetingDetail'))
+
 function Meeting({}: MeetingProps) {
-  return <div css={pageStyle}><Routes>
-    <Route path='/request' element={<RequestForm />} />
-    <Route path='/*' element={<h1>Display Meeting Information and State</h1>} />
-  </Routes>
-  </div>
+  return (
+    <Routes>
+      <Route path='/request' element={<div css={pageStyle}><RequestForm /></div>}
+      />
+      <Route path='/*' element={<MeetingDetail />} />
+    </Routes>
+  )
 }
 
 const pageStyle = css`

@@ -29,7 +29,6 @@ function InitialInputModal({}: InitialInputModalProps) {
     }
   })
   const [error, setError] = useState<string | null>(null)
-  // const { field, fieldText, onChangeFieldText, add, remove } = useField()
   const [form, onChange] = useInputs({
     company: '',
     department: '',

@@ -1,19 +1,18 @@
 import React from 'react'
-import TopNavigation from 'components/TopNavigation/TopNavigation'
 import VerticalBar from 'components/Sidebar/VerticalBar'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import EventDetail from 'pages/EventDetail'
 import Sponsor from 'components/Sponsor'
 import Sidebar from 'components/Sidebar'
-import { footerStyle, headerStyle, loadStyle, mainStyle, sidebarStyle } from './styles'
+import { footerStyle, mainStyle, sidebarStyle } from './styles'
 import useUserQuery from '../../hooks/query/useUserQuery'
 import loadable from '@loadable/component'
-import { CircularProgress } from '@mui/material'
+import { Backdrop, CircularProgress } from '@mui/material'
 
 const Home = loadable(() => import('pages/Home'))
 const Profile = loadable(() => import('pages/Profile'))
 const Member = loadable(() => import('pages/Member'))
-const Network = loadable(() => import('pages/Member/Network'))
+const Network = loadable(() => import('pages/Network'))
 const Meeting = loadable(() => import('pages/Meeting'))
 
 export type AppLayoutProps = {}
@@ -22,18 +21,12 @@ export default function AppLayout({}: AppLayoutProps) {
   const { data, isLoading } = useUserQuery()
 
   if (isLoading) {
-    return (<>
-      <AppLayout.Header>
-        <TopNavigation />
-      </AppLayout.Header>
-      <AppLayout.Sidebar>
-        <Sidebar />
-        <VerticalBar />
-      </AppLayout.Sidebar>
-      <AppLayout.Main>
-        <div css={loadStyle}><CircularProgress /></div>
-      </AppLayout.Main>
-    </>)
+    return <Backdrop
+      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      open={isLoading}
+    >
+      <CircularProgress color='inherit' />
+    </Backdrop>
   }
 
   if (!data) {
@@ -41,9 +34,6 @@ export default function AppLayout({}: AppLayoutProps) {
   }
 
   return <>
-    <AppLayout.Header>
-      <TopNavigation />
-    </AppLayout.Header>
     <AppLayout.Sidebar>
       <Sidebar />
       <VerticalBar />
@@ -64,14 +54,6 @@ export default function AppLayout({}: AppLayoutProps) {
       <Sponsor />
     </AppLayout.Footer>
   </>
-}
-
-export type HeaderProps = {
-  children: React.ReactNode
-}
-
-function Header({ children }: HeaderProps) {
-  return <header css={headerStyle}>{children}</header>
 }
 
 export type MainProps = {
@@ -98,7 +80,6 @@ function Footer({ children }: FooterProps) {
   return <footer css={footerStyle}>{children}</footer>
 }
 
-AppLayout.Header = Header
 AppLayout.Sidebar = AppSidebar
 AppLayout.Main = Main
 AppLayout.Footer = Footer

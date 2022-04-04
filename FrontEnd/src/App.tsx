@@ -46,7 +46,9 @@ const globalStyle = css`
   #root {
     height: 100%;
     overflow-x: hidden;
-
+    margin: 0;
+    padding: 0;
+    
     ${media.small} {
       overflow-x: auto;
     }

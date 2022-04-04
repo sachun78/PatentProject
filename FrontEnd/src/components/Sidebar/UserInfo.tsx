@@ -15,7 +15,7 @@ function UserInfo({}: UserInfoProps) {
 
   const { data, isLoading } = useUserQuery()
 
-  if (!data) {
+  if (!data || isLoading) {
     return null
   }
 
@@ -25,7 +25,6 @@ function UserInfo({}: UserInfoProps) {
       <img src={gravatar.url(data?.email, { s: '28px', d: 'retro' })} alt={data?.username} />
       <MdArrowDropDown />
     </div>
-
     <UserInfoPicker onClose={toggleCategoryPicker} visible={categoryPicker} />
   </div>
 }
@@ -35,6 +34,7 @@ const wrapper = css`
   flex-shrink: 2;
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: flex-end;
   margin-right: 2rem;

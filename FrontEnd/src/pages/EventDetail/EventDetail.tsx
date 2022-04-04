@@ -21,12 +21,9 @@ function EventDetail({}: EventProps) {
 const pageStyle = css`
   display: flex;
   justify-content: center;
-  height: 90rem;
   width: 90rem;
   padding: 3rem;
   margin-top: 2rem;
-  background: #fff;
-  position: fixed;
   border-radius: 0.8rem;
   border: 1px solid #e6e6e6;
 `
@@ -34,9 +31,7 @@ const pageStyle = css`
 const blockWrapper = css`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
-
+  width: 50%;
   &:first-of-type {
     border-right: 1px solid #e0e0e0;
   }

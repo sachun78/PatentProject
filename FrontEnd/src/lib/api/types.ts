@@ -33,7 +33,8 @@ export type IMeeting = {
   ownerName: string,
   location: string,
   comment: string
-  status: string
+  status: string,
+  code: string
 }
 
 export type IAuthCode = {

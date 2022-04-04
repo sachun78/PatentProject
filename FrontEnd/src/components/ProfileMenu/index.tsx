@@ -93,7 +93,6 @@ function ProfileMenu({}: ProfileMenuProps) {
   }, [])
 
   const onSaveProfile = useCallback(() => {
-    console.log(company, department, position, fields, country)
     saveMutation.mutate({ company, department, position, field: fields, country })
   }, [company, country, department, fields, position, saveMutation])
 
@@ -115,7 +114,8 @@ function ProfileMenu({}: ProfileMenuProps) {
                          onAdd={onFieldAdd} fields={fields} onRemove={onFieldRemove} />
       <ProfileCard.Country title='country' onChange={handleCountry}
                            country={country ?? 'AD'} />
-      <ProfileCard.Save title='' active={isSaveActive} onSave={onSaveProfile} loading={saveMutation.isLoading} />
+      {isSaveActive &&
+        <ProfileCard.Save title='' onSave={onSaveProfile} loading={saveMutation.isLoading} />}
     </InfoViewSection>
     <InfoViewSection title='Additional'>
       <InfoViewCard.Item title='Prev Career' type={'career'} />

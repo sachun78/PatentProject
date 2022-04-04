@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 import React from 'react'
-import NetworkHead from "../../components/NetworkHead";
-import NetworkList from "../../components/NetworkList";
+import NetworkList from 'components/NetworkList'
+import NetworkHead from '../../components/NetworkList/NetworkHead'
 
 type NetworkProps = {}
 
@@ -9,8 +9,8 @@ function Network({}: NetworkProps) {
 
   return (
     <div css={wrapper}>
-        <NetworkHead/>
-        <NetworkList/>
+      <NetworkHead />
+      <NetworkList />
     </div>
   )
 }

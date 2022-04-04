@@ -27,6 +27,7 @@ function UserInfoPicker({ visible, onClose }: UserInfoPickerProps) {
     }
     onClose()
   }
+
   useOnClickOutside(ref, onOutsideClick)
 
   if (!user) {

@@ -33,11 +33,11 @@ const itemStyle = css``
 
 const linkStyle = css`
   border-radius: 0.5rem;
-  height: 6rem;
+  height: 3.75rem;
   display: flex;
   align-items: center;
-  padding-left: 1.6rem;
-  padding-right: 1.6rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
   color: ${palette.purple[200]}; //NON SELECTED ITEM
   text-decoration: none;
 
@@ -46,13 +46,13 @@ const linkStyle = css`
   }
 
   svg {
-    width: 2.8rem;
-    height: 2.8rem;
+    width: 1.75rem;
+    height: 1.75rem;
   }
 
   span {
-    font-size: 1.8rem;
-    margin-left: 1.6rem;
+    font-size: 1.125rem;
+    margin-left: 1rem;
   }
 
   &.active {

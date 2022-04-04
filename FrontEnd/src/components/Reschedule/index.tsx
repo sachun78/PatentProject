@@ -1,17 +1,20 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import useUserQuery from 'hooks/query/useUserQuery'
-import { Button, Modal, Paper, TextField, Typography } from '@mui/material'
+import { Button, Modal, Paper, Stack, TextField, Typography } from '@mui/material'
 import { inputStyle } from 'pages/Login/styles'
 import useInput from 'hooks/useInput'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { signin } from 'lib/api/auth/signin'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { getMeetingInfoByCode } from 'lib/api/meeting/getMeetingInfoByCode'
 import BookingSide from '../Booking/BookingSide'
-import BookingRepalnMain from '../Booking/BookingRepalnMain'
+import BookingReplanMain from '../Booking/BookingRepalnMain'
 import { wrapper } from '../Booking/styles'
+import { IMeeting } from '../../lib/api/types'
+import { useRecoilState } from 'recoil'
+import { replanState } from '../../atoms/replanState'
 
 export type MeetingRescheduleProps = {}
 
@@ -25,13 +28,13 @@ function MeetingReschedule({}: MeetingRescheduleProps) {
     data: meetingData,
     isLoading,
     isError
-  } = useQuery(['meeting', code ?? ''], () => getMeetingInfoByCode(code ?? ''), {
+  } = useQuery<IMeeting>(['meeting', code ?? ''], () => getMeetingInfoByCode(code ?? ''), {
     enabled: !!userData,
     staleTime: Infinity,
     retry: false,
     refetchOnWindowFocus: false,
     onSuccess: (data) => {
-      if (data.meeting.toEmail !== userData?.email) {
+      if (data.toEmail !== userData?.email) {
         toast.error('본인이 예약한 일정만 수정할 수 있습니다.')
       }
     }
@@ -39,7 +42,8 @@ function MeetingReschedule({}: MeetingRescheduleProps) {
   const [email, onChangeEmail] = useInput('')
   const [password, onChangePassword] = useInput('')
   const queryClient = useQueryClient()
-
+  const navi = useNavigate()
+  const [replan, setReplan] = useRecoilState(replanState)
   const mutation = useMutation(signin, {
     onSuccess: (res) => {
       console.log(res.user)
@@ -65,10 +69,20 @@ function MeetingReschedule({}: MeetingRescheduleProps) {
     setLoginModalOpen(prev => !prev)
   }, [])
 
+  const onNavigateSignup = useCallback(() => {
+    navi('/email/check')
+    setReplan({
+      code: code ?? ''
+    })
+  }, [code, navi, setReplan])
+
   if (!userData) {
     return <div>
       <h1>Replan Need Login</h1>
-      <Button onClick={toggleLoginModal}>Login</Button>
+      <Stack alignItems={'stretch'} spacing={2} direction={'row'}>
+        <Button onClick={toggleLoginModal}>Login</Button>
+        <Button onClick={onNavigateSignup}>Sign up</Button>
+      </Stack>
       <Modal open={loginModalOpen} onClose={toggleLoginModal}>
         <Paper sx={{ width: '50%' }}>
           <Typography id='modal-modal-title' variant='h2' component='h2'> Login </Typography>
@@ -94,9 +108,13 @@ function MeetingReschedule({}: MeetingRescheduleProps) {
     return <div>Error</div>
   }
 
+  if (userData.email !== meetingData?.toEmail) {
+    return <div>you are not proposed this meeting</div>
+  }
+
   return <div css={wrapper}>
     <BookingSide meeting={meetingData} />
-    <BookingRepalnMain meeting={meetingData} />
+    <BookingReplanMain meeting={meetingData} />
   </div>
 }
 

@@ -32,18 +32,18 @@ const item = css`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 8rem;
+  height: 5rem;
 
   svg {
-    width: 2.8rem;
-    height: 2.8rem;
+    width: 1.75rem;
+    height: 1.75rem;
   }
 
   text-decoration: none;
 
   span {
-    font-size: 1.2rem;
-    margin-top: 0.8rem;
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
   }
 
   color: ${palette.purple[600]};
@@ -55,7 +55,7 @@ const item = css`
   &.active {
     background: ${palette.purple[50]};
     color: ${palette.purple[400]};
-    border-radius: 0.4rem;
+    border-radius: 0.25rem;
   }
 `
 

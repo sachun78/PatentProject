@@ -31,14 +31,14 @@ const bar = css`
   }
 
   flex-direction: column;
-  padding-top: 3.2rem;
-  padding-bottom: 3.2rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
   flex: 1;
   align-items: center;
 
   .logo {
-    width: 4rem;
-    height: 4rem;
+    width: 2.5rem;
+    height: 2.5rem;
   }
 `
 
@@ -51,7 +51,7 @@ const links = css`
 `
 
 const endBlock = (position: 'top' | 'bottom') => css`
-  height: 8rem;
+  height: 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;

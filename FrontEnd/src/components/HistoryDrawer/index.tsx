@@ -12,7 +12,7 @@ function HistoryDrawer({ open, onClose }: HistoryDrawerProps) {
     onClose={onClose}
     sx={{ width: '100%' }}
   >
-    <div style={{ width: '90rem' }}>MY drawer</div>
+    <div style={{ width: '60rem' }}>MY drawer</div>
   </Drawer>
 }
 

@@ -1,6 +1,6 @@
 import { mainStyle } from './styles'
 import { IMeeting } from '../../lib/api/types'
-import useInput from '../../hooks/useInput'
+import useInput from 'hooks/useInput'
 import RequestSection from '../RequestForm/RequestSection'
 import DatePickerInput from '../DatePickerInput'
 import TimePickerInput from '../DatePickerInput/TimePickerInput'
@@ -8,6 +8,8 @@ import Input from '../Input/Input'
 import LocationInput from '../LocationMap/LocationInput'
 import { Button, Typography } from '@mui/material'
 import React, { useCallback } from 'react'
+import { replanMeeting } from '../../lib/api/meeting/replanMeeting'
+import { useQueryClient } from 'react-query'
 
 export type BookingRepalnMainProps = {
   meeting: IMeeting
@@ -15,26 +17,55 @@ export type BookingRepalnMainProps = {
 
 function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
   const [location, onChangeLocation] = useInput(meeting.location)
-  const [date, onChangeDate, setDate] = useInput(new Date(meeting.date))
-  const [time, onChangeTime, setTime] = useInput(new Date(meeting.time))
+  const [date, , setDate] = useInput(new Date(meeting.date))
+  const [time, , setTime] = useInput(new Date(meeting.time))
   const [comment, onChangeComment] = useInput('')
+  const qc = useQueryClient()
 
   const onSubmit = useCallback((e) => {
     e.preventDefault()
     console.log(location, date, time, comment)
-  }, [location, date, time, comment])
+    replanMeeting(meeting.code, { location, date, time, comment })
+      .then(() => {
+        console.log('success')
+        qc.invalidateQueries(['meeting', meeting.code])
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [location, date, time, comment, meeting.code])
+
+  if (meeting.status !== 'none') {
+    return (
+      <div css={mainStyle}>
+        <Typography variant='h5'>
+          Replan Completed
+        </Typography>
+      </div>
+    )
+  }
 
   return <div css={mainStyle}>
-    <Typography component='h6' variant='h3'> Change the meeting schedule for propose </Typography>
+    <Typography component='h6' variant='h3' align={'center'}> Replan</Typography>
     <form onSubmit={onSubmit}>
       <RequestSection title={'Meeting Date'}>
         <DatePickerInput value={date} onChange={(value: Date) => {
+          console.log(time)
+          value.setHours(time.getHours())
+          value.setMinutes(time.getMinutes())
           setDate(value)
         }} />
       </RequestSection>
       <RequestSection title={'Meeting Time'}>
         <TimePickerInput onChange={(value: Date) => {
           setTime(value)
+          setDate(prev => {
+            const newDate = new Date(prev)
+            newDate.setHours(value.getHours())
+            newDate.setMinutes(value.getMinutes())
+            console.log(newDate)
+            return newDate
+          })
         }} value={time} />
       </RequestSection>
       <RequestSection title={'Location'}>

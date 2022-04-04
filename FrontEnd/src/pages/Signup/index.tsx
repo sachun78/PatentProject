@@ -87,10 +87,11 @@ export default function Signup({}: RegisterProps) {
     return <Navigate replace to={'/'} />
   }
 
-  // if (codeError) {
-  //   toast.error('code is not valid', { position: 'top-center' })
-  //   return <Navigate replace to={'/login'} />
-  // }
+  if (codeError) {
+    //TODO: 두번 표시되는 현상 수정
+    toast.error('code is not valid', { position: 'top-center' })
+    return <Navigate replace to={'/login'} />
+  }
 
   if (!data) {
     toast.error('code is empty', { position: 'top-center' })

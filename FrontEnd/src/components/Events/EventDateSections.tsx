@@ -1,7 +1,7 @@
-import React, { memo } from 'react'
+import React from 'react'
 import RequestSection from '../RequestForm/RequestSection'
 import DatePickerInput from '../DatePickerInput'
-import useDateRangeHook from '../../hooks/useDateRangeHook'
+import useDateRangeHook from 'hooks/useDateRangeHook'
 
 export type EventDateSectionsProps = {}
 

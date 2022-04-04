@@ -2,12 +2,11 @@ import { css } from '@emotion/react'
 import palette from 'lib/palette'
 import { Navigate, NavLink } from 'react-router-dom'
 import React, { FormEvent, useCallback, useState } from 'react'
-import { inputStyle, signupFormStyle, undoStyle } from 'pages/Signup/styles'
+import { signupFormStyle, undoStyle } from 'pages/Signup/styles'
 import Auth from 'layouts/Auth'
 import useUserQuery from 'hooks/query/useUserQuery'
-import { Button, TextField } from '@mui/material'
+import { Button, FormHelperText, InputLabel, OutlinedInput, Stack } from '@mui/material'
 import Joi from 'joi'
-import { errorMessageStyle } from '../Login/styles'
 import useInput from '../../hooks/useInput'
 import { sendmail } from '../../lib/api/auth/sendmail'
 
@@ -40,7 +39,7 @@ export default function MailCheck({}: RegisterProps) {
         setSendMail(true)
       })
       .catch(err => {
-        setMailTypeError(err.message)
+        setMailTypeError(err.response.data.message)
       })
   }, [email])
 
@@ -63,13 +62,21 @@ export default function MailCheck({}: RegisterProps) {
               <Button variant='contained' size='large'>OK</Button>
             </div>
             : <form onSubmit={onSubmit}>
-              <h2 className='title'>Check Email</h2>
-              <TextField label='Email' variant='outlined' type='email' name='email' placeholder='Input your email'
-                         autoComplete='off'
-                         value={email} onChange={onChangeEmail} css={inputStyle}
-                         InputProps={{ style: { fontSize: 12 } }} />
-              {mailTypeError && <span css={errorMessageStyle}>{mailTypeError}</span>}
-              <Button variant='contained' type='submit' size='large'>send</Button>
+              <Stack spacing={1}>
+                <InputLabel htmlFor='mailcheck-signup'>Check Email</InputLabel>
+                <OutlinedInput value={email} onChange={onChangeEmail} placeholder='email'
+                               type='email' name='email' id='email-check'
+                               inputProps={{}}
+                               error={Boolean(mailTypeError)}
+                               fullWidth
+                />
+                {mailTypeError && (
+                  <FormHelperText error id='helper-text-email-check'>
+                    {mailTypeError}
+                  </FormHelperText>
+                )}
+                <Button variant='contained' type='submit' size='large'>send</Button>
+              </Stack>
             </form>}
         </div>
       </Auth>

@@ -39,7 +39,7 @@ const sideStyle = css`
   min-width: 600px;
   border-right: 1px solid rgba(26, 26, 26, 0.1);
   transition: all 0.22s ease-out;
-  padding-top: 2.5rem;
+  padding-top: 2rem;
   padding-left: 3rem;
   padding-right: 1rem;
 `
@@ -58,18 +58,16 @@ const eventNameStyle = css`
   line-height: 1.4;
 `
 const sectionStyle = css`
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 
   > div {
     display: flex;
-
-    margin-bottom: 0.8rem;
     align-items: center;
 
     h3 {
-      font-size: 1.6rem;
+      font-size: 1.2rem;
       font-weight: 700;
-      line-height: 2.4rem;
+      line-height: 1.5;
     }
 
     svg {

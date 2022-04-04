@@ -4,18 +4,17 @@ import { Button } from '@mui/material'
 
 export type ProfileCardSaveProps = {
   title: string
-  active: boolean
   onSave: () => void
   loading: boolean
 }
 
-function ProfileCardSave({ title, active, onSave, loading }: ProfileCardSaveProps) {
+function ProfileCardSave({ title, onSave, loading }: ProfileCardSaveProps) {
   return <div css={itemStyle}>
     <div className='inner'>
       <div className='title'>
         <label>{title}</label></div>
       <div css={textStyle}>
-        <Button variant='contained' disabled={!active || loading} onClick={onSave}>Save</Button>
+        <Button variant='contained' disabled={loading} onClick={onSave}>Save</Button>
       </div>
     </div>
   </div>

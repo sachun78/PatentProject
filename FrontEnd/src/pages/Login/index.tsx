@@ -52,11 +52,11 @@ function Login({}: LoginProps) {
             <form onSubmit={onSubmit}>
               <div>
                 <TextField label='Email' variant='outlined' type='email' name='email'
-                           value={form.email} onChange={onChange} css={inputStyle} required
+                           value={form.email} onChange={onChange} css={inputStyle}
                            InputProps={{ style: { fontSize: 15 } }} />
               </div>
               <div><TextField label='Password' variant='outlined' type='password' name='password'
-                              value={form.password} onChange={onChange} css={inputStyle} required
+                              value={form.password} onChange={onChange} css={inputStyle}
                               autoComplete='password' InputProps={{ style: { fontSize: 15 } }} />
               </div>
               {loginError && <span css={errorMessageStyle}> {loginError}</span>}

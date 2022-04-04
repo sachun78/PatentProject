@@ -10,7 +10,7 @@ export const mainStyle = css`
   padding-right: 2.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
 `
 
 export const wrapper = css`
