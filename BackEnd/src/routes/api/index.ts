@@ -7,6 +7,7 @@ import buddy from './buddy'
 import event from './event'
 import profile from './profile'
 import authemail from './emailAuth'
+import mhistory from './mhistory'
 
 const apiRoute = express.Router()
 apiRoute.use('/auth', auth)
@@ -16,6 +17,7 @@ apiRoute.use('/buddy', buddy)
 apiRoute.use('/event', event)
 apiRoute.use('/profile', profile)
 apiRoute.use('/authemail', authemail)
+apiRoute.use('/mhistory', mhistory)
 
 apiRoute.use((req: Request, res: Response, next: NextFunction) => {
   res.sendStatus(404);

@@ -15,6 +15,7 @@ export interface IMeeting {
   comment: string,
   status: 'none' | 'confirm' | 'cancel',
   code: string,
+  history: string
 };
 
 export const meetingSchema = new mongoose.Schema<IMeeting>({
@@ -30,6 +31,7 @@ export const meetingSchema = new mongoose.Schema<IMeeting>({
   comment: { type: String, requierd: true },
   status: { type: String, enum: ['none', 'confirm', 'cancel'], default: 'none' },
   code: { type: String, requierd: true },
+  history: { type: String, ref: "mhistory", default: ""}
 },{
   timestamps: true,
   versionKey: false
@@ -50,7 +52,7 @@ export async function getAll(userId: string, data?: any) {
 }
 
 export async function getById(meetingId: string) {
-  return meeting.findById(meetingId);
+  return meeting.findById(meetingId).populate('mhistory');
 }
 
 export async function getByCode(meetingCode: string) {

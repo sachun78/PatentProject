@@ -4,7 +4,7 @@ import { isAuth } from '../../middleware/authChecker'
 
 const route = express.Router()
 
-route.get('/getBuddy', isAuth, buddyCtrl.getBuddy);
-route.post('/addBuddy', isAuth, buddyCtrl.addBuddy);
+route.get('/', isAuth, buddyCtrl.getBuddy);
+route.post('/', isAuth, buddyCtrl.addBuddy);
 
 export default route
