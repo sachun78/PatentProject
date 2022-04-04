@@ -38,8 +38,15 @@ useVirtualId(meetingSchema);
 
 const meeting = mongoose.model('meetings', meetingSchema);
 
-export async function getAll(userId: string) {
-  return meeting.find({ownerId: userId}).sort({createAt: -1});
+export async function getAll(userId: string, data?: any) {
+  if (!data) {
+    return meeting.find({ownerId: userId}).sort({createAt: -1});
+  }
+
+  let filters: any = {ownerId: userId};
+  Object.assign(filters, data.filter);
+
+  return meeting.find(filters).sort(data.sort);
 }
 
 export async function getById(meetingId: string) {
