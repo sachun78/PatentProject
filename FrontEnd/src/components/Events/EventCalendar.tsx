@@ -43,7 +43,6 @@ function EventCalendar({}: ScheduleCalendarProps) {
     initialView='dayGridMonth'
     editable={false}
     selectable={false}
-    initialEvents={calendarEvents}
     selectMirror={true}
     dayMaxEvents={true}
     weekends={true}
@@ -53,6 +52,7 @@ function EventCalendar({}: ScheduleCalendarProps) {
     dayMaxEventRows={true}
     fixedWeekCount={false}
     views={{ dayGridMonth: { dayMaxEventRows: true } }}
+    events={calendarEvents}
   />
 }
 

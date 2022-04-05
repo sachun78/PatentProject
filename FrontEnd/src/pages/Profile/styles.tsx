@@ -8,15 +8,14 @@ export const wrapper = css`
   width: 100%;
 `
 export const titleStyle = css`
-  padding-top: 3rem;
-  padding-left: 3rem;
   padding-right: 3rem;
 
   h2 {
     line-height: 1.2;
-    font-size: 3.6rem;
+    font-size: 2.25rem;
     font-weight: 700;
     padding-bottom: 1rem;
+    margin: 0;
   }
 
   .line {
@@ -25,7 +24,6 @@ export const titleStyle = css`
   }
 `
 export const infoStyle = css`
-  padding-left: 3rem;
   padding-right: 3rem;
   height: 100%;
   width: 100%;

@@ -1,13 +1,16 @@
+import React from 'react'
 import { css } from '@emotion/react'
-import InitialInputModal from '../../components/InitialInputModal'
-import Post from '../../components/Post/'
-import media from '../../lib/styles/media'
+import InitialInputModal from 'components/InitialInputModal'
+import Post from 'components/Post/'
+import media from 'lib/styles/media'
+import { Card, Grid } from '@mui/material'
 
 type HomeProps = {}
 
 function Home({}: HomeProps) {
-  return (
-    <div css={baseStyle}>
+  return <>
+    <Grid container rowSpacing={4.5} columnSpacing={2.75}>
+      <Card variant='outlined' sx={{ p: 2.25, width: '1088px', mb: 2 }}> + Create new Post</Card>
       <div css={postViewStyle}>
         {/*  POST BLOCK */}
         <Post id='1' />
@@ -15,14 +18,10 @@ function Home({}: HomeProps) {
         <Post id='3' />
         <Post id='4' />
       </div>
-      <InitialInputModal />
-    </div>
-  )
+    </Grid>
+    <InitialInputModal />
+  </>
 }
-
-const baseStyle = css`
-  height: 100%;
-`
 
 const postViewStyle = css`
   min-height: calc(100vh - 7rem);

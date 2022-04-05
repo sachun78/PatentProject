@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import palette from '../../lib/palette'
+import palette from 'lib/palette'
 
 export const bodyStyle = (width: number, height: number) => css`
   z-index: 20;
@@ -19,7 +19,7 @@ export const wrapStyle = css`
 
   .img-block {
     width: 216px;
-    background: ${palette.blueGrey[100]};
+    background: ${palette.grey[100]};
     padding: 1.5rem;
     display: flex;
     flex-direction: column;

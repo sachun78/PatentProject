@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ScheduleCard from './ScheduleCard'
 import IconControl from '../IconControl'
 import useMeetingQuery from '../../hooks/query/useMeetingQuery'
@@ -7,6 +7,7 @@ import { FormControlLabel, Switch } from '@mui/material'
 import ScheduleCalendar from './ScheduleCalendar'
 import { meetingSwitchState } from '../../atoms/memberShipTabState'
 import { useRecoilState } from 'recoil'
+import ScheduleSkeleton from './ScheduleSkeleton'
 
 type ScheduleViewProps = {}
 
@@ -18,10 +19,15 @@ function Schedules({}: ScheduleViewProps) {
     setChecked(event.target.checked)
   }
 
-  if (isLoading) return <div css={noScheduleStyle}>
-    <IconControl name={'welcome'} />
-    <div>Loading...</div>
-  </div>
+  if (isLoading)
+    return <div css={tableStyle}>
+      <ScheduleSkeleton />
+      <ScheduleSkeleton />
+      <ScheduleSkeleton />
+      <ScheduleSkeleton />
+      <ScheduleSkeleton />
+      <ScheduleSkeleton />
+    </div>
 
   if (data?.length === 0)
     return <div css={noScheduleStyle}>
@@ -46,6 +52,10 @@ function Schedules({}: ScheduleViewProps) {
                                         date={v.date} time={v.time}
                                         title={v.title}
                                         state={v.status} id={v.id} />)}
+        <ScheduleSkeleton />
+        <ScheduleSkeleton />
+        <ScheduleSkeleton />
+        <ScheduleSkeleton />
       </div>}
   </>
 }

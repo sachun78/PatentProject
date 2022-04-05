@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import palette from '../../lib/palette'
+import palette from 'lib/palette'
 
 type RequestSectionProps = {
   title: string
@@ -10,9 +10,7 @@ function RequestSection({ title, children }: RequestSectionProps) {
   return (
     <section css={sectionStyle}>
       <h3>{title}</h3>
-      <div>
-        {children}
-      </div>
+      <div>{children}</div>
     </section>
   )
 }
@@ -21,22 +19,17 @@ export default RequestSection
 
 const sectionStyle = css`
   section + & {
-    margin-top: 1.25rem;
+    margin-top: 0.78125rem;
   }
 
-  max-width: 60rem;
-  margin-bottom: 1.5rem;
-
-  &:first-of-type {
-    margin-bottom: 0;
-  }
+  margin-bottom: 0.5rem;
 
   h3 {
     color: ${palette.blueGrey[800]};
-    font-size: 1.6rem;
-    line-height: 1.5rem;
+    font-size: 1.25rem;
+    line-height: 1.2;
     margin-top: 0;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0;
   }
 
   & > div {
@@ -46,11 +39,9 @@ const sectionStyle = css`
 
     align-items: center;
     justify-content: flex-start;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    font-size: 1.8rem;
+    font-size: 1.125rem;
     font-weight: 600;
-    line-height: 1.5;
+    line-height: 1.25;
     color: ${palette.blueGrey[400]};
   }
 `

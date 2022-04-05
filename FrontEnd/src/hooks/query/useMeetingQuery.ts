@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from 'react-query'
-import { IMeeting } from '../../lib/api/types'
-import { getMeetings } from '../../lib/api/meeting/getMeetings'
+import { IMeeting } from 'lib/api/types'
+import { getMeetings } from 'lib/api/meeting/getMeetings'
 
 export default function useMeetingQuery(
   id: number,

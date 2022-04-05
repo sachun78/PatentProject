@@ -1,8 +1,7 @@
 import { css } from '@emotion/react'
-import { Link } from 'react-router-dom'
 import media from '../../lib/styles/media'
 import VerticalBarItem from './VerticalBarItem'
-import IconControl from '../IconControl'
+import { Link } from 'react-router-dom'
 
 export type VerticalBarProps = {}
 
@@ -10,6 +9,9 @@ function VerticalBar({}: VerticalBarProps) {
   return (
     <div css={bar}>
       <div css={endBlock('top')}>
+        <Link to="/">
+          <img src={"/assets/logo.png"} alt="small logo" className="logo" />
+        </Link>
       </div>
       <div css={links}>
         <VerticalBarItem icon='home' text='Home' to='' />
@@ -37,8 +39,8 @@ const bar = css`
   align-items: center;
 
   .logo {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 4rem;
+    height: 4rem;
   }
 `
 

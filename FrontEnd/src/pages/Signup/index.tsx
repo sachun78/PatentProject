@@ -106,7 +106,6 @@ export default function Signup({}: RegisterProps) {
     return <Navigate replace to={'/login'} />
   }
   return (
-    <div css={wrapper}>
       <Auth width={622} height={670}>
         <div css={signupFormStyle}>
           <div css={undoStyle}>
@@ -145,7 +144,6 @@ export default function Signup({}: RegisterProps) {
           </section>
         </div>
       </Auth>
-    </div>
   )
 }
 

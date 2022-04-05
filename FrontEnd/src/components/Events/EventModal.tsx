@@ -1,6 +1,6 @@
 import { Box, Button, Modal } from '@mui/material'
 import { css } from '@emotion/react'
-import RequestSection from '../RequestForm/RequestSection'
+import RequestSection from '../../pages/Meeting/meeting-create-form/RequestForm/RequestSection'
 import Input from '../Input/Input'
 import EventDateSections from './EventDateSections'
 import { useEventModal } from '../../hooks/useEventTitle'

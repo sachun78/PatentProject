@@ -44,10 +44,8 @@ const globalStyle = css`
   html,
   body,
   #root {
-    height: 100%;
     overflow-x: hidden;
-    margin: 0;
-    padding: 0;
+    height: 100%;
 
     ${media.small} {
       overflow-x: auto;
@@ -56,7 +54,7 @@ const globalStyle = css`
 
   html {
     box-sizing: border-box;
-    height: 100%;
+
     * {
       box-sizing: inherit;
 

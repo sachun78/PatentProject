@@ -1,5 +1,5 @@
 import React from 'react'
-import RequestSection from '../RequestForm/RequestSection'
+import RequestSection from '../../pages/Meeting/meeting-create-form/RequestForm/RequestSection'
 import DatePickerInput from '../DatePickerInput'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 

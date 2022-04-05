@@ -3,10 +3,10 @@ import { useCurrentEventState } from 'atoms/eventState'
 import useDateTimeHook from 'hooks/useDateTimeHook'
 import useInputs from 'hooks/useInputs'
 import { createMeeting } from 'lib/api/meeting/createMeeting'
-import DatePickerInput from '../DatePickerInput'
-import TimePickerInput from '../DatePickerInput/TimePickerInput'
-import Input from '../Input'
-import LocationInput from '../LocationMap/LocationInput'
+import DatePickerInput from '../../../../components/DatePickerInput'
+import TimePickerInput from '../../../../components/DatePickerInput/TimePickerInput'
+import Input from '../../../../components/Input'
+import LocationInput from '../../../../components/LocationMap/LocationInput'
 import RequestSection from './RequestSection'
 import { toast } from 'react-toastify'
 import { buttonStyle, headerStyle, sectionStyle, space, wrapper } from './styles'
@@ -91,7 +91,7 @@ export default function RequestForm({}: RequestViewProps) {
             setTime(value)
             setDate(newDate)
           }} value={time} />
-        </RequestSection>``
+        </RequestSection>
         <RequestSection title={'Location'}>
           <LocationInput />
         </RequestSection>

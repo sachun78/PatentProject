@@ -1,7 +1,7 @@
 import { mainStyle } from './styles'
 import { IMeeting } from '../../lib/api/types'
 import useInput from 'hooks/useInput'
-import RequestSection from '../RequestForm/RequestSection'
+import RequestSection from '../../pages/Meeting/meeting-create-form/RequestForm/RequestSection'
 import DatePickerInput from '../DatePickerInput'
 import TimePickerInput from '../DatePickerInput/TimePickerInput'
 import Input from '../Input/Input'

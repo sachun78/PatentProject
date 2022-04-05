@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import palette from '../../lib/palette'
+import palette from 'lib/palette'
 
 export const wrapper = css`
   height: 100%;

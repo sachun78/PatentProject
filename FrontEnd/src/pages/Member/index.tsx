@@ -68,7 +68,7 @@ function Member({}: MemberShipProps) {
 }
 
 const wrapper = css`
-  padding: 1rem;
+  padding-right: 1rem;
 `
 
 export default Member

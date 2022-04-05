@@ -12,9 +12,9 @@ import { noScheduleStyle, wrapper } from './styles'
 import { eventSwitchState } from '../../atoms/memberShipTabState'
 import { useRecoilState } from 'recoil'
 
-type EventViewProps = {}
+type EventsProps = {}
 
-function Events({}: EventViewProps) {
+function Events({}: EventsProps) {
   const { data, isLoading } = useEventQuery(1)
   const { setOpen, setEdit } = useEventModal()
   const { setStartDate, setEndDate } = useDateRangeHook()
@@ -68,7 +68,7 @@ function Events({}: EventViewProps) {
             count={event.meeting_list.length} />)}
       </div>}
 
-    <Fab sx={{ position: 'fixed', bottom: 60, right: 32 }}
+    <Fab sx={{ position: 'fixed', bottom: 60, right: 32, zIndex: 10 }}
          color='primary'
          onClick={() => {
            setOpen(true)

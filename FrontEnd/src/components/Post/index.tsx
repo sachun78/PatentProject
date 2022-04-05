@@ -24,7 +24,6 @@ function Post({ id, contents }: PostProps) {
 }
 
 const postStyle = css`
-  width: 98%;
   display: flex;
   flex-direction: column;
   background: #fff;

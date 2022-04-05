@@ -7,6 +7,6 @@ export async function getCurrentProfile() {
 }
 
 export async function patchProfile(req: IProfile) {
-  const response = await client.patch<IProfile>('/api/profile/update-profile', req)
+  const response = await client.patch<IProfile>('/api/profile/', req)
   return response.data
 }

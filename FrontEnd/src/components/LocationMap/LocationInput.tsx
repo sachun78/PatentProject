@@ -1,5 +1,3 @@
-import { LocalizationProvider } from '@mui/lab'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import InputBase from '../InputBase'
 import { css } from '@emotion/react'
 import { SetStateAction, useRef, useState } from 'react'
@@ -42,11 +40,9 @@ function LocationInput() {
     </div>
 
     {open &&
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <div css={calendarStyle}>
-          <LocationMap location={address} getLocation={getLocation} />
-        </div>
-      </LocalizationProvider>}
+      <div css={calendarStyle}>
+        <LocationMap location={address} getLocation={getLocation} />
+      </div>}
   </InputBase>
 }
 
@@ -73,12 +69,12 @@ const textStyle = css`
 const calendarStyle = css`
   position: absolute;
   background: white;
-  z-index: 5;
-  bottom: -0.1rem;
+  z-index: 10;
+  top: 0.1rem;
 
   box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.07);
   border-radius: 0.5rem;
-  transform: translate3d(0, 100%, 0);
+  transform: translate3d(0, -100%, 0);
 `
 
 export default LocationInput

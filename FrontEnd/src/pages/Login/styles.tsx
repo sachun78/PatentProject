@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import palette from '../../lib/palette'
+import palette from 'lib/palette'
 
 export const loginFormStyle = css`
   display: flex;
@@ -42,12 +42,7 @@ export const loginFormStyle = css`
   }
 `
 export const inputStyle = css`
-  width: 100%;
   margin-bottom: 1.5rem;
-
-  label {
-    font-size: 100%;
-  }
 `
 export const dividerStlye = css`
   height: 1rem;
@@ -87,12 +82,11 @@ export const underBlockStyle = css`
   }
 `
 export const pageStyle = css`
-  background-color: ${palette.blueGrey[50]};
+    //background-color: ${palette.blueGrey[50]};
+  background-image: url("/assets/background.jpg");
   width: 100%;
   height: 100%;
   display: flex;
-  top: 0;
-  left: 0;
   align-items: center;
   justify-content: center;
 `

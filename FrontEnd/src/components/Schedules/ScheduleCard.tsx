@@ -37,7 +37,7 @@ function ScheduleCard({ from, to, comment, place, time, date, state, id, title }
   </NavLink>
 }
 
-const wrapper = (state: string) => css`
+export const wrapper = (state: string) => css`
   height: 20rem;
   background: #fff;
   ${state === 'replan' && css`
@@ -68,21 +68,21 @@ const wrapper = (state: string) => css`
     line-height: 1.1;
   }
 `
-const commentStyle = css`
+export const commentStyle = css`
   height: 100%;
   margin-top: 0.5rem;
   font-size: 1.4rem;
   line-height: 1.2;
   word-break: break-all
 `
-const bottomStyle = css`
+export const bottomStyle = css`
   box-shadow: inset 0 calc(1 * 1px) 0 rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
   padding: 0.5rem;
   text-align: center;
 `
-const headerStyle = css`
+export const headerStyle = css`
   display: flex;
   flex-direction: column;
 

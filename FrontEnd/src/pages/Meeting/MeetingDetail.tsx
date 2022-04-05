@@ -4,7 +4,6 @@ import { useQuery } from 'react-query'
 import { getMeetingOne } from '../../lib/api/meeting/getMeetingOne'
 import { toast } from 'react-toastify'
 import { Button, Container, Stack } from '@mui/material'
-import { css } from '@emotion/react'
 
 export type MeetingDetailProps = {}
 
@@ -35,7 +34,7 @@ function MeetingDetail({}: MeetingDetailProps) {
     return <div>Loading...</div>
   }
 
-  return <Container maxWidth='xs' sx={{ mt: 0, p: 3, backgroundColor: 'palegoldenrod' }} css={css`margin-top: -1rem;`}>
+  return <Container maxWidth='xs' sx={{ mt: 0, p: 3, backgroundColor: 'palegoldenrod', borderRadius: '16px' }}>
     <h1>{data.title}</h1>
     <section>
       <h2> Organizer</h2>
@@ -59,7 +58,10 @@ function MeetingDetail({}: MeetingDetailProps) {
       <p>{data.comment}</p>
       <p>{data.status}</p>
     </section>
-    <Button variant='contained'>Input Result</Button>
+    {data.status === 'confirm' && <Button variant='contained'>Result</Button>}
+    {data.status === 'replan' && <Button variant='contained'>Confirm</Button>}
+    {data.status !== 'none' && <Button variant='contained'>Change</Button>}
+    {data.status !== 'none' && < Button variant='contained'>Reject</Button>}
   </Container>
 }
 

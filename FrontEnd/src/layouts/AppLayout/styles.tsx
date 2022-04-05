@@ -6,11 +6,9 @@ export const mainStyle = css`
   margin-left: 16.25rem;
   min-height: 100%;
   background: #f7f7f8;
-  position: relative;
   padding-left: 2rem;
   padding-top: 3rem;
   padding-bottom: 3rem;
-  
   ${media.xlarge} {
     margin-left: 8rem;
   }
@@ -23,8 +21,8 @@ export const sidebarStyle = css`
   width: 16.25rem;
   height: 100%;
   position: fixed; 
-  background: linear-gradient(210deg, ${palette.purple[50]} 0%, #fff  80%);
-  //background: #f7f7f8;
+  //background: linear-gradient(210deg, ${palette.purple[50]} 0%, #fff  80%);
+  background: #f7f7f8;
   display: flex;
   padding-top: 3rem;
   padding-bottom: 3rem;
@@ -44,9 +42,9 @@ export const footerStyle = css`
   width: 100%;
   height: 3.2rem;
   background: ${palette.purple[50]};
-  position: sticky;
-  bottom: 0;
   z-index: 999;
+  position: fixed;
+  bottom: 0;
 `
 
 export const loadStyle = css`
