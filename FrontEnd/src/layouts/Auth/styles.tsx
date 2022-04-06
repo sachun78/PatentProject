@@ -1,17 +1,6 @@
 import { css } from '@emotion/react'
 import palette from 'lib/palette'
 
-export const bodyStyle = (width: number, height: number) => css`
-  z-index: 20;
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  transform: translateY(-10%);
-  width: ${width}px;
-  height: ${height}px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 40%);
-`
-
 export const wrapStyle = css`
   height: 100%;
   width: 100%;

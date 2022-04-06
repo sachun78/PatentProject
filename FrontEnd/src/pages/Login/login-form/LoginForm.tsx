@@ -1,4 +1,4 @@
-import { Button, FormHelperText, TextField } from '@mui/material'
+import { Button, FormHelperText, OutlinedInput } from '@mui/material'
 import { inputStyle } from '../styles'
 import React, { useCallback, useState } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
@@ -38,17 +38,16 @@ function LoginForm({}: LoginFormProps) {
       return
     }
     mutation.mutate()
-  }, [mutation])
+  }, [form.email, form.password, mutation])
 
   return <form onSubmit={onSubmit}>
-    <div>
-      <TextField label='Email' variant='outlined' type='email' name='email'
-                 value={form.email} onChange={onChange} css={inputStyle} fullWidth />
-    </div>
-    <div><TextField label='Password' variant='outlined' type='password' name='password'
-                    value={form.password} onChange={onChange} css={inputStyle}
-                    autoComplete='password' fullWidth />
-    </div>
+    <OutlinedInput type='email' name='email' placeholder={'username'} value={form.email} onChange={onChange}
+                   css={inputStyle} fullWidth
+                   sx={{ borderRadius: '12px', height: '67px' }}
+    />
+    <OutlinedInput type='password' name='password' placeholder={'password'} value={form.password} onChange={onChange}
+                   css={inputStyle} autoComplete='password' fullWidth
+                   sx={{ borderRadius: '12px', height: '67px' }} />
     {loginError && <FormHelperText error id='helper-text-login'>{loginError}</FormHelperText>}
     <div className='button-div'>
       <Button variant='contained' type='submit' color='primary' disabled={mutation.isLoading}

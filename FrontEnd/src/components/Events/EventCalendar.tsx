@@ -4,7 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import useEventQuery from 'hooks/query/useEventQuery'
 import { css } from '@emotion/react'
-import palette from 'lib/palette'
+import palette, { brandColor } from 'lib/palette'
 import { useNavigate } from 'react-router-dom'
 import listPlugin from '@fullcalendar/list'
 
@@ -22,7 +22,7 @@ function EventCalendar({}: ScheduleCalendarProps) {
           title: event.title,
           start: event.start_date.replace(/T.*$/, ''),
           end: event.end_date.replace(/T.*$/, ''),
-          backgroundColor: palette.purple[500]
+          backgroundColor: brandColor
         }
         retArr.push(eventObj)
       }

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import palette from 'lib/palette'
+import { brandColor } from 'lib/palette'
 
 export const wrapper = css`
   height: 100%;
@@ -32,7 +32,7 @@ export const noScheduleStyle = css`
     margin-top: 10px;
     font-size: 3rem;
     font-weight: 600;
-    color: ${palette.purple[600]};
+    color: ${brandColor};
     user-select: none;
   }
 `

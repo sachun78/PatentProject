@@ -1,31 +1,13 @@
 import { css } from '@emotion/react'
-import palette from 'lib/palette'
 
 export const loginFormStyle = css`
   display: flex;
-  flex: 1;
   flex-direction: column;
-  font-size: 1.5rem;
-  background: #fff;
-  padding: 1.5rem;
-  margin-top: 2.25rem;
-  line-height: 1.5;
-
-  .title {
-    margin: 0;
-    margin-bottom: 1.5rem;
-    font-size: 2rem;
-    font-weight: bold;
-  }
+  min-width: 31.625rem;
 
   section {
-    margin-bottom: 1.5rem;
-    margin-top: 0.5rem;
     flex: 1;
-  }
-
-  section + section {
-    margin-top: 0;
+    margin-bottom: 2.1875rem;
   }
 
   a {
@@ -34,32 +16,45 @@ export const loginFormStyle = css`
 
   .button-div {
     display: flex;
-    height: 3.6rem;
+    height: 3.5rem;
 
     button {
       flex: 1;
+      background: #A1045A 0 0 no-repeat padding-box;
+      mix-blend-mode: multiply;
+      border-radius: 7px;
+      font: normal normal normal 19px/22px NanumBarunGothic;
+      letter-spacing: 0;
+      color: #FFFFFF;
     }
   }
 `
 export const inputStyle = css`
-  margin-bottom: 1.5rem;
-`
-export const dividerStlye = css`
-  height: 1rem;
-  color: ${palette.grey[400]};
-  margin-bottom: 1rem;
+  margin-bottom: 2.1875rem;
+  font: normal normal bold 14px/16px NanumBarunGothic;
+  background: #fff;
 
-  &:before, &:after {
-    border-color: ${palette.grey[400]};
+  &:hover {
+    .MuiOutlinedInput-notchedOutline {
+      border-color: #A1045A;
+    }
+  }
+
+  input {
+    &::placeholder {
+      color: #9C9C9C;
+    }
+    padding: 21.5px 37px;
   }
 `
-export const errorMessageStyle = css`
-  color: ${palette.red[500]};
-  font-size: 1.5rem;
-  line-height: 1.5;
-  font-weight: bold;
-  display: block;
-  margin-bottom: 1rem;
+export const dividerStyle = css`
+  color: #9C9C9C;
+  font: normal normal bold 15px/20px NanumBarunGothicOTF;
+
+  &:before, &:after {
+    border-color: #9C9C9C;
+    margin-bottom: 1rem;
+  }
 `
 
 export const underBlockStyle = css`
@@ -72,8 +67,9 @@ export const underBlockStyle = css`
 
     h4 {
       text-align: center;
-      color: ${palette.blueGrey['600']};
-      font-size: 1.3rem;
+      color: #6C6C6C;
+      font-size: 0.875rem;
+      margin: 0.625rem 0;
 
       &:hover {
         text-decoration: underline;
@@ -82,11 +78,16 @@ export const underBlockStyle = css`
   }
 `
 export const pageStyle = css`
-    //background-color: ${palette.blueGrey[50]};
-  background-image: url("/assets/background.jpg");
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+
+  img {
+    min-width: 11.875rem;
+    min-height: 14.4375rem;
+    margin-top: 239px;
+    margin-bottom: 50px;
+  }
 `

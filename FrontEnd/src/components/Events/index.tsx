@@ -68,7 +68,7 @@ function Events({}: EventsProps) {
             count={event.meeting_list.length} />)}
       </div>}
 
-    <Fab sx={{ position: 'fixed', bottom: 60, right: 32, zIndex: 10 }}
+    <Fab sx={{ position: 'fixed', bottom: 91, right: 32, zIndex: 10 }}
          color='primary'
          onClick={() => {
            setOpen(true)

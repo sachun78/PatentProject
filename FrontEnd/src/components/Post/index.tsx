@@ -2,6 +2,7 @@ import { css } from '@emotion/react'
 import React from 'react'
 import PostHeader from './PostHeader'
 import PostFooter from './PostFooter'
+import media from '../../lib/styles/media'
 
 type PostProps = {
   id?: string
@@ -26,12 +27,10 @@ function Post({ id, contents }: PostProps) {
 const postStyle = css`
   display: flex;
   flex-direction: column;
-  background: #fff;
   margin-bottom: 1.6rem;
-  line-height: 1.34;
-  font-size: 1.2rem;
-  border-radius: max(0px, min(8px, ((100vw - 4px) - 100%) * 9999)) / 8px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  background: #fff;
+  box-shadow: 0 3px 6px #00000029;
+  border-radius: 1rem;
   position: relative;
 
   figure {
@@ -39,15 +38,16 @@ const postStyle = css`
     display: flex;
     justify-content: center;
     background: grey;
+    margin: 1.25rem 1.875rem;
+  }
+  ${media.small} {
+    margin-right: 1rem;
+    //padding-left: 0;
   }
 `
 const bodyStyle = css`
-  padding: 4px 16px 16px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  font-size: 1.5rem;
-  font-weight: 400;
-  line-height: 32.5px;
+  padding: 0 1.875rem;
+  font: normal normal 800 14px/19px NanumSquareOTF;
 `
 
 export default Post

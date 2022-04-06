@@ -1,30 +1,27 @@
 import { css } from '@emotion/react'
-import { MdRecommend,MdOutlineModeComment } from 'react-icons/md'
-import palette from '../../lib/palette'
+import palette, { brandColor } from '../../lib/palette'
 
 export type PostFooterProps = {}
 
 function PostFooter({}: PostFooterProps) {
-  return <div css={footerStyle}>
-    <div css={countWrapper}>comment, likes</div>
+  return <div css={footerStyle /*flex*/}>
     <div css={buttonWrapper}>
       <div className={'toolbar'}>
         <div className={'item'}>
-          <div className={'icon'}><MdRecommend /></div>
-          <div className={'text'}>Recommend</div>
+          <div className={'text'}>Good</div>
         </div>
         <div className={'item'}>
-          <div className={'icon'}><MdOutlineModeComment /></div>
-          <div className={'text'}>Comment</div></div>
+          <div className={'text'}>Detail</div>
+        </div>
       </div>
     </div>
+    <div css={countWrapper}>likes</div>
   </div>
 }
 
 const footerStyle = css`
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-  line-height: 1.34;
+  display: flex;
+  margin: 2rem 1.875rem 0;
 `
 const countWrapper = css`
   padding-bottom: 10px;
@@ -33,12 +30,9 @@ const countWrapper = css`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  line-height: 1.3333;
-  border-bottom: 1px solid #CED0E4;
 `
 const buttonWrapper = css`
-  margin-right: 1.2rem;
-  margin-left: 1.2rem;
+  flex: 1;
 
   .toolbar {
     display: flex;
@@ -50,39 +44,30 @@ const buttonWrapper = css`
     flex-wrap: nowrap;
     flex-shrink: 0;
   }
-  
+
   .item {
     flex-basis: 0;
-    height: 4.4rem;
+    height: 1.875rem;
     justify-content: center;
     display: flex;
     flex-shrink: 1;
     flex-grow: 1;
     flex-wrap: nowrap;
-    padding: 6px 2px 6px;
     white-space: nowrap;
     align-items: center;
-    border-radius: 4px;
-    .icon {
-      padding: 6px 4px 1px;
-      position: relative;
-      max-width: 100%;
-    }
+    border-radius: 11px;
+    background: ${brandColor};
+    margin-right: 10px;
+    
     .text {
-      padding: 6px 4px 6px;
-      min-width: 0;
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: ${palette.purple[400]};
+      font: normal normal 800 14px/19px NanumSquareOTF;
+      color: #fff;
     }
+
     svg {
       width: 1.8rem;
       height: 1.8rem;
       color: ${palette.purple[400]};
-    }
-
-    &:hover {
-      background: ${palette.purple[50]};
     }
   }
 `

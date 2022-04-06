@@ -312,9 +312,9 @@ export const red = {
     active: 'rgba(255, 255, 255, 1)',
     inactive: 'rgba(255, 255, 255, 0.5)',
   }
-  
-  export const brandColor = '#3472AD'
-  
+
+  export const brandColor = '#A1045A'
+
   export default {
     red: red,
     pink: pink,

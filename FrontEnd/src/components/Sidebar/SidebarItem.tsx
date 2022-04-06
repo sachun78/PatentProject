@@ -1,18 +1,16 @@
 import { css } from '@emotion/react'
 import { NavLink } from 'react-router-dom'
-import palette from '../../lib/palette'
-import IconControl, { IconControlType } from '../IconControl/IconControl'
+import { brandColor } from 'lib/palette'
 
 export type SidebarItemProps = {
-  icon: IconControlType
   text: string
   to: string
   ignore?: boolean
 }
 
-function SidebarItem({ icon, text, to, ignore }: SidebarItemProps) {
+function SidebarItem({ text, to, ignore }: SidebarItemProps) {
   return (
-    <li css={itemStyle}>
+    <li>
       <NavLink
         to={to}
         css={linkStyle}
@@ -20,50 +18,29 @@ function SidebarItem({ icon, text, to, ignore }: SidebarItemProps) {
           if (ignore) {
             e.preventDefault()
           }
-        }}
-      >
-        <IconControl name={icon} />
+        }}>
         <span>{text}</span>
       </NavLink>
     </li>
   )
 }
 
-const itemStyle = css``
-
 const linkStyle = css`
   border-radius: 0.5rem;
-  height: 3.75rem;
   display: flex;
   align-items: center;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  color: ${palette.purple[200]}; //NON SELECTED ITEM
+  color: #6C6C6C;
   text-decoration: none;
-
-  &:hover {
-    background: ${palette.purple[50]};
-  }
-
-  svg {
-    width: 1.75rem;
-    height: 1.75rem;
-  }
+  margin-bottom: 1.5625rem;
 
   span {
-    font-size: 1.125rem;
-    margin-left: 1rem;
+    font: normal normal 800 18px/24px NanumSquareOTF;
+    text-align: center;
+    width: 95px;
   }
 
   &.active {
-    background: none;
-    color: ${palette.purple[400]};
-
-    span {
-      font-weight: bold;
-      border-bottom: 3px solid ${palette.purple[400]};
-      padding-bottom: 0.5rem;
-    }
+    color: ${brandColor};
   }
 `
 

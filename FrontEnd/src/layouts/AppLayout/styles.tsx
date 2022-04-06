@@ -1,32 +1,32 @@
 import { css } from '@emotion/react'
 import media from 'lib/styles/media'
-import palette from 'lib/palette'
 
 export const mainStyle = css`
-  margin-left: 16.25rem;
+  margin-left: 18.8125rem;
   min-height: 100%;
-  background: #f7f7f8;
-  padding-left: 2rem;
-  padding-top: 3rem;
-  padding-bottom: 3rem;
+  padding-left: 9.25rem;
+  padding-top: 5.625rem;
+  padding-bottom: 5.1875rem;
+
   ${media.xlarge} {
     margin-left: 8rem;
+    padding-left: 0;
   }
 
   ${media.small} {
     margin-left: 0;
+    //padding-left: 0;
   }
 `
 export const sidebarStyle = css`
-  width: 16.25rem;
+  width: 18.8125rem;
   height: 100%;
-  position: fixed; 
-  //background: linear-gradient(210deg, ${palette.purple[50]} 0%, #fff  80%);
-  background: #f7f7f8;
+  position: fixed;
+  background-color: transparent;
   display: flex;
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-  padding-left: 3rem;
+  padding-top: 5.625rem;
+  padding-bottom: 5.1875rem;
+  padding-left: 12.875rem;
 
   ${media.xlarge} {
     width: 8rem;
@@ -40,11 +40,14 @@ export const sidebarStyle = css`
 
 export const footerStyle = css`
   width: 100%;
-  height: 3.2rem;
-  background: ${palette.purple[50]};
+  height: 5.1875rem;
+  background: #F2F2F2;
   z-index: 999;
   position: fixed;
   bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 export const loadStyle = css`

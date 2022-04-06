@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom'
 import { css } from '@emotion/react'
-import EventDetailLeft from '../../components/Events/EventDetailLeft'
+import EventDetailLeft from 'components/Events/EventDetailLeft'
 
 export type EventProps = {}
 
@@ -22,8 +22,6 @@ const pageStyle = css`
   display: flex;
   justify-content: center;
   width: 90rem;
-  padding: 3rem;
-  margin-top: 2rem;
   border-radius: 0.8rem;
   border: 1px solid #e6e6e6;
 `

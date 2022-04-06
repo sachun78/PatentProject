@@ -1,50 +1,42 @@
 import { css } from '@emotion/react'
-import { MdAir, MdMoreHoriz } from 'react-icons/md'
-import palette from '../../lib/palette'
-import { useGlobalDialogActions } from '../../atoms/globalDialogState'
+import { MdMoreHoriz } from 'react-icons/md'
+import palette, { brandColor } from '../../lib/palette'
+import gravatar from 'gravatar'
+import { Avatar } from '@mui/material'
+import React from 'react'
 
 export type PostHeaderProps = {}
 
 function PostHeader({}: PostHeaderProps) {
-  const { open } = useGlobalDialogActions()
-
-  const onMoreClick = () => {
-    open({
-      title: 'More Btn Click',
-      message: 'you clicked more btn',
-      onConfirm: () => {
-        console.log('Confirm')
-      },
-      showCancel: false,
-      confirmText: 'OK'
-    })
-  }
-
   return <div css={headerStyle}>
-    <div css={iconStyle}><MdAir /></div>
-    <div css={titleStyle}><h4>
-      <span>TitleTitle</span>
-    </h4>
+    <div css={iconStyle}>
+      <Avatar alt='user-avatar' src={gravatar.url('test.email', { s: '60px', d: 'retro' })}
+              sx={{ width: 60, height: 60 }}
+              onClick={() => {
+              }} />
+    </div>
+    <div css={titleStyle}>
+      <h4><span>username/ etc ..</span></h4>
       <div className={'time-date'}>posted time-date</div>
     </div>
-    <div css={moreStyle} onClick={onMoreClick}><MdMoreHoriz /></div>
+    <div css={moreStyle} onClick={() => {
+    }}><MdMoreHoriz /></div>
   </div>
 }
 
 const headerStyle = css`
   display: flex;
-  padding-top: 1.2rem;
-  padding-left: 1.6rem;
-  padding-right: 1.6rem;
-  margin-bottom: 1.2rem;
+  padding-top: 1.875rem;
+  padding-left: 1.875rem;
+  padding-right: 1.875rem;
   align-items: flex-start;
 `
 const moreStyle = css`
   width: 3.6rem;
   height: 3.6rem;
   padding: 0.8rem;
-  border-radius: 9999px;
-  
+  border-radius: 999px;
+
   &:hover {
     background: ${palette.purple[50]};
   }
@@ -52,7 +44,7 @@ const moreStyle = css`
   svg {
     width: 2rem;
     height: 2rem;
-    color: ${palette.purple[400]};
+    color: ${brandColor};
   }
 
 `
@@ -64,28 +56,23 @@ const titleStyle = css`
   margin-bottom: -5px;
 
   h4 {
-    margin-top: 4px;
+    margin: 5px 0;
     outline: none;
     text-align: left;
   }
 
   span {
-    font-weight: 600;
-    font-size: 1.5rem;
-    color: ${palette.purple[600]};
+    color: #333333;
+    font: normal normal 800 19px/26px NanumSquareOTF;
   }
+
   .time-date {
-    color: ${palette.purple[300]};
+    font: normal normal 800 14px/19px NanumSquareOTF;
+    color: #9C9C9C;
   }
 `
 const iconStyle = css`
-  margin-right: 0.8rem;
-
-  svg {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 9999px;
-  }
+  margin-right: 1.875rem;
 `
 
 export default PostHeader

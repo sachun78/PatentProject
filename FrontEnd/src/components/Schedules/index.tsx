@@ -1,11 +1,11 @@
 import React from 'react'
 import ScheduleCard from './ScheduleCard'
 import IconControl from '../IconControl'
-import useMeetingQuery from '../../hooks/query/useMeetingQuery'
+import useMeetingQuery from 'hooks/query/useMeetingQuery'
 import { noScheduleStyle, tableStyle } from './styles'
 import { FormControlLabel, Switch } from '@mui/material'
 import ScheduleCalendar from './ScheduleCalendar'
-import { meetingSwitchState } from '../../atoms/memberShipTabState'
+import { meetingSwitchState } from 'atoms/memberShipTabState'
 import { useRecoilState } from 'recoil'
 import ScheduleSkeleton from './ScheduleSkeleton'
 
@@ -51,12 +51,7 @@ function Schedules({}: ScheduleViewProps) {
                                         place={v.location}
                                         date={v.date} time={v.time}
                                         title={v.title}
-                                        state={v.status} id={v.id} />)}
-        <ScheduleSkeleton />
-        <ScheduleSkeleton />
-        <ScheduleSkeleton />
-        <ScheduleSkeleton />
-      </div>}
+                                        state={v.status} id={v.id} />)}      </div>}
   </>
 }
 

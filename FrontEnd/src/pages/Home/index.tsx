@@ -2,17 +2,24 @@ import React from 'react'
 import { css } from '@emotion/react'
 import InitialInputModal from 'components/InitialInputModal'
 import Post from 'components/Post/'
-import media from 'lib/styles/media'
 import { Card, Grid } from '@mui/material'
+import { brandColor } from '../../lib/palette'
 
 type HomeProps = {}
 
 function Home({}: HomeProps) {
   return <>
-    <Grid container rowSpacing={4.5} columnSpacing={2.75}>
-      <Card variant='outlined' sx={{ p: 2.25, width: '1088px', mb: 2 }}> + Create new Post</Card>
+    <Grid container rowSpacing={4.5} columnSpacing={2.75} sx={{ ml: 0 }}>
+      <Card variant='outlined'
+            sx={{
+              p: 2.25, width: '54.375rem', mb: 2, boxShadow: '0 3px 6px #00000029',
+              borderRadius: '1rem', cursor: 'pointer',
+              '&:hover': {
+                background: brandColor, color: '#fff'
+              }
+            }}> +
+        Create new Post</Card>
       <div css={postViewStyle}>
-        {/*  POST BLOCK */}
         <Post id='1' />
         <Post id='2' />
         <Post id='3' />
@@ -24,16 +31,11 @@ function Home({}: HomeProps) {
 }
 
 const postViewStyle = css`
-  min-height: calc(100vh - 7rem);
-  max-width: 68rem;
+  max-width: 54.375rem;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-
-  ${media.small} {
-    margin-right: 0;
-  }
 `
 
 export default Home

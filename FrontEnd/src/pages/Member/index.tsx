@@ -1,74 +1,37 @@
-import { css } from '@emotion/react'
-import { Box, Tab, Tabs } from '@mui/material'
-import Events from 'components/Events/'
-import Schedules from 'components/Schedules'
+import { Box } from '@mui/material'
 import React from 'react'
-import { useRecoilState } from 'recoil'
-import { memberShipTabState } from 'atoms/memberShipTabState'
+import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom'
+import Events from 'components/Events'
+import Schedules from 'components/Schedules'
+import EventDetail from '../EventDetail'
+import { itemStyle, tabStyle, wrapper } from './style'
 
 type MemberShipProps = {}
 
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`
-  }
-}
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function TabPanel({ children, value, index, ...other }: TabPanelProps) {
-
-  return (
-    <div
-      role='tabpanel'
-      hidden={value !== index}
-      id={`member-tabpanel-${index}`}
-      aria-labelledby={`member-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <div>
-          {children}
-        </div>
-      )}
-    </div>
-  )
-}
-
 function Member({}: MemberShipProps) {
-  const [value, setValue] = useRecoilState(memberShipTabState)
+  const loc = useLocation()
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue)
+  if (loc.pathname === '/membership') {
+    return <Navigate to={'event'} />
   }
 
   return (
     <div css={wrapper}>
       <Box sx={{ width: '100%' }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
-            <Tab label='Event' {...a11yProps(0)} />
-            <Tab label='Schedule' {...a11yProps(1)} />
-          </Tabs>
-        </Box>
-        <TabPanel value={value} index={0}>
-          <Events />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <Schedules />
-        </TabPanel>
+        <ul css={tabStyle}>
+          <li><NavLink css={itemStyle} to={'event'}> Event </NavLink></li>
+          <li><NavLink css={itemStyle} to={'schedule'}> Schedule </NavLink></li>
+        </ul>
+        <Routes>
+          <Route path='event' element={<Events />} />
+          {/*<Route index element={<Events />} />*/}
+          <Route path='schedule' element={<Schedules />} />
+          <Route path='event/*' element={<EventDetail />} />
+        </Routes>
       </Box>
     </div>
   )
 }
 
-const wrapper = css`
-  padding-right: 1rem;
-`
 
 export default Member

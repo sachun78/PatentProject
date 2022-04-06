@@ -1,15 +1,15 @@
 import { css } from '@emotion/react'
-import palette from '../../lib/palette'
+import palette, { brandColor } from 'lib/palette'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { MdDeleteForever, MdUpdate } from 'react-icons/md'
-import { deleteEvent } from '../../lib/api/event/deleteEvent'
-import { useCurrentEventState } from '../../atoms/eventState'
-import { useEventModal } from '../../hooks/useEventTitle'
-import useDateRangeHook from '../../hooks/useDateRangeHook'
+import { deleteEvent } from 'lib/api/event/deleteEvent'
+import { useCurrentEventState } from 'atoms/eventState'
+import { useEventModal } from 'hooks/useEventTitle'
+import useDateRangeHook from 'hooks/useDateRangeHook'
 import { useCallback } from 'react'
 import { useQueryClient } from 'react-query'
 import { toast } from 'react-toastify'
-import media from '../../lib/styles/media'
+import media from 'lib/styles/media'
 
 export type EventCardProps = {
   id: string
@@ -75,7 +75,7 @@ function EventCard({ title, startDate, endDate, id, count }: EventCardProps) {
     </div>
     <div css={buttonStyle} onClick={handleNewMeet}>
       <NavLink to={'/membership/meeting/request'}>
-        <div className='text'>Propose a meeting</div>
+        <div className='text'>+ New Schedule</div>
       </NavLink>
     </div>
   </div>
@@ -104,7 +104,7 @@ const wrapper = css`
 `
 
 const buttonStyle = css`
-  background-color: ${palette.purple[500]};
+  background-color: ${brandColor};
   margin: 1.5rem -1.5rem -1.5rem -1.5rem;
   border-bottom-right-radius: 0.8rem;
   border-bottom-left-radius: 0.8rem;
@@ -116,10 +116,6 @@ const buttonStyle = css`
     font-weight: 600;
     padding-bottom: 0.5rem;
     color: #fff;
-  }
-
-  &:hover {
-    background-color: ${palette.purple[400]};
   }
 
   a {
@@ -141,7 +137,6 @@ const eventHeaderStyle = css`
     visibility: hidden;
     display: flex;
     font-size: 1.6rem;
-    color: ${palette.purple[500]};
     align-items: center;
 
     svg {
@@ -154,7 +149,7 @@ const eventHeaderStyle = css`
     }
 
     .tool-edit:hover {
-      color: ${palette.purple[400]};
+      color: ${palette.green[600]};
     }
   }
 `

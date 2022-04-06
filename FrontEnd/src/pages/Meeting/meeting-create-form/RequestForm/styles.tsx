@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import { resetButton } from 'lib/styles/resetButton'
-import palette from 'lib/palette'
+import palette, { brandColor } from 'lib/palette'
 
 export const wrapper = css`
   margin-right: 2rem;
@@ -15,7 +15,7 @@ export const buttonStyle = css`
   ${resetButton};
   height: 2.8rem;
   color: white;
-  background: ${palette.cyan[500]};
+  background: ${brandColor};
 
   &:hover,
   &:focus-visible {

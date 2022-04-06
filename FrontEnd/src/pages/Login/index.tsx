@@ -1,10 +1,10 @@
 import { Divider } from '@mui/material'
 import { Navigate, NavLink } from 'react-router-dom'
 import React from 'react'
-import { dividerStlye, loginFormStyle, underBlockStyle } from './styles'
-import Auth from '../../layouts/Auth'
-import useUserQuery from '../../hooks/query/useUserQuery'
+import { dividerStyle, loginFormStyle, underBlockStyle } from './styles'
+import useUserQuery from 'hooks/query/useUserQuery'
 import LoginForm from './login-form/LoginForm'
+import Auth from 'layouts/Auth'
 
 type LoginProps = {}
 
@@ -16,13 +16,13 @@ function Login({}: LoginProps) {
   }
 
   return (
-    <Auth width={800} height={600}>
+    <Auth height={1} width={1}>
+      <img src={'/assets/logo.png'} alt={'login-logo'} />
       <div css={loginFormStyle}>
-        <h2 className='title'>Sign In</h2>
         <section>
           <LoginForm />
         </section>
-        <Divider css={dividerStlye}>OR</Divider>
+        <Divider css={dividerStyle}>OR</Divider>
         <section>
           <div css={underBlockStyle}>
             <div>

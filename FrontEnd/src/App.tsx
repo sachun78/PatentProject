@@ -3,9 +3,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import DebugObserver from 'components/DebugObserver'
 import palette from 'lib/palette'
-import GlobalDialog from 'components/GlobalDialog'
 import useCsrfQuery from 'hooks/query/useCsrfQuery'
-import media from 'lib/styles/media'
 import loadable from '@loadable/component'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import useUserQuery from 'hooks/query/useUserQuery'
@@ -34,7 +32,6 @@ function App() {
         <Route path='/*' element={<AppLayout />} />
       </Routes>
       <Global styles={globalStyle} />
-      <GlobalDialog />
       <ToastContainer />
     </>
   )
@@ -46,10 +43,8 @@ const globalStyle = css`
   #root {
     overflow-x: hidden;
     height: 100%;
-
-    ${media.small} {
-      overflow-x: auto;
-    }
+    background: url("/assets/background.jpg") no-repeat center center fixed;
+    background-size: cover;
   }
 
   html {

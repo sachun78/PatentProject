@@ -1,11 +1,10 @@
 import React from 'react'
 import VerticalBar from 'components/Sidebar/VerticalBar'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import EventDetail from 'pages/EventDetail'
 import Sponsor from 'components/Sponsor'
 import Sidebar from 'components/Sidebar'
 import { footerStyle, mainStyle, sidebarStyle } from './styles'
-import useUserQuery from '../../hooks/query/useUserQuery'
+import useUserQuery from 'hooks/query/useUserQuery'
 import loadable from '@loadable/component'
 import { Backdrop, CircularProgress } from '@mui/material'
 
@@ -23,8 +22,7 @@ export default function AppLayout({}: AppLayoutProps) {
   if (isLoading) {
     return <Backdrop
       sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      open={isLoading}
-    >
+      open={isLoading}>
       <CircularProgress color='inherit' />
     </Backdrop>
   }
@@ -41,9 +39,8 @@ export default function AppLayout({}: AppLayoutProps) {
     <AppLayout.Main>
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/membership' element={<Member />} />
-        <Route path='/membership/event/*' element={<EventDetail />} />
         <Route path='/membership/meeting/*' element={<Meeting />} />
+        <Route path='/membership/*' element={<Member />} />
         <Route path='/network' element={<Network />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/conference' element={<div>컨퍼런스</div>} />
