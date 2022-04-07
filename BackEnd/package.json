@@ -51,6 +51,6 @@
     "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register build/index.js",
     "postinstall": "tsc -p tsconfig.json",
     "watch-ts": "tsc -w",
-    "deploy": "git add . && git commit -m Heroku && git subtree push --prefix BackEnd heroku master"
+    "start:dev": "cross-env NODE_PATH=./src ts-node-dev --respawn --transpile-only src/index.ts"
   }
 }
