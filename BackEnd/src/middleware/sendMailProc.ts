@@ -117,8 +117,8 @@ export const sendmail = async (emailInfo: any, mailType: EMAILTYPE) => {
       user: envConfig.email.userid,
       clientId: envConfig.email.client_id,
       clientSecret: envConfig.email.client_secret,
-      refreshToken: "1//04mtHrbnate7nCgYIARAAGAQSNwF-L9IrozvFYlUqmVMUpavEcsSF3Y4PNpgnMgPFBY2-cwyQZclbdnUrHBpMd71SJGnREQkwRZw",
-      accessToken: "ya29.A0ARrdaM_jNPbMfqK5P3qBc39uVufi4WeFzwhHmpWDr1tWpj-9a5imxc9Cw6Y9B-W_OlnjpFvCILDcok_-INNRSSdREoN3rlg9L0cjLTHQI5vqNzKmL0N5auOmbGG1w1MJ2LT1QaQIssTI7LRDh967IhR-_ovJ"
+      refreshToken: "1//04TB1r9NUjgbpCgYIARAAGAQSNwF-L9Ir0iHlek3WXg6Rwwb-K5C35pwfhGjIsI3d1c8zGE3RgPtGRr8Cvf5rc9f4LVRPNHwhWic",
+      accessToken: "ya29.A0ARrdaM9uTRuSybaBoYMLTzsiS34doQ-ClLAb92fl9sHO5bdPiGhn6ZMgfpAy9ni9p4SKY0SCP8giew5xAGj-vJsLBxYLF8IXW5PN_iNkpvIUlxQC58AllA1vuMUngAz_FBs6iA1A5zo57AjjVq3EziZc0hNq"
     },
   }
   let transporter = nodemailer.createTransport(serviceContent);
