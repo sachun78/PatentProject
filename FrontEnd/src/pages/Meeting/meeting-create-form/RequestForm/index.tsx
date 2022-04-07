@@ -9,14 +9,16 @@ import Input from 'components/Input'
 import LocationInput from 'components/LocationMap/LocationInput'
 import RequestSection from './RequestSection'
 import { toast } from 'react-toastify'
-import { buttonStyle, headerStyle, sectionStyle, space, wrapper } from './styles'
+import { buttonStyle, headerStyle, sectionStyle, wrapper } from './styles'
 import { Navigate, useNavigate } from 'react-router-dom'
+import useDateRangeHook from 'hooks/useDateRangeHook'
 
 type RequestViewProps = {}
 
 export default function RequestForm({}: RequestViewProps) {
   const [curEvent] = useCurrentEventState()
-  const { date, time, setDate, setTime } = useDateTimeHook()
+  const { startDate, endDate } = useDateRangeHook()
+  const { date, time, setDate, setTime } = useDateTimeHook(startDate)
   const navi = useNavigate()
   const [form, onChange] = useInputs({
     to: '',
@@ -24,6 +26,29 @@ export default function RequestForm({}: RequestViewProps) {
     comment: '',
     title: ''
   })
+
+  const onChangeDate = useCallback((change: Date) => {
+    if (!(change.getDate() <= endDate.getDate() && change.getDate() >= startDate.getDate())) {
+      toast.error('Error Date Not Contained', {
+        position: toast.POSITION.TOP_CENTER,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000
+      })
+      return
+    }
+    change.setHours(time.getHours())
+    change.setMinutes(time.getMinutes())
+    setDate(change)
+  }, [endDate, setDate, startDate, time])
+
+  const onChangeTime = useCallback((change: Date) => {
+    const newDate = new Date(date)
+    newDate.setHours(change.getHours())
+    newDate.setMinutes(change.getMinutes())
+    setTime(change)
+    setDate(newDate)
+  }, [date, setDate, setTime])
 
   const onSubmit = useCallback(() => {
     console.log(form, date.toLocaleDateString(), time.toLocaleTimeString(), curEvent)
@@ -60,15 +85,19 @@ export default function RequestForm({}: RequestViewProps) {
       })
     })
   }, [curEvent, date, form, time])
+
   if (curEvent.id === '') {
     return <Navigate to={'/membership'} />
   }
+
   return (
     <div css={wrapper}>
       <div css={headerStyle}> Request Meeting</div>
       <div css={sectionStyle}>
-        <RequestSection title={'Event'}>
+        <RequestSection title={'Event Info'}>
           <span>{curEvent.title}</span>
+          &nbsp;
+          <div> {startDate.toLocaleDateString()} ~ {endDate.toLocaleDateString()}</div>
         </RequestSection>
         <RequestSection title={'Meeting Title'}>
           <Input name='title' value={form.title} onChange={onChange} />
@@ -77,33 +106,23 @@ export default function RequestForm({}: RequestViewProps) {
           <Input name='to' value={form.to} onChange={onChange} />
         </RequestSection>
         <RequestSection title={'Meeting Date'}>
-          <DatePickerInput value={date} onChange={(value: Date) => {
-            value.setHours(time.getHours())
-            value.setMinutes(time.getMinutes())
-            setDate(value)
-          }} />
+          <DatePickerInput value={date}
+                           minimum={startDate}
+                           maximum={endDate}
+                           onChange={onChangeDate} />
         </RequestSection>
         <RequestSection title={'Meeting Time'}>
-          <TimePickerInput onChange={(value: Date) => {
-            const newDate = new Date(date)
-            newDate.setHours(value.getHours())
-            newDate.setMinutes(value.getMinutes())
-            setTime(value)
-            setDate(newDate)
-          }} value={time} />
+          <TimePickerInput onChange={onChangeTime} value={time} />
         </RequestSection>
         <RequestSection title={'Location'}>
           <LocationInput />
         </RequestSection>
         <RequestSection title={'Comment'}>
-          <Input
-            placeholder='Leave a comment'
-            name='comment'
-            value={form.comment}
-            onChange={onChange}
-          />
+          <Input placeholder='Leave a comment'
+                 name='comment'
+                 value={form.comment}
+                 onChange={onChange} />
         </RequestSection>
-        <div css={space} />
         <button css={buttonStyle} onClick={onSubmit}>OK</button>
       </div>
     </div>

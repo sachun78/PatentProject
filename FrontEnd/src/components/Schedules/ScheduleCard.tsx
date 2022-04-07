@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
-import palette from '../../lib/palette'
-import { NavLink } from 'react-router-dom'
+import palette from 'lib/palette'
+import { Link } from 'react-router-dom'
 
 export type ScheduleCardProps = {
   id: string
@@ -15,87 +15,94 @@ export type ScheduleCardProps = {
 }
 
 function ScheduleCard({ from, to, comment, place, time, date, state, id, title }: ScheduleCardProps) {
-  return <NavLink css={wrapper(state)} to={'/membership/meeting/' + id}>
+  return <Link css={wrapper(state)} to={'/membership/meeting/' + id}>
     <div css={headerStyle}>
-      <h3>{title}</h3>
-      <p className='from'>from<span> {from} </span></p>
-      <p className='to'>to <span> {to}</span></p>
+      <h3>{title}</h3> &nbsp;
+      <p>who#{to}</p>
     </div>
     <p css={commentStyle}>{comment}</p>
     <div css={bottomStyle}>
-      <div>{state}</div>
+      <div className={'state-box'}><span>{state}</span></div>
       <div>
-        {place}
-        <div>
-          {new Date(date).toLocaleDateString()}
-          {new Date(time).toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit'
-          })}</div>
+        {place} &nbsp;
+        {new Date(date).toLocaleDateString()}
+        {new Date(time).toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit'
+        })}
       </div>
     </div>
-  </NavLink>
+  </Link>
 }
 
 export const wrapper = (state: string) => css`
-  height: 20rem;
-  background: #fff;
-  ${state === 'replan' && css`
-    background: ${palette.lightGreen[200]};
-  `}
-  width: calc(33.3333% - 3rem);
-  min-width: 20rem;
-  margin: 1rem;
-  padding: 1rem;
+  height: 15.8125rem;
+  background: rgba(255, 255, 255, 0.5);
+  width: calc(50% - 3rem);
+  margin-right: 0.625rem;
+  margin-bottom: 0.625rem;
+  padding: 1.875rem 1.875rem 0;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  border-radius: 0.4rem;
-  box-shadow: rgb(0 0 0 / 4%) 0 4px 16px 0;
-  overflow: hidden;
-  transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
-  color: ${palette.purple[900]};
+  border-radius: 1rem;
+  box-shadow: 0 3px 6px #00000029;
+  overflow: hidden; //Text overflow
+  transition: background-color 0.25s ease-in 0s;
+  color: #333333;
   text-decoration: none;
 
   &:hover {
-    transform: translate(5px, -10px);
     border: 1px solid ${palette.grey[300]};
     cursor: pointer;
+    background: rgba(255, 255, 255, 1);
+
+    h3 {
+      color: #A1045A;
+      margin: 5px 0 0.9375rem;
+    }
   }
 
   h3 {
-    font-size: 1.3rem;
-    line-height: 1.1;
+    font: normal normal 800 20px/23px 'NanumSquare';
+    margin: 5px 0 0.9375rem;
   }
 `
 export const commentStyle = css`
+  color: #6C6C6C;
+  font: normal normal normal 17px/19px 'NanumSquare';
+  word-break: break-all;
+  margin: 0;
+  min-height: 111px;
   height: 100%;
-  margin-top: 0.5rem;
-  font-size: 1.4rem;
-  line-height: 1.2;
-  word-break: break-all
 `
 export const bottomStyle = css`
+  height: 100%;
   box-shadow: inset 0 calc(1 * 1px) 0 rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
-  padding: 0.5rem;
+  align-items: center;
   text-align: center;
+  color: #6C6C6C;
+  font: normal normal normal 16px/18px NanumSquareOTF;
+  
+  .state-box {
+    height: 1.5rem;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    background: #A1045A;
+    border: 1px solid #D9D9D9;
+    border-radius: 12px;
+
+    span {
+      color: #fff;
+      font: normal normal normal 15px/17px 'NanumSquare';
+    }
+  }
 `
 export const headerStyle = css`
   display: flex;
-  flex-direction: column;
-
-  .from, .to {
-    color: ${palette.grey[500]};
-    align-self: flex-end;
-    margin: 0.2rem;
-  }
-
-  span {
-    color: ${palette.blueGrey[600]};
-    font-weight: bold;
-  }
+  justify-content: space-between;
 `
 
 export default ScheduleCard

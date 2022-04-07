@@ -24,10 +24,6 @@ export const buttonStyle = css`
 
   border-radius: 0.5rem;
 `
-
-export const space = css`
-  flex: 1;
-`
 export const headerStyle = css`
   font-size: 2.25rem;
   font-weight: bold;

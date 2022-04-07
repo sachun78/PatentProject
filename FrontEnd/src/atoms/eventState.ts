@@ -24,7 +24,13 @@ export const eventState = atom({
   default: initialState
 })
 
-const currentEventState = atom({
+export type CurrentEventState = {
+  id: string,
+  title: string,
+}
+
+
+const currentEventState = atom<CurrentEventState>({
   key: 'currentEventState',
   default: {
     id: '',

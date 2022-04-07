@@ -32,7 +32,8 @@ const postStyle = css`
   box-shadow: 0 3px 6px #00000029;
   border-radius: 1rem;
   position: relative;
-
+  opacity: 0.8;
+  
   figure {
     max-height: 40rem;
     display: flex;

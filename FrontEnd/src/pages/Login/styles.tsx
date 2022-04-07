@@ -23,7 +23,7 @@ export const loginFormStyle = css`
       background: #A1045A 0 0 no-repeat padding-box;
       mix-blend-mode: multiply;
       border-radius: 7px;
-      font: normal normal normal 19px/22px NanumBarunGothic;
+      font: normal normal normal 19px/22px 'NanumBarunGothic';
       letter-spacing: 0;
       color: #FFFFFF;
     }
@@ -44,6 +44,7 @@ export const inputStyle = css`
     &::placeholder {
       color: #9C9C9C;
     }
+
     padding: 21.5px 37px;
   }
 `
@@ -83,11 +84,23 @@ export const pageStyle = css`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+`
+
+export const containerStyle = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;;
+  width: 54.375rem;
+  height: 53.75rem;
+  border-radius: 1rem;
+  box-shadow: 0 3px 6px #00000029;
+  background: rgba(255, 255, 255, 0.5);
 
   img {
     min-width: 11.875rem;
     min-height: 14.4375rem;
-    margin-top: 239px;
-    margin-bottom: 50px;
+    margin-top: 6.8125rem;
+    margin-bottom: 4.625rem;
   }
 `

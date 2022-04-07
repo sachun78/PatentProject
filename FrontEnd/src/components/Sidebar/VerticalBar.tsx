@@ -10,7 +10,7 @@ function VerticalBar({}: VerticalBarProps) {
     <div css={bar}>
       <div css={endBlock('top')}>
         <Link to="/">
-          <img src={"/assets/logo.png"} alt="small logo" className="logo" />
+          <img src={"/assets/wemet_logo.png"} alt="small logo" className="logo" />
         </Link>
       </div>
       <div css={links}>

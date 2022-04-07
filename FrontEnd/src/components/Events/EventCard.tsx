@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import palette, { brandColor } from 'lib/palette'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { MdDeleteForever, MdUpdate } from 'react-icons/md'
 import { deleteEvent } from 'lib/api/event/deleteEvent'
 import { useCurrentEventState } from 'atoms/eventState'
@@ -52,9 +52,11 @@ function EventCard({ title, startDate, endDate, id, count }: EventCardProps) {
       })
   }
 
-  const handleNewMeet = async () => {
+  const onCreateSchedule = useCallback(() => {
     setEvent({ id, title })
-  }
+    setStartDate(new Date(startDate))
+    setEndDate(new Date(endDate))
+  }, [endDate, id, startDate, title])
 
   return <div css={wrapper}>
     <div className={'inner'} onClick={() => {
@@ -73,10 +75,10 @@ function EventCard({ title, startDate, endDate, id, count }: EventCardProps) {
         <span>Associated Meetings: <b>{count}</b></span>
       </div>
     </div>
-    <div css={buttonStyle} onClick={handleNewMeet}>
-      <NavLink to={'/membership/meeting/request'}>
+    <div css={buttonStyle} onClick={onCreateSchedule}>
+      <Link to={'/membership/meeting/request'}>
         <div className='text'>+ New Schedule</div>
-      </NavLink>
+      </Link>
     </div>
   </div>
 }
@@ -92,7 +94,7 @@ const wrapper = css`
   ${media.xsmall} {
     width: calc(100% - 1rem);
   }
-  
+
   background-color: #fff;
   text-align: left;
 

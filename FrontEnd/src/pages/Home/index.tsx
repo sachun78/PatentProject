@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import InitialInputModal from 'components/InitialInputModal'
 import Post from 'components/Post/'
 import { Card, Grid } from '@mui/material'
-import { brandColor } from '../../lib/palette'
+import { brandColor } from 'lib/palette'
 
 type HomeProps = {}
 

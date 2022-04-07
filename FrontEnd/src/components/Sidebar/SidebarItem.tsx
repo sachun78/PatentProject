@@ -1,6 +1,5 @@
 import { css } from '@emotion/react'
 import { NavLink } from 'react-router-dom'
-import { brandColor } from 'lib/palette'
 
 export type SidebarItemProps = {
   text: string
@@ -26,21 +25,24 @@ function SidebarItem({ text, to, ignore }: SidebarItemProps) {
 }
 
 const linkStyle = css`
-  border-radius: 0.5rem;
   display: flex;
   align-items: center;
   color: #6C6C6C;
   text-decoration: none;
-  margin-bottom: 1.5625rem;
-
+  width: 95px;
+  justify-content: center;
   span {
-    font: normal normal 800 18px/24px NanumSquareOTF;
+    font: normal normal 800 18px/24px 'NanumSquare';
     text-align: center;
-    width: 95px;
+    padding: 1.25rem 0 0.625rem;
   }
 
   &.active {
-    color: ${brandColor};
+    color: #910457;
+    span {
+      border-bottom: 1px solid #910457; 
+    }
+    font: normal normal normal 17px/19px NanumSquareOTF;
   }
 `
 

@@ -34,17 +34,19 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
     navigate('/membership/meeting/' + clickInfo.event.id)
   }, [navigate])
 
-  return <div css={calendarStyle}><FullCalendar
-    plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
-    headerToolbar={{
-      left: 'title',
-      right: 'today prev,next'
-    }}
-    initialEvents={scheduleEvents}
-    showNonCurrentDates={false}
-    fixedWeekCount={false}
-    eventClick={onScheduleClick}
-  />
+  return <div css={calendarStyle}>
+    <FullCalendar
+      plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
+      headerToolbar={{
+        center: 'title',
+        left: 'prev next today',
+        right: ''
+      }}
+      initialEvents={scheduleEvents}
+      showNonCurrentDates={false}
+      fixedWeekCount={false}
+      eventClick={onScheduleClick}
+    />
   </div>
 }
 

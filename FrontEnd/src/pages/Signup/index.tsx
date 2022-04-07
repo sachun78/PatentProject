@@ -106,44 +106,44 @@ export default function Signup({}: RegisterProps) {
     return <Navigate replace to={'/login'} />
   }
   return (
-      <Auth width={622} height={670}>
-        <div css={signupFormStyle}>
-          <div css={undoStyle}>
-            <NavLink to={'/login'} className='link'>
-              <span>Back</span>
-            </NavLink>
-          </div>
-          <h2 className='title'>Sign Up</h2>
-          <section>
-            <form onSubmit={onSubmit}>
-              {/*TODO: email get from code check queryClient on MAILCHECK*/}
-              <TextField label='Email' variant='outlined' type='text' name='email'
-                         value={data.email} css={inputStyle}
-                         InputProps={{
-                           style: { fontSize: 12 },
-                           endAdornment: <InputAdornment position='end'><MdLock /></InputAdornment>
-                         }} />
-              <TextField label='Name' variant='outlined' type='text' name='username'
-                         value={form.username} onChange={onChange} css={inputStyle} autoComplete='off'
-                         InputProps={{ style: { fontSize: 12 } }} />
-              <TextField label='Password' variant='outlined' type='password' name='password'
-                         value={form.password} onChange={onChange} css={inputStyle} autoComplete='password'
-                         InputProps={{ style: { fontSize: 12 } }} />
-              <TextField label='Confirm Password' variant='outlined' type='password'
-                         name='password_confirm' autoComplete='password-confirm'
-                         value={form.password_confirm} onChange={onChange} css={inputStyle}
-                         InputProps={{ style: { fontSize: 12 } }} />
-              <div css={privacyStyle}><p>By clicking Sign Up, you are indicating that you have read and acknowledge the
-                <NavLink to={'/login'}> Terms of Service</NavLink> and <NavLink to={'/'}>Privacy Notice</NavLink>.</p>
-              </div>
-              {error && <FormHelperText error id='helper-text-signup-error'>{error}</FormHelperText>}
-              <div className='button-div'>
-                <Button variant='contained' disabled={mutation.isLoading} type='submit' size='large'>Sign Up</Button>
-              </div>
-            </form>
-          </section>
+    <Auth>
+      <div css={signupFormStyle}>
+        <div css={undoStyle}>
+          <NavLink to={'/login'} className='link'>
+            <span>Back</span>
+          </NavLink>
         </div>
-      </Auth>
+        <h2 className='title'>Sign Up</h2>
+        <section>
+          <form onSubmit={onSubmit}>
+            {/*TODO: email get from code check queryClient on MAILCHECK*/}
+            <TextField label='Email' variant='outlined' type='text' name='email'
+                       value={data.email} css={inputStyle}
+                       InputProps={{
+                         style: { fontSize: 12 },
+                         endAdornment: <InputAdornment position='end'><MdLock /></InputAdornment>
+                       }} />
+            <TextField label='Name' variant='outlined' type='text' name='username'
+                       value={form.username} onChange={onChange} css={inputStyle} autoComplete='off'
+                       InputProps={{ style: { fontSize: 12 } }} />
+            <TextField label='Password' variant='outlined' type='password' name='password'
+                       value={form.password} onChange={onChange} css={inputStyle} autoComplete='password'
+                       InputProps={{ style: { fontSize: 12 } }} />
+            <TextField label='Confirm Password' variant='outlined' type='password'
+                       name='password_confirm' autoComplete='password-confirm'
+                       value={form.password_confirm} onChange={onChange} css={inputStyle}
+                       InputProps={{ style: { fontSize: 12 } }} />
+            <div css={privacyStyle}><p>By clicking Sign Up, you are indicating that you have read and acknowledge the
+              <NavLink to={'/login'}> Terms of Service</NavLink> and <NavLink to={'/'}>Privacy Notice</NavLink>.</p>
+            </div>
+            {error && <FormHelperText error id='helper-text-signup-error'>{error}</FormHelperText>}
+            <div className='button-div'>
+              <Button variant='contained' disabled={mutation.isLoading} type='submit' size='large'>Sign Up</Button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </Auth>
   )
 }
 

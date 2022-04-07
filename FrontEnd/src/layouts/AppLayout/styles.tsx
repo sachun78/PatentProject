@@ -46,7 +46,7 @@ export const footerStyle = css`
   position: fixed;
   bottom: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
 `
 

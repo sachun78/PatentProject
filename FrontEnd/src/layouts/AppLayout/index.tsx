@@ -38,7 +38,7 @@ export default function AppLayout({}: AppLayoutProps) {
     </AppLayout.Sidebar>
     <AppLayout.Main>
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route index element={<Home />} />
         <Route path='/membership/meeting/*' element={<Meeting />} />
         <Route path='/membership/*' element={<Member />} />
         <Route path='/network' element={<Network />} />
