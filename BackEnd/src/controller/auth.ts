@@ -23,9 +23,12 @@ export async function signup(req: IRequest, res: Response, next: NextFunction) {
     const hashed = await bcrypt.hash(password, envConfig.bcrypt.salt_rouunds);
     const user = await UserRepo.createUser({ ...req.body, password : hashed});
     const profile = await ProfileRepo.createProfile(ProfileRepo.defaultProfile , user.id);
+    if (profile) {
+      await UserRepo.updateUser(user.id, {profile: profile._id});
+    }
     const emailAuth = await EmailAutoRepo.findByEmail(email);
     if (emailAuth?.logged === true) {
-      const updated = await UserRepo.updateUser(user.id, {certified: true});
+      await UserRepo.updateUser(user.id, {certified: true, profile: profile._id});
     }
 
     const token = createJwtToken(user.id)

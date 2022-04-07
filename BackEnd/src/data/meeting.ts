@@ -15,6 +15,7 @@ export interface IMeeting {
   comment: string,
   status: 'none' | 'confirm' | 'cancel',
   code: string,
+  history: string
 };
 
 export const meetingSchema = new mongoose.Schema<IMeeting>({
@@ -30,6 +31,7 @@ export const meetingSchema = new mongoose.Schema<IMeeting>({
   comment: { type: String, requierd: true },
   status: { type: String, enum: ['none', 'confirm', 'cancel'], default: 'none' },
   code: { type: String, requierd: true },
+  history: { type: String, ref: "mhistory", default: ""}
 },{
   timestamps: true,
   versionKey: false
@@ -38,12 +40,27 @@ useVirtualId(meetingSchema);
 
 const meeting = mongoose.model('meetings', meetingSchema);
 
-export async function getAll(userId: string) {
-  return meeting.find({ownerId: userId}).sort({createAt: -1});
+export async function getAll(userId: string, data?: any) {
+  if (!data) {
+    return meeting.find({ownerId: userId}).sort({createAt: -1});
+  }
+
+  let filters: any = {ownerId: userId};
+  Object.assign(filters, data.filter);
+
+  return meeting.find(filters).sort(data.sort);
 }
 
 export async function getById(meetingId: string) {
-  return meeting.findById(meetingId);
+  return meeting.findById(meetingId).then((value) => {
+    console.log(value);
+    if (value?.history) {
+      return meeting.findById(meetingId).populate('history');
+    }
+    else {
+      return value;
+    }
+  })
 }
 
 export async function getByCode(meetingCode: string) {
