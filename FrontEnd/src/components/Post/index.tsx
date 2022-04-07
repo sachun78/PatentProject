@@ -2,7 +2,7 @@ import { css } from '@emotion/react'
 import React from 'react'
 import PostHeader from './PostHeader'
 import PostFooter from './PostFooter'
-import media from '../../lib/styles/media'
+import media from 'lib/styles/media'
 
 type PostProps = {
   id?: string
@@ -33,14 +33,16 @@ const postStyle = css`
   border-radius: 1rem;
   position: relative;
   opacity: 0.8;
-  
+
   figure {
     max-height: 40rem;
     display: flex;
     justify-content: center;
     background: grey;
     margin: 1.25rem 1.875rem;
+    border-radius: 1rem;
   }
+
   ${media.small} {
     margin-right: 1rem;
     //padding-left: 0;
@@ -48,7 +50,9 @@ const postStyle = css`
 `
 const bodyStyle = css`
   padding: 0 1.875rem;
-  font: normal normal 800 14px/19px NanumSquareOTF;
+  font: normal normal 800 14px 'NanumSquare';
+  line-height: 1.142857143;
+  color: #333333;
 `
 
 export default Post

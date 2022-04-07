@@ -18,7 +18,7 @@ export const sidebarStyle = css`
 export const menuStyle = css`
   list-style: none;
   padding: 0;
-  margin: 35px 0 40px;
+  margin: 35px 0 30px;
 `
 
 export const logoStyle = css`
@@ -49,8 +49,9 @@ export const userStyle = css`
   cursor: pointer;
 
   span {
-    margin-top: 0.660625rem;
-    font: normal normal 800 20px/27px 'NanumSquare';
+    margin-top: 1.25rem;
+    font: normal normal 800 18px 'NanumSquare';
+    line-height: 1.166666667;
     color: #333333;
     white-space: nowrap;
 

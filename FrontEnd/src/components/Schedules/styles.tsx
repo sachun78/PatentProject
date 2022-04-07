@@ -34,17 +34,45 @@ export const tableStyle = css`
 
 export const calendarStyle = css`
   .fc-today-button {
+    width: 73px !important;
+    border-radius: 12px !important;
+    height: 24px !important;
+    padding: 4px 0 !important;
+    font: normal normal 800 15px 'NanumSquare' !important;
+    line-height: 1.133333333 !important;
+
+    background-color: #A1045A !important;
+    color: #fff !important;
+
     &:disabled {
       background-color: ${palette.grey[900]} !important;
       color: ${palette.grey[400]} !important;
     }
-
-    background-color: ${palette.purple[900]} !important;
-    color: ${palette.grey[100]} !important;
   }
 
-  margin-top: 1.5625rem;
+  .fc .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 1.125rem !important;
+  }
+
+  .fc-prev-button, .fc-next-button {
+    background: #9C9C9C !important;
+    width: 19px !important;
+    height: 19px !important;
+    padding: 0 !important;
+  }
+
+  .fc .fc-toolbar-title {
+    color: #6C6C6C;
+    font: normal normal normal 20px NanumSquareOTF;
+    line-height: 1.15;
+  }
+
+  margin-top: 0.625rem;
+  margin-bottom: 0.625rem;
   max-width: 80.3125rem;
+  max-height: 42.9375rem;
   padding: 1.875rem;
-  background: rgba(255, 255, 255, 0.5);
+  border-radius: 1rem;
+  box-shadow: 0 3px 6px #00000029;
+  background: rgba(255, 255, 255, 0.7);
 `

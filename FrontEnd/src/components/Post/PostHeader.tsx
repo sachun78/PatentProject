@@ -11,9 +11,7 @@ function PostHeader({}: PostHeaderProps) {
   return <div css={headerStyle}>
     <div css={iconStyle}>
       <Avatar alt='user-avatar' src={gravatar.url('test.email', { s: '60px', d: 'retro' })}
-              sx={{ width: 60, height: 60 }}
-              onClick={() => {
-              }} />
+              sx={{ width: 60, height: 60 }} />
     </div>
     <div css={titleStyle}>
       <h4><span>username/ etc ..</span></h4>
@@ -56,23 +54,28 @@ const titleStyle = css`
   margin-bottom: -5px;
 
   h4 {
-    margin: 5px 0;
+    margin: 0.625rem 0 0.5rem;
     outline: none;
     text-align: left;
   }
 
   span {
     color: #333333;
-    font: normal normal 800 19px/26px NanumSquareOTF;
+    font-family: NanumSquare;
+    font-weight: 800;
+    font-size: 19px;
+    line-height: 1.157894737;
   }
 
   .time-date {
-    font: normal normal 800 14px/19px NanumSquareOTF;
+    font-family: 'NanumSquare';
+    font-size: 14px;
+    line-height: 1.142857143;
     color: #9C9C9C;
   }
 `
 const iconStyle = css`
-  margin-right: 1.875rem;
+  margin-right: 1.25rem;
 `
 
 export default PostHeader

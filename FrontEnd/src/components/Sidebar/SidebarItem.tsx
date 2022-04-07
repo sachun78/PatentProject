@@ -31,18 +31,17 @@ const linkStyle = css`
   text-decoration: none;
   width: 95px;
   justify-content: center;
+
   span {
     font: normal normal 800 18px/24px 'NanumSquare';
     text-align: center;
-    padding: 1.25rem 0 0.625rem;
+    padding: 1.25rem 0 1.25rem;
   }
 
   &.active {
     color: #910457;
-    span {
-      border-bottom: 1px solid #910457; 
-    }
-    font: normal normal normal 17px/19px NanumSquareOTF;
+    font: normal normal normal 18px 'NanumSquare';
+    line-height: 1.166666667;
   }
 `
 

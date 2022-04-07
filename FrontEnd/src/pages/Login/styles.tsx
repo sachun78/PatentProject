@@ -23,9 +23,9 @@ export const loginFormStyle = css`
       background: #A1045A 0 0 no-repeat padding-box;
       mix-blend-mode: multiply;
       border-radius: 7px;
-      font: normal normal normal 19px/22px 'NanumBarunGothic';
-      letter-spacing: 0;
-      color: #FFFFFF;
+      font: normal normal normal 19px 'NanumBarunGothic';
+      line-height: 1.157894737;
+      color: #fff;
     }
   }
 `

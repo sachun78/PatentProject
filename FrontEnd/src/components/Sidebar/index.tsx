@@ -30,8 +30,8 @@ function Sidebar({}: SidebarProps) {
     </ul>
     <div css={dividerStyle}>{''}</div>
     <div css={userStyle}>
-      <Avatar alt='user-avatar' src={gravatar.url(user.email, { s: '74px', d: 'retro' })}
-              sx={{ width: 74, height: 74 }}
+      <Avatar alt='user-avatar' src={gravatar.url(user.email, { s: '60px', d: 'retro' })}
+              sx={{ width: 60, height: 60 }}
               onClick={() => navigate('/profile')} />
       <span>{user.username}</span>
       <span onClick={() => logout()}>Logout</span>

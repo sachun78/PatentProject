@@ -46,6 +46,7 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
       showNonCurrentDates={false}
       fixedWeekCount={false}
       eventClick={onScheduleClick}
+      aspectRatio={2.079796265}
     />
   </div>
 }
