@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useCurrentEventState } from 'atoms/eventState'
 import useDateTimeHook from 'hooks/useDateTimeHook'
 import useInputs from 'hooks/useInputs'
@@ -18,7 +18,7 @@ type RequestViewProps = {}
 export default function RequestForm({}: RequestViewProps) {
   const [curEvent] = useCurrentEventState()
   const { startDate, endDate } = useDateRangeHook()
-  const { date, time, setDate, setTime } = useDateTimeHook(startDate)
+  const { date, time, setDate, setTime } = useDateTimeHook()
   const navi = useNavigate()
   const [form, onChange] = useInputs({
     to: '',
@@ -85,6 +85,13 @@ export default function RequestForm({}: RequestViewProps) {
       })
     })
   }, [curEvent, date, form, time])
+
+  useEffect(() => {
+    const tempTime = new Date(startDate)
+    tempTime.setMinutes(0)
+    setDate(startDate)
+    setTime(tempTime)
+  }, [])
 
   if (curEvent.id === '') {
     return <Navigate to={'/membership'} />

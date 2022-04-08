@@ -1,7 +1,6 @@
 import { css } from '@emotion/react'
-import palette, { brandColor } from 'lib/palette'
+import { brandColor } from 'lib/palette'
 import { Link, useNavigate } from 'react-router-dom'
-import { MdDeleteForever, MdUpdate } from 'react-icons/md'
 import { deleteEvent } from 'lib/api/event/deleteEvent'
 import { useCurrentEventState } from 'atoms/eventState'
 import { useEventModal } from 'hooks/useEventTitle'
@@ -63,16 +62,11 @@ function EventCard({ title, startDate, endDate, id, count }: EventCardProps) {
       navigate(`/membership/event/${id}`)
     }}>
       <div css={eventHeaderStyle}>
-        <span className='event-header-header'>{title}</span>
-        <div className='event-header-tool'>
-          <div className='tool-edit' onClick={handleEdit}><MdUpdate /></div>
-          <div className='tool-delete' onClick={onDelete}><MdDeleteForever /></div>
-        </div>
+        <span className='event-card-header'>{title}</span>
       </div>
       <div css={contentStyle}>
-        <span>Begin: <b>{startDate.replace(/T.*$/, '')}</b></span>
-        <span>END: <b>{endDate.replace(/T.*$/, '')}</b></span>
-        <span>Associated Meetings: <b>{count}</b></span>
+        <span>Period: <b>{startDate.replace(/T.*$/, '')}</b> ~ <b>{endDate.replace(/T.*$/, '')}</b></span>
+        <span>Schedules: <b>{count}</b></span>
       </div>
     </div>
     <div css={buttonStyle} onClick={onCreateSchedule}>
@@ -84,39 +78,38 @@ function EventCard({ title, startDate, endDate, id, count }: EventCardProps) {
 }
 
 const wrapper = css`
-  width: calc(50% - 1rem);
-  margin: 2rem 0.5rem 2rem;
-  padding: 1.5rem;
-  line-height: 1.2;
-  border-radius: 0.8rem;
-  box-shadow: rgb(0 0 0 / 4%) 0 4px 16px 0;
+  width: calc(50% - 1.25rem);
+  max-width: 37.5rem;
+  height: 13.9375rem;
+  margin-bottom: 1.5625rem;
+  margin-right: 1.25rem;
+  padding: 1.875rem;
+  border-radius: 1rem;
 
   ${media.xsmall} {
     width: calc(100% - 1rem);
   }
 
-  background-color: #fff;
-  text-align: left;
+  background: #fff;
+  opacity: 0.7;
 
-  .inner:hover {
-    .event-header-tool {
-      visibility: visible
-    }
+  &:hover {
+    opacity: 1;
   }
 `
 
 const buttonStyle = css`
   background-color: ${brandColor};
-  margin: 1.5rem -1.5rem -1.5rem -1.5rem;
-  border-bottom-right-radius: 0.8rem;
-  border-bottom-left-radius: 0.8rem;
-  text-align: center;
+  margin: 3.25rem -1.875rem 0;
+
+  border-bottom-right-radius: 1rem;
+  border-bottom-left-radius: 1rem;
 
   .text {
-    padding-top: 0.5rem;
-    font-size: 1.5rem;
-    font-weight: 600;
-    padding-bottom: 0.5rem;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+    font: normal normal normal 16px 'NanumSquare';
+    line-height: 1.125;
     color: #fff;
   }
 
@@ -127,38 +120,16 @@ const buttonStyle = css`
 
 const eventHeaderStyle = css`
   display: flex;
-  height: 3rem;
+  margin-top: 7px;
+  margin-bottom: 15px;
 
-  .event-header-header {
-    flex-grow: 1;
-    font-weight: 800;
-    font-size: 1.5rem;
-  }
-
-  .event-header-tool {
-    visibility: hidden;
-    display: flex;
-    font-size: 1.6rem;
-    align-items: center;
-
-    svg {
-      width: 2rem;
-      height: 2rem;
-    }
-
-    .tool-delete:hover {
-      color: ${palette.red[700]};
-    }
-
-    .tool-edit:hover {
-      color: ${palette.green[600]};
-    }
+  .event-card-header {
+    font: normal normal 800 18px 'NanumSquare';
+    color: #333333;
+    line-height: 1.166666667;
   }
 `
 const contentStyle = css`
-  min-height: 4rem;
-  font-size: 1.2rem;
-
   display: flex;
   flex-direction: column;
   align-items: flex-start;

@@ -45,7 +45,6 @@ const postStyle = css`
 
   ${media.small} {
     margin-right: 1rem;
-    //padding-left: 0;
   }
 `
 const bodyStyle = css`

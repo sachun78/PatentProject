@@ -4,6 +4,7 @@ import palette, { brandColor } from 'lib/palette'
 
 export const wrapper = css`
   margin-right: 2rem;
+  max-width: 90rem;
 `
 export const sectionStyle = css`
   flex: 2;

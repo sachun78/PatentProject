@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import media from 'lib/styles/media'
-import { brandColor } from 'lib/palette'
+import { brandColor } from '../../lib/palette'
 
 export const sidebarStyle = css`
   ${media.xlarge} {
@@ -49,14 +49,20 @@ export const userStyle = css`
   cursor: pointer;
 
   span {
-    margin-top: 1.25rem;
     font: normal normal 800 18px 'NanumSquare';
     line-height: 1.166666667;
     color: #333333;
     white-space: nowrap;
+    margin-top: 1.25rem;
+    margin-bottom: 0.9375rem;
+  }
+
+  svg {
+    width: 1.25rem;
+    height: 17px;
 
     &:hover {
-      color: ${brandColor};
+      fill: ${brandColor};
     }
   }
 `

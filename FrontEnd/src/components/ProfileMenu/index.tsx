@@ -118,7 +118,7 @@ function ProfileMenu({}: ProfileMenuProps) {
         <ProfileCard.Save title='' onSave={onSaveProfile} loading={saveMutation.isLoading} />}
     </InfoViewSection>
     <InfoViewSection title='Additional'>
-      <InfoViewCard.Item title='Prev Career' type={'career'} />
+      <InfoViewCard.Item title='Career' type={'career'} />
     </InfoViewSection>
     <Button variant='outlined' onClick={toggleHistoryDrawer}> Open History</Button>
     <HistoryDrawer open={isHistoryOpen} onClose={toggleHistoryDrawer} />

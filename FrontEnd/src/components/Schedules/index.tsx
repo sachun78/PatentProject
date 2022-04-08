@@ -51,7 +51,8 @@ function Schedules({}: ScheduleViewProps) {
                                         place={v.location}
                                         date={v.date} time={v.time}
                                         title={v.title}
-                                        state={v.status} id={v.id} />)}      </div>}
+                                        state={v.status} id={v.id} />)}
+      </div>}
   </>
 }
 

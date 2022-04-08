@@ -18,7 +18,9 @@ function Login({}: LoginProps) {
   return (
     <Auth>
       <div css={containerStyle}>
-        <img src={'/assets/login_logo.png'} alt={'login-logo'} />
+        <figure>
+          <img src={'/assets/login_logo.png'} alt={'login-logo'} />
+        </figure>
         <div css={loginFormStyle}>
           <section>
             <LoginForm />

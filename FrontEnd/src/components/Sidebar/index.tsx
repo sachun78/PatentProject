@@ -7,6 +7,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { Avatar } from '@mui/material'
 import gravatar from 'gravatar'
 import { dividerStyle, logoStyle, menuStyle, sidebarStyle, userStyle } from './styles'
+import { MdOutlineLogout } from 'react-icons/md'
 
 type SidebarProps = {}
 
@@ -34,7 +35,7 @@ function Sidebar({}: SidebarProps) {
               sx={{ width: 60, height: 60 }}
               onClick={() => navigate('/profile')} />
       <span>{user.username}</span>
-      <span onClick={() => logout()}>Logout</span>
+      <MdOutlineLogout onClick={() => logout()} />
     </div>
   </div>
 }

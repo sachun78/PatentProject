@@ -50,8 +50,26 @@ export const calendarStyle = css`
     }
   }
 
+  .fc-daygrid-day-number {
+    padding: 0.5rem 0.5rem 0.25rem !important;
+    color: #6C6C6C;
+    font: normal normal 800 15px 'NanumSquare';
+    line-height: 1.133333333;
+  }
+
+  .fc-col-header {
+    background: #D9D9D9;
+    color: #6C6C6C;
+    font: normal normal normal 17px NanumSquareOTF;
+    line-height: 1.117647059;
+  }
+
   .fc .fc-toolbar.fc-header-toolbar {
     margin-bottom: 1.125rem !important;
+  }
+
+  .fc-day-past, .fc-day-future {
+    background: #fff;
   }
 
   .fc-prev-button, .fc-next-button {

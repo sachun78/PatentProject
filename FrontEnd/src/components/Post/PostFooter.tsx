@@ -1,73 +1,93 @@
 import { css } from '@emotion/react'
-import palette, { brandColor } from '../../lib/palette'
+import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
+import useToggle from 'hooks/useToggle'
+import useInput from 'hooks/useInput'
+import { Avatar, OutlinedInput } from '@mui/material'
+import { inputStyle } from 'pages/Login/styles'
+import React from 'react'
+import gravatar from 'gravatar'
+import { brandColor } from 'lib/palette'
 
-export type PostFooterProps = {}
+export type PostFooterProps = {
+  likes?: number
+  comments?: number
+  isLike?: boolean
+}
 
-function PostFooter({}: PostFooterProps) {
+function PostFooter({ likes = 16, isLike = false }: PostFooterProps) {
+  const [commentVisible, onToggleComment] = useToggle(false)
+  const [comment, onChangeComment] = useInput('')
+  const [likeClick, onToggleLike] = useToggle(isLike)
+
   return <div css={footerStyle /*flex*/}>
     <div css={buttonWrapper}>
-      <div className={'toolbar'}>
-        <div className={'item'}>
-          <div className={'text'}>Good</div>
-        </div>
-        <div className={'item'}>
-          <div className={'text'}>Detail</div>
-        </div>
+      <div className={'item'} onClick={onToggleLike}>
+        {likeClick ? <BsHeartFill className={'filled'} /> : <BsHeart />}
+        {likes + Number(likeClick)}
+      </div>
+      <div className={'item'} onClick={onToggleComment}>
+        <BsChatLeftDots /> 12
       </div>
     </div>
-    <div css={countWrapper}>likes</div>
+    {commentVisible
+      && <div css={commentStyle}>
+        <OutlinedInput placeholder={'Write your comment'} value={comment} onChange={onChangeComment}
+                       css={inputStyle} fullWidth multiline
+                       sx={{ borderRadius: '1rem', paddingLeft: '1.25rem' }}
+                       startAdornment={<Avatar alt='post-user-avatar'
+                                               src={gravatar.url('ryanhe4@gmail.com',
+                                                 { s: '44px', d: 'retro' })}
+                                               sx={{ width: 44, height: 44, mr: '25px' }} />} />
+      </div>}
   </div>
 }
 
 const footerStyle = css`
   display: flex;
-  margin: 2rem 1.875rem 0;
+  flex-direction: column;
+  margin: 2.8125rem 1.875rem 0;
 `
-const countWrapper = css`
-  padding-bottom: 10px;
-  margin-right: 16px;
-  margin-left: 16px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-`
-const buttonWrapper = css`
-  flex: 1;
 
-  .toolbar {
-    display: flex;
-    position: relative;
-    justify-content: space-between;
-    align-items: stretch;
-    padding: 4px;
-    margin: 2px -2px 2px;
-    flex-wrap: nowrap;
-    flex-shrink: 0;
+const commentStyle = css`
+  margin-bottom: 1.875rem;
+
+  .MuiOutlinedInput-root {
+    margin: 0;
+    color: #9C9C9C;
+    font: normal normal normal 16px 'NanumSquare';
+    line-height: 1.125;
   }
+`
+
+const buttonWrapper = css`
+  display: flex;
+  margin-bottom: 1.25rem;
+  user-select: none;
 
   .item {
-    flex-basis: 0;
     height: 1.875rem;
-    justify-content: center;
+    width: 5.5625rem;
+
     display: flex;
-    flex-shrink: 1;
-    flex-grow: 1;
-    flex-wrap: nowrap;
-    white-space: nowrap;
+    justify-content: center;
     align-items: center;
-    border-radius: 11px;
-    background: ${brandColor};
+
+    border-radius: 1.5rem;
+    border: 1px solid #C9C9C9;
+    background: #fff;
+    color: #333333;
     margin-right: 10px;
-    
-    .text {
-      font: normal normal 800 14px/19px NanumSquareOTF;
-      color: #fff;
-    }
+    cursor: pointer;
 
     svg {
-      width: 1.8rem;
-      height: 1.8rem;
-      color: ${palette.purple[400]};
+      width: 1rem;
+      height: 0.8125rem;
+      margin-right: 5px;
+
+    }
+
+    .filled {
+      fill: ${brandColor};
     }
   }
 `

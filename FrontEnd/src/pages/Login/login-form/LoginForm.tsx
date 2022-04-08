@@ -43,11 +43,11 @@ function LoginForm({}: LoginFormProps) {
   return <form onSubmit={onSubmit}>
     <OutlinedInput type='email' name='email' placeholder={'username'} value={form.email} onChange={onChange}
                    css={inputStyle} fullWidth
-                   sx={{ borderRadius: '12px', height: '67px' }}
+                   sx={{ borderRadius: '12px', height: '45px' }}
     />
     <OutlinedInput type='password' name='password' placeholder={'password'} value={form.password} onChange={onChange}
                    css={inputStyle} autoComplete='password' fullWidth
-                   sx={{ borderRadius: '12px', height: '67px' }} />
+                   sx={{ borderRadius: '12px', height: '45px' }} />
     {loginError && <FormHelperText error id='helper-text-login'>{loginError}</FormHelperText>}
     <div className='button-div'>
       <Button variant='contained' type='submit' color='primary' disabled={mutation.isLoading}

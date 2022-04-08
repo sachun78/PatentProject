@@ -4,7 +4,7 @@ import { bottomStyle, commentStyle, headerStyle, wrapper } from './ScheduleCard'
 export type ScheduleSkeletonProps = {}
 
 function ScheduleSkeleton({}: ScheduleSkeletonProps) {
-  return <div css={wrapper('')}>
+  return <div css={wrapper}>
     <div css={headerStyle}>
       <h3><Skeleton variant='rectangular' /></h3>
       <p className='from'><span> <Skeleton variant='text' width={160} /></span></p>

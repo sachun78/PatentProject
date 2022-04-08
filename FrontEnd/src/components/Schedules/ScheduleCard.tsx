@@ -15,7 +15,7 @@ export type ScheduleCardProps = {
 }
 
 function ScheduleCard({ from, to, comment, place, time, date, state, id, title }: ScheduleCardProps) {
-  return <Link css={wrapper(state)} to={'/membership/meeting/' + id}>
+  return <Link css={wrapper} to={'/membership/meeting/' + id}>
     <div css={headerStyle}>
       <h3>{title}</h3> &nbsp;
       <p>who#{to}</p>
@@ -35,17 +35,17 @@ function ScheduleCard({ from, to, comment, place, time, date, state, id, title }
   </Link>
 }
 
-export const wrapper = (state: string) => css`
+export const wrapper = css`
   height: 15.8125rem;
   background: rgba(255, 255, 255, 0.5);
   width: calc(50% - 3rem);
-  margin-right: 0.625rem;
-  margin-bottom: 0.625rem;
+  max-width: 37.5rem;
+  margin-right: 1.25rem;
+  margin-bottom: 1.5625rem;
   padding: 1.875rem 1.875rem 0;
   display: flex;
   flex-direction: column;
   border-radius: 1rem;
-  box-shadow: 0 3px 6px #00000029;
   overflow: hidden; //Text overflow
   transition: background-color 0.25s ease-in 0s;
   color: #333333;
@@ -55,6 +55,7 @@ export const wrapper = (state: string) => css`
     border: 1px solid ${palette.grey[300]};
     cursor: pointer;
     background: rgba(255, 255, 255, 1);
+    box-shadow: 2px 5px 11px #00000029;
 
     h3 {
       color: #A1045A;
@@ -84,7 +85,7 @@ export const bottomStyle = css`
   text-align: center;
   color: #6C6C6C;
   font: normal normal normal 16px/18px NanumSquareOTF;
-  
+
   .state-box {
     height: 1.5rem;
     padding-left: 15px;

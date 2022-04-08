@@ -29,6 +29,7 @@ function App() {
         <Route path='/signup' element={<SignUp />} />
         <Route path='/email/check' element={<MailCheck />} />
         <Route path='/invitation/*' element={<MeetingBook />} />
+        {/*with AUTH*/}
         <Route path='/*' element={<AppLayout />} />
       </Routes>
       <Global styles={globalStyle} />
