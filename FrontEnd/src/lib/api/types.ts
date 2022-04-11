@@ -42,7 +42,7 @@ export type IAuthCode = {
 }
 
 export type IPost = {
-  id: number,
+  id: string,
   title: string,
   text: string,
   comments: IComment[],
@@ -53,7 +53,7 @@ export type IPost = {
 }
 
 export type IComment = {
-  id: number,
+  id: string,
   text: string,
   created_at?: Date,
   updated_at?: Date,
