@@ -26,7 +26,8 @@ function ProfileCardCountry({ title, editable, country, onChange }: ProfileCardC
           {edit && <CountrySelector onChange={onChange}
                                     defaultValue={countries[countries.findIndex((v) => (country) === v.code)]}
           />}
-          {!edit && <div>{countries[countries.findIndex((v) => (country) === v.code)].label}</div>}
+          {!edit &&
+            <div css={countryNormalStyle}>{countries[countries.findIndex((v) => (country) === v.code)].label}</div>}
           {!edit && <div>
             <Button variant='contained' color='primary' onClick={() => {
               setEdit(prev => !prev)
@@ -37,5 +38,9 @@ function ProfileCardCountry({ title, editable, country, onChange }: ProfileCardC
     </div>
   </div>
 }
+
+const countryNormalStyle = css`
+  padding-top: 1rem;
+`
 
 export default ProfileCardCountry

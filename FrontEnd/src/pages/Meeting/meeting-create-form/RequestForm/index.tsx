@@ -50,10 +50,10 @@ export default function RequestForm({}: RequestViewProps) {
     setDate(newDate)
   }, [date, setDate, setTime])
 
-  const onSubmit = useCallback(() => {
-    console.log(form, date.toLocaleDateString(), time.toLocaleTimeString(), curEvent)
+  const onSubmit = useCallback((e) => {
+    e.preventDefault()
     const { title, to, place, comment } = form
-    if (!to || !to.trim() || !place || !place.trim() || !title || !title.trim()) {
+    if (!to.trim() || !place.trim() || !title.trim()) {
       toast.error('Please fill out all fields', {
         position: toast.POSITION.TOP_CENTER,
         pauseOnHover: false,
@@ -84,7 +84,7 @@ export default function RequestForm({}: RequestViewProps) {
         autoClose: 3000
       })
     })
-  }, [curEvent, date, form, time])
+  }, [curEvent.id, date, form, navi, time])
 
   useEffect(() => {
     const tempTime = new Date(startDate)
@@ -100,17 +100,17 @@ export default function RequestForm({}: RequestViewProps) {
   return (
     <div css={wrapper}>
       <div css={headerStyle}> Request Meeting</div>
-      <div css={sectionStyle}>
+      <form css={sectionStyle} onSubmit={onSubmit}>
         <RequestSection title={'Event Info'}>
           <span>{curEvent.title}</span>
           &nbsp;
-          <div> {startDate.toLocaleDateString()} ~ {endDate.toLocaleDateString()}</div>
+          <div> {startDate.toLocaleDateString()} ~ {endDate.toLocaleDateString()}          </div>
         </RequestSection>
         <RequestSection title={'Meeting Title'}>
-          <Input name='title' value={form.title} onChange={onChange} />
+          <Input name='title' type={'text'} value={form.title} onChange={onChange} />
         </RequestSection>
         <RequestSection title={'Email'}>
-          <Input name='to' value={form.to} onChange={onChange} />
+          <Input name='to' type={'email'} value={form.to} onChange={onChange} />
         </RequestSection>
         <RequestSection title={'Meeting Date'}>
           <DatePickerInput value={date}
@@ -130,8 +130,8 @@ export default function RequestForm({}: RequestViewProps) {
                  value={form.comment}
                  onChange={onChange} />
         </RequestSection>
-        <button css={buttonStyle} onClick={onSubmit}>OK</button>
-      </div>
+        <button css={buttonStyle} type={'submit'}>OK</button>
+      </form>
     </div>
   )
 }

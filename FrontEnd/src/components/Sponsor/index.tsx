@@ -14,6 +14,7 @@ function Sponsor({}: SponsorProps) {
       <img src={'/assets/wemet_logo.png'} alt={'logo'} />
       <img src={'/assets/wemet_logo.png'} alt={'logo'} />
     </div>
+    <div className={'space'} />
   </div>
 }
 

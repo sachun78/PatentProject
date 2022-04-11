@@ -7,6 +7,7 @@ import { footerStyle, mainStyle, sidebarStyle } from './styles'
 import useUserQuery from 'hooks/query/useUserQuery'
 import loadable from '@loadable/component'
 import { Backdrop, CircularProgress } from '@mui/material'
+import User from '../../pages/User'
 
 const Home = loadable(() => import('pages/Home'))
 const Profile = loadable(() => import('pages/Profile'))
@@ -44,6 +45,7 @@ export default function AppLayout({}: AppLayoutProps) {
         <Route path='/network' element={<Network />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/conference' element={<div>컨퍼런스</div>} />
+        <Route path='/u/:email' element={<User />} />
         <Route path='/*' element={<div>404 NOT FOUND</div>} />
       </Routes>
     </AppLayout.Main>

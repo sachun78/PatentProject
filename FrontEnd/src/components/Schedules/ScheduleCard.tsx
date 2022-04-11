@@ -36,7 +36,7 @@ function ScheduleCard({ from, to, comment, place, time, date, state, id, title }
 }
 
 export const wrapper = css`
-  height: 15.8125rem;
+  height: 15.5rem;
   background: rgba(255, 255, 255, 0.5);
   width: calc(50% - 3rem);
   max-width: 37.5rem;
@@ -70,7 +70,7 @@ export const wrapper = css`
 `
 export const commentStyle = css`
   color: #6C6C6C;
-  font: normal normal normal 17px/19px 'NanumSquare';
+  font: normal normal normal 15px/17px 'NanumSquare';
   word-break: break-all;
   margin: 0;
   min-height: 111px;

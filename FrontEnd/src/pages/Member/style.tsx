@@ -15,11 +15,12 @@ export const tabStyle = css`
 
 export const itemStyle = css`
   text-decoration: none;
-  margin-right: 3.75rem;
+  margin-right: 3.3125rem;
   color: #6C6C6C;
-  font: normal normal 800 17px/22px NanumSquareOTF;
+  font: normal normal 800 17px 'NanumSquare';
+  line-height: 1.117647059;
 
-  &.active {
+  &.active, &:hover {
     color: ${brandColor};
   }
 `
