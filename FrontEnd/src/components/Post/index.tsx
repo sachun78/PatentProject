@@ -1,10 +1,10 @@
 import { css } from '@emotion/react'
-import React from 'react'
-import PostHeader from './PostHeader'
-import PostFooter from './PostFooter'
+import { IComment } from 'lib/api/types'
 import media from 'lib/styles/media'
-import { IComment, IPost } from 'lib/api/types'
+import React from 'react'
 import { Link } from 'react-router-dom'
+import PostFooter from './PostFooter'
+import PostHeader from './PostHeader'
 
 type PostProps = {
   id: string  
@@ -18,8 +18,7 @@ type PostProps = {
 
 function Post({ id, text, writer, created_at, like, comments }: PostProps) {
   return (
-    <div css={postStyle}>
-      
+    <div css={postStyle}>      
       <PostHeader writer={writer} created_at={created_at} />
       <Link
         to={`/postDetail/${id}`}
