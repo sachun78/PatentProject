@@ -7,7 +7,7 @@ import { IComment, IPost } from 'lib/api/types'
 import { Link } from 'react-router-dom'
 
 type PostProps = {
-  id?: string  
+  id: string  
   text: string
   like: number
   comments: IComment[]
@@ -39,7 +39,7 @@ function Post({ id, text, writer, created_at, like, comments }: PostProps) {
         예측 모델이 필요하신가요? AWS가 제공하는 다양한 기능을 이용해 보다 쉽고 빠르게 머신러닝 모델을 업무에 적용하는 방법을 배워보세요!`}
       </div>
       </Link>
-      <PostFooter like={like} comments={comments} />
+      <PostFooter id={id} like={like} comments={comments} />
     </div>
   )
 }

@@ -4,21 +4,43 @@ import useToggle from 'hooks/useToggle'
 import useInput from 'hooks/useInput'
 import { Avatar, OutlinedInput } from '@mui/material'
 import { inputStyle } from 'pages/Login/styles'
-import React from 'react'
+import React, { KeyboardEventHandler } from 'react'
 import gravatar from 'gravatar'
 import { brandColor } from 'lib/palette'
-import { IComment } from 'lib/api/types'
+import { IComment, User } from 'lib/api/types'
+import { cp } from 'fs/promises'
+import { useQueryClient } from 'react-query'
 
 export type PostFooterProps = {
+  id: string
   like: number
   comments: IComment[]
   isLike?: boolean
 }
 
-function PostFooter({ like, isLike = false, comments }: PostFooterProps) {
+function PostFooter({ id, like, isLike = false, comments }: PostFooterProps) {
   const [commentVisible, onToggleComment] = useToggle(false)
-  const [comment, onChangeComment] = useInput('')
+  const [comment, onChangeComment, setComment] = useInput('')
   const [likeClick, onToggleLike] = useToggle(isLike)
+
+  const queryClient = useQueryClient()
+  const user = queryClient.getQueryData<User>('user') as User
+  
+
+  const onKeyPress = (e: any) => {   
+
+    if(e.key === "Enter") {
+      e.preventDefault();
+      
+      comments.push({
+        id: String(comments.length + 1),
+        text: comment,
+        writer: user.username
+      })
+      setComment("")
+    }  
+
+  }
 
   return <div css={footerStyle /*flex*/}>
     <div css={buttonWrapper}>
@@ -33,6 +55,7 @@ function PostFooter({ like, isLike = false, comments }: PostFooterProps) {
     {commentVisible
       && <div css={commentStyle}>
         <OutlinedInput placeholder={'Write your comment'} value={comment} onChange={onChangeComment}
+                       onKeyPress={onKeyPress}
                        css={inputStyle} fullWidth multiline
                        sx={{ borderRadius: '1rem', paddingLeft: '1.25rem' }}
                        startAdornment={<Avatar alt='post-user-avatar'
