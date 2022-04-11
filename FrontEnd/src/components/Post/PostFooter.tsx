@@ -7,14 +7,15 @@ import { inputStyle } from 'pages/Login/styles'
 import React from 'react'
 import gravatar from 'gravatar'
 import { brandColor } from 'lib/palette'
+import { IComment } from 'lib/api/types'
 
 export type PostFooterProps = {
-  likes?: number
-  comments?: number
+  like: number
+  comments: IComment[]
   isLike?: boolean
 }
 
-function PostFooter({ likes = 16, isLike = false }: PostFooterProps) {
+function PostFooter({ like, isLike = false, comments }: PostFooterProps) {
   const [commentVisible, onToggleComment] = useToggle(false)
   const [comment, onChangeComment] = useInput('')
   const [likeClick, onToggleLike] = useToggle(isLike)
@@ -23,10 +24,10 @@ function PostFooter({ likes = 16, isLike = false }: PostFooterProps) {
     <div css={buttonWrapper}>
       <div className={'item'} onClick={onToggleLike}>
         {likeClick ? <BsHeartFill className={'filled'} /> : <BsHeart />}
-        {likes + Number(likeClick)}
+        {like + Number(likeClick)}
       </div>
       <div className={'item'} onClick={onToggleComment}>
-        <BsChatLeftDots /> 12
+        <BsChatLeftDots /> {comments.length}
       </div>
     </div>
     {commentVisible

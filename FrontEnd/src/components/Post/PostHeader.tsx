@@ -5,17 +5,20 @@ import gravatar from 'gravatar'
 import { Avatar } from '@mui/material'
 import React from 'react'
 
-export type PostHeaderProps = {}
+export type PostHeaderProps = {
+  writer: string
+  created_at: Date
+}
 
-function PostHeader({}: PostHeaderProps) {
+function PostHeader({ writer, created_at}: PostHeaderProps) {
   return <div css={headerStyle}>
     <div css={iconStyle}>
       <Avatar alt='user-avatar' src={gravatar.url('test.email', { s: '60px', d: 'retro' })}
               sx={{ width: 60, height: 60 }} />
     </div>
     <div css={titleStyle}>
-      <h4><span>username/ etc ..</span></h4>
-      <div className={'time-date'}>posted time-date</div>
+      <h4><span>{writer}/ etc ..</span></h4>
+      <div className={'time-date'}>{created_at}</div>
     </div>
     <div css={moreStyle} onClick={() => {
     }}><MdMoreHoriz /></div>

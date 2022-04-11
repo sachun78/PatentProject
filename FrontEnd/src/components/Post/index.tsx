@@ -3,23 +3,28 @@ import React from 'react'
 import PostHeader from './PostHeader'
 import PostFooter from './PostFooter'
 import media from 'lib/styles/media'
+import { IComment } from 'lib/api/types'
 
 type PostProps = {
-  id?: string
-  contents?: string
+  id?: string  
+  text: string
+  like: number
+  comments: IComment[]
+  writer: string
+  created_at: Date
 }
 
-function Post({ id, contents }: PostProps) {
+function Post({ id, text, writer, created_at, like, comments }: PostProps) {
   return (
     <div css={postStyle}>
-      <PostHeader />
+      <PostHeader writer={writer} created_at={created_at} />
       <figure><img src={'https://picsum.photos/200/300?random=' + id} alt={'post-img'} /></figure>
-      <div css={bodyStyle}>{contents
-        ? contents
+      <div css={bodyStyle}>{text
+        ? text
         : `앱 개발자, 데이터 사이언티스트, 엔지니어를 위한 2022년 최신 AI/ML 무료 교육에 초대합니다! 한국어 자연어 처리를 고민하고 계신가요? 수요 예측을 위한 시계열
         예측 모델이 필요하신가요? AWS가 제공하는 다양한 기능을 이용해 보다 쉽고 빠르게 머신러닝 모델을 업무에 적용하는 방법을 배워보세요!`}
       </div>
-      <PostFooter />
+      <PostFooter like={like} comments={comments} />
     </div>
   )
 }
