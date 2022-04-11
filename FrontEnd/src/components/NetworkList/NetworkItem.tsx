@@ -1,20 +1,23 @@
 import { css } from '@emotion/react'
-import palette from '../../lib/palette'
+import { brandColor } from 'lib/palette'
+import { IProfile } from 'lib/api/types'
+import { useNavigate } from 'react-router-dom'
 
-export type NetworkItemProps = {}
+export type NetworkItemProps = {
+  data: { email: string, profile: IProfile }
+}
 
-function NetworkItem({}: NetworkItemProps) {
-  return <div css={itemStyle}>
-    <div css={iconStyle}><img src={'https://blog.kakaocdn.net/dn/wn8ds/btq5u4RsTuG/7KMKUbqv3CLSbdigBxxnJ0/img.png'} alt={'user-icon'} />
+function NetworkItem({ data }: NetworkItemProps) {
+  const navigate = useNavigate()
+  return <div css={itemStyle} onClick={() => navigate('/u/' + data.email)}>
+    <div css={iconStyle}><img src={'https://blog.kakaocdn.net/dn/wn8ds/btq5u4RsTuG/7KMKUbqv3CLSbdigBxxnJ0/img.png'}
+                              alt={'user-icon'} />
     </div>
-    <div css={nameStyle}>NAME</div>
-    <div css={informStyle}>Company, favoriteField</div>
+    <div css={nameStyle}>{data.email}</div>
+    <div
+      css={informStyle}>COMPANY {data.profile.company} FIELD: {data.profile.field?.map((item) => item)} country:{data.profile.country}</div>
     <div css={stateStyle}>
-      <div className={'request-block'}>
-        <span>request to: n</span>
-        <span>request from: n</span>
-      </div>
-      <span>something</span>
+      <span>something online?</span>
     </div>
   </div>
 }
@@ -29,8 +32,8 @@ const itemStyle = css`
   line-height: 1.5;
 
   &:hover {
-    border: 2px solid ${palette.purple[400]};
-    color: ${palette.purple[400]};
+    border: 2px solid ${brandColor};
+    color: ${brandColor};
   }
 
   & + & {

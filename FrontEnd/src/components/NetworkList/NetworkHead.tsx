@@ -7,9 +7,10 @@ function NetworkHead({}: NetworkHeadProps) {
 }
 
 const HeadStyle = css`
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: bold;
   text-align: left;
+  padding: 1rem;
 `
 
 export default NetworkHead
