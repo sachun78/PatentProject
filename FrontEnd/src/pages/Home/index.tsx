@@ -18,7 +18,8 @@ function Home({}: HomeProps) {
         <Post id='4' />
       </div>
     </Stack>
-    <InitialInputModal />
+    {/* 임시 주석처리 */}
+    {/* <InitialInputModal /> */}
   </>
 }
 
