@@ -5,6 +5,7 @@ import Post from 'components/Post/'
 import { Stack } from '@mui/material'
 import PostForm from './form/PostForm'
 import usePostQuery from 'hooks/query/usePostQuery'
+import { IPost } from 'lib/api/types'
 
 type HomeProps = {}
 
@@ -14,7 +15,7 @@ function Home({}: HomeProps) {
     <Stack>
       <PostForm />
       <div css={postViewStyle}>
-        {data?.map((post: any) =>
+        {data?.map((post: IPost) =>
         <Post 
           key={post.id}
           id={post.id}                    
@@ -22,7 +23,7 @@ function Home({}: HomeProps) {
           like={post.like}
           comments={post.comments}
           writer={post.writer}
-          created_at={post.created_at.toDateString()}
+          created_at={post.created_at}          
         />
         )}        
       </div>

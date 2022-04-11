@@ -18,7 +18,7 @@ function PostHeader({ writer, created_at}: PostHeaderProps) {
     </div>
     <div css={titleStyle}>
       <h4><span>{writer}/ etc ..</span></h4>
-      <div className={'time-date'}>{created_at}</div>
+      <div className={'time-date'}>{created_at.toDateString()}</div>
     </div>
     <div css={moreStyle} onClick={() => {
     }}><MdMoreHoriz /></div>
