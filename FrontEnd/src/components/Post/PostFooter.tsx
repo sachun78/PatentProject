@@ -2,22 +2,24 @@ import { css } from '@emotion/react'
 import { Avatar, OutlinedInput } from '@mui/material'
 import gravatar from 'gravatar'
 import useToggle from 'hooks/useToggle'
-import { IComment } from 'lib/api/types'
+import { IComment, IPost } from 'lib/api/types'
 import { brandColor } from 'lib/palette'
 import React from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
+import { useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
 
 export type PostFooterProps = {
-  id: string
-  like: number
-  comments: IComment[]
-  isLike?: boolean
-  
+  id: string  
+  isLike?: boolean  
 }
 
-function PostFooter({ id, like, isLike = false, comments }: PostFooterProps) {
-  
+function PostFooter({ id, isLike = false }: PostFooterProps) {
+
+  const qc = useQueryClient();
+  const posts = qc.getQueryData('posts') as IPost[];
+  const { comments, like } = posts[Number(id) - 1]
+
   const [likeClick, onToggleLike] = useToggle(isLike)  
   const viewComments = comments.filter((comment: IComment) => (Number(comment.id) < 3)) 
 
