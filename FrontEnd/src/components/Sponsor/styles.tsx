@@ -25,7 +25,7 @@ export const bodyStyle = css`
 
     img {
       width: 4.5725rem;
-      height: 4rem;
+      height: 1.075625rem;
     }
   }
 

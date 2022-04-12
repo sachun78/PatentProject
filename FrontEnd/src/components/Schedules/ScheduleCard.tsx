@@ -64,13 +64,13 @@ export const wrapper = css`
   }
 
   h3 {
-    font: normal normal 800 20px/23px 'NanumSquare';
+    font: normal normal 800 20px/23px 'NanumSquareOTF';
     margin: 5px 0 0.9375rem;
   }
 `
 export const commentStyle = css`
   color: #6C6C6C;
-  font: normal normal normal 15px/17px 'NanumSquare';
+  font: normal normal normal 15px/17px 'NanumSquareOTF';
   word-break: break-all;
   margin: 0;
   min-height: 111px;
@@ -97,7 +97,7 @@ export const bottomStyle = css`
 
     span {
       color: #fff;
-      font: normal normal normal 15px/17px 'NanumSquare';
+      font: normal normal normal 15px/17px NanumSquareOTF;
     }
   }
 `

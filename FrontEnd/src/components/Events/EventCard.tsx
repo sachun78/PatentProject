@@ -108,7 +108,7 @@ const buttonStyle = css`
   .text {
     padding-top: 0.625rem;
     padding-bottom: 0.625rem;
-    font: normal normal normal 16px 'NanumSquare';
+    font: normal normal normal 16px NanumSquareOTF;
     line-height: 1.125;
     color: #fff;
   }
@@ -124,7 +124,7 @@ const eventHeaderStyle = css`
   margin-bottom: 15px;
 
   .event-card-header {
-    font: normal normal 800 18px 'NanumSquare';
+    font: normal normal 800 18px NanumSquareOTF;
     color: #333333;
     line-height: 1.166666667;
   }
@@ -135,6 +135,8 @@ const contentStyle = css`
   align-items: flex-start;
   justify-content: center;
 
+  font: normal normal normal 18px NanumSquareOTF;
+  
   span {
     margin-bottom: 0.5rem
   }

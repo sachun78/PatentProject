@@ -11,13 +11,13 @@ function NetworkList({}: NetworkListProps) {
     return <div>Loading...</div>
   }
 
-  if (!buddyData) {
+  if (!buddyData || buddyData.length === 0) {
     return <div>No data</div>
   }
 
   return <div css={networkStyle}>
     {buddyData.buddy.map((buddy: any) => {
-      return <NetworkItem key={buddy.id} data={buddy} />
+      return <NetworkItem key={buddy.email} data={buddy} />
     })}
   </div>
 }

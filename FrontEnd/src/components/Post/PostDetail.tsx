@@ -1,31 +1,29 @@
-import { css } from '@emotion/react';
-import React, { useEffect, useState } from 'react';
-import { useQueryClient } from 'react-query';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { IPost, User } from '../../lib/api/types';
+import { css } from '@emotion/react'
+import React from 'react'
+import { useLocation } from 'react-router-dom'
 
 type postDetailProps = {}
 
-function PostDetail({}: postDetailProps) {   
+function PostDetail({}: postDetailProps) {
 
-    const location: any = useLocation();    
+    const location: any = useLocation();
     const { writer, id, created_at, text} = location.state as any;
-    
+
     return(
-        
-        <div css={detailStyle}>            
+
+        <div css={detailStyle}>
             <div>
                 {writer}
             </div>
             <div>
-                
+
             </div>
             <div>
-               
+
             </div>
-        </div>        
-       
-        
+        </div>
+
+
     );
 }
 

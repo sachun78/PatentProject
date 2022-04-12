@@ -1,9 +1,8 @@
-import { useRef, useEffect, useState} from 'react';
-import Quill from 'quill';
+import React, { useEffect, useRef, useState } from 'react'
+import Quill from 'quill'
 import 'quill/dist/quill.bubble.css'
 import { css } from '@emotion/react'
-import palette from 'lib/palette';
-import React from 'react';
+import palette from 'lib/palette'
 
 function PostWrite() {
     const [body, setBody] = useState("")

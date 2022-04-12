@@ -50,9 +50,8 @@ function LoginForm({}: LoginFormProps) {
                    sx={{ borderRadius: '12px', height: '45px' }} />
     {loginError && <FormHelperText error id='helper-text-login'>{loginError}</FormHelperText>}
     <div className='button-div'>
-      <Button variant='contained' type='submit' color='primary' disabled={mutation.isLoading}
-              size='large'>
-        Log In
+      <Button variant='contained' type='submit' color='primary' disabled={mutation.isLoading}>
+        LOGIN
       </Button>
     </div>
   </form>

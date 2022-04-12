@@ -49,7 +49,7 @@ export const userStyle = css`
   cursor: pointer;
 
   span {
-    font: normal normal 800 18px 'NanumSquare';
+    font: normal normal 800 18px NanumSquareOTF;
     line-height: 1.166666667;
     color: #333333;
     white-space: nowrap;
