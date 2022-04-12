@@ -35,5 +35,5 @@ export function updateBuddy(buddyId: string, arrBuddy: string[]) {
 }
 
 export function getBuddy(userId: string) {
-  return Buddy.findOne({user_id: userId}, {_id: false}).populate({path: 'buddy.profile', model: 'Profile'});
+  return Buddy.findOne({owner_id: userId}, {_id: false}).populate({path: 'buddy.profile', model: 'Profile'});
 }
