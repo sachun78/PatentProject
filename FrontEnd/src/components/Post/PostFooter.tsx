@@ -1,45 +1,25 @@
 import { css } from '@emotion/react'
 import { Avatar, OutlinedInput } from '@mui/material'
 import gravatar from 'gravatar'
-import useInput from 'hooks/useInput'
 import useToggle from 'hooks/useToggle'
-import { IComment, User } from 'lib/api/types'
+import { IComment } from 'lib/api/types'
 import { brandColor } from 'lib/palette'
-import { inputStyle } from 'pages/Login/styles'
 import React from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
-import { useQueryClient } from 'react-query'
+import { Link } from 'react-router-dom'
 
 export type PostFooterProps = {
   id: string
   like: number
   comments: IComment[]
   isLike?: boolean
+  
 }
 
 function PostFooter({ id, like, isLike = false, comments }: PostFooterProps) {
-  const [commentVisible, onToggleComment] = useToggle(false)
-  const [comment, onChangeComment, setComment] = useInput('')
-  const [likeClick, onToggleLike] = useToggle(isLike)
-
-  const queryClient = useQueryClient()
-  const user = queryClient.getQueryData<User>('user') as User
   
-
-  const onKeyPress = (e: any) => {   
-
-    if(e.key === "Enter") {
-      e.preventDefault();
-      
-      comments.push({
-        id: String(comments.length + 1),
-        text: comment,
-        writer: user.username
-      })
-      setComment("")
-    }  
-
-  }
+  const [likeClick, onToggleLike] = useToggle(isLike)  
+  const viewComments = comments.filter((comment: IComment) => (Number(comment.id) < 3)) 
 
   return <div css={footerStyle /*flex*/}>
     <div css={buttonWrapper}>
@@ -47,41 +27,51 @@ function PostFooter({ id, like, isLike = false, comments }: PostFooterProps) {
         {likeClick ? <BsHeartFill className={'filled'} /> : <BsHeart />}
         {like + Number(likeClick)}
       </div>
-      <div className={'item'} onClick={onToggleComment}>
-        <BsChatLeftDots /> {comments.length}
-      </div>
+      <Link
+        to={`/postDetail/${id}`}
+        state={{
+          id: id          
+        }}
+      >
+        <div className={'item'}>
+          <BsChatLeftDots /> {comments.length}
+        </div>
+      </Link>
+    </div>     
+    <div css={commentStyle}>
+      {viewComments.map((comment: IComment) => (
+      <OutlinedInput key={comment.id} placeholder={'Write your comment'} value={comment.text}
+        fullWidth multiline
+        sx={{ borderRadius: '1rem', paddingLeft: '1.25rem' }}
+        startAdornment={<Avatar alt='post-user-avatar'
+                                src={gravatar.url('temp.email' + comment.id,
+                                  { s: '44px', d: 'retro' })}
+                                sx={{ width: 22, height: 22, mr: '25px' }} />} 
+      />         
+      ))}
     </div>
-    {commentVisible
-      && <div css={commentStyle}>
-        <OutlinedInput placeholder={'Write your comment'} value={comment} onChange={onChangeComment}
-                       onKeyPress={onKeyPress}
-                       css={inputStyle} fullWidth multiline
-                       sx={{ borderRadius: '1rem', paddingLeft: '1.25rem' }}
-                       startAdornment={<Avatar alt='post-user-avatar'
-                                               src={gravatar.url('ryanhe4@gmail.com',
-                                                 { s: '44px', d: 'retro' })}
-                                               sx={{ width: 44, height: 44, mr: '25px' }} />} />
-      </div>}
   </div>
 }
 
+const commentStyle = css`
+    
+    font-weight: 400;
+    font-size: 0.5rem;    
+    letter-spacing: 0.00938em;
+    border: thick solid #dddddd;    
+    position: relative; 
+    padding: 1rem;
+    border-radius: 1rem;    
+    margin-bottom: 1.5625rem;
+    font: normal normal bold 14px/16px NanumBarunGothic;
+    background: #fff;
+
+`
 const footerStyle = css`
   display: flex;
   flex-direction: column;
   margin: 2.8125rem 1.875rem 0;
 `
-
-const commentStyle = css`
-  margin-bottom: 1.875rem;
-
-  .MuiOutlinedInput-root {
-    margin: 0;
-    color: #9C9C9C;
-    font: normal normal normal 16px 'NanumSquare';
-    line-height: 1.125;
-  }
-`
-
 const buttonWrapper = css`
   display: flex;
   margin-bottom: 1.25rem;
