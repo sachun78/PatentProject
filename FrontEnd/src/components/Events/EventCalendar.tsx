@@ -1,18 +1,19 @@
-import React, { useMemo } from 'react'
-import FullCalendar, { EventClickArg, EventContentArg } from '@fullcalendar/react'
+import React, { useMemo, useRef } from 'react'
+import FullCalendar, { EventClickArg } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import useEventQuery from 'hooks/query/useEventQuery'
-import { css } from '@emotion/react'
-import palette, { brandColor } from 'lib/palette'
+import { brandColor } from 'lib/palette'
 import { useNavigate } from 'react-router-dom'
 import listPlugin from '@fullcalendar/list'
+import { calendarStyle } from '../Schedules/styles'
 
 export type ScheduleCalendarProps = {}
 
 function EventCalendar({}: ScheduleCalendarProps) {
   const { data } = useEventQuery(1, { enabled: false })
   const navigate = useNavigate()
+  const calendarRef = useRef<any>(null)
   const calendarEvents = useMemo(() => {
     const retArr = []
     if (data) {
@@ -34,39 +35,35 @@ function EventCalendar({}: ScheduleCalendarProps) {
     navigate('/membership/event/' + clickInfo.event.id)
   }
 
-  return <FullCalendar
-    plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
-    headerToolbar={{
-      left: 'title',
-      right: 'today prev,next'
-    }}
-    initialView='dayGridMonth'
-    editable={false}
-    selectable={false}
-    selectMirror={true}
-    dayMaxEvents={true}
-    weekends={true}
-    showNonCurrentDates={false}
-    eventContent={renderEventContent}
-    eventClick={handleEventClick}
-    dayMaxEventRows={true}
-    fixedWeekCount={false}
-    views={{ dayGridMonth: { dayMaxEventRows: true } }}
-    events={calendarEvents}
-  />
+  return <div css={calendarStyle}>
+    <FullCalendar
+      ref={calendarRef}
+      plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
+      headerToolbar={{
+        left: 'prev next',
+        center: 'title',
+        right: 'today'
+      }}
+      initialView='dayGridMonth'
+      editable={false}
+      selectable={true}
+      selectMirror={true}
+      dayMaxEvents={true}
+      weekends={true}
+      showNonCurrentDates={false}
+      dayMaxEventRows={true}
+      fixedWeekCount={false}
+      events={calendarEvents}
+      eventClick={handleEventClick}
+      aspectRatio={2.079796265}
+      select={(info) => {
+        console.log(info)
+        alert(info.start.toDateString() + ' clicked')
+        // calendarRef?.current?.getApi().unselect()
+        info.view.calendar.unselect()
+      }}
+    />
+  </div>
 }
-
-function renderEventContent(eventContent: EventContentArg) {
-  return (
-    <><i css={eventStyle}>{eventContent.event.title}</i></>
-  )
-}
-
-const eventStyle = css`
-  font-size: 1.3rem;
-  line-height: 1.34;
-  font-weight: 600;
-  padding: 0.5rem;
-`
 
 export default EventCalendar

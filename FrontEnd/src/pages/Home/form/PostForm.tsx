@@ -43,6 +43,7 @@ const containerStyle = css`
 
     span {
       flex: 1;
+      color: #9C9C9C;
     }
 
     svg {

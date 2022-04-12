@@ -73,10 +73,16 @@ export const calendarStyle = css`
   }
 
   .fc-prev-button, .fc-next-button {
-    background: #9C9C9C !important;
-    width: 19px !important;
-    height: 19px !important;
+    background: transparent !important;
+    width: 24px !important;
+    height: 24px !important;
     padding: 0 !important;
+    border-radius: 1rem !important;
+
+    span {
+      color: #6C6C6C !important;
+      margin-bottom: 0.3rem;
+    }
   }
 
   .fc .fc-toolbar-title {

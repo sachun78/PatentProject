@@ -19,8 +19,8 @@ function Member({}: MemberShipProps) {
     <div css={wrapper}>
       <Box sx={{ width: '100%' }}>
         <ul css={tabStyle}>
-          <li><NavLink css={itemStyle} to={'event'}> Event </NavLink></li>
-          <li><NavLink css={itemStyle} to={'schedule'}> Schedule </NavLink></li>
+          <li><NavLink css={itemStyle} to={'event'}> EVENTS </NavLink></li>
+          <li><NavLink css={itemStyle} to={'schedule'}> SCHEDULES </NavLink></li>
         </ul>
         <Routes>
           <Route path='event' element={<Events />} />

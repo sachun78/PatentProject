@@ -1,23 +1,23 @@
 import { css } from '@emotion/react'
-import NetworkItem from './NetworkItem'
 import useBuddyQuery from 'hooks/query/useBuddyQuery'
+import NetworkItem from './NetworkItem'
 
 export type NetworkListProps = {}
 
 function NetworkList({}: NetworkListProps) {
-  const { data, isLoading } = useBuddyQuery()
+  const { data: buddyData, isLoading } = useBuddyQuery()
 
   if (isLoading) {
     return <div>Loading...</div>
   }
 
-  if (!data) {
+  if (!buddyData) {
     return <div>No data</div>
   }
 
   return <div css={networkStyle}>
-    {data.map((buddy: any) => {
-      return <NetworkItem key={buddy.id} />
+    {buddyData.buddy.map((buddy: any) => {
+      return <NetworkItem key={buddy.id} data={buddy} />
     })}
   </div>
 }

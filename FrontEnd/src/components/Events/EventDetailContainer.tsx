@@ -5,6 +5,7 @@ import ScheduleCard from '../Schedules/ScheduleCard'
 import { css } from '@emotion/react'
 import { useQuery } from 'react-query'
 import { Navigate } from 'react-router-dom'
+import { Button, ButtonGroup } from '@mui/material'
 
 export type EventDetailLeftProps = {
   id: string
@@ -23,25 +24,27 @@ function EventDetailContainer({ id }: EventDetailLeftProps) {
   return <>
     <h1 css={titleEventStyle}>{event.title}</h1>
     <section css={dateSectionStyle}><MdCalendarToday />
-      <span>Begin : <b>{event.start_date.replace(/T.*$/, '')}</b></span>
+      <span>Period : <b>{event.start_date.replace(/T.*$/, '')}</b> ~ <b>{event.end_date.replace(/T.*$/, '')}</b></span>
     </section>
-    <section css={dateSectionStyle}><MdCalendarToday />
-      <span>End : <b>{event.end_date.replace(/T.*$/, '')}</b></span>
-    </section>
-    {event.meeting_list.length > 0 && <>
-      <h3 css={titleNameStyle}>Schedules - {event.meeting_list.length}</h3>
-      <div css={scheduleWrapStyle}>
-        {event.meeting_list.map((meeting: any) => {
-          return <ScheduleCard key={meeting.id}
-                               from={meeting.ownerEmail} to={meeting.toEmail}
-                               comment={meeting.comment}
-                               place={meeting.location}
-                               date={meeting.date} time={meeting.time}
-                               title={meeting.title}
-                               state={meeting.status} id={meeting.id} />
-        })}
-      </div>
-    </>}
+    {event.meeting_list.length > 0 &&
+      <>
+        <h3 css={titleNameStyle}>Schedules - {event.meeting_list.length}</h3>
+        <div css={scheduleWrapStyle}>
+          {event.meeting_list.map((meeting: any) => {
+            return <ScheduleCard key={meeting.id}
+                                 from={meeting.ownerEmail} to={meeting.toEmail}
+                                 comment={meeting.comment}
+                                 place={meeting.location}
+                                 date={meeting.date} time={meeting.time}
+                                 title={meeting.title}
+                                 state={meeting.status} id={meeting.id} />
+          })}
+        </div>
+      </>}
+    <ButtonGroup>
+      <Button variant={'contained'}> EDIT </Button>
+      <Button variant={'contained'} color={'error'}> DEL </Button>
+    </ButtonGroup>
   </>
 }
 

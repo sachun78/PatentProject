@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 export const loginFormStyle = css`
   display: flex;
   flex-direction: column;
-  min-width: 22.230625rem;
+  max-width: 22.230625rem;
 
   section {
     flex: 1;
@@ -92,7 +92,7 @@ export const pageStyle = css`
 export const containerStyle = css`
   display: flex;
   flex-direction: column;
-  align-items: center;;
+  align-items: center;
   width: 38.125rem;
   height: 37.3125rem;
   border-radius: 1rem;

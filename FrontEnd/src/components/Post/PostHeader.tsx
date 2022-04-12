@@ -57,7 +57,7 @@ const titleStyle = css`
   margin-bottom: -5px;
 
   h4 {
-    margin: 0.625rem 0 0.5rem;
+    margin: 0.5625rem 0 0.3125rem;
     outline: none;
     text-align: left;
   }
@@ -66,8 +66,8 @@ const titleStyle = css`
     color: #333333;
     font-family: NanumSquare;
     font-weight: 800;
-    font-size: 19px;
-    line-height: 1.157894737;
+    font-size: 18px;
+    line-height: 1.166666667;
   }
 
   .time-date {

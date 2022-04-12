@@ -80,7 +80,7 @@ function ProfileCardItem({
             <Avatar sx={{ width: 100, height: 100, fontSize: 40 }}>
               {!photo
                 ? (<img src={gravatar.url(email, { s: '100px', d: 'retro' })} alt={email} />)
-                : (<img crossOrigin='anonymous' src={`http://localhost:4000/static/${photo}`} alt={username} />)
+                : (<img crossOrigin='anonymous' src={`/static/${photo}`} alt={username} />)
               }
             </Avatar>
           </div>
