@@ -10,7 +10,7 @@ import PostForm from './form/PostForm'
 type HomeProps = {}
 
 function Home({}: HomeProps) {
-  const { data, isLoading } = usePostQuery()
+  const { data, isLoading } = usePostQuery({ staleTime:Infinity })
   return <>
     <Stack>
       <Link css={linkStyle} to={'/postWrite/'}
