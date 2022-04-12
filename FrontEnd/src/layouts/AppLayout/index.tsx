@@ -7,6 +7,8 @@ import { footerStyle, mainStyle, sidebarStyle } from './styles'
 import useUserQuery from 'hooks/query/useUserQuery'
 import loadable from '@loadable/component'
 import { Backdrop, CircularProgress } from '@mui/material'
+import PostDetail from 'components/Post/PostDetail'
+import PostWrite from 'components/Post/PostWrite'
 import User from '../../pages/User'
 
 const Home = loadable(() => import('pages/Home'))
@@ -40,6 +42,7 @@ export default function AppLayout({}: AppLayoutProps) {
     <AppLayout.Main>
       <Routes>
         <Route index element={<Home />} />
+        <Route path='/postDetail/:id' element={<PostDetail />} />
         <Route path='/membership/meeting/*' element={<Meeting />} />
         <Route path='/membership/*' element={<Member />} />
         <Route path='/network' element={<Network />} />
@@ -47,6 +50,7 @@ export default function AppLayout({}: AppLayoutProps) {
         <Route path='/conference' element={<div>컨퍼런스</div>} />
         <Route path='/u/:email' element={<User />} />
         <Route path='/*' element={<div>404 NOT FOUND</div>} />
+        <Route path='/postWrite/' element={<PostWrite />} />
       </Routes>
     </AppLayout.Main>
     <AppLayout.Footer>

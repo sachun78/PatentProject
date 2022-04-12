@@ -40,3 +40,22 @@ export type IMeeting = {
 export type IAuthCode = {
   email: string
 }
+
+export type IPost = {
+  id: string,
+  title: string,
+  text: string,
+  comments: IComment[],
+  like: number,
+  writer: string,
+  created_at: Date,
+  updated_at: Date
+}
+
+export type IComment = {
+  id: string,
+  text: string,
+  created_at?: Date,
+  updated_at?: Date,
+  writer: string
+}

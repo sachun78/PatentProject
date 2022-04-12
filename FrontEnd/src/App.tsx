@@ -9,6 +9,7 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import useUserQuery from 'hooks/query/useUserQuery'
 import 'react-toastify/dist/ReactToastify.min.css'
 import { ToastContainer } from 'react-toastify'
+import usePostQuery from 'hooks/query/usePostQuery'
 
 const Login = loadable(() => import('pages/Login'))
 const SignUp = loadable(() => import('pages/Signup'))
@@ -19,6 +20,7 @@ const AppLayout = loadable(() => import('layouts/AppLayout'))
 function App() {
   useCsrfQuery({ retry: true, staleTime: Infinity })
   useUserQuery()
+  usePostQuery()
 
   return (
     <>
