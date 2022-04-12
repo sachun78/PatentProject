@@ -23,12 +23,7 @@ function Post({ id, text, writer, created_at, like, comments }: PostProps) {
       <Link
         to={`/postDetail/${id}`}
         state={{
-          id: id,
-          text: text,
-          like: like,
-          comments: comments,
-          writer: writer,
-          created_at: created_at          
+          id: id          
         }}
       >
       <figure><img src={'https://picsum.photos/200/300?random=' + id} alt={'post-img'} /></figure>
