@@ -122,6 +122,7 @@ export async function replanlMeeting(req: IRequest, res: Response) {
 export async function sendInvitMail(req: IRequest, res: Response) {
   const user_id = req.userId;
   const bodyData = req.body;
+  const origin: string = req.get('origin');
 
   try {
     const meetingData = await createMeeting(user_id, bodyData);
@@ -129,7 +130,7 @@ export async function sendInvitMail(req: IRequest, res: Response) {
       return res.status(500).json({ message: `Failed save meeting ${bodyData.toEmail}`});
     }
 
-    const mailInfo = sendmail(meetingData, EMAILTYPE.INVI);
+    const mailInfo = sendmail(origin, meetingData, EMAILTYPE.INVI);
     if (!mailInfo) {
       return res.status(500).json({ message: `Failed email send ${bodyData.toEmail}`});
     }
