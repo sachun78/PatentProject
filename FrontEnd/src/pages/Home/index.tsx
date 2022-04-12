@@ -46,10 +46,10 @@ const postViewStyle = css`
   align-items: flex-start;
 `
 const linkStyle = css`
-  a {
+  
     text-decoration: none;
     text-decoration-line: none;
-  }
+  
   a:link, a:visited, a:hover {
       text-decoration: none;
       cursor: pointer;
