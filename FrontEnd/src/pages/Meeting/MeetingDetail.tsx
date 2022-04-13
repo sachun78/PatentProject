@@ -1,20 +1,9 @@
-import { Link, Navigate, useLocation } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import React, { useMemo } from 'react'
 import { useQuery } from 'react-query'
 import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
 import { toast } from 'react-toastify'
-import {
-  Accordion, AccordionDetails, AccordionSummary,
-  Box,
-  Button,
-  Container,
-  Stack,
-  Step,
-  StepContent,
-  StepLabel,
-  Stepper,
-  Typography
-} from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary, Button, Container, Stack, Typography } from '@mui/material'
 import { css } from '@emotion/react'
 import IconControl from 'components/IconControl'
 
@@ -42,15 +31,15 @@ const steps = [
 ]
 
 function MeetingDetail({}: MeetingDetailProps) {
-  const location = useLocation()
-  const code = useMemo(() => location.pathname.split('/')[3], [location])
-  const [activeStep, setActiveStep] = React.useState(2)
-  const { data, isLoading, error } = useQuery(['meeting', code], () => getMeetingOne(code), {
+  const params = useParams()
+  const code = useMemo(() => params.id, [params])
+  const { data, isLoading, error } = useQuery(['meeting', code], () => getMeetingOne(code!), {
     retry: false,
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
+    enabled: !!code
   })
 
-  if (location.pathname.split('/')[3] === '') {
+  if (!code) {
     return <Navigate replace to={'/'} />
   }
 

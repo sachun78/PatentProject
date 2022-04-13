@@ -70,7 +70,7 @@ function EventCard({ title, startDate, endDate, id, count }: EventCardProps) {
       </div>
     </div>
     <div css={buttonStyle} onClick={onCreateSchedule}>
-      <Link to={'/membership/meeting/request'}>
+      <Link to={'/membership/schedule/request'}>
         <div className='text'>+ New Schedule</div>
       </Link>
     </div>
@@ -136,7 +136,7 @@ const contentStyle = css`
   justify-content: center;
 
   font: normal normal normal 18px NanumSquareOTF;
-  
+
   span {
     margin-bottom: 0.5rem
   }

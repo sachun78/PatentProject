@@ -15,7 +15,7 @@ export type ScheduleCardProps = {
 }
 
 function ScheduleCard({ from, to, comment, place, time, date, state, id, title }: ScheduleCardProps) {
-  return <Link css={wrapper} to={'/membership/meeting/' + id}>
+  return <Link css={wrapper} to={'/membership/schedule/' + id}>
     <div css={headerStyle}>
       <h3>{title}</h3> &nbsp;
       <p>who#{to}</p>

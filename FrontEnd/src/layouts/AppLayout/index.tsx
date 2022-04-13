@@ -15,7 +15,6 @@ const Home = loadable(() => import('pages/Home'))
 const Profile = loadable(() => import('pages/Profile'))
 const Member = loadable(() => import('pages/Member'))
 const Network = loadable(() => import('pages/Network'))
-const Meeting = loadable(() => import('pages/Meeting'))
 
 export type AppLayoutProps = {}
 
@@ -43,7 +42,6 @@ export default function AppLayout({}: AppLayoutProps) {
       <Routes>
         <Route index element={<Home />} />
         <Route path='/postDetail/:id' element={<PostDetail />} />
-        <Route path='/membership/meeting/*' element={<Meeting />} />
         <Route path='/membership/*' element={<Member />} />
         <Route path='/network' element={<Network />} />
         <Route path='/profile' element={<Profile />} />

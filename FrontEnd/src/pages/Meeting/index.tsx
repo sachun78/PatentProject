@@ -10,7 +10,7 @@ function Meeting({}: MeetingProps) {
   return (
     <Routes>
       <Route path='/request' element={<RequestForm />} />
-      <Route path='/*' element={<MeetingDetail />} />
+      <Route path='/:id' element={<MeetingDetail />} />
     </Routes>
   )
 }

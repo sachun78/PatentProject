@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 export type NetworkHeadProps = {}
 
 function NetworkHead({}: NetworkHeadProps) {
-  return <div css={HeadStyle}>Network</div>
+  return <div css={HeadStyle}>Network List</div>
 }
 
 const HeadStyle = css`

@@ -11,8 +11,6 @@ import { DayCellMountArg } from '@fullcalendar/common'
 
 export type ScheduleCalendarProps = {}
 
-let p = document.createElement('div')
-
 function ScheduleCalendar({}: ScheduleCalendarProps) {
   const { data } = useMeetingQuery(1, { enabled: false })
   const navigate = useNavigate()
@@ -52,11 +50,16 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
       eventClick={onScheduleClick}
       aspectRatio={2.079796265}
       dayCellDidMount={(arg: DayCellMountArg) => {
-        console.log(arg.date)
-        if (arg.isToday) {
-          p.textContent = '오늘'
-          p.style.zIndex = '10'
+        if (data?.findIndex((meeting) => {
+          const meetingDate = new Date(meeting.date)
+          return meetingDate.getMonth() === arg.date.getMonth() && meetingDate.getDate() === arg.date.getDate() &&
+            meetingDate.getFullYear() === arg.date.getFullYear()
+        }) === -1 && !arg.isDisabled && !arg.isPast) {
+          let p = document.createElement('div')
+          p.textContent = '+'
           p.style.position = 'absolute'
+          p.style.left = '50%'
+          p.style.bottom = '50%'
           arg.el.firstChild?.appendChild(p)
         }
       }}>
