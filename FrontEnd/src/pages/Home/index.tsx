@@ -2,6 +2,7 @@ import { css } from '@emotion/react'
 import { Stack } from '@mui/material'
 import Post from 'components/Post/'
 import usePostQuery from 'hooks/query/usePostQuery'
+import { usePosts } from 'lib/api/post/usePosts'
 import { IPost } from 'lib/api/types'
 import React from 'react'
 import { Link } from 'react-router-dom'
@@ -10,7 +11,7 @@ import PostForm from './form/PostForm'
 type HomeProps = {}
 
 function Home({}: HomeProps) {
-  const { data, isLoading } = usePostQuery({ staleTime:Infinity })
+  const { data, isLoading } = usePostQuery({ staleTime:Infinity })  
   return <>
     <Stack>
       <Link css={linkStyle} to={'/postWrite/'}
@@ -23,7 +24,8 @@ function Home({}: HomeProps) {
         {data?.map((post: IPost) =>
         <Post 
           key={post.id}
-          id={post.id}                    
+          id={post.id}
+          index={data.indexOf(post)}                    
           text={post.text}
           like={post.like}
           comments={post.comments}

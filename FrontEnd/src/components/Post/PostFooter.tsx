@@ -2,6 +2,8 @@ import { css } from '@emotion/react'
 import { Avatar, OutlinedInput } from '@mui/material'
 import gravatar from 'gravatar'
 import useToggle from 'hooks/useToggle'
+import { usePost } from 'lib/api/post/usePost'
+import { usePosts } from 'lib/api/post/usePosts'
 import { IComment, IPost } from 'lib/api/types'
 import { brandColor } from 'lib/palette'
 import React from 'react'
@@ -10,29 +12,40 @@ import { useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
 
 export type PostFooterProps = {
-  id: string  
-  isLike?: boolean  
+  id: string
+  index: number  
+  isLike: boolean
+  comments: IComment[]  
+  like: number
 }
 
-function PostFooter({ id, isLike = false }: PostFooterProps) {
-
-  const qc = useQueryClient();
-  const posts = qc.getQueryData('posts') as IPost[];
-  const { comments, like } = posts[Number(id) - 1]
+function PostFooter({ id, index, isLike, like, comments }: PostFooterProps) {  
 
   const [likeClick, onToggleLike] = useToggle(isLike)  
-  const viewComments = comments.filter((comment: IComment) => (Number(comment.id) < 3)) 
+  const post = usePost(index)  
+  const viewComments = comments.filter((comment: IComment) => (Number(comment.id) < 2)) 
+
+  const onLike = () => {
+    
+    if(!likeClick) {
+      post.like = like + 1      
+    } else {
+      post.like = like     
+    }
+    onToggleLike()   
+        
+  }
 
   return <div css={footerStyle /*flex*/}>
     <div css={buttonWrapper}>
-      <div className={'item'} onClick={onToggleLike}>
+      <div className={'item'} onClick={onLike}>
         {likeClick ? <BsHeartFill className={'filled'} /> : <BsHeart />}
         {like + Number(likeClick)}
       </div>
       <Link
         to={`/postDetail/${id}`}
         state={{
-          id: id          
+          postNumber: index          
         }}
       >
         <div className={'item'}>
@@ -107,4 +120,4 @@ const buttonWrapper = css`
   }
 `
 
-export default PostFooter
+export default React.memo(PostFooter)

@@ -1,43 +1,59 @@
 import { css } from '@emotion/react';
-import React, { useEffect, useState } from 'react';
-import { useQueryClient } from 'react-query';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { IComment, IPost, User } from '../../lib/api/types';
-import useToggle from 'hooks/useToggle'
-import useInput from 'hooks/useInput'
-import media from 'lib/styles/media'
-import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs';
-import { brandColor } from 'lib/palette';
 import { Avatar, OutlinedInput } from '@mui/material';
-import gravatar from 'gravatar'
-import { inputStyle } from 'components/ProfileMenu/styles';
+import gravatar from 'gravatar';
+import useInput from 'hooks/useInput';
+import useToggle from 'hooks/useToggle';
+import { usePost } from 'lib/api/post/usePost';
+import { usePosts } from 'lib/api/post/usePosts';
+import { brandColor } from 'lib/palette';
+import React, { useEffect, useState } from 'react';
+import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs';
+import { useQueryClient } from 'react-query';
+import { useLocation } from 'react-router-dom';
+import { IComment, User } from '../../lib/api/types';
+import PostActionButtons from './PostActionButtons';
 
 type postDetailProps = {
-    isLike?: boolean
+    isLike?: boolean    
 }
 
 function PostDetail({ isLike = false }: postDetailProps) {   
 
     const qc = useQueryClient();
-    const location: any = useLocation();
-    const { id } = location.state as any;
-    const posts = qc.getQueryData('posts') as IPost[];
-    const post = posts[Number(id) - 1]
-    const { title, text, writer, created_at, comments, like } = post
+    const location: any = useLocation();    
+    const { postNumber } = location.state as any;        
+    const post = usePost(postNumber)
+    const { title, text, writer, created_at, like, comments } = post
     const [commentVisible, onToggleComment] = useToggle(false)
     const [comment, onChangeComment, setComment] = useInput('')
-    const [likeClick, onToggleLike] = useToggle(isLike)  
-    const queryClient = useQueryClient()
-    const user = queryClient.getQueryData<User>('user') as User    
-    // 임시    
-    
+    const [likeClick, onToggleLike] = useToggle(isLike)      
+    const user = qc.getQueryData<User>('user') as User
+    // 임시 트루
+    const [owner, setOwner] = useState(true);
+
+    useEffect(() => {
+      if(post.writer === user.username) {
+        setOwner(true);
+      }
+    },[])
+
+    const onLike = () => {
+      onToggleLike()
+      if(!likeClick) {
+        post.like = like + 1        
+      } else {
+        post.like = like - 1
+      }
+    }
+
     const onKeyPress = (e: any) => {
-      if(e.key === "Enter") {
+      if(e.key === "Enter") {        
         e.preventDefault();
         comments.push({
           id: String(comments.length + 1),
           text: comment,
-          writer: user.username
+          writer: user.username,
+          created_at: new Date()
         })
         setComment("")
       }  
@@ -54,14 +70,19 @@ function PostDetail({ isLike = false }: postDetailProps) {
         </div>      
         <div>{text}</div>
         <div css={buttonWrapper}>
-          <div className={'item'} onClick={onToggleLike}>
+          <div className={'item'} onClick={onLike}>
             {likeClick ? <BsHeartFill className={'filled'} /> : <BsHeart />}
-            {like + Number(likeClick)}
+            {like}
           </div>     
           <div className={'item'} onClick={onToggleComment}>
             <BsChatLeftDots /> {comments.length}
-          </div>      
+          </div>
+          {owner &&
+          <PostActionButtons id={postNumber} />      
+          
+          }
         </div>
+        
         {commentVisible && <div>
           <OutlinedInput placeholder={'Write your comment'} value={comment} onChange={onChangeComment}
                        onKeyPress={onKeyPress}
@@ -74,7 +95,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
                                                </div>}
 
         {comments.map((comment: IComment) => (
-          <div>
+          <div key={comment.id}>
             {comment.text}
           </div>            
         ))}      
