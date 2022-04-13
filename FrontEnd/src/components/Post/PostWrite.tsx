@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
-import Quill from 'quill'
+import { useRef, useEffect, useState} from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Quill from 'quill';
 import 'quill/dist/quill.bubble.css'
 import { css } from '@emotion/react'
 import palette from 'lib/palette'
@@ -8,6 +9,16 @@ function PostWrite() {
     const [body, setBody] = useState("")
     const quillElement = useRef<any>(null);
     const quillInstance = useRef<any>(null);
+    const navigate = useNavigate();
+
+    const onTest = () => {
+        // alert(body)
+
+    }
+
+    const onCancle = () => {
+        navigate(-1);
+    }
 
     useEffect(() => {
         quillInstance.current = new Quill(quillElement.current, {
@@ -20,8 +31,18 @@ function PostWrite() {
                     [{ list: 'ordered'}, { list: 'bullet'}],
                     ['blockquote', 'code-block', 'link', 'image']
                 ]
-            }
+            },
+            
         })
+        
+        const quill = quillInstance.current
+
+        quill.root.innerText = body;
+        quill.on('text-change', () => {
+            setBody(quill.root.innerText);
+        });
+
+        
     },[])
     return (<>
         <div css={postWriteStyle}>
@@ -32,9 +53,9 @@ function PostWrite() {
             </div>
         </div>
         <div css={buttonWrapStyle}>
-        <button css={buttonStyle}>포스트 등록</button>
-        <button css={buttonStyle}>취소</button>
-    </div>
+            <button css={buttonStyle} onClick={onTest}>Posting</button>
+            <button css={buttonStyle} onClick={onCancle}>Cancle</button>
+        </div>
     </>
     );
 }
@@ -47,8 +68,9 @@ const quillWrapperStyle = css`
         line-height: 1.5;
         margin-top: 2rem;        
         margin-left: 1rem;
-        
+        max-height: 35rem;
     }
+    
 `
 const postWriteStyle = css`
 
@@ -63,9 +85,11 @@ const postWriteStyle = css`
   background: #fff;
 
   .divider {
+    margin: auto;
     margin-top: 1.25rem;
     margin-bottom: 1.875rem;
     border: 1px solid #9C9C9C;
+    width: 95%    
   }
 `
 
@@ -76,7 +100,7 @@ const inputStyle = css`
     padding-bottom: 0.5rem;
     margin-top: 2rem;
     padding: 0 2rem;
-    font-size: 2.5rem;
+    font-size: 2rem;
     
 `
 const buttonWrapStyle = css`

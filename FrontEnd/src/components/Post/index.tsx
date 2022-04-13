@@ -1,34 +1,36 @@
 import { css } from '@emotion/react'
+import { usePost } from 'lib/api/post/usePost'
 import { IComment } from 'lib/api/types'
 import media from 'lib/styles/media'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { writer } from 'repl'
 import PostFooter from './PostFooter'
 import PostHeader from './PostHeader'
 
 type PostProps = {
+
+  index: number
   id: string
   text: string
   like: number
   comments: IComment[]
   writer: string
   created_at: Date
+  isLike?: boolean  
   // post: IPost
 }
 
-function Post({ id, text, writer, created_at, like, comments }: PostProps) {
+function Post({ index, id, text, like, comments, writer, created_at, isLike = false }: PostProps) {
+  // const post = usePost(index);
+  // const { writer, created_at, text, comments, like } = post
   return (
     <div css={postStyle}>
       <PostHeader writer={writer} created_at={created_at} />
       <Link
         to={`/postDetail/${id}`}
         state={{
-          id: id,
-          text: text,
-          like: like,
-          comments: comments,
-          writer: writer,
-          created_at: created_at
+          postNumber: index          
         }}
       >
         <figure><img src={'https://picsum.photos/200/300?random=' + id} alt={'post-img'} /></figure>
@@ -38,7 +40,7 @@ function Post({ id, text, writer, created_at, like, comments }: PostProps) {
         예측 모델이 필요하신가요? AWS가 제공하는 다양한 기능을 이용해 보다 쉽고 빠르게 머신러닝 모델을 업무에 적용하는 방법을 배워보세요!`}
         </div>
       </Link>
-      <PostFooter id={id} like={like} comments={comments} />
+      <PostFooter id={id} index={index} comments={comments} like={like} isLike={isLike} />
     </div>
   )
 }
