@@ -13,12 +13,13 @@ import {
 import gravatar from 'gravatar'
 import React, { useCallback } from 'react'
 import { Button, Grid, Tooltip } from '@mui/material'
-import { useQueryClient } from 'react-query'
+import { useQuery, useQueryClient } from 'react-query'
 import { User as UserType } from '../../lib/api/types'
 import useBuddyQuery from '../../hooks/query/useBuddyQuery'
 import { IoMdMail } from 'react-icons/io'
 import { MdOutlineSafetyDivider, MdOutlineWork } from 'react-icons/md'
 import { GrUserManager } from 'react-icons/gr'
+import { getProfilebyEmail } from '../../lib/api/me/getProfile'
 
 export type UserProps = {}
 
@@ -27,12 +28,15 @@ function User({}: UserProps) {
   const user = qc.getQueryData<UserType>('user')
   const { data: buddyData, isLoading } = useBuddyQuery()
   const { email } = useParams<{ email: string }>()
+  const { data: profileData, isLoading: isLoadingProfile } = useQuery(['profile', email ?? ''], getProfilebyEmail, {
+    enabled: !!email
+  })
 
   const onAddNetwork = useCallback(() => {
     alert('add network')
   }, [])
 
-  if (!email || !user || !buddyData) {
+  if (!email || !user || !buddyData || isLoadingProfile || !profileData) {
     return null
   }
 
@@ -57,13 +61,16 @@ function User({}: UserProps) {
       <Summary>
         <h3>Summary</h3>
         <Tooltip title='Company' placement={'left'}>
-          <span><MdOutlineWork />Company</span>
+          <span><MdOutlineWork />{profileData.company}</span>
         </Tooltip>
         <Tooltip title='Position' placement={'left'}>
-          <span><GrUserManager /> Position</span>
+          <span><GrUserManager /> {profileData.position}</span>
         </Tooltip>
         <Tooltip title='Department' placement={'left'}>
-          <span><MdOutlineSafetyDivider /> Department</span>
+          <span><MdOutlineSafetyDivider /> {profileData.department}</span>
+        </Tooltip>
+        <Tooltip title='Country' placement={'left'}>
+          <span><MdOutlineSafetyDivider /> {profileData.country}</span>
         </Tooltip>
       </Summary>
       <Middle>
@@ -82,13 +89,9 @@ function User({}: UserProps) {
       <Field>
         <h3>Fields</h3>
         <Grid container>
-          <FieldItem>Field1</FieldItem>
-          <FieldItem>Field2</FieldItem>
-          <FieldItem>Field2</FieldItem>
-          <FieldItem>LONGLONG Field2</FieldItem>
-          <FieldItem>LONGLONG LONGLONG LONGLONG Field2</FieldItem>
-          <FieldItem>LONGLONG LONGLONG LONGLONG Field2LONGLONG LONGLONG LONGLONG</FieldItem>
-          <FieldItem>Field3</FieldItem>
+          {profileData.field?.map((elem: string) => (
+            <FieldItem key={elem}>{elem}</FieldItem>
+          ))}
         </Grid>
       </Field>
     </UserBody>

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import palette, { brandColor } from '../../lib/palette'
+import palette, { brandColor } from 'lib/palette'
 
 export const Container = styled.div`
   max-width: 90rem;
