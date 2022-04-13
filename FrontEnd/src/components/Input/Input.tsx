@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import { useRef, forwardRef } from 'react'
+import { forwardRef, useRef } from 'react'
 import palette from '../../lib/palette'
 import InputBase from '../InputBase'
 import useMergedRef from '@react-hook/merged-ref'

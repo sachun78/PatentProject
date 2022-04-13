@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useCallback, useState, ChangeEvent } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useCallback, useState } from 'react'
 
 type ReturnTypes<T> = [T, (e: ChangeEvent<HTMLInputElement>) => void, Dispatch<SetStateAction<T>>];
 

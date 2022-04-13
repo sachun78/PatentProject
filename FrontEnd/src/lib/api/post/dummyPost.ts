@@ -1,13 +1,13 @@
-import { IComment } from 'lib/api/types';
+import { IComment } from 'lib/api/types'
 
-export default function DummyPost() {    
+export default function DummyPost() {
     // 임시데이터
     const commentsArray: IComment[] = [];
     for(let i = 0; i <= 4; i++) {
         commentsArray.push({
             id: String(i),
             text: `테스트코멘트${i}`,
-            writer: `코멘트글쓴이${i}`,    
+            writer: `코멘트글쓴이${i}`,
         })
     }
 
@@ -25,5 +25,5 @@ export default function DummyPost() {
     }
 
     return arrays;
-    
+
 }

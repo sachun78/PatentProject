@@ -45,7 +45,7 @@ const globalStyle = css`
   body,
   #root {
     overflow-x: hidden;
-    height: 100%;
+    min-height: 100%;
     background: url("/assets/background.jpg") no-repeat center center fixed;
     background-size: cover;
   }

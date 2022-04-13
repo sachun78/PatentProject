@@ -33,7 +33,7 @@ const linkStyle = css`
   justify-content: center;
 
   span {
-    font: normal normal 800 18px/24px 'NanumSquare';
+    font: normal normal normal 17px/19px NanumSquareOTF;
     text-align: center;
     padding: 1.25rem 0 1.25rem;
   }

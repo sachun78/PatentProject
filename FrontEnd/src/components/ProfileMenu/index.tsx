@@ -2,15 +2,14 @@ import InfoViewSection from './ProfileSection'
 import InfoViewCard from './ProfileCard'
 import ProfileCard from './ProfileCard'
 import { useMutation, useQueryClient } from 'react-query'
-import { User } from '../../lib/api/types'
-import useProfileQuery from '../../hooks/query/useProfileQuery'
+import { User } from 'lib/api/types'
+import useProfileQuery from 'hooks/query/useProfileQuery'
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { AutocompleteValue, Button } from '@mui/material'
 import { CountryType } from '../CountrySelector/CountrySelector'
 import { css } from '@emotion/react'
 import _ from 'lodash'
-import { patchProfile } from '../../lib/api/me/getProfile'
-import HistoryDrawer from '../HistoryDrawer'
+import { patchProfile } from 'lib/api/me/getProfile'
 
 export type ProfileMenuProps = {}
 
@@ -120,8 +119,6 @@ function ProfileMenu({}: ProfileMenuProps) {
     <InfoViewSection title='Additional'>
       <InfoViewCard.Item title='Career' type={'career'} />
     </InfoViewSection>
-    <Button variant='outlined' onClick={toggleHistoryDrawer}> Open History</Button>
-    <HistoryDrawer open={isHistoryOpen} onClose={toggleHistoryDrawer} />
   </div>
 }
 

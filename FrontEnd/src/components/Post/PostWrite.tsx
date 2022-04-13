@@ -3,8 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Quill from 'quill';
 import 'quill/dist/quill.bubble.css'
 import { css } from '@emotion/react'
-import palette from 'lib/palette';
-import React from 'react';
+import palette from 'lib/palette'
 
 function PostWrite() {
     const [body, setBody] = useState("")

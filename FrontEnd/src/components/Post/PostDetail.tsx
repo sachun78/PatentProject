@@ -14,7 +14,7 @@ import { IComment, User } from '../../lib/api/types';
 import PostActionButtons from './PostActionButtons';
 
 type postDetailProps = {
-    isLike?: boolean    
+    isLike?: boolean 
 }
 
 function PostDetail({ isLike = false }: postDetailProps) {   
