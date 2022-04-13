@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import palette from '../../lib/palette'
+import palette, { brandColor } from 'lib/palette'
 
 export const emailStyle = css`
   flex-grow: 1;
@@ -20,8 +20,6 @@ export const emailStyle = css`
 export const photoStyle = css`
   flex-grow: 1;
   display: flex;
-  width: 10rem;
-  height: 10rem;
 
   div {
     flex-grow: 1;
@@ -29,7 +27,7 @@ export const photoStyle = css`
 
   svg {
     &:hover {
-      color: ${palette.teal[200]};
+      color: ${brandColor};
     }
 
     cursor: pointer;
@@ -70,16 +68,13 @@ export const textStyle = css`
 
     svg {
       &:hover {
-        color: ${palette.teal[200]};
+        color: ${brandColor};
       }
+
+      width: 1.5rem;
+      height: 1.5rem;
+      cursor: pointer;
     }
-  }
-
-
-  svg {
-    width: 1.5rem;
-    height: 1.5rem;
-    cursor: pointer;
   }
 
   .save-cancel {

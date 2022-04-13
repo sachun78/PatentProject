@@ -20,10 +20,10 @@ export const loginFormStyle = css`
 
     button {
       flex: 1;
-      background: #A1045A 0 0 no-repeat padding-box;
+      background: #A1045A;
       mix-blend-mode: multiply;
       border-radius: 7px;
-      font: normal normal normal 12px 'NanumBarunGothic';
+      font: normal normal normal 12px/14px NanumBarunGothic;
       line-height: 1.166666667;
       color: #fff;
     }
@@ -31,7 +31,6 @@ export const loginFormStyle = css`
 `
 export const inputStyle = css`
   margin-bottom: 1.5625rem;
-  font: normal normal bold 14px/16px NanumBarunGothic;
   background: #fff;
 
   &:hover {
@@ -45,14 +44,21 @@ export const inputStyle = css`
       color: #9C9C9C;
     }
 
+    font: normal normal normal 1rem NanumBarunGothic;
+    line-height: 1.125;
     color: #333;
     padding: 13.5px 25px;
   }
 `
 export const dividerStyle = css`
   color: #9C9C9C;
-  font: normal normal bold 11px/20px 'NanumBarunGothic';
+  font: normal normal bold 11px/15px NanumBarunGothic;
   line-height: 1.363636364;
+
+  span {
+    padding-left: 19.5px;
+    padding-right: 19.5px;
+  }
 
   &:before, &:after {
     border-color: #9C9C9C;
@@ -71,7 +77,7 @@ export const underBlockStyle = css`
     h4 {
       text-align: center;
       color: #6C6C6C;
-      font-size: 0.875rem;
+      font: normal normal bold 15px/17px 'NanumSquareOTF';
       margin: 0;
 
       &:hover {

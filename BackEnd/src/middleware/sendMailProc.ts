@@ -7,7 +7,7 @@ export const enum EMAILTYPE {
   INVI  // invitation
 }
 
-const createAuthEmail = (code: string) => {
+const createAuthEmail = (origin: string, code: string) => {
   const keywords = {
         type: 'signup',
         text: 'Email verification'
@@ -19,9 +19,9 @@ const createAuthEmail = (code: string) => {
     <b style="black">Hello! </b>Click the link below to continue ${keywords.text}. If you made a request by mistake, or if you did not request it, please disregard this email.
   </div>
   
-  <a href="${envConfig.host.url}/${keywords.type}?code=${code}" style="text-decoration: none; width: 400px; text-align:center; display:block; margin: 0 auto; margin-top: 1rem; background: #845ef7; padding-top: 1rem; color: white; font-size: 1.25rem; padding-bottom: 1rem; font-weight: 600; border-radius: 4px;">continue</a>
+  <a href="${origin}/${keywords.type}?code=${code}" style="text-decoration: none; width: 400px; text-align:center; display:block; margin: 0 auto; margin-top: 1rem; background: #845ef7; padding-top: 1rem; color: white; font-size: 1.25rem; padding-bottom: 1rem; font-weight: 600; border-radius: 4px;">continue</a>
   
-  <div style="text-align: center; margin-top: 1rem; color: #868e96; font-size: 0.85rem;"><div>Click the button above or open the following link: <br/> <a style="color: #b197fc;" href="${envConfig.host.url}/${keywords.type}?code=${code}">${envConfig.host.url}/${keywords.type}?code=${code}</a></div><br/><div>This link is valid for 24 hours. </div></div>`;
+  <div style="text-align: center; margin-top: 1rem; color: #868e96; font-size: 0.85rem;"><div>Click the button above or open the following link: <br/> <a style="color: #b197fc;" href="${origin}/${keywords.type}?code=${code}">${origin}/${keywords.type}?code=${code}</a></div><br/><div>This link is valid for 24 hours. </div></div>`;
 
   return {
     subject,
@@ -29,14 +29,14 @@ const createAuthEmail = (code: string) => {
   };
 }
 
-const createInviteEmail = (data: any) => {
+const createInviteEmail = (origin: string, data: any) => {
   const keywords = {
     type: 'invitation',
     subType: ['detail', 'replan'],
     text: 'invitation letter'
   };
   const subject = `Wemet [${keywords.text}] - ${data.ownerName}`;
-  const html = `<a href="http://localhost:3000"
+  const html = `<a href="${origin}"
   ><img
     src="http://localhost:8080/undraw_People_re_ueqm.png"
     style="display: block; width: 128px; margin: 0 auto; margin-bottom: 1rem;"
@@ -75,12 +75,12 @@ const createInviteEmail = (data: any) => {
           <b style="color: black">comment:</b> ${data.comment}
         </div>
         <a
-          href="http://localhost:3000/${keywords.type}/${keywords.subType[0]}?code=${data.code}"
+          href="${origin}/${keywords.type}/${keywords.subType[0]}?code=${data.code}"
           style="outline: none; border: none; background: #845ef7; color: white; padding-top: 0.5rem; padding-bottom: 0.5rem; font-size: 1rem; font-weight: 600; display: inline-block; background: #845ef7; padding-left: 1rem; padding-right: 1rem; align-items: center; margin-top: 1rem; border-radius: 4px; text-decoration: none;"
           >View meeting detail</a
         >
         <a
-          href="http://localhost:3000/${keywords.type}/${keywords.subType[1]}?code=${data.code}"
+          href="${origin}/${keywords.type}/${keywords.subType[1]}?code=${data.code}"
           style="outline: none; border: none; background: #845ef7; color: white; padding-top: 0.5rem; padding-bottom: 0.5rem; font-size: 1rem; font-weight: 600; display: inline-block; background: #845ef7; padding-left: 1rem; padding-right: 1rem; align-items: center; margin-top: 1rem; border-radius: 4px; text-decoration: none;"
           >Change meeting schedule</a
         >
@@ -94,17 +94,17 @@ const createInviteEmail = (data: any) => {
   return {subject, html};
 }
 
-export const sendmail = async (emailInfo: any, mailType: EMAILTYPE) => {
+export const sendmail = async (origin: string, emailInfo: any, mailType: EMAILTYPE) => {
   let user_email;
   let emailTemplete;
 
   if (mailType === EMAILTYPE.AUTH) {
     user_email = emailInfo.email;
-    emailTemplete = createAuthEmail(emailInfo.code);
+    emailTemplete = createAuthEmail(origin, emailInfo.code);
   }
   else if (mailType === EMAILTYPE.INVI) {
     user_email = emailInfo.toEmail;
-    emailTemplete = createInviteEmail(emailInfo);
+    emailTemplete = createInviteEmail(origin, emailInfo);
   }
 
   let serviceContent: SMTPTransport.Options = {

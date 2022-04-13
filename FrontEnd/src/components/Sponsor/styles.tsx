@@ -13,7 +13,7 @@ export const bodyStyle = css`
   span {
     margin-right: 9.875rem;
     margin-left: 13.75rem;
-    font: normal normal 800 15px/17px 'NanumSquare';
+    font: normal normal 800 15px/17px NanumSquareOTF;
     color: #333;
   }
 
@@ -25,7 +25,8 @@ export const bodyStyle = css`
 
     img {
       width: 4.5725rem;
-      height: 4rem;
+      height: 1.075625rem;
+      object-fit: scale-down;
     }
   }
 

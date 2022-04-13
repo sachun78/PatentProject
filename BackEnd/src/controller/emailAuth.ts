@@ -11,6 +11,8 @@ interface IRequest extends Request {
 
 export async function sendAuthEmail(req: IRequest, res: Response, next: NextFunction) {
   try {
+    let origin: string = req.get('origin') || '';
+
     const emailInfo = {
       email: "",
       code: "",
@@ -28,7 +30,7 @@ export async function sendAuthEmail(req: IRequest, res: Response, next: NextFunc
     console.log("[emailInfo]", emailInfo);
 
     const savedMail = await EmaiAuthlRepo.saveAuthMaiil(emailInfo);
-    const sendInfo = sendmail(savedMail, EMAILTYPE.AUTH);
+    const sendInfo = sendmail(origin, savedMail, EMAILTYPE.AUTH);
     if (!sendInfo) {
       return res.status(500).json({ message: `Failed email send ${emailInfo.email}`});
     }

@@ -11,14 +11,16 @@ function NetworkList({}: NetworkListProps) {
     return <div>Loading...</div>
   }
 
-  if (!buddyData) {
+  if (!buddyData || buddyData.length === 0) {
     return <div>No data</div>
   }
 
   return <div css={networkStyle}>
     {buddyData.buddy.map((buddy: any) => {
-      return <NetworkItem key={buddy.id} data={buddy} />
+      return <NetworkItem key={buddy.email} data={buddy} />
     })}
+    {/*<NetworkItem key={buddyData.buddy[0].email} data={buddyData.buddy[0]} />*/}
+    {/*<NetworkItem key={buddyData.buddy[0].email} data={buddyData.buddy[0]} />*/}
   </div>
 }
 
@@ -27,8 +29,8 @@ const networkStyle = css`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
+  margin-right: 1rem;
+  max-width: 60rem;
 `
 
 export default NetworkList

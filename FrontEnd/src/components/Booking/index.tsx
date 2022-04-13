@@ -2,7 +2,7 @@ import BookingSide from './BookingSide'
 import BookingMain from './BookingMain'
 import { useSearchParams } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
-import { getMeetingInfoByCode } from '../../lib/api/meeting/getMeetingInfoByCode'
+import { getMeetingInfoByCode } from 'lib/api/meeting/getMeetingInfoByCode'
 import { wrapper } from './styles'
 
 export type BookingProps = {}

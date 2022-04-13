@@ -6,13 +6,13 @@ function Sponsor({}: SponsorProps) {
   return <div css={bodyStyle}>
     <span>SPONSOR</span>
     <div className={'sponsors'}>
-      <img src={'/assets/wemet_logo.png'} alt={'logo'} />
-      <img src={'/assets/wemet_logo.png'} alt={'logo'} />
-      <img src={'/assets/wemet_logo.png'} alt={'logo'} />
-      <img src={'/assets/wemet_logo.png'} alt={'logo'} />
-      <img src={'/assets/wemet_logo.png'} alt={'logo'} />
-      <img src={'/assets/wemet_logo.png'} alt={'logo'} />
-      <img src={'/assets/wemet_logo.png'} alt={'logo'} />
+      <img src={'/assets/logo-hanyang.png'} alt={'logo'} />
+      <img src={'/assets/logo-sungam.png'} alt={'logo'} />
+      <img src={'/assets/logo-cisun.png'} alt={'logo'} />
+      <img src={'/assets/logo-hanyang.png'} alt={'logo'} />
+      <img src={'/assets/logo-sungam.png'} alt={'logo'} />
+      <img src={'/assets/logo-cisun.png'} alt={'logo'} />
+      <img src={'/assets/logo-hanyang.png'} alt={'logo'} />
     </div>
     <div className={'space'} />
   </div>

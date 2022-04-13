@@ -1,10 +1,6 @@
 import { useMemo } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  dateRangeState,
-  eventState,
-  updateDateRange
-} from '../atoms/eventState'
+import { dateRangeState, eventState, updateDateRange } from '../atoms/eventState'
 
 export default function useDateRangeHook() {
   const dateRange = useRecoilValue(dateRangeState)

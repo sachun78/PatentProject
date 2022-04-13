@@ -63,8 +63,32 @@ export async function updateProfile(req: IRequest, res: Response, next: NextFunc
 
 export async function getProfile(req: IRequest, res: Response, next: NextFunction) {
   try{
-    const retProfile = await ProfileRepo.getProfile(req.userId);
-    res.status(200).json(retProfile);
+    const email = req.params.email as string | undefined;
+    if (email) {
+      const findUser = await userRepo.findByEmail(email);
+      if (findUser) {
+        const findProfile = await ProfileRepo.findById(findUser.profile);
+        console.log({findProfile});
+        return res.status(200).json({
+          company: findProfile?.company,
+          department: findProfile?.department,
+          position: findProfile?.position,
+          history: findProfile?.history,
+          field: findProfile?.field,
+          status: findProfile?.status,
+          username: findUser.username,
+          photo_path: findUser.photo_path,
+          email: email
+        });
+      }
+      else {
+        return res.status(409).json({ message: `${email} user is not found`});
+      }
+    }
+    else {
+      const retProfile = await ProfileRepo.getProfile(req.userId);
+      res.status(200).json(retProfile);
+    }
   }
   catch(e) {
     console.error("[Profile][getProfile] ", e);
