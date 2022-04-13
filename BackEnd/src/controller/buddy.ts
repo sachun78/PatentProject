@@ -51,7 +51,7 @@ export async function getBuddy(req: IRequest, res: Response, next: NextFunction)
   try {
     const _buddy = await buddyRepo.getBuddy(userId);
     if (!_buddy) {
-      return res.status(401).json({ message: 'Fail get buddy'});
+      return res.status(200).json([]);
     }
     console.log(_buddy);
     res.status(200).json(_buddy);
