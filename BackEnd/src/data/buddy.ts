@@ -37,3 +37,8 @@ export function updateBuddy(buddyId: string, arrBuddy: string[]) {
 export function getBuddy(userId: string) {
   return Buddy.findOne({owner_id: userId}, {_id: false}).populate({path: 'buddy.profile', model: 'Profile'});
 }
+
+// Query an Array of Embedded Documents
+export function getBuddyByEmail(_email: string) {
+  return Buddy.find({"buddy.email": _email}, {_id: false});
+}
