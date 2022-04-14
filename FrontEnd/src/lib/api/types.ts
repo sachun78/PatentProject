@@ -49,7 +49,7 @@ export type IPost = {
   like: number,
   writer: string,
   created_at: Date,
-  updated_at: Date
+  updated_at?: Date
 }
 
 export type IComment = {

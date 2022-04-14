@@ -1,5 +1,6 @@
 import { css } from '@emotion/react'
 import { Stack } from '@mui/material'
+import InitialInputModal from 'components/InitialInputModal'
 import Post from 'components/Post/'
 import usePostQuery from 'hooks/query/usePostQuery'
 import { usePosts } from 'lib/api/post/usePosts'
@@ -11,7 +12,8 @@ import PostForm from './form/PostForm'
 type HomeProps = {}
 
 function Home({}: HomeProps) {
-  const { data, isLoading } = usePostQuery({ staleTime:Infinity })  
+  const { data, isLoading } = usePostQuery({ staleTime:Infinity })
+  const posts = usePosts()     
   return <>
     <Stack>
       <Link css={linkStyle} to={'/postWrite/'}
@@ -20,12 +22,12 @@ function Home({}: HomeProps) {
       > 
         <PostForm />
       </Link>
-      <div css={postViewStyle}>
-        {data?.map((post: IPost) =>
+      <div css={postViewStyle}>        
+        {posts.sort((a: IPost, b: IPost) => (Number(b.id) - Number(a.id))).map((post: IPost) =>
         <Post 
           key={post.id}
           id={post.id}
-          index={data.indexOf(post)}                    
+          index={posts.indexOf(post)}                    
           text={post.text}
           like={post.like}
           comments={post.comments}
