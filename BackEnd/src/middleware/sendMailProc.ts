@@ -128,7 +128,7 @@ export const sendmail = async (origin: string, emailInfo: any, mailType: EMAILTY
     to: user_email,
     ...emailTemplete
   }).then((value) => {
-    console.error(`[sendMailProc] env(${value.envelope}) res(${value.response})`);
+    console.info(`[sendMailProc] env(${value.envelope}) res(${value.response})`);
   }).catch((e) => {
     console.error("[sendMailProc][ERROR]", e.message);
   });

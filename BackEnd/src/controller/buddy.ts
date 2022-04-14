@@ -8,9 +8,9 @@ interface IRequest extends Request {
 
 export async function addBuddy(req: IRequest, res: Response, next: NextFunction) {
   try {
-    const isExist = await buddyRepo.getBuddy(req.userId);
-    console.log(isExist);
-    if (!isExist) {
+    const getBuddy = await buddyRepo.getBuddy(req.userId);
+    console.log(getBuddy);
+    if (!getBuddy) {
       console.log("[HJBAE] no exist!! => create");
       const buddyUser = await userRepo.findByEmail(req.body.email);
       if (buddyUser) {
@@ -19,11 +19,11 @@ export async function addBuddy(req: IRequest, res: Response, next: NextFunction)
         res.status(201).json({ message: `create buddy`});
       }
       else {
-        return res.status(409).json({ message: `buddy(${req.body.email}) is on found`});
+        return res.status(409).json({ message: `buddy(${req.body.email}) is not found`});
       }
     }
     else {
-      const buddies = isExist.buddy.findIndex(value => value.email === req.body.email);
+      const buddies = getBuddy.buddy.findIndex(value => value.email === req.body.email);
       if (buddies !== -1) {
         return res.status(409).json({ message: 'already buddy email'});
       }
@@ -33,9 +33,8 @@ export async function addBuddy(req: IRequest, res: Response, next: NextFunction)
         return res.status(409).json({ message: `buddy(${req.body.email}) is on found`});
       }
       const buddyItem = {email: req.body.email, profile: buddyUser.profile};
-      const buddy_list: any = [buddyItem, ...isExist.buddy];
-      const buddyID: string = (isExist._id).toString();
-      const update = await buddyRepo.updateBuddy(buddyID, buddy_list);
+      const buddy_list: any = [buddyItem, ...getBuddy.buddy];
+      const update = await buddyRepo.updateBuddy(getBuddy._id, buddy_list);
       res.status(200).json({ message: `add buddy ${update}`});
     }
   }
@@ -60,4 +59,9 @@ export async function getBuddy(req: IRequest, res: Response, next: NextFunction)
     console.error("[buddyCtrl-getBuddy] ", e);
     next(e)
   }
+}
+
+export async function deleteBuddy(req: IRequest, res: Response, next: NextFunction) {
+  const delBuddy = await buddyRepo.deleteBuddy(req.params.email);
+  res.status(200).json({ message: `${req.params.email} is removed`});
 }
