@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import * as authRepo  from 'data/auth';
+import { useVirtualId } from 'database/database';
 
 export interface IBuddy {
   owner_id: string
@@ -13,7 +14,10 @@ export const buddySchema = new mongoose.Schema<IBuddy>({
     email: { type: String, default: ''},
     profile: { type: String, default: ''}
   }]
-})
+},{
+  versionKey: false
+});
+useVirtualId(buddySchema);
 
 const Buddy = mongoose.model('Buddy', buddySchema);
 
@@ -30,16 +34,16 @@ export function findById(buddyId: string) {
   return Buddy.findById(buddyId);
 }
 
-export function updateBuddy(buddyId: mongoose.Schema.Types.ObjectId, arrBuddy: string[]) {
-  return Buddy.findOneAndUpdate({buddy: arrBuddy});
+export function updateBuddy(buddyId: string, arrBuddy: string[]) {
+  return Buddy.findByIdAndUpdate(buddyId, {buddy: arrBuddy}, {new: true});
 }
 
 export function getBuddy(userId: string) {
-  return Buddy.findOne({owner_id: userId}, {_id: false}).populate({path: 'buddy.profile', model: 'Profile'});
+  return Buddy.findOne({owner_id: userId}).populate({path: 'buddy.profile', model: 'Profile'});
 }
 
-export function deleteBuddy(_email: string) {
-  return Buddy.updateOne({}, {$pull: {"buddy": {"email": _email}}});
+export function deleteBuddy(userId: string, _email: string) {
+  return Buddy.updateOne({owner_id: userId}, {$pull: {"buddy": {"email": _email}}});
 }
 
 // Query an Array of Embedded Documents
