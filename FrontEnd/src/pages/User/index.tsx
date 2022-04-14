@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import {
   Container,
   Field,
@@ -12,14 +12,21 @@ import {
 } from './styles'
 import gravatar from 'gravatar'
 import React, { useCallback } from 'react'
-import { Button, Grid, Tooltip } from '@mui/material'
-import { useQuery, useQueryClient } from 'react-query'
+import { Button, ButtonGroup, Grid, Tooltip } from '@mui/material'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { User as UserType } from '../../lib/api/types'
 import useBuddyQuery from '../../hooks/query/useBuddyQuery'
 import { IoMdMail } from 'react-icons/io'
 import { MdOutlineSafetyDivider, MdOutlineWork } from 'react-icons/md'
 import { GrUserManager } from 'react-icons/gr'
 import { getProfilebyEmail } from '../../lib/api/me/getProfile'
+import { toast } from 'react-toastify'
+import { addBuddy } from '../../lib/api/buddy/addBuddy'
+import { AxiosError } from 'axios'
+import { deleteBuddy } from '../../lib/api/buddy/deleteBuddy'
+import { useRecoilState } from 'recoil'
+import { eventSelectModalState } from '../../atoms/eventState'
+import EventSelectModal from '../../components/Events/EventSelectModal'
 
 export type UserProps = {}
 
@@ -28,16 +35,62 @@ function User({}: UserProps) {
   const user = qc.getQueryData<UserType>('user')
   const { data: buddyData, isLoading } = useBuddyQuery()
   const { email } = useParams<{ email: string }>()
+  const [, setOpen] = useRecoilState(eventSelectModalState)
   const { data: profileData, isLoading: isLoadingProfile } = useQuery(['profile', email ?? ''], getProfilebyEmail, {
-    enabled: !!email
+    enabled: !!email,
+    retry: false,
+    staleTime: 5000
+  })
+
+  const addBuddyMutation = useMutation(addBuddy, {
+    onSuccess: () => {
+      toast.success('Buddy added!')
+      qc.invalidateQueries('buddy')
+    },
+    onError: (err: AxiosError) => {
+      console.error(err)
+      toast.error(err.response?.data.message)
+    }
+  })
+
+  const delBuddyMutation = useMutation(deleteBuddy, {
+    onSuccess: () => {
+      toast.success('Buddy deleted!')
+      qc.invalidateQueries('buddy')
+    },
+    onError: (err: AxiosError) => {
+      console.error(err)
+      toast.error(err.response?.data.message)
+    }
   })
 
   const onAddNetwork = useCallback(() => {
-    alert('add network')
-  }, [])
+    if (!email) return
+    addBuddyMutation.mutate(email)
+  }, [addBuddyMutation, email])
 
-  if (!email || !user || !buddyData || isLoadingProfile || !profileData) {
-    return null
+  const onDeleteNetwork = useCallback(() => {
+    if (!email) return
+    delBuddyMutation.mutate(email)
+  }, [delBuddyMutation, email])
+
+  const onRequestMeeting = useCallback(() => {
+    setOpen(prev => !prev)
+  }, [setOpen])
+
+  if (isLoading || isLoadingProfile) {
+    return <div>Loading...</div>
+  }
+
+  if (!email || !user || !buddyData || !profileData) {
+    if (!toast.isActive('user-not-found')) {
+      toast.error(`Cannot found user(${email}) information`, {
+        toastId: 'user-not-found',
+        pauseOnFocusLoss: false,
+        pauseOnHover: false
+      })
+    }
+    return <Navigate to={'/'} />
   }
 
   return (<Container>
@@ -47,11 +100,13 @@ function User({}: UserProps) {
         <h1>{email} {user.email === email && '(나)'}</h1>
         <span>username</span>
       </NameMailContainer>
-      {user.email !== email &&
-      buddyData.buddy?.findIndex((elem: { email: string, profile: any }) => elem.email === email) === -1
-        ? <Button onClick={onAddNetwork}>+ Add Network</Button>
-        : <Button onClick={onAddNetwork}>- Remove From Network</Button>
-      }
+      <ButtonGroup orientation='vertical'>
+        {user.email === email ? null
+          : buddyData.buddy?.findIndex((elem: { email: string, profile: any }) => elem.email === email) === -1
+            ? <Button variant={'contained'} onClick={onAddNetwork}>+ Add Network</Button>
+            : <Button variant={'contained'} onClick={onDeleteNetwork}>- Remove From Network</Button>}
+        {user.email !== email && <Button variant={'contained'} onClick={onRequestMeeting}>Request Meeting</Button>}
+      </ButtonGroup>
       <Link css={mailToStyle} to={'#'} onClick={(e) => {
         window.location.href = `mailto:${email}`
         e.preventDefault()
@@ -68,9 +123,6 @@ function User({}: UserProps) {
         </Tooltip>
         <Tooltip title='Department' placement={'left'}>
           <span><MdOutlineSafetyDivider /> {profileData.department}</span>
-        </Tooltip>
-        <Tooltip title='Country' placement={'left'}>
-          <span><MdOutlineSafetyDivider /> {profileData.country}</span>
         </Tooltip>
       </Summary>
       <Middle>
@@ -95,6 +147,7 @@ function User({}: UserProps) {
         </Grid>
       </Field>
     </UserBody>
+    <EventSelectModal />
   </Container>)
 }
 

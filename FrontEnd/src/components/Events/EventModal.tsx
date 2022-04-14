@@ -1,19 +1,19 @@
 import { Box, Button, Modal } from '@mui/material'
 import { css } from '@emotion/react'
-import RequestSection from '../../pages/Meeting/meeting-create-form/RequestForm/RequestSection'
+import RequestSection from 'pages/Meeting/meeting-create-form/RequestForm/RequestSection'
 import Input from '../Input/Input'
 import EventDateSections from './EventDateSections'
-import { useEventModal } from '../../hooks/useEventTitle'
-import { resetButton } from '../../lib/styles/resetButton'
-import palette from '../../lib/palette'
-import useDateRangeHook from '../../hooks/useDateRangeHook'
-import { createEvent } from '../../lib/api/event/createEvent'
+import { useEventModal } from 'hooks/useEventTitle'
+import { resetButton } from 'lib/styles/resetButton'
+import palette, { brandColor } from 'lib/palette'
+import useDateRangeHook from 'hooks/useDateRangeHook'
+import { createEvent } from 'lib/api/event/createEvent'
 import { toast } from 'react-toastify'
 import { ChangeEvent } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 import { AxiosError } from 'axios'
-import { useCurrentEventState } from '../../atoms/eventState'
-import { updateEvent } from '../../lib/api/event/updateEvent'
+import { useCurrentEventState } from 'atoms/eventState'
+import { updateEvent } from 'lib/api/event/updateEvent'
 
 export type CreateEventModalProps = {}
 
@@ -108,8 +108,9 @@ function EventModal({}: CreateEventModalProps) {
 
   return <Modal open={open}>
     <Box css={eventFormStyle}>
-      <RequestSection title={'Event title'}>
-        <Input placeholder='Input your event title'
+      <h2>Create Custom Event</h2>
+      <RequestSection title={'Event Title'}>
+        <Input placeholder='event title'
                name='event'
                onChange={onChangeEventTitle}
                value={event.title} />
@@ -128,17 +129,18 @@ function EventModal({}: CreateEventModalProps) {
 
 const eventFormStyle = css`
   position: absolute;
-  left: 40%;
+  left: 20%;
   top: 20%;
   width: 35rem;
-  background: #fff;
-  padding: 1.5rem;
-  border-radius: 0.8rem;
+  background: linear-gradient(45deg, #f1f1f1 45%, #fff 100%);
+  padding: 2rem;
+  border-radius: 1rem;
 
 `
 const buttonBlock = css`
   display: flex;
   justify-content: center;
+  margin: 2rem 0 0;
 `
 const buttonStyle = css`
   ${resetButton};
@@ -151,7 +153,7 @@ const buttonStyle = css`
   font-weight: bold;
   cursor: pointer;
 
-  background-color: ${palette.purple[500]};
+  background-color: ${brandColor};
 
   color: #fff;
 

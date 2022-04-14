@@ -29,20 +29,20 @@ function Input(
 }
 
 const wrapper = (disabled?: boolean) => css`
-  padding-left: 1.6rem;
-  padding-right: 1.6rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
   display: flex;
   flex: 1;
   align-items: center;
   cursor: text;
   span {
     color: ${palette.blueGrey[300]};
-    margin-right: 0.8rem;
+    margin-right: 0.5rem;
   }
   ${disabled &&
   css`
     span {
-      color: ${palette.blueGrey[200]};
+      color: #C6C6C6;
     }
     cursor: not-allowed;
   `}
@@ -57,7 +57,7 @@ const style = css`
   padding: 0;
   font-size: inherit;
   &::placeholder {
-    color: ${palette.blueGrey[200]};
+    color: #C6C6C6;
   }
   &:disabled {
     cursor: not-allowed;

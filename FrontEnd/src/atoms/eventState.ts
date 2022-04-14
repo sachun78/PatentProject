@@ -29,6 +29,10 @@ export type CurrentEventState = {
   title: string,
 }
 
+export const eventSelectModalState = atom({
+  key: 'eventSelectModalState',
+  default: false
+})
 
 const currentEventState = atom<CurrentEventState>({
   key: 'currentEventState',

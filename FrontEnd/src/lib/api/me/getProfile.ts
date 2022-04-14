@@ -8,12 +8,12 @@ export async function getCurrentProfile() {
 }
 
 export async function getProfilebyEmail({ queryKey }: QueryFunctionContext) {
-  const [_, email] = queryKey
-  const response = await client.get<IProfile>('/api/profile', { params: { email } })
+  const [, email] = queryKey
+  const response = await client.get<IProfile>(`/api/profile/${email}`)
   return response.data
 }
 
 export async function patchProfile(req: IProfile) {
-  const response = await client.patch<IProfile>('/api/profile/', req)
+  const response = await client.patch<IProfile>('/api/profile', req)
   return response.data
 }

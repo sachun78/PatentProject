@@ -16,9 +16,10 @@ export type EventCardProps = {
   startDate: string
   endDate: string
   count: number
+  cardView?: boolean
 }
 
-function EventCard({ title, startDate, endDate, id, count }: EventCardProps) {
+function EventCard({ title, startDate, endDate, id, count, cardView = false }: EventCardProps) {
   const qc = useQueryClient()
   const navigate = useNavigate()
   const { setOpen, setEdit } = useEventModal()
@@ -57,9 +58,11 @@ function EventCard({ title, startDate, endDate, id, count }: EventCardProps) {
     setEndDate(new Date(endDate))
   }, [endDate, id, startDate, title])
 
-  return <div css={wrapper}>
+  return <div css={wrapper(cardView)}>
     <div className={'inner'} onClick={() => {
-      navigate(`/membership/event/${id}`)
+      if (!cardView) {
+        navigate(`/membership/event/${id}`)
+      }
     }}>
       <div css={eventHeaderStyle}>
         <span className='event-card-header'>{title}</span>
@@ -69,20 +72,28 @@ function EventCard({ title, startDate, endDate, id, count }: EventCardProps) {
         <span>Schedules: <b>{count}</b></span>
       </div>
     </div>
-    <div css={buttonStyle} onClick={onCreateSchedule}>
-      <Link to={'/membership/schedule/request'}>
-        <div className='text'>+ New Schedule</div>
-      </Link>
-    </div>
+    {!cardView &&
+      <div css={buttonStyle} onClick={onCreateSchedule}>
+        <Link to={'/membership/schedule/request'}>
+          <div className='text'>+ New Schedule</div>
+        </Link>
+      </div>}
   </div>
 }
 
-const wrapper = css`
-  width: calc(50% - 1.25rem);
+const wrapper = (maxWidth: boolean) => css`
+  ${maxWidth ? css`
+    width: 37.5rem;
+    margin-bottom: 0;
+    margin-right: 0;
+  ` : css`
+    width: calc(50% - 1.25rem);
+    margin-bottom: 1.5625rem;
+    margin-right: 1.25rem;
+  `}
+
   max-width: 37.5rem;
   height: 13.9375rem;
-  margin-bottom: 1.5625rem;
-  margin-right: 1.25rem;
   padding: 1.875rem;
   border-radius: 1rem;
 
@@ -100,7 +111,7 @@ const wrapper = css`
 
 const buttonStyle = css`
   background-color: ${brandColor};
-  margin: 3.25rem -1.875rem 0;
+  margin: 3.5rem -1.875rem 0;
 
   border-bottom-right-radius: 1rem;
   border-bottom-left-radius: 1rem;

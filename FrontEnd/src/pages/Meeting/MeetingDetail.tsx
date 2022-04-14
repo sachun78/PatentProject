@@ -1,45 +1,29 @@
-import { Link, Navigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useLocation } from 'react-router-dom'
 import React, { useMemo } from 'react'
 import { useQuery } from 'react-query'
 import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
 import { toast } from 'react-toastify'
-import { Accordion, AccordionDetails, AccordionSummary, Button, Container, Stack, Typography } from '@mui/material'
+import {
+  Accordion, AccordionDetails, AccordionSummary,
+  Button,
+  Container,
+  Stack,
+  Typography
+} from '@mui/material'
 import { css } from '@emotion/react'
 import IconControl from 'components/IconControl'
 
 export type MeetingDetailProps = {}
 
-const steps = [
-  {
-    label: 'Select campaign settings',
-    description: `For each ad campaign that you create, you can control how much
-              you're willing to spend on clicks and conversions, which networks
-              and geographical locations you want your ads to show on, and more.`
-  },
-  {
-    label: 'Create an ad group',
-    description:
-      'An ad group contains one or more ads which target a shared set of keywords.'
-  },
-  {
-    label: 'Create an ad',
-    description: `Try out different ad text to see what brings in the most customers,
-              and learn how to enhance your ads using features like ad extensions.
-              If you run into any problems with your ads, find out how to tell if
-              they're running and how to resolve approval issues.`
-  }
-]
-
 function MeetingDetail({}: MeetingDetailProps) {
-  const params = useParams()
-  const code = useMemo(() => params.id, [params])
-  const { data, isLoading, error } = useQuery(['meeting', code], () => getMeetingOne(code!), {
+  const location = useLocation()
+  const code = useMemo(() => location.pathname.split('/')[3], [location])
+  const { data, isLoading, error } = useQuery(['meeting', code], () => getMeetingOne(code), {
     retry: false,
-    refetchOnWindowFocus: false,
-    enabled: !!code
+    refetchOnWindowFocus: false
   })
 
-  if (!code) {
+  if (location.pathname.split('/')[3] === '') {
     return <Navigate replace to={'/'} />
   }
 
@@ -90,12 +74,11 @@ function MeetingDetail({}: MeetingDetailProps) {
           aria-controls='panel1a-content'
           id='panel1a-header'
         >
-          <Typography>Accordion 1</Typography>
+          <Typography>"Request" from ME to Opponent</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+            message/ time/ place/ data
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -105,23 +88,43 @@ function MeetingDetail({}: MeetingDetailProps) {
           aria-controls='panel2a-content'
           id='panel2a-header'
         >
-          <Typography>Accordion 2</Typography>
+          <Typography>"Replan" from Opponent to me</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+            message/ time/ place/ data
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<IconControl name={'plus'} />}
+          aria-controls='panel3a-content'
+          id='panel3a-header'
+        >
+          <Typography>"Replan(change)" from me to Opponent</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            message/ time/ place/ data
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<IconControl name={'plus'} />}
+          aria-controls='panel4a-content'
+          id='panel4a-header'
+        >
+          <Typography>"Confirm" or Reject by Opponent</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            message/ time/ place/ data
           </Typography>
         </AccordionDetails>
       </Accordion>
     </div>
-    <Container>
-      스케줄 컨펌 HISTORY 표시<br /><br />
-      1. Request me -&gt; Opponent<br />
-      2. Replan Opponent -&gt; me<br />
-      3. Change(replan) me -&gt; Opponent<br />
-      4. Confirm or Reject Opponent<br />
-    </Container>
   </Stack>
 }
 

@@ -22,7 +22,7 @@ export default function RequestForm({}: RequestViewProps) {
   const navi = useNavigate()
   const [form, onChange] = useInputs({
     to: '',
-    place: '1234',
+    place: '성수역1번출구',
     comment: '',
     title: ''
   })
@@ -104,7 +104,7 @@ export default function RequestForm({}: RequestViewProps) {
         <RequestSection title={'Event Info'}>
           <span>{curEvent.title}</span>
           &nbsp;
-          <div> {startDate.toLocaleDateString()} ~ {endDate.toLocaleDateString()}          </div>
+          <div> {startDate.toLocaleDateString()} ~ {endDate.toLocaleDateString()} </div>
         </RequestSection>
         <RequestSection title={'Meeting Title'}>
           <Input name='title' type={'text'} value={form.title} onChange={onChange} />

@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from 'react-query'
 import { User } from 'lib/api/types'
 import useProfileQuery from 'hooks/query/useProfileQuery'
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react'
-import { AutocompleteValue, Button } from '@mui/material'
+import { AutocompleteValue } from '@mui/material'
 import { CountryType } from '../CountrySelector/CountrySelector'
 import { css } from '@emotion/react'
 import _ from 'lodash'
@@ -27,15 +27,9 @@ function ProfileMenu({}: ProfileMenuProps) {
   const [fields, setFields] = useState<string[]>(data?.field ?? [])
   const [fieldText, setFieldText] = useState('')
 
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false)
-
   const company_default = useMemo(() => data?.company, [data])
   const department_default = useMemo(() => data?.department, [data])
   const position_default = useMemo(() => data?.position, [data])
-
-  const toggleHistoryDrawer = useCallback(() => {
-    setIsHistoryOpen(prev => !prev)
-  }, [])
 
   const difference = useMemo(() => _.difference(data?.field, fields), [data, fields])
   const isSaveActive = company_default !== company || department_default !== department || position_default !== position || difference.length > 0 || country !== data?.country

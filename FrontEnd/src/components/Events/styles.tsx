@@ -7,7 +7,6 @@ export const wrapper = css`
   text-align: center;
   display: flex;
   flex-wrap: wrap;
-  min-width: 60rem;
 
   &:hover, &:focus {
     cursor: pointer;
