@@ -1,4 +1,4 @@
-import mongoose, { ObjectId, Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import * as authRepo  from 'data/auth';
 
 export interface IBuddy {
@@ -30,7 +30,7 @@ export function findById(buddyId: string) {
   return Buddy.findById(buddyId);
 }
 
-export function updateBuddy(buddyId: ObjectId, arrBuddy: string[]) {
+export function updateBuddy(buddyId: mongoose.Schema.Types.ObjectId, arrBuddy: string[]) {
   return Buddy.findOneAndUpdate({buddy: arrBuddy});
 }
 

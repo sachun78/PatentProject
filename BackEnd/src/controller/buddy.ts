@@ -35,7 +35,7 @@ export async function addBuddy(req: IRequest, res: Response, next: NextFunction)
       const buddyItem = {email: req.body.email, profile: buddyUser.profile};
       const buddy_list: any = [buddyItem, ...getBuddy.buddy];
       const update = await buddyRepo.updateBuddy(getBuddy._id, buddy_list);
-      res.status(200).json({ message: `add buddy ${update}`});
+      res.status(200).json({ message: `add buddy ok`});
     }
   }
   catch(e) {
