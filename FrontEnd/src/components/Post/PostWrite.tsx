@@ -4,18 +4,31 @@ import Quill from 'quill';
 import 'quill/dist/quill.bubble.css'
 import { css } from '@emotion/react'
 import palette from 'lib/palette'
+import React from 'react';
+import { usePosts } from 'lib/api/post/usePosts';
+import { string } from 'joi';
 
 function PostWrite() {
     const [body, setBody] = useState("")
     const quillElement = useRef<any>(null);
     const quillInstance = useRef<any>(null);
     const navigate = useNavigate();
+    const posts = usePosts();
 
-    const onTest = () => {
-        // alert(body)
 
-    }
 
+    const onPost = () => {
+        posts.push({
+            id: String(posts.length + 1),
+            title: "아무것",
+            text: body,
+            created_at: new Date(),
+            like: 0,
+            comments: [],
+            writer: '홍길동'
+        })
+        navigate('/')
+    }    
     const onCancle = () => {
         navigate(-1);
     }
@@ -53,7 +66,7 @@ function PostWrite() {
             </div>
         </div>
         <div css={buttonWrapStyle}>
-            <button css={buttonStyle} onClick={onTest}>Posting</button>
+            <button css={buttonStyle} onClick={onPost}>Posting</button>
             <button css={buttonStyle} onClick={onCancle}>Cancle</button>
         </div>
     </>

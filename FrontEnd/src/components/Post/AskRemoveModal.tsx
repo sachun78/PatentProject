@@ -2,8 +2,8 @@ import AskModal from "./AskModal";
 
 type askRemoveModalProps = {
     visible: boolean,
-    onConfirm: any,
-    onCancel: any
+    onConfirm?: any,
+    onCancel?: any
 }
 
 const AskRemoveModal = ({ visible, onConfirm, onCancel }: askRemoveModalProps) => {

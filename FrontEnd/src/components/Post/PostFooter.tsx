@@ -22,8 +22,8 @@ export type PostFooterProps = {
 function PostFooter({ id, index, isLike, like, comments }: PostFooterProps) {  
 
   const [likeClick, onToggleLike] = useToggle(isLike)  
-  const post = usePost(index)  
-  const viewComments = comments.filter((comment: IComment) => (Number(comment.id) < 2)) 
+  const post = usePost(index)    
+  const viewComments = comments.filter((comment: IComment) => (comments.indexOf(comment) < 2))   
 
   const onLike = () => {
     
@@ -53,6 +53,7 @@ function PostFooter({ id, index, isLike, like, comments }: PostFooterProps) {
         </div>
       </Link>
     </div>     
+    {/* arr.sort((a, b) => b - a); */}
     <div css={commentStyle}>
       {viewComments.map((comment: IComment) => (
       <OutlinedInput key={comment.id} placeholder={'Write your comment'} value={comment.text}
