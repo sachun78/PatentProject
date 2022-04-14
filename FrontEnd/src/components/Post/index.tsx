@@ -9,6 +9,7 @@ import PostFooter from './PostFooter'
 import PostHeader from './PostHeader'
 
 type PostProps = {
+
   index: number
   id: string
   text: string
@@ -24,7 +25,7 @@ function Post({ index, id, isLike = false }: PostProps) {
   const post = usePost(index);
   const { writer, created_at, text, comments, like } = post  
   return (
-    <div css={postStyle}>      
+    <div css={postStyle}>
       <PostHeader writer={writer} created_at={created_at} />
       <Link
         to={`/postDetail/${id}`}

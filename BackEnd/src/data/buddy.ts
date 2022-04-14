@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { ObjectId, Schema } from 'mongoose';
 import * as authRepo  from 'data/auth';
 
 export interface IBuddy {
@@ -30,12 +30,16 @@ export function findById(buddyId: string) {
   return Buddy.findById(buddyId);
 }
 
-export function updateBuddy(buddyId: string, arrBuddy: string[]) {
+export function updateBuddy(buddyId: ObjectId, arrBuddy: string[]) {
   return Buddy.findOneAndUpdate({buddy: arrBuddy});
 }
 
 export function getBuddy(userId: string) {
   return Buddy.findOne({owner_id: userId}, {_id: false}).populate({path: 'buddy.profile', model: 'Profile'});
+}
+
+export function deleteBuddy(_email: string) {
+  return Buddy.updateOne({}, {$pull: {"buddy": {"email": _email}}});
 }
 
 // Query an Array of Embedded Documents

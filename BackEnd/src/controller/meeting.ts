@@ -139,16 +139,14 @@ export async function sendInvitMail(req: IRequest, res: Response) {
   }
   catch(e) {
     console.error(e);
-    return res.status(500).json({ message: `Exception email send ${bodyData.toEmail}`});
+    return res.status(500).json({ message: `${e} => ${bodyData.toEmail}`});
   }
 }
 
 async function createMeeting(userId: string, body: any) {
   const user = await authRepo.findById(userId);
   if (!user) {
-    return new Promise((resolve, reject) => {
-      reject(new Error('message: User is not found'));
-    });
+    throw new Error('message: User is not found');
   }
 
   let revMeeting = {
@@ -168,25 +166,19 @@ async function createMeeting(userId: string, body: any) {
 
   const meeting = await meetingRepo.createMeeting(revMeeting);
   if (!meeting) {
-    return new Promise((resolve, reject) => {
-      reject(new Error('message: Failed create meeting'));
-    });
+    throw new Error('Failed create meeting');
   }
 
   const event = await eventRepo.getById(meeting.eventId);
   if (!event) {
-    return new Promise((resolve, reject) => {
-      reject(new Error('message: Not found event'));
-    });
+    throw new Error('Not found event');
   }
   let meetingList: string[] = [meeting.id, ...event.meeting_list];
   const eventUpdate = await eventRepo.updateEvent(meeting.eventId, {meeting_list: meetingList});
   if (!eventUpdate) {
-    return new Promise((resolve, reject) => {
-      reject(new Error('message: Failed meeting list update'));
-    });
+    throw new Error('Failed meeting list update');
   }
-  
+
   const retMeetingData = {
     ...revMeeting,
     ownerPhoto: user.photo_path
