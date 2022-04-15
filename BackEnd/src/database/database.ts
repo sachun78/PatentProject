@@ -10,4 +10,5 @@ export function useVirtualId(schema: Mongoose.Schema) {
         return this._id.toString();
     });
     schema.set('toJSON', { virtuals: true });
+    schema.set('toObject', { virtuals: true });
 }

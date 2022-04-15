@@ -67,10 +67,6 @@ export async function getByCode(meetingCode: string) {
   return meeting.findOne({code: meetingCode});
 }
 
-export async function findByCode(code: string) {
-  return meeting.findOne({code});
-}
-
 export async function createMeeting(meetingData: any) {
   return new meeting(meetingData).save().then((data: any) => {
     return {
