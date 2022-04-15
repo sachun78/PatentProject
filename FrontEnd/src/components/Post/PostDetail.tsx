@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
-import { Avatar, OutlinedInput } from '@mui/material';
+import { Avatar, ImageList, ImageListItem, OutlinedInput } from '@mui/material';
 import gravatar from 'gravatar';
 import useInput from 'hooks/useInput';
 import useToggle from 'hooks/useToggle';
 import { usePost } from 'lib/api/post/usePost';
 import { usePosts } from 'lib/api/post/usePosts';
-import { brandColor } from 'lib/palette';
+import palette, { brandColor } from 'lib/palette';
 import media from 'lib/styles/media';
 import React, { useEffect, useState } from 'react';
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs';
@@ -22,7 +22,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
 
     const qc = useQueryClient();
     const location: any = useLocation();    
-    const { postNumber } = location.state as any;        
+    const { postNumber, imageData } = location.state as any;        
     const post = usePost(postNumber)
     const posts = usePosts()
     const { title, text, writer, created_at, like, comments } = post
@@ -76,7 +76,22 @@ function PostDetail({ isLike = false }: postDetailProps) {
           </div>
         <div>{title}</div>
       </div>
-      <figure><img src={'https://picsum.photos/810/300?random=' + postNumber} alt={'post-img'} /></figure>      
+      <figure>
+        <ImageList variant='masonry' cols={3} gap={8}>
+          {imageData.map((image: any) => (
+            <ImageListItem key={image.imageId}>
+              <img 
+                src={image.src}
+                alt={image.alt}
+                loading="lazy"
+                style={{
+                  borderRadius: "1rem"
+                }}
+              />
+            </ImageListItem> 
+          ))}
+        </ImageList>      
+      </figure>
       <div css={bodyStyle}>
         {text}
       </div>
@@ -103,11 +118,20 @@ function PostDetail({ isLike = false }: postDetailProps) {
         <div css={commentStyle}>    
           {comments.map((comment: IComment) => (
             <div key={comment.id} style={{
-              paddingTop: '0.2rem'
+              paddingTop: '1rem',
+              display: 'flex',              
+              justifyContent: 'center',
+              verticalAlign: 'center', 
+              borderBottom: `0.5px solid ${palette.grey[400]}`
+                            
               }}
             >
-              {comment.text}
-              <hr />
+            <div style={{display:'flex'}}>
+              <Avatar alt='user-avatar' src={gravatar.url(`test.email${comment.id}`, { s: '60px', d: 'retro' })}
+                sx={{ width: 20, height: 20, marginBottom: '0.5rem' }} />
+            </div>
+            <div style={{ flex : '1', marginLeft: '1rem', verticalAlign: 'center' }}>
+              {comment.text}</div>              
             </div>            
           ))}
         </div>      
@@ -118,8 +142,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
 
 export default React.memo(PostDetail)
 
-const commentStyle = css`    
-  
+const commentStyle = css`      
   font-size: 0.5rem;    
   letter-spacing: 0.00938em;
   border: thick solid #dddddd;    
@@ -146,8 +169,7 @@ const wrapStyle = css`
   figure {
     max-height: 40rem;    
     display: flex;
-    justify-content: center;
-    background: grey;
+    justify-content: center;    
     margin: 1.25rem 1.875rem;
     border-radius: 1rem;
     overflow:hidden;
