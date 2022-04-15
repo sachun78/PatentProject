@@ -4,7 +4,8 @@ import envConfig from 'config';
 
 export const enum EMAILTYPE {
   AUTH, // authorization
-  INVI  // invitation
+  INVI,  // invitation
+  RESULT
 }
 
 const createAuthEmail = (origin: string, code: string) => {
@@ -94,6 +95,69 @@ const createInviteEmail = (origin: string, data: any) => {
   return {subject, html};
 }
 
+const createResultEmail = (origin: string, data: any) => {
+  const keywords = {
+    text: 'Send results',
+  };
+  const result = data.status === 'confirm'
+    ? { comment: 'Accept meeting' } : { comment: 'Cancel meeting' };
+
+  const subject = `Wemet [${keywords.text}] - ${data.ownerName}`;
+  const html = `<a href="${origin}"
+  ><img
+    src="${origin}/asset/wemet_logo.png"
+    style="display: block; width: 128px; margin: 0 auto; margin-bottom: 1rem;"
+  /></a>
+  <div style="max-width: 100%; width: 600px; margin: 0 auto;">
+    <div style="font-weight: 400; margin: 0; font-size: 1.25rem; color: #868e96;">
+      Notification of rescheduling request result.
+    </div>
+    <div style="display:-webkit-flex;display:-ms-flexbox;display:flex; margin-top: 1rem;">
+      <img
+          style="height: 32px; width: 32px; display: block; border-radius: 32px;"
+          src="${origin}/asset/confirm.png"
+        />
+      <p style="flex: 1; color: #495057; margin: 0; text-decoration: none; margin-left: 1.5rem; font-weight: 600; font-size: 1.125rem;">
+        ${result.comment}
+      </p>
+    </div>
+    <div style="font-weight: 400; margin-top: 0.5rem; font-size: 1.75rem;"></div>
+    <div
+      style="width: 100%; height: 1px; background: #e9ecef; margin-top: 1rem; margin-bottom: 2rem;"
+    ></div>
+    <div style="display:-webkit-flex;display:-ms-flexbox;display:flex;">
+      <div>
+        <img
+          style="height: 64px; width: 64px; display: block; border-radius: 32px;"
+          src="${origin}/asset/default.png"
+        />
+      </div>
+      <div style="flex: 1; margin-left: 1.5rem; color: #495057;">
+        <div style="margin: 0; color: #495057; margin-bottom: 0.5rem;">
+          <b style="color: black">title:</b> ${data.title}
+        </div>
+        <div style="margin: 0; color: #495057; margin-bottom: 0.5rem;">
+          <b style="color: black">date:</b> ${data.date}
+        </div>
+        <div style="margin: 0; color: #495057; margin-bottom: 0.5rem;">
+          <b style="color: black">location:</b> ${data.location}
+        </div>
+        <div style="margin: 0; color: #495057; margin-bottom: 0.5rem;">
+          <b style="color: black">member:</b> ${data.ownerEmail}(owner), ${data.toEmail}
+        </div>
+        <div style="margin: 0; color: #495057; margin-bottom: 0.5rem;">
+          <b style="color: black">comment:</b> ${data.comment}
+        </div>
+      </div>
+    </div>
+    <div
+      style="width: 100%; height: 1px; background: #e9ecef; margin-top: 2rem; margin-bottom: 1rem;"
+    ></div>
+  </div>`;
+
+  return {subject, html};
+}
+
 export const sendmail = async (origin: string, emailInfo: any, mailType: EMAILTYPE) => {
   let user_email;
   let emailTemplete;
@@ -106,6 +170,10 @@ export const sendmail = async (origin: string, emailInfo: any, mailType: EMAILTY
     user_email = emailInfo.toEmail;
     emailTemplete = createInviteEmail(origin, emailInfo);
   }
+  else {
+    user_email = emailInfo.toEmail;
+    emailTemplete = createResultEmail(origin, emailInfo);
+  }
 
   let serviceContent: SMTPTransport.Options = {
     service: 'gmail',
@@ -117,8 +185,8 @@ export const sendmail = async (origin: string, emailInfo: any, mailType: EMAILTY
       user: envConfig.email.userid,
       clientId: envConfig.email.client_id,
       clientSecret: envConfig.email.client_secret,
-      refreshToken: "1//04TB1r9NUjgbpCgYIARAAGAQSNwF-L9Ir0iHlek3WXg6Rwwb-K5C35pwfhGjIsI3d1c8zGE3RgPtGRr8Cvf5rc9f4LVRPNHwhWic",
-      accessToken: "ya29.A0ARrdaM9uTRuSybaBoYMLTzsiS34doQ-ClLAb92fl9sHO5bdPiGhn6ZMgfpAy9ni9p4SKY0SCP8giew5xAGj-vJsLBxYLF8IXW5PN_iNkpvIUlxQC58AllA1vuMUngAz_FBs6iA1A5zo57AjjVq3EziZc0hNq"
+      refreshToken: "1//04-lI_UXHTKaoCgYIARAAGAQSNwF-L9IrDMPigu0J-SBwmJS7Egp-dfX1l4CGkzaTCCi0IA4MqjYsspLjKbCVlVMLJrP-RcWpiE4",
+      accessToken: "ya29.A0ARrdaM9ceBvi38WOLbWQgyhRS4_TAEUkVEZ8RQ03_daOSumQ1Qmd--i1_-GdkNlRPiPZXljN3A1BufW5wD80JN-2lNmyNqoMnXHv7sic0kUdxste1Jv2iqjhF0LatPBMKSsf1JkAkfd8iKKRZ2DaCEvmBMhK"
     },
   }
   let transporter = nodemailer.createTransport(serviceContent);

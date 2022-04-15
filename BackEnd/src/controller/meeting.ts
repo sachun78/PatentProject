@@ -122,18 +122,19 @@ export async function replanlMeeting(req: IRequest, res: Response) {
 export async function sendResultMail(req: IRequest, res: Response) {
   const mId = req.body.meetingId;
   const mStatus = req.body.status;
+  const origin: string = req.get('origin');
 
   try {
-    const meeting = await meetingRepo.findById(mId);
+    const meeting = await meetingRepo.getById(mId);
     if (meeting) {
-      console.log({meeting});
-      meeting['code'] = shortid.generate();
-      console.log("after", meeting);
-      // const mailInfo = sendmail(origin, meetingData, EMAILTYPE.INVI);
-      // if (!mailInfo) {
-      //   return res.status(500).json({ message: `Failed email send ${bodyData.toEmail}`});
-      // }
-      // return res.status(200).json({ message: `Success send email: ${bodyData.toEmail}`});
+      meeting["status"] = mStatus;
+      console.log(meeting);
+      const mailInfo = sendmail(origin, meeting, EMAILTYPE.RESULT);
+      if (!mailInfo) {
+        return res.status(500).json({ message: `Failed email send ${meeting.toEmail}`});
+      }
+      await meetingRepo.updateMeeting(meeting.id, meeting);
+      return res.status(200).json({ message: `Success send email: ${meeting.toEmail}`});
     }
     else {
       return res.status(409).json({ message: `[Meeting(${mId}) not found] or [status(${mStatus}) is wrong]`});
