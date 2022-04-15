@@ -176,27 +176,17 @@ export const sendmail = async (origin: string, emailInfo: any, mailType: EMAILTY
   }
 
   let serviceContent: SMTPTransport.Options = {
-    // service: 'gmail',
-    // port: 587,
-    // host: 'smtp.google.com',
-    // secure: true,
-    // auth: {
-    //   type: "OAuth2",
-    //   user: envConfig.email.userid,
-    //   clientId: envConfig.email.client_id,
-    //   clientSecret: envConfig.email.client_secret,
-    //   refreshToken: "1//04tJlh9cyMLKNCgYIARAAGAQSNwF-L9IrQ207U8OEZSULqPly6IzpBDy8WO7eQXyaJqh9PhbLpX8a4q_0RnnW8A0CsKBh8Vrq-ks",
-    //   accessToken: "ya29.A0ARrdaM8585Ich72PqC74krO3e11tpwHSDdI4kYwZmz33vdpX_RqKTZaMqTJeJTq-3emlG7i3IJCAXqfRWv6g4YldknEV88Cjk3hmoGzJXzQiL7xme6wCgK-lCtQ0R4mS_6xGjAj-JJrVBh_hiuwPQYsBGp--"
-    // },
     service: 'gmail',
     port: 587,
-    host: 'smtp.gmlail.com',
-    secure: false,
-    requireTLS: true,
+    host: 'smtp.google.com',
+    secure: true,
     auth: {
-        user: "wemetsuperuser@gmail.com",
-        pass: "Wemetadmin12!@"
-    }
+      type: "OAuth2",
+      user: envConfig.email.userid,
+      clientId: envConfig.email.client_id,
+      clientSecret: envConfig.email.client_secret,
+      accessToken: "ya29.A0ARrdaM_gDI-R6rMqezshm39ag-Xma4U4Vr0YdsfipT7c_TOVP2-UI8OZKpvPRc-Pp3MYSfyP10SuqUJ_avyaFZYi-6VrSRiupo_c9RnNZOInCf8AdXDK537acUH8I3Ruv1CSLbEB61E1Kr9Dh8jRNCnkdruD"
+    },
   }
   let transporter = nodemailer.createTransport(serviceContent);
 
