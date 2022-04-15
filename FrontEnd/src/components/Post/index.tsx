@@ -1,4 +1,5 @@
 import { css } from '@emotion/react'
+import { ImageList, ImageListItem } from '@mui/material'
 import { usePost } from 'lib/api/post/usePost'
 import { IComment } from 'lib/api/types'
 import media from 'lib/styles/media'
@@ -24,6 +25,16 @@ type PostProps = {
 function Post({ index, id, isLike = false }: PostProps) {
   const post = usePost(index);
   const { writer, created_at, text, comments, like } = post  
+  const imageData = [] as any;
+
+  for(let i = 0; i < 9; i++) {
+    imageData.push({
+      imageId: i,
+      src: 'https://picsum.photos/810/300?random=' + i,
+      alt: 'image' + i
+    })
+  }
+
   return (
     <div css={postStyle}>
       <PostHeader writer={writer} created_at={created_at} />
@@ -33,7 +44,22 @@ function Post({ index, id, isLike = false }: PostProps) {
           postNumber: index          
         }}
       >
-      <figure><img src={'https://picsum.photos/810/300?random=' + id} alt={'post-img'} /></figure>
+      <figure>
+        <ImageList variant='masonry' cols={3} gap={8}>
+          {imageData.map((image: any) => (
+            <ImageListItem key={image.imageId}>
+              <img 
+                src={image.src}
+                alt={image.alt}
+                loading="lazy"
+                style={{
+                  borderRadius: "1rem"
+                }}
+              />
+            </ImageListItem> 
+          ))}
+        </ImageList>
+      </figure>      
       <div css={bodyStyle}>
         {text}
       </div>
@@ -62,7 +88,7 @@ const postStyle = css`
     max-height: 40rem;    
     display: flex;
     justify-content: center;
-    background: grey;
+    /* background: grey; */
     margin: 1.25rem 1.875rem;
     border-radius: 1rem;
     overflow:hidden;
