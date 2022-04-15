@@ -28,7 +28,7 @@ type postDetailProps = {
 function PostDetail({ isLike = false }: postDetailProps) {
   const qc = useQueryClient()
   const location: any = useLocation()
-  const { postNumber, imageData } = location.state as any
+  const { postNumber, imageData } = location.state as any  
   const post = usePost(postNumber)
   const posts = usePosts()
   const { title, text, writer, created_at, like, comments } = post
@@ -157,6 +157,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
             />
           </div>
         )}
+        {comments.length === 0 ? <div></div> : 
         <div css={commentStyle}>
           {comments.map((comment: IComment) => (
             <div
@@ -190,7 +191,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
               </div>
             </div>
           ))}
-        </div>
+        </div>}
       </div>
     </>
   )

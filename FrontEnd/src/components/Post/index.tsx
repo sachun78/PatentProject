@@ -65,7 +65,7 @@ function Post({ index, id, isLike = false }: PostProps) {
         {text}
       </div>
       </Link>
-      <PostFooter id={id} index={index} comments={comments} like={like} isLike={isLike} />
+      <PostFooter id={id} index={index} comments={comments} like={like} isLike={isLike} imageData={imageData} />
     </div>
   )
 }
