@@ -56,7 +56,7 @@ function PostFooter({ id, index, isLike, like, comments }: PostFooterProps) {
     {/* arr.sort((a, b) => b - a); */}
     <div css={commentStyle}>
       {viewComments.map((comment: IComment) => (
-      <OutlinedInput key={comment.id} placeholder={'Write your comment'} value={comment.text}
+      <OutlinedInput key={comment.id} value={comment.text}
         fullWidth multiline
         sx={{ borderRadius: '1rem', paddingLeft: '1.25rem' }}
         startAdornment={<Avatar alt='post-user-avatar'
