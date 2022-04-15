@@ -2,11 +2,13 @@ import { css } from '@emotion/react'
 import palette, { brandColor } from 'lib/palette'
 import { IProfile } from 'lib/api/types'
 import { useNavigate } from 'react-router-dom'
-import { Avatar, Tooltip } from '@mui/material'
+import { Avatar, Grid, Tooltip } from '@mui/material'
 import gravatar from 'gravatar'
 import React from 'react'
 import { MdOutlineSafetyDivider, MdOutlineWork } from 'react-icons/md'
 import { GrUserManager } from 'react-icons/gr'
+import { FieldItem } from '../../pages/User/styles'
+import getCountryName from 'lib/countryName'
 
 export type NetworkItemProps = {
   data: { email: string, profile: IProfile }
@@ -21,11 +23,16 @@ function NetworkItem({ data }: NetworkItemProps) {
     </div>
     <div css={nameStyle}>{data.email}</div>
     <div css={informStyle}>
-      <Tooltip title='Company' placement={'top-start'}><span><MdOutlineWork />{data.profile.company}</span></Tooltip>
+      <Tooltip title='Company' placement={'left'}><span><MdOutlineWork />{data.profile.company}</span></Tooltip>
       <Tooltip title='Field'
-               placement={'top-start'}><span><GrUserManager />{data.profile.field?.map((item) => item)}</span></Tooltip>
+               placement={'left'}><span><GrUserManager />
+        <Grid container>
+        {data.profile.field?.map((elem: string) => (
+          <FieldItem key={elem}>{elem}</FieldItem>
+        ))}
+      </Grid></span></Tooltip>
       <Tooltip title='Country'
-               placement={'top-start'}><span><MdOutlineSafetyDivider />{data.profile.country}</span></Tooltip>
+               placement={'left'}><span><MdOutlineSafetyDivider />{getCountryName(data.profile.country!)}</span></Tooltip>
     </div>
     <div css={stateStyle}>
       <span>something online?</span>
@@ -76,7 +83,7 @@ const informStyle = css`
   }
 
   span {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.2rem;
     display: flex;
     align-items: center;
   }

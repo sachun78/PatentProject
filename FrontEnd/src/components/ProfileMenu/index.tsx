@@ -111,7 +111,7 @@ function ProfileMenu({}: ProfileMenuProps) {
         <ProfileCard.Save title='' onSave={onSaveProfile} loading={saveMutation.isLoading} />}
     </InfoViewSection>
     <InfoViewSection title='Additional'>
-      <InfoViewCard.Item title='Career' type={'career'} />
+      <InfoViewCard.Item title='Previous company' type={'career'} />
     </InfoViewSection>
   </div>
 }

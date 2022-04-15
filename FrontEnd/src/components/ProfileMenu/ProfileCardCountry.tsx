@@ -3,6 +3,7 @@ import React, { SyntheticEvent } from 'react'
 import { css } from '@emotion/react'
 import CountrySelector, { countries, CountryType } from '../CountrySelector/CountrySelector'
 import { AutocompleteValue, Button } from '@mui/material'
+import getCountryName from '../../lib/countryName'
 
 export type ProfileCardCountryProps = {
   title: string
@@ -27,7 +28,7 @@ function ProfileCardCountry({ title, editable, country, onChange }: ProfileCardC
                                     defaultValue={countries[countries.findIndex((v) => (country) === v.code)]}
           />}
           {!edit &&
-            <div css={countryNormalStyle}>{countries[countries.findIndex((v) => (country) === v.code)].label}</div>}
+            <div css={countryNormalStyle}>{getCountryName(country)}</div>}
           {!edit && <div>
             <Button variant='contained' color='primary' onClick={() => {
               setEdit(prev => !prev)

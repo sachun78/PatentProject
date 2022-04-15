@@ -4,7 +4,7 @@ import { useQuery } from 'react-query'
 import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
 import { toast } from 'react-toastify'
 import {
-  Accordion, AccordionDetails, AccordionSummary,
+  Accordion, AccordionDetails, AccordionSummary, Box,
   Button,
   Container,
   Stack,
@@ -12,6 +12,7 @@ import {
 } from '@mui/material'
 import { css } from '@emotion/react'
 import IconControl from 'components/IconControl'
+import { ContainerBlock, MeetingSection } from './styles'
 
 export type MeetingDetailProps = {}
 
@@ -43,37 +44,46 @@ function MeetingDetail({}: MeetingDetailProps) {
   }
 
   return <Stack direction={'row'}>
-    <Container maxWidth='xs' sx={{ mt: 0, p: 3, backgroundColor: 'palegoldenrod', borderRadius: '16px' }}>
-      <h1>{data.title}</h1>
-      <section>
+    <ContainerBlock>
+      <h1>{data.title} [{data.status}]</h1>
+      <MeetingSection>
+        <h2>Organizer</h2>
+        <p>{data.ownerEmail}</p>
+      </MeetingSection>
+      <MeetingSection>
         <h2>Participants</h2>
-        <p>{data.toEmail}</p>
-        <Link to={`/u/${data.toEmail}`}><Button variant='contained'>정보확인</Button></Link>
-      </section>
-      <section>
-        <h2>Schedule Information</h2>
         <Stack direction='row' spacing={2}>
-          <div><p><b>Date</b> {data.date.replace(/T.*$/, '')}</p></div>
-          <div><p>{new Date(data.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p></div>
+          <p>{data.toEmail}</p>
+          <Link to={`/u/${data.toEmail}`}><Button variant='contained' style={{ height: '24px' }}>정보확인</Button></Link>
         </Stack>
-        <p><b>Place : </b>{data.location}</p>
-        <p><b>Message : </b> {data.comment}</p>
-        <p><b>State : </b>{data.status}</p>
-      </section>
-      <div css={buttonGroupStyle}>
+      </MeetingSection>
+      <MeetingSection>
+        <h2>Schedule Information</h2>
+        <p>{data.location}</p>
+        <p> {data.date.replace(/T.*$/, '')} {new Date(data.time).toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit'
+        })}</p>
+      </MeetingSection>
+      <MeetingSection>
+        <h2>Request Message</h2>
+        <p> {data.comment}</p>
+      </MeetingSection>
+      <Box display='flex' justifyContent='space-between'>
         {data.status === 'confirm' && <Button variant='contained'>Result</Button>}
-        {data.status === 'replan' && <Button variant='contained'>Confirm</Button>}
-        {data.status !== 'none' && <Button variant='contained'>Change</Button>}
-        {data.status !== 'none' && < Button variant='contained'>Reject</Button>}
-      </div>
-    </Container>
-    <div>
+        {data.status === 'replan'
+          && <>
+            <Button variant='contained' style={{ width: '180px' }}>Confirm</Button>
+            <Button variant='contained' style={{ width: '180px', backgroundColor: '#9C9C9C' }}>Cancel</Button>
+          </>}
+      </Box>
+    </ContainerBlock>
+    <Container>
       <Accordion>
         <AccordionSummary
           expandIcon={<IconControl name={'plus'} />}
           aria-controls='panel1a-content'
-          id='panel1a-header'
-        >
+          id='panel1a-header'>
           <Typography>"Request" from ME to Opponent</Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -124,13 +134,8 @@ function MeetingDetail({}: MeetingDetailProps) {
           </Typography>
         </AccordionDetails>
       </Accordion>
-    </div>
+    </Container>
   </Stack>
 }
-
-const buttonGroupStyle = css`
-  display: flex;
-  justify-content: space-between;
-`
 
 export default MeetingDetail

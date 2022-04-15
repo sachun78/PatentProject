@@ -14,6 +14,11 @@ export type IProfile = {
   country?: string
 }
 
+export type IProfileDetail = {
+  username?: string
+  photo_path?: string
+} & IProfile
+
 export type IEvent = {
   id: string
   title: string,

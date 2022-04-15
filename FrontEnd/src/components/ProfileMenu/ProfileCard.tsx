@@ -22,8 +22,8 @@ function ProfileCard({ children }: ProfileCardProps) {
 }
 
 const wrapper = css`
-  margin-bottom: 4rem;
-  border-radius: 0.4rem;
+  margin-bottom: 2.5rem;
+  border-radius: 0.25rem;
   background-color: #fff;
   border: 1px solid rgba(0, 0, 0, 0.1);
 `
