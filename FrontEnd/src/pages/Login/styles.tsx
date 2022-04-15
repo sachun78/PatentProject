@@ -44,10 +44,14 @@ export const inputStyle = css`
       color: #9C9C9C;
     }
 
-    font: normal normal normal 1rem NanumBarunGothic;
+    font: normal normal normal 1rem NanumSquareOTF;
     line-height: 1.125;
     color: #333;
     padding: 13.5px 25px;
+  }
+
+  input[type=password] {
+    font: normal normal normal 1rem NanumBarunGothic;
   }
 `
 export const dividerStyle = css`
@@ -88,7 +92,7 @@ export const underBlockStyle = css`
 `
 export const pageStyle = css`
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;

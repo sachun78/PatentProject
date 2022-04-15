@@ -12,6 +12,7 @@ import { toast } from 'react-toastify'
 import { buttonStyle, headerStyle, sectionStyle, wrapper } from './styles'
 import { Navigate, useNavigate } from 'react-router-dom'
 import useDateRangeHook from 'hooks/useDateRangeHook'
+import { useMeetingReqUser } from '../../../../atoms/meetingReqState'
 
 type RequestViewProps = {}
 
@@ -19,10 +20,11 @@ export default function RequestForm({}: RequestViewProps) {
   const [curEvent] = useCurrentEventState()
   const { startDate, endDate } = useDateRangeHook()
   const { date, time, setDate, setTime } = useDateTimeHook()
+  const [meetuser, setMeetuser] = useMeetingReqUser()
   const navi = useNavigate()
   const [form, onChange] = useInputs({
     to: '',
-    place: '1234',
+    place: '성수역1번출구',
     comment: '',
     title: ''
   })
@@ -53,7 +55,7 @@ export default function RequestForm({}: RequestViewProps) {
   const onSubmit = useCallback((e) => {
     e.preventDefault()
     const { title, to, place, comment } = form
-    if (!to.trim() || !place.trim() || !title.trim()) {
+    if ((!to.trim() && !meetuser) || !place.trim() || !title.trim()) {
       toast.error('Please fill out all fields', {
         position: toast.POSITION.TOP_CENTER,
         pauseOnHover: false,
@@ -66,7 +68,8 @@ export default function RequestForm({}: RequestViewProps) {
     createMeeting({
       eventId: curEvent.id,
       title, date, time,
-      toEmail: to, location: place,
+      toEmail: meetuser ? meetuser : to,
+      location: place,
       comment
     }).then(() => {
       toast.success('Meeting Request Success', {
@@ -84,13 +87,17 @@ export default function RequestForm({}: RequestViewProps) {
         autoClose: 3000
       })
     })
-  }, [curEvent.id, date, form, navi, time])
+  }, [curEvent.id, date, form, meetuser, navi, time])
 
   useEffect(() => {
     const tempTime = new Date(startDate)
     tempTime.setMinutes(0)
     setDate(startDate)
     setTime(tempTime)
+
+    return () => {
+      setMeetuser('')
+    }
   }, [])
 
   if (curEvent.id === '') {
@@ -104,13 +111,14 @@ export default function RequestForm({}: RequestViewProps) {
         <RequestSection title={'Event Info'}>
           <span>{curEvent.title}</span>
           &nbsp;
-          <div> {startDate.toLocaleDateString()} ~ {endDate.toLocaleDateString()}          </div>
+          <div> {startDate.toLocaleDateString()} ~ {endDate.toLocaleDateString()} </div>
         </RequestSection>
         <RequestSection title={'Meeting Title'}>
           <Input name='title' type={'text'} value={form.title} onChange={onChange} />
         </RequestSection>
         <RequestSection title={'Email'}>
-          <Input name='to' type={'email'} value={form.to} onChange={onChange} />
+          {meetuser ? <span>{meetuser}</span>
+            : <Input name='to' type={'email'} value={form.to} onChange={onChange} />}
         </RequestSection>
         <RequestSection title={'Meeting Date'}>
           <DatePickerInput value={date}

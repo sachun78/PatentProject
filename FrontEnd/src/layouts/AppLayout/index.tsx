@@ -36,7 +36,7 @@ export default function AppLayout({}: AppLayoutProps) {
   return <>
     <AppLayout.Sidebar>
       <Sidebar />
-      <VerticalBar />
+      {/*<VerticalBar />*/}
     </AppLayout.Sidebar>
     <AppLayout.Main>
       <Routes>

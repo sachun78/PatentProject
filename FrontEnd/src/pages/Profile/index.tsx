@@ -1,4 +1,4 @@
-import ProfileMenu from '../../components/ProfileMenu'
+import ProfileMenu from 'components/ProfileMenu'
 import { infoStyle, titleStyle, wrapper } from './styles'
 
 export type ProfileProps = {}

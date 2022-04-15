@@ -70,6 +70,7 @@ export async function getProfile(req: IRequest, res: Response, next: NextFunctio
         const findProfile = await ProfileRepo.findById(findUser.profile);
         console.log({findProfile});
         return res.status(200).json({
+          country: findProfile?.country,
           company: findProfile?.company,
           department: findProfile?.department,
           position: findProfile?.position,

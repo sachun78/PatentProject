@@ -23,7 +23,7 @@ function PostWrite() {
   const onChange = (e: any) => {
     setTitle(e.target.value)
   }
-
+  
   const onPost = () => {
     posts.push({
       id: String(posts.length + 1),
@@ -39,7 +39,7 @@ function PostWrite() {
   const onCancle = () => {
     navigate(-1);
   }
-
+  
   useEffect(() => {
     quillInstance.current = new Quill(quillElement.current, {
         theme: 'snow',
@@ -81,14 +81,13 @@ function PostWrite() {
   );
 }
 
-export default PostWrite;
+export default PostWrite
 
 const editorStyle = css`
   height: 22rem;
   
 `
-const quillWrapperStyle = css`
-  
+const quillWrapperStyle = css`  
   margin: 1rem;
     .ql-editor {
       font-size: 1.125rem;
@@ -114,44 +113,49 @@ const postWriteStyle = css`
     margin-top: 1.25rem;
     margin-bottom: 1.875rem;
     border: 1px solid #9C9C9C;
-    width: 95%    
+    width: 95%
   }
 `
 
 const inputStyle = css`
-    width: 100%;
-    border: none;
-    outline: none;
-    padding-bottom: 0.5rem;
-    margin-top: 2rem;
-    padding: 0 2rem;
-    font-size: 2rem;
-    
+  width: 100%;
+  border: none;
+  outline: none;
+  padding-bottom: 0.5rem;
+  margin-top: 2rem;
+  padding: 0 2rem;
+  font-size: 2rem;
+
 `
 const buttonWrapStyle = css`
-    margin-top: 1rem;
-    margin-bottom: 3rem;
-    button + button {
-        margin-left: 0.5rem;
-    }
-    height: 2.125rem;
-    & + & {
-        margin-left: 0.5rem;
-    }
-    padding: 0 2rem;
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+
+  button + button {
+    margin-left: 0.5rem;
+  }
+
+  height: 2.125rem;
+
+  & + & {
+    margin-left: 0.5rem;
+  }
+
+  padding: 0 2rem;
 `
 
 const buttonStyle = css`
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 0.25rem 1rem;
-    color: white;
-    outline: none;
-    cursor: pointer;
-    background: ${palette.cyan[800]};
-    &:hover {
-        background: ${palette.cyan[600]};
-    }
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.25rem 1rem;
+  color: white;
+  outline: none;
+  cursor: pointer;
+  background: ${palette.cyan[800]};
+
+  &:hover {
+    background: ${palette.cyan[600]};
+  }
 `

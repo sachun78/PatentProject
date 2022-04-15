@@ -1,4 +1,4 @@
-import { atom } from 'recoil'
+import { atom, useRecoilState } from 'recoil'
 import produce from 'immer'
 
 export type MeetingReqState = {
@@ -14,6 +14,15 @@ export const meetingReqState = atom({
   key: 'meetingReqState',
   default: initialState
 })
+
+export const meetingReqUser = atom({
+  key: 'meetingReqUser',
+  default: ''
+})
+
+export const useMeetingReqUser = () => {
+  return useRecoilState(meetingReqUser)
+}
 
 export const updateDate = (
   state: MeetingReqState,

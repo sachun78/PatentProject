@@ -8,7 +8,7 @@ export const emailStyle = css`
 
   .email-block {
     line-height: 1.5;
-    font-size: 1.8rem;
+    font-size: 1.125rem;
     font-weight: 600;
   }
 
@@ -128,8 +128,7 @@ export const careerStyle = css`
 `
 // PROFILECARD STYLES
 export const itemStyle = css`
-  padding: 2rem;
-  width: 100%;
+  padding: 1.25rem;
 
   &:not(:first-of-type) {
     border-top: 1px solid rgba(0, 0, 0, .1);
@@ -140,13 +139,13 @@ export const itemStyle = css`
     flex-wrap: nowrap;
     position: relative;
     flex-grow: 1;
-    font-size: 1.3rem;
+    font-size: 0.8125rem;
   }
 
   .title {
-    width: 18rem;
+    width: 11.25rem;
     flex-shrink: 0;
-    padding-right: 2rem;
+    padding-right: 1.25rem;
 
     label {
       font-weight: 700;
@@ -159,9 +158,9 @@ export const itemStyle = css`
   }
 `
 export const inputStyle = css`
-  font-size: 1.3rem;
+  font-size: 0.8125rem;
   line-height: 1.2;
-  min-height: 3.5rem;
+  min-height: 2.1875rem;
   flex-grow: 1;
 `
 export const tagStyle = css`

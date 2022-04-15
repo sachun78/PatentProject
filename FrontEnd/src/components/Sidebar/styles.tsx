@@ -3,9 +3,9 @@ import media from 'lib/styles/media'
 import { brandColor } from '../../lib/palette'
 
 export const sidebarStyle = css`
-  ${media.xlarge} {
-    display: none;
-  }
+  // ${media.xlarge} {
+  //   display: none;
+  // }
 
   flex: 1;
   display: flex;

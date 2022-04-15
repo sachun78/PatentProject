@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import palette, { brandColor } from 'lib/palette'
+import palette from 'lib/palette'
 
 export const Container = styled.div`
   max-width: 90rem;
@@ -109,12 +109,12 @@ export const mailToStyle = css`
   justify-content: center;
   font-size: 1.75rem;
   margin-left: 1rem;
-  color: #fff;
+  color: #ccc;
   border-radius: 0.875rem;
   background-color: ${palette.blue[600]};
   padding: 0.35rem;
 
   &:hover {
-    color: ${brandColor};
+    color: #c1c1c1;
   }
 `
