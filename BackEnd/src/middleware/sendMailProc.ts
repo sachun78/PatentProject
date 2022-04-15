@@ -38,7 +38,7 @@ const createInviteEmail = (origin: string, data: any) => {
   const subject = `Wemet [${keywords.text}] - ${data.ownerName}`;
   const html = `<a href="${origin}"
   ><img
-    src="http://localhost:8080/undraw_People_re_ueqm.png"
+    src="${origin}/asset/wemet_logo.png"
     style="display: block; width: 128px; margin: 0 auto; margin-bottom: 1rem;"
   /></a>
   <div style="max-width: 100%; width: 600px; margin: 0 auto;">
@@ -58,7 +58,7 @@ const createInviteEmail = (origin: string, data: any) => {
       <div>
         <img
           style="height: 64px; width: 64px; display: block; border-radius: 32px;"
-          src="http://localhost:5500/default.png"
+          src="${origin}/asset/default.png"
         />
       </div>
       <div style="flex: 1; margin-left: 1.5rem; color: #495057;">

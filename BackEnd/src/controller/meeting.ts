@@ -18,7 +18,7 @@ const enum MEETING_STATUS {
 }
 
 const checkInviteCode = async (code: string, data: any): Promise<any> => {
-  const meeting = await meetingRepo.findByCode(code);
+  const meeting = await meetingRepo.getByCode(code);
   if (!meeting) {
     return new Promise((resolve, reject) => {
       reject(new Error('message: Not found meeting'));
@@ -119,9 +119,36 @@ export async function replanlMeeting(req: IRequest, res: Response) {
   }
 }
 
+export async function sendResultMail(req: IRequest, res: Response) {
+  const mId = req.body.meetingId;
+  const mStatus = req.body.status;
+
+  try {
+    const meeting = await meetingRepo.findById(mId);
+    if (meeting) {
+      console.log({meeting});
+      meeting['code'] = shortid.generate();
+      console.log("after", meeting);
+      // const mailInfo = sendmail(origin, meetingData, EMAILTYPE.INVI);
+      // if (!mailInfo) {
+      //   return res.status(500).json({ message: `Failed email send ${bodyData.toEmail}`});
+      // }
+      // return res.status(200).json({ message: `Success send email: ${bodyData.toEmail}`});
+    }
+    else {
+      return res.status(409).json({ message: `[Meeting(${mId}) not found] or [status(${mStatus}) is wrong]`});
+    }
+  }
+  catch(e) {
+    console.error(e);
+    return res.status(409).json({ message: `Meeting(${mId})  not found`});
+  }
+}
+
 export async function sendInvitMail(req: IRequest, res: Response) {
   const user_id = req.userId;
   const bodyData = req.body;
+  const meetingId = req.params.id;
   const origin: string = req.get('origin');
 
   try {
@@ -135,7 +162,7 @@ export async function sendInvitMail(req: IRequest, res: Response) {
       return res.status(500).json({ message: `Failed email send ${bodyData.toEmail}`});
     }
 
-    res.status(200).json({ message: `Success send email: ${bodyData.toEmail}`})
+    res.status(200).json({ message: `Success send email: ${bodyData.toEmail}`});
   }
   catch(e) {
     console.error(e);
