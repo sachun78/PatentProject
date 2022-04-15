@@ -41,7 +41,8 @@ function Post({ index, id, isLike = false }: PostProps) {
       <Link
         to={`/postDetail/${id}`}
         state={{
-          postNumber: index          
+          postNumber: index,
+          imageData: imageData          
         }}
       >
       <figure>
@@ -87,8 +88,7 @@ const postStyle = css`
   figure {
     max-height: 40rem;    
     display: flex;
-    justify-content: center;
-    /* background: grey; */
+    justify-content: center;    
     margin: 1.25rem 1.875rem;
     border-radius: 1rem;
     overflow:hidden;
