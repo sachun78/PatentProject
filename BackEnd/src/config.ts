@@ -32,7 +32,8 @@ const config = {
   email: {
     userid: required('SEND_EMAIL_ID', "wemetmaster@gmail.com"),
     client_id: required('CLIENT_ID', "431745332301-6g5maknvsi737hu677ppts4hfksketmp.apps.googleusercontent.com"),
-    client_secret: required('CLIENT_SECRET', "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")
+    client_secret: required('CLIENT_SECRET', "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"),
+    access_token: required('GOOGLE_EMAIL_ACCESS_TOKEN', "ya29.A0ARrdaM980IUS99fgd75CJVenKvRS2-DF6gbCcx6StbJY1vxAbsrIpQLF5mpqibNpnQEM6Ik0yunjXf4R405-mG3U7lVEAa4ZmB1X2R3l07rp79Yb0U-4MVJXyvsUoPgKJysbBGDBlcrLfYWcLkIaTC5fTUgIaA")
   }
 
 };
