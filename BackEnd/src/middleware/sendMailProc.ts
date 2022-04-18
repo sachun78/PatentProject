@@ -185,8 +185,7 @@ export const sendmail = async (origin: string, emailInfo: any, mailType: EMAILTY
       user: envConfig.email.userid,
       clientId: envConfig.email.client_id,
       clientSecret: envConfig.email.client_secret,
-      refreshToken: "1//04-lI_UXHTKaoCgYIARAAGAQSNwF-L9IrDMPigu0J-SBwmJS7Egp-dfX1l4CGkzaTCCi0IA4MqjYsspLjKbCVlVMLJrP-RcWpiE4",
-      accessToken: "ya29.A0ARrdaM9ceBvi38WOLbWQgyhRS4_TAEUkVEZ8RQ03_daOSumQ1Qmd--i1_-GdkNlRPiPZXljN3A1BufW5wD80JN-2lNmyNqoMnXHv7sic0kUdxste1Jv2iqjhF0LatPBMKSsf1JkAkfd8iKKRZ2DaCEvmBMhK"
+      accessToken: envConfig.email.access_token
     },
   }
   let transporter = nodemailer.createTransport(serviceContent);

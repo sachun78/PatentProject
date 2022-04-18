@@ -63,10 +63,6 @@ export async function getById(meetingId: string) {
   })
 }
 
-export async function findById(id: string) {
-  return meeting.findById(id);
-}
-
 export async function getByCode(meetingCode: string) {
   return meeting.findOne({code: meetingCode});
 }
