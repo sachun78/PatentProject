@@ -14,19 +14,22 @@ import gravatar from 'gravatar'
 import React, { useCallback } from 'react'
 import { Button, ButtonGroup, Grid, Tooltip } from '@mui/material'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { User as UserType } from '../../lib/api/types'
-import useBuddyQuery from '../../hooks/query/useBuddyQuery'
+import { User as UserType } from 'lib/api/types'
+import useBuddyQuery from 'hooks/query/useBuddyQuery'
 import { IoMdMail } from 'react-icons/io'
-import { MdOutlineSafetyDivider, MdOutlineWork } from 'react-icons/md'
+import { MdOutlineSafetyDivider, MdOutlineWork, MdPersonAdd, MdPersonRemove } from 'react-icons/md'
 import { GrUserManager } from 'react-icons/gr'
-import { getProfilebyEmail } from '../../lib/api/me/getProfile'
+import { getProfilebyEmail } from 'lib/api/me/getProfile'
 import { toast } from 'react-toastify'
-import { addBuddy } from '../../lib/api/buddy/addBuddy'
+import { addBuddy } from 'lib/api/buddy/addBuddy'
 import { AxiosError } from 'axios'
-import { deleteBuddy } from '../../lib/api/buddy/deleteBuddy'
+import { deleteBuddy } from 'lib/api/buddy/deleteBuddy'
 import { useRecoilState } from 'recoil'
-import { eventSelectModalState } from '../../atoms/eventState'
-import EventSelectModal from '../../components/Events/EventSelectModal'
+import { eventSelectModalState } from 'atoms/eventState'
+import EventSelectDialog from 'components/Events/EventSelectDialog'
+import { useMeetingReqUser } from 'atoms/meetingReqState'
+import getCountryName from '../../lib/countryName'
+import { BiWorld } from 'react-icons/bi'
 
 export type UserProps = {}
 
@@ -36,6 +39,7 @@ function User({}: UserProps) {
   const { data: buddyData, isLoading } = useBuddyQuery()
   const { email } = useParams<{ email: string }>()
   const [, setOpen] = useRecoilState(eventSelectModalState)
+  const [, setMeetuser] = useMeetingReqUser()
   const { data: profileData, isLoading: isLoadingProfile } = useQuery(['profile', email ?? ''], getProfilebyEmail, {
     enabled: !!email,
     retry: false,
@@ -76,7 +80,8 @@ function User({}: UserProps) {
 
   const onRequestMeeting = useCallback(() => {
     setOpen(prev => !prev)
-  }, [setOpen])
+    setMeetuser(email ?? '')
+  }, [email, setMeetuser, setOpen])
 
   if (isLoading || isLoadingProfile) {
     return <div>Loading...</div>
@@ -98,19 +103,24 @@ function User({}: UserProps) {
       <img src={gravatar.url(email, { s: '100px', d: 'retro' })} alt={email} />
       <NameMailContainer>
         <h1>{email} {user.email === email && '(나)'}</h1>
-        <span>username</span>
+        <span>{profileData.username}</span>
       </NameMailContainer>
-      <ButtonGroup orientation='vertical'>
+      <ButtonGroup variant='outlined'>
         {user.email === email ? null
           : buddyData.buddy?.findIndex((elem: { email: string, profile: any }) => elem.email === email) === -1
-            ? <Button variant={'contained'} onClick={onAddNetwork}>+ Add Network</Button>
-            : <Button variant={'contained'} onClick={onDeleteNetwork}>- Remove From Network</Button>}
-        {user.email !== email && <Button variant={'contained'} onClick={onRequestMeeting}>Request Meeting</Button>}
+            ? <Button disabled={addBuddyMutation.isLoading} onClick={onAddNetwork}>
+              <MdPersonAdd />
+            </Button>
+            : <Button disabled={delBuddyMutation.isLoading} onClick={onDeleteNetwork}>
+              <MdPersonRemove />
+            </Button>}
+        {user.email !== email && <Button onClick={onRequestMeeting}>Request Meeting</Button>}
       </ButtonGroup>
-      <Link css={mailToStyle} to={'#'} onClick={(e) => {
-        window.location.href = `mailto:${email}`
-        e.preventDefault()
-      }}><IoMdMail /></Link>
+      {user.email !== email &&
+        <Link css={mailToStyle} to={'#'} onClick={(e) => {
+          window.location.href = `mailto:${email}`
+          e.preventDefault()
+        }}><IoMdMail /></Link>}
     </UserHeader>
     <UserBody>
       <Summary>
@@ -124,6 +134,9 @@ function User({}: UserProps) {
         <Tooltip title='Department' placement={'left'}>
           <span><MdOutlineSafetyDivider /> {profileData.department}</span>
         </Tooltip>
+        <Tooltip title='Country' placement={'left'}>
+          <span><BiWorld /> {getCountryName(profileData.country!)}</span>
+        </Tooltip>
       </Summary>
       <Middle>
         <div className='career-summary'>
@@ -135,7 +148,7 @@ function User({}: UserProps) {
           LONGLONG LONGLONG LONGLONG TEXT</pre>
         </div>
         <div className='History'>
-          <h3> History with me</h3>
+          <h3>Previous Meeting</h3>
         </div>
       </Middle>
       <Field>
@@ -147,7 +160,7 @@ function User({}: UserProps) {
         </Grid>
       </Field>
     </UserBody>
-    <EventSelectModal />
+    <EventSelectDialog />
   </Container>)
 }
 

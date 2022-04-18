@@ -17,9 +17,10 @@ export type PostFooterProps = {
   isLike: boolean
   comments: IComment[]  
   like: number
+  imageData: any
 }
 
-function PostFooter({ id, index, isLike, like, comments }: PostFooterProps) {  
+function PostFooter({ id, index, isLike, like, comments, imageData }: PostFooterProps) {  
 
   const [likeClick, onToggleLike] = useToggle(isLike)  
   const post = usePost(index)    
@@ -45,7 +46,8 @@ function PostFooter({ id, index, isLike, like, comments }: PostFooterProps) {
       <Link
         to={`/postDetail/${id}`}
         state={{
-          postNumber: index          
+          postNumber: index,
+          imageData: imageData          
         }}
       >
         <div className={'item'}>
@@ -53,10 +55,10 @@ function PostFooter({ id, index, isLike, like, comments }: PostFooterProps) {
         </div>
       </Link>
     </div>     
-    {/* arr.sort((a, b) => b - a); */}
+    {viewComments.length === 0 ? <div></div> :
     <div css={commentStyle}>
       {viewComments.map((comment: IComment) => (
-      <OutlinedInput key={comment.id} placeholder={'Write your comment'} value={comment.text}
+      <OutlinedInput key={comment.id} value={comment.text}
         fullWidth multiline
         sx={{ borderRadius: '1rem', paddingLeft: '1.25rem' }}
         startAdornment={<Avatar alt='post-user-avatar'
@@ -66,6 +68,7 @@ function PostFooter({ id, index, isLike, like, comments }: PostFooterProps) {
       />         
       ))}
     </div>
+    }
   </div>
 }
 

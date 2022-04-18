@@ -39,7 +39,7 @@ export const wrapper = css`
   height: 15.5rem;
   background: rgba(255, 255, 255, 0.5);
   width: calc(50% - 3rem);
-  max-width: 37.5rem;
+  min-width: 37.5rem;
   margin-right: 1.25rem;
   margin-bottom: 1.5625rem;
   padding: 1.875rem 1.875rem 0;

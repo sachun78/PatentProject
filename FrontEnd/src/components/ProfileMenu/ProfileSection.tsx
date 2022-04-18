@@ -1,3 +1,4 @@
+import React from 'react'
 import { css } from '@emotion/react'
 import InfoViewCard from './ProfileCard'
 
@@ -8,7 +9,7 @@ export type ProfileSectionProps = {
 }
 
 function ProfileSection({ title, children, description }: ProfileSectionProps) {
-  return <div>
+  return <>
     <div css={headerStyle}>
       <h3>{title}</h3>
       <div className='sub-comment'>
@@ -19,26 +20,27 @@ function ProfileSection({ title, children, description }: ProfileSectionProps) {
     <InfoViewCard>
       {children}
     </InfoViewCard>
-  </div>
+  </>
 }
 
 const headerStyle = css`
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
 
   h3 {
     line-height: 1.2;
-    font-size: 1.8rem;
+    font-size: 1.125rem;
     font-weight: 600;
     margin-bottom: 0;
   }
 
   .sub-comment {
-    margin-top: 1rem;
+    margin-top: 0.625rem;
 
     p {
-      line-height: 1.5;
-      font-size: 1.3rem;
+      line-height: 1.2;
+      font-size: 0.825rem;
       color: #53535f;
+      margin: 0;
     }
   }
 `

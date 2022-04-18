@@ -9,6 +9,7 @@ import { useCallback } from 'react'
 import { useQueryClient } from 'react-query'
 import { toast } from 'react-toastify'
 import media from 'lib/styles/media'
+import { useMeetingReqUser } from '../../atoms/meetingReqState'
 
 export type EventCardProps = {
   id: string
@@ -25,6 +26,7 @@ function EventCard({ title, startDate, endDate, id, count, cardView = false }: E
   const { setOpen, setEdit } = useEventModal()
   const { setStartDate, setEndDate } = useDateRangeHook()
   const [, setEvent] = useCurrentEventState()
+  const [, setMeetuser] = useMeetingReqUser()
 
   const handleEdit = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
@@ -56,7 +58,8 @@ function EventCard({ title, startDate, endDate, id, count, cardView = false }: E
     setEvent({ id, title })
     setStartDate(new Date(startDate))
     setEndDate(new Date(endDate))
-  }, [endDate, id, startDate, title])
+    setMeetuser('')
+  }, [endDate, id, setEndDate, setEvent, setMeetuser, setStartDate, startDate, title])
 
   return <div css={wrapper(cardView)}>
     <div className={'inner'} onClick={() => {
@@ -87,7 +90,7 @@ const wrapper = (maxWidth: boolean) => css`
     margin-bottom: 0;
     margin-right: 0;
   ` : css`
-    width: calc(50% - 1.25rem);
+    width: 37.5rem;
     margin-bottom: 1.5625rem;
     margin-right: 1.25rem;
   `}
@@ -106,6 +109,10 @@ const wrapper = (maxWidth: boolean) => css`
 
   &:hover {
     opacity: 1;
+
+    .event-card-header {
+      color: ${brandColor};
+    }
   }
 `
 

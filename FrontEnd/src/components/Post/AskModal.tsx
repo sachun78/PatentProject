@@ -14,40 +14,40 @@ type askModalProps = {
 }
 
 const AskModal = ({ visible, title, description, confirmText, cancelText, onConfirm, onCancel}: askModalProps) => {
-
     
     if(!visible) return null;
-
     return (
-        <Modal 
+      <Modal 
         hideBackdrop
-        open={true}>
+        open={true}
+      >
         <Box sx={{
-                width: '20rem',
-                height: '10rem',
-                position: 'absolute',
-                backgroundColor: `${grey[50]}`,
-                '&:hover': {
-                    backgroundColor: `${grey[200]}`,
-                    cursor: "pointer"
-                },
-                padding: '0.2rem 1.5rem 0.2rem',
-                borderRadius: '1rem',
-                top: "20rem",
-                left: "20rem",
-                opacity: [0.9, 0.9, 0.9]
-                
-            }}>
+              width: '20rem',
+              height: '10rem',
+              position: 'absolute',
+              backgroundColor: `${grey[50]}`,
+              '&:hover': {
+                  backgroundColor: `${grey[200]}`,
+                  cursor: "pointer"
+              },
+              padding: '0.2rem 1.5rem 0.2rem',
+              borderRadius: '1rem',
+              top: "20rem",
+              left: "35rem",
+              opacity: [0.9, 0.9, 0.9]
+              
+          }}>
             <div>
-                <h2>{title}</h2>
-                <p>{description}</p>
-                <div className='buttons' css={buttonWrapStyle}>                    
-                    <button css={buttonStyle} onClick={onConfirm}>{confirmText}</button>
-                    <button css={buttonStyle} onClick={onCancel}>{cancelText}</button>
-                </div>
+              <h2>{title}</h2>
+              <hr />
+              <p>{description}</p>
+              <div className='buttons' css={buttonWrapStyle}>                    
+                  <button css={buttonStyle} onClick={onConfirm}>{confirmText}</button>
+                  <button css={buttonStyle} onClick={onCancel}>{cancelText}</button>
+              </div>
             </div>        
         </Box>
-        </Modal>
+      </Modal>
     );
 }
 

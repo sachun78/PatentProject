@@ -3,12 +3,11 @@ import { css } from '@emotion/react'
 export const wrapper = css`
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
   height: 100%;
   width: 100%;
 `
 export const titleStyle = css`
-  padding-right: 3rem;
+  padding-right: 1.875rem;
 
   h2 {
     line-height: 1.2;
@@ -25,8 +24,6 @@ export const titleStyle = css`
 `
 export const infoStyle = css`
   padding-right: 3rem;
-  height: 100%;
-  width: 100%;
   display: flex;
   flex-flow: column;
 `
