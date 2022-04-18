@@ -107,6 +107,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
                   loading="lazy"
                   style={{
                     borderRadius: '1rem',
+                    cursor: 'zoom-in'
                   }}
                   onClick={handleOpen}
                 />
@@ -220,7 +221,7 @@ export const boxWrapper = css`
 `
 const imageStyle = css`
   width: 100%;
-  border-radius: 1rem;  
+  border-radius: 1rem;   
 `
 const commentStyle = css`
   font-size: 0.5rem;

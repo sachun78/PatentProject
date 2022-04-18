@@ -54,7 +54,8 @@ export type IPost = {
   like: number,
   writer: string,
   created_at: Date,
-  updated_at?: Date
+  updated_at?: Date,
+  images: any
 }
 
 export type IComment = {

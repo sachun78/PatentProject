@@ -24,9 +24,9 @@ type PostProps = {
 
 function Post({ index, id, isLike = false }: PostProps) {
   const post = usePost(index);
-  const { writer, created_at, text, comments, like } = post  
-  const imageData = [] as any;
-
+  const { writer, created_at, text, comments, like, images } = post  
+  const imageData = [] as any;  
+  
   for(let i = 0; i < 9; i++) {
     imageData.push({
       imageId: i,
@@ -59,7 +59,7 @@ function Post({ index, id, isLike = false }: PostProps) {
               />
             </ImageListItem> 
           ))}
-        </ImageList>
+        </ImageList>      
       </figure>      
       <div css={bodyStyle}>
         {text}

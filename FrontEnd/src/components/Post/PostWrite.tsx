@@ -14,17 +14,19 @@ function PostWrite() {
   const qc = useQueryClient()
   const [body, setBody] = useState("")
   const [title, setTitle] = useState("")
+  const [image, setImage] = useState<any>()
   const quillElement = useRef<any>(null);
   const quillInstance = useRef<any>(null);
   const navigate = useNavigate();
   const posts = usePosts();
   const user = qc.getQueryData<User>('user') as User
+  const imgData = [] as any;
 
   const onChange = (e: any) => {
     setTitle(e.target.value)
   }
 
-  const onPost = () => {
+  const onPost = () => {        
     posts.push({
       id: String(posts.length + 1),
       title: title,
@@ -32,25 +34,70 @@ function PostWrite() {
       created_at: new Date(),
       like: 0,
       comments: [],
-      writer: user.username
-    })
+      writer: user.username,
+      images: image
+    })    
     navigate('/')
   }    
   const onCancle = () => {
     navigate(-1);
   }
 
+  // 이미지 처리를 하는 핸들러
+  const imageHandler = () => {
+    console.log('에디터에서 이미지 버튼을 클릭하면 이 핸들러가 시작됩니다!');
+
+    // 1. 이미지를 저장할 input type=file DOM을 만든다.
+    const input: any = document.createElement('input');
+    // 속성 써주기
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click(); 
+
+    // input에 변화가 생긴다면 = 이미지를 선택
+    input.addEventListener('change', async () => {
+      console.log('온체인지');
+      const file = input.files[0];            
+      console.log(file)
+      
+      imgData.push({        
+        img: file,
+        imgName: file.name,
+        src: `/${file.name}`
+      })
+
+      qc.setQueryData('images', imgData);
+      const results: any = qc.getQueryData('images');     
+      const IMG_URL = `/${results[imgData.length - 1].imgName}`                 
+      
+      try {                
+        
+        const range: { index: Number, length: Number } = quillInstance.current.getSelection();                
+        quillInstance.current.insertEmbed(range.index, 'image', IMG_URL);
+        setImage(results)        
+      } catch (error) {
+        console.log(error)
+        
+      }
+    });
+  };
+
   useEffect(() => {
     quillInstance.current = new Quill(quillElement.current, {
         theme: 'snow',
         placeholder: '   Please enter the contents...',
         modules: {
-            toolbar: [
-                [ {size: [ 'small', false, 'large', 'huge']}],
-                ['bold', 'italic', 'underline', 'strike'],
-                [{ list: 'ordered'}, { list: 'bullet'}],
-                ['blockquote', 'code-block', 'link', 'image']
-            ]
+          toolbar:{
+            container: [
+              [ {size: [ 'small', false, 'large', 'huge']}],
+              ['bold', 'italic', 'underline', 'strike'],
+              [{ list: 'ordered'}, { list: 'bullet'}],
+              ['blockquote', 'code-block', 'link', 'image']            
+            ],
+            handlers: {
+              image: imageHandler
+            }
+          } 
         },
         
     })
@@ -61,7 +108,7 @@ function PostWrite() {
     quill.on('text-change', () => {
         setBody(quill.root.innerText);
     });
-      
+    
   },[])
 
   return (
