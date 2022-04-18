@@ -18,18 +18,15 @@ function RequestSection({ title, children }: RequestSectionProps) {
 export default RequestSection
 
 const sectionStyle = css`
-  section + & {
-    margin-top: 0.78125rem;
-  }
 
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 
   h3 {
     color: ${palette.blueGrey[800]};
     font-size: 1.25rem;
     line-height: 1.2;
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: 0.5rem;
   }
 
   & > div {
@@ -39,7 +36,7 @@ const sectionStyle = css`
 
     align-items: center;
     justify-content: flex-start;
-    font-size: 1.125rem;
+    font-size: 0.875rem;
     font-weight: 600;
     line-height: 1.25;
     color: ${palette.blueGrey[400]};

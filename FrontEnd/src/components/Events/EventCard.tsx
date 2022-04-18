@@ -9,6 +9,7 @@ import { useCallback } from 'react'
 import { useQueryClient } from 'react-query'
 import { toast } from 'react-toastify'
 import media from 'lib/styles/media'
+import { useMeetingReqUser } from '../../atoms/meetingReqState'
 
 export type EventCardProps = {
   id: string
@@ -16,14 +17,16 @@ export type EventCardProps = {
   startDate: string
   endDate: string
   count: number
+  cardView?: boolean
 }
 
-function EventCard({ title, startDate, endDate, id, count }: EventCardProps) {
+function EventCard({ title, startDate, endDate, id, count, cardView = false }: EventCardProps) {
   const qc = useQueryClient()
   const navigate = useNavigate()
   const { setOpen, setEdit } = useEventModal()
   const { setStartDate, setEndDate } = useDateRangeHook()
   const [, setEvent] = useCurrentEventState()
+  const [, setMeetuser] = useMeetingReqUser()
 
   const handleEdit = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
@@ -55,11 +58,14 @@ function EventCard({ title, startDate, endDate, id, count }: EventCardProps) {
     setEvent({ id, title })
     setStartDate(new Date(startDate))
     setEndDate(new Date(endDate))
-  }, [endDate, id, startDate, title])
+    setMeetuser('')
+  }, [endDate, id, setEndDate, setEvent, setMeetuser, setStartDate, startDate, title])
 
-  return <div css={wrapper}>
+  return <div css={wrapper(cardView)}>
     <div className={'inner'} onClick={() => {
-      navigate(`/membership/event/${id}`)
+      if (!cardView) {
+        navigate(`/membership/event/${id}`)
+      }
     }}>
       <div css={eventHeaderStyle}>
         <span className='event-card-header'>{title}</span>
@@ -69,20 +75,28 @@ function EventCard({ title, startDate, endDate, id, count }: EventCardProps) {
         <span>Schedules: <b>{count}</b></span>
       </div>
     </div>
-    <div css={buttonStyle} onClick={onCreateSchedule}>
-      <Link to={'/membership/schedule/request'}>
-        <div className='text'>+ New Schedule</div>
-      </Link>
-    </div>
+    {!cardView &&
+      <div css={buttonStyle} onClick={onCreateSchedule}>
+        <Link to={'/membership/schedule/request'}>
+          <div className='text'>+ New Schedule</div>
+        </Link>
+      </div>}
   </div>
 }
 
-const wrapper = css`
-  width: calc(50% - 1.25rem);
+const wrapper = (maxWidth: boolean) => css`
+  ${maxWidth ? css`
+    width: 37.5rem;
+    margin-bottom: 0;
+    margin-right: 0;
+  ` : css`
+    width: 37.5rem;
+    margin-bottom: 1.5625rem;
+    margin-right: 1.25rem;
+  `}
+
   max-width: 37.5rem;
   height: 13.9375rem;
-  margin-bottom: 1.5625rem;
-  margin-right: 1.25rem;
   padding: 1.875rem;
   border-radius: 1rem;
 
@@ -95,12 +109,16 @@ const wrapper = css`
 
   &:hover {
     opacity: 1;
+
+    .event-card-header {
+      color: ${brandColor};
+    }
   }
 `
 
 const buttonStyle = css`
   background-color: ${brandColor};
-  margin: 3.25rem -1.875rem 0;
+  margin: 3.5rem -1.875rem 0;
 
   border-bottom-right-radius: 1rem;
   border-bottom-left-radius: 1rem;

@@ -32,7 +32,7 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
   }, [data])
 
   const onScheduleClick = useCallback((clickInfo: EventClickArg) => {
-    navigate('/membership/meeting/' + clickInfo.event.id)
+    navigate('/membership/schedule/' + clickInfo.event.id)
   }, [navigate])
 
   return <div css={calendarStyle}>

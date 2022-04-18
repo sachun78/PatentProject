@@ -2,7 +2,7 @@ import { css } from '@emotion/react'
 import palette from 'lib/palette'
 import { Navigate, NavLink, useNavigate, useSearchParams } from 'react-router-dom'
 import React, { useCallback, useState } from 'react'
-import { inputStyle, privacyStyle, signupFormStyle, undoStyle } from './styles'
+import { inputStyle, privacyStyle, undoStyle } from './styles'
 import Auth from 'layouts/Auth'
 import useUserQuery from 'hooks/query/useUserQuery'
 import { Button, CircularProgress, FormHelperText, InputAdornment, TextField } from '@mui/material'
@@ -16,6 +16,7 @@ import { checkCode } from 'lib/api/auth/sendmail'
 import { toast } from 'react-toastify'
 import { replanState } from 'atoms/replanState'
 import { useRecoilState } from 'recoil'
+import { containerStyle } from '../Login/styles'
 
 type RegisterProps = {}
 
@@ -107,7 +108,7 @@ export default function Signup({}: RegisterProps) {
   }
   return (
     <Auth>
-      <div css={signupFormStyle}>
+      <div css={containerStyle}>
         <div css={undoStyle}>
           <NavLink to={'/login'} className='link'>
             <span>Back</span>

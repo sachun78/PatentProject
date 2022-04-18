@@ -1,19 +1,20 @@
-import { Box, Button, Modal } from '@mui/material'
+import { Box, Button, Dialog, DialogTitle, OutlinedInput, TextField } from '@mui/material'
 import { css } from '@emotion/react'
-import RequestSection from '../../pages/Meeting/meeting-create-form/RequestForm/RequestSection'
+import RequestSection from 'pages/Meeting/meeting-create-form/RequestForm/RequestSection'
 import Input from '../Input/Input'
 import EventDateSections from './EventDateSections'
-import { useEventModal } from '../../hooks/useEventTitle'
-import { resetButton } from '../../lib/styles/resetButton'
-import palette from '../../lib/palette'
-import useDateRangeHook from '../../hooks/useDateRangeHook'
-import { createEvent } from '../../lib/api/event/createEvent'
+import { useEventModal } from 'hooks/useEventTitle'
+import { resetButton } from 'lib/styles/resetButton'
+import palette, { brandColor } from 'lib/palette'
+import useDateRangeHook from 'hooks/useDateRangeHook'
+import { createEvent } from 'lib/api/event/createEvent'
 import { toast } from 'react-toastify'
-import { ChangeEvent } from 'react'
+import React, { ChangeEvent } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 import { AxiosError } from 'axios'
-import { useCurrentEventState } from '../../atoms/eventState'
-import { updateEvent } from '../../lib/api/event/updateEvent'
+import { useCurrentEventState } from 'atoms/eventState'
+import { updateEvent } from 'lib/api/event/updateEvent'
+import { inputStyle } from '../../pages/Login/styles'
 
 export type CreateEventModalProps = {}
 
@@ -73,7 +74,7 @@ function EventModal({}: CreateEventModalProps) {
     setEvent(prev => ({ ...prev, title: e.target.value }))
   }
 
-  const onCancel = () => {
+  const onClose = () => {
     setEvent({ title: '', id: '' })
     setOpen(false)
   }
@@ -106,52 +107,40 @@ function EventModal({}: CreateEventModalProps) {
     }
   }
 
-  return <Modal open={open}>
-    <Box css={eventFormStyle}>
-      <RequestSection title={'Event title'}>
-        <Input placeholder='Input your event title'
-               name='event'
-               onChange={onChangeEventTitle}
-               value={event.title} />
-      </RequestSection>
+  return <Dialog open={open} onClose={onClose} PaperProps={{
+    style: { borderRadius: '1rem' }
+  }}>
+    <Box style={{ padding: '50px', width: '393px', height: '387px' }} css={boxStyle}>
+      <h3>Event Title</h3>
+      <TextField
+        name='event'
+        label={undefined}
+        type='text'
+        variant='standard'
+        value={event.title}
+        onChange={onChangeEventTitle}
+        fullWidth
+      />
       <EventDateSections />
-      <div css={buttonBlock}>
-        <Button css={buttonStyle} disabled={createMutation.isLoading || updateMutation.isLoading}
-                onClick={onCreate}>{isEdit ? 'EDIT' : 'OK'}</Button>
-        <Button css={buttonStyle} disabled={createMutation.isLoading || updateMutation.isLoading}
-                onClick={onCancel}> 취소
-        </Button>
-      </div>
+      <Button css={buttonStyle} disabled={createMutation.isLoading || updateMutation.isLoading}
+              fullWidth onClick={onCreate}>{isEdit ? 'EDIT' : 'OK'}
+      </Button>
     </Box>
-  </Modal>
+  </Dialog>
 }
 
-const eventFormStyle = css`
-  position: absolute;
-  left: 40%;
-  top: 20%;
-  width: 35rem;
-  background: #fff;
-  padding: 1.5rem;
-  border-radius: 0.8rem;
-
-`
-const buttonBlock = css`
-  display: flex;
-  justify-content: center;
-`
 const buttonStyle = css`
   ${resetButton};
   padding-left: 4rem;
   padding-right: 4rem;
   align-items: center;
-  height: 2.5rem;
+  height: 37px;
   border-radius: 0.25rem;
   font-size: 0.875rem;
   font-weight: bold;
   cursor: pointer;
 
-  background-color: ${palette.purple[500]};
+  background-color: ${brandColor};
 
   color: #fff;
 
@@ -161,6 +150,14 @@ const buttonStyle = css`
 
   &:hover {
     background: ${palette.purple[400]};
+  }
+`
+
+const boxStyle = css`
+  h3 {
+    margin: 0;
+    font: normal normal 800 16px/18px NanumSquareOTF;
+    color: #6C6C6C;
   }
 `
 

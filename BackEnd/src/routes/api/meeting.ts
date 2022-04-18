@@ -11,5 +11,6 @@ route.get('/cancel/:code', meetingCtrl.cancelMeeting);
 route.get('/confirm/:code', meetingCtrl.confirmMeeting);
 route.patch('/replan/:code', meetingCtrl.replanlMeeting);
 route.post('/send-invitemail', isAuth, meetingCtrl.sendInvitMail);
+route.post('/', isAuth, meetingCtrl.sendResultMail);
 
 export default route

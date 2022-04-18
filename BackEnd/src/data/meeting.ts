@@ -63,12 +63,12 @@ export async function getById(meetingId: string) {
   })
 }
 
-export async function getByCode(meetingCode: string) {
-  return meeting.findOne({code: meetingCode});
+export async function findById(id: string) {
+  return meeting.findById(id);
 }
 
-export async function findByCode(code: string) {
-  return meeting.findOne({code});
+export async function getByCode(meetingCode: string) {
+  return meeting.findOne({code: meetingCode});
 }
 
 export async function createMeeting(meetingData: any) {

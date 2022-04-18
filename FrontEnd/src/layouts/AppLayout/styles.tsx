@@ -8,14 +8,14 @@ export const mainStyle = css`
   padding-top: 5.625rem;
   padding-bottom: 5.1875rem;
 
-  ${media.xlarge} {
-    margin-left: 8rem;
-    padding-left: 0;
-  }
+  // ${media.xlarge} {
+  //   margin-left: 8rem;
+  //   padding-left: 0;
+  // }
 
   ${media.small} {
     margin-left: 0;
-    //padding-left: 0;
+    padding-left: 1rem;
   }
 `
 export const sidebarStyle = css`
@@ -28,10 +28,10 @@ export const sidebarStyle = css`
   padding-bottom: 5.1875rem;
   padding-left: 12.875rem;
 
-  ${media.xlarge} {
-    width: 8rem;
-    padding: 0;
-  }
+  // ${media.xlarge} {
+  //   width: 8rem;
+  //   padding: 0;
+  // }
 
   ${media.small} {
     display: none;

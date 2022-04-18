@@ -1,5 +1,5 @@
 import client from '../client'
-import { IProfile } from '../types'
+import { IProfile, IProfileDetail } from '../types'
 import { QueryFunctionContext } from 'react-query'
 
 export async function getCurrentProfile() {
@@ -8,12 +8,12 @@ export async function getCurrentProfile() {
 }
 
 export async function getProfilebyEmail({ queryKey }: QueryFunctionContext) {
-  const [_, email] = queryKey
-  const response = await client.get<IProfile>('/api/profile', { params: { email } })
+  const [, email] = queryKey
+  const response = await client.get<IProfileDetail>(`/api/profile/${email}`)
   return response.data
 }
 
 export async function patchProfile(req: IProfile) {
-  const response = await client.patch<IProfile>('/api/profile/', req)
+  const response = await client.patch<IProfile>('/api/profile', req)
   return response.data
 }
