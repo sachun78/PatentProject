@@ -7,7 +7,6 @@ import useMeetingQuery from 'hooks/query/useMeetingQuery'
 import { useCallback, useMemo } from 'react'
 import { calendarStyle } from './styles'
 import { useNavigate } from 'react-router-dom'
-import { DayCellMountArg } from '@fullcalendar/common'
 
 export type ScheduleCalendarProps = {}
 
@@ -37,7 +36,6 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
 
   return <div css={calendarStyle}>
     <FullCalendar
-
       plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
       headerToolbar={{
         center: 'title',
@@ -48,8 +46,13 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
       showNonCurrentDates={false}
       fixedWeekCount={false}
       eventClick={onScheduleClick}
-      aspectRatio={2.079796265}
-      dayCellDidMount={(arg: DayCellMountArg) => {
+      aspectRatio={2.079796265}>
+    </FullCalendar>
+  </div>
+}
+
+/*
+*    dayCellDidMount={(arg: DayCellMountArg) => {
         if (data?.findIndex((meeting) => {
           const meetingDate = new Date(meeting.date)
           return meetingDate.getMonth() === arg.date.getMonth() && meetingDate.getDate() === arg.date.getDate() &&
@@ -62,9 +65,7 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
           p.style.bottom = '50%'
           arg.el.firstChild?.appendChild(p)
         }
-      }}>
-    </FullCalendar>
-  </div>
-}
+      }}
+* */
 
 export default ScheduleCalendar

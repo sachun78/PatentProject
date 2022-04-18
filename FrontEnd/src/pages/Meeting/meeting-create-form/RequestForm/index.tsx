@@ -9,10 +9,12 @@ import Input from 'components/Input'
 import LocationInput from 'components/LocationMap/LocationInput'
 import RequestSection from './RequestSection'
 import { toast } from 'react-toastify'
-import { buttonStyle, headerStyle, sectionStyle, wrapper } from './styles'
+import { buttonStyle, sectionStyle, wrapper } from './styles'
 import { Navigate, useNavigate } from 'react-router-dom'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import { useMeetingReqUser } from '../../../../atoms/meetingReqState'
+import { useMutation } from 'react-query'
+import { OutlinedInput } from '@mui/material'
 
 type RequestViewProps = {}
 
@@ -27,6 +29,26 @@ export default function RequestForm({}: RequestViewProps) {
     place: '성수역1번출구',
     comment: '',
     title: ''
+  })
+
+  const createScheduleMut = useMutation(createMeeting, {
+    onSuccess: () => {
+      toast.success('Meeting Request Success', {
+        position: toast.POSITION.TOP_CENTER,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000
+      })
+      navi('/membership')
+    },
+    onError: () => {
+      toast.error('Something went wrong', {
+        position: toast.POSITION.TOP_CENTER,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000
+      })
+    }
   })
 
   const onChangeDate = useCallback((change: Date) => {
@@ -65,29 +87,14 @@ export default function RequestForm({}: RequestViewProps) {
       return
     }
 
-    createMeeting({
+    createScheduleMut.mutate({
       eventId: curEvent.id,
       title, date, time,
       toEmail: meetuser ? meetuser : to,
       location: place,
       comment
-    }).then(() => {
-      toast.success('Meeting Request Success', {
-        position: toast.POSITION.TOP_CENTER,
-        pauseOnHover: false,
-        pauseOnFocusLoss: false,
-        autoClose: 3000
-      })
-      navi('/membership')
-    }).catch(e => {
-      toast.error('Something went wrong', {
-        position: toast.POSITION.TOP_CENTER,
-        pauseOnHover: false,
-        pauseOnFocusLoss: false,
-        autoClose: 3000
-      })
     })
-  }, [curEvent.id, date, form, meetuser, navi, time])
+  }, [createScheduleMut, curEvent.id, date, form, meetuser, time])
 
   useEffect(() => {
     const tempTime = new Date(startDate)
@@ -106,7 +113,6 @@ export default function RequestForm({}: RequestViewProps) {
 
   return (
     <div css={wrapper}>
-      <div css={headerStyle}> Request Meeting</div>
       <form css={sectionStyle} onSubmit={onSubmit}>
         <RequestSection title={'Event Info'}>
           <span>{curEvent.title}</span>
@@ -114,11 +120,13 @@ export default function RequestForm({}: RequestViewProps) {
           <div> {startDate.toLocaleDateString()} ~ {endDate.toLocaleDateString()} </div>
         </RequestSection>
         <RequestSection title={'Meeting Title'}>
-          <Input name='title' type={'text'} value={form.title} onChange={onChange} />
+          <OutlinedInput name='title' type={'text'} value={form.title} onChange={onChange} fullWidth />
+          {/*<Input name='title' type={'text'} value={form.title} onChange={onChange} />*/}
         </RequestSection>
         <RequestSection title={'Email'}>
           {meetuser ? <span>{meetuser}</span>
-            : <Input name='to' type={'email'} value={form.to} onChange={onChange} />}
+            : <OutlinedInput name='to' type={'email'} value={form.to} onChange={onChange} fullWidth />
+            /*<Input name='to' type={'email'} value={form.to} onChange={onChange} />*/}
         </RequestSection>
         <RequestSection title={'Meeting Date'}>
           <DatePickerInput value={date}
@@ -133,12 +141,19 @@ export default function RequestForm({}: RequestViewProps) {
           <LocationInput />
         </RequestSection>
         <RequestSection title={'Comment'}>
-          <Input placeholder='Leave a comment'
-                 name='comment'
-                 value={form.comment}
-                 onChange={onChange} />
+          <OutlinedInput placeholder='Leave a comment'
+                         name='comment'
+                         value={form.comment}
+                         onChange={onChange}
+                         multiline fullWidth
+                         rows={3} />
+          {/*<Input placeholder='Leave a comment'*/}
+          {/*       name='comment'*/}
+          {/*       value={form.comment}*/}
+          {/*       onChange={onChange}*/}
+          {/*       multiple={true} />*/}
         </RequestSection>
-        <button css={buttonStyle} type={'submit'}>OK</button>
+        <button css={buttonStyle} disabled={createScheduleMut.isLoading} type={'submit'}>OK</button>
       </form>
     </div>
   )

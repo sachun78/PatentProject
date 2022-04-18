@@ -35,7 +35,7 @@ function NetworkItem({ data }: NetworkItemProps) {
                placement={'left'}><span><MdOutlineSafetyDivider />{getCountryName(data.profile.country!)}</span></Tooltip>
     </div>
     <div css={stateStyle}>
-      <span>something online?</span>
+      <span>online?</span>
     </div>
   </div>
 }
@@ -67,11 +67,13 @@ const nameStyle = css`
   margin-right: 2rem;
   font-size: 1.25rem;
   font-weight: 600;
+  max-width: 20rem;
+  min-width: 20rem;
+  flex: 1;
 `
 
 const informStyle = css`
   display: flex;
-  flex: 1;
   flex-direction: column;
   font-size: 0.875rem;
   color: ${palette.grey[400]};
@@ -89,7 +91,6 @@ const informStyle = css`
   }
 `
 const stateStyle = css`
-  display: flex;
   margin-right: 1rem;
   font-size: 1.2rem;
   font-weight: 600;

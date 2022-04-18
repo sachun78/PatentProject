@@ -1,11 +1,9 @@
-import { Box, Button, Dialog, DialogTitle, OutlinedInput, TextField } from '@mui/material'
+import { Box, Button, Dialog, Modal, TextField } from '@mui/material'
 import { css } from '@emotion/react'
-import RequestSection from 'pages/Meeting/meeting-create-form/RequestForm/RequestSection'
-import Input from '../Input/Input'
 import EventDateSections from './EventDateSections'
 import { useEventModal } from 'hooks/useEventTitle'
 import { resetButton } from 'lib/styles/resetButton'
-import palette, { brandColor } from 'lib/palette'
+import { brandColor } from 'lib/palette'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import { createEvent } from 'lib/api/event/createEvent'
 import { toast } from 'react-toastify'
@@ -14,7 +12,6 @@ import { useMutation, useQueryClient } from 'react-query'
 import { AxiosError } from 'axios'
 import { useCurrentEventState } from 'atoms/eventState'
 import { updateEvent } from 'lib/api/event/updateEvent'
-import { inputStyle } from '../../pages/Login/styles'
 
 export type CreateEventModalProps = {}
 
@@ -107,9 +104,8 @@ function EventModal({}: CreateEventModalProps) {
     }
   }
 
-  return <Dialog open={open} onClose={onClose} PaperProps={{
-    style: { borderRadius: '1rem' }
-  }}>
+  return <Modal open={open} onClose={onClose}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
     <Box style={{ padding: '50px', width: '393px', height: '387px' }} css={boxStyle}>
       <h3>Event Title</h3>
       <TextField
@@ -126,34 +122,30 @@ function EventModal({}: CreateEventModalProps) {
               fullWidth onClick={onCreate}>{isEdit ? 'EDIT' : 'OK'}
       </Button>
     </Box>
-  </Dialog>
+  </Modal>
 }
 
 const buttonStyle = css`
   ${resetButton};
-  padding-left: 4rem;
-  padding-right: 4rem;
   align-items: center;
   height: 37px;
   border-radius: 0.25rem;
-  font-size: 0.875rem;
-  font-weight: bold;
   cursor: pointer;
-
+  margin-top: 1.875rem;
   background-color: ${brandColor};
 
   color: #fff;
-
-  &:first-of-type {
-    margin-right: 3rem;
-  }
+  font: normal normal normal 16px/18px NanumSquareOTF;
 
   &:hover {
-    background: ${palette.purple[400]};
+    background: ${brandColor};
   }
 `
 
 const boxStyle = css`
+  background: #fff;
+  border-radius: 1rem;
+
   h3 {
     margin: 0;
     font: normal normal 800 16px/18px NanumSquareOTF;

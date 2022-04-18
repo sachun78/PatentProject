@@ -45,18 +45,18 @@ const countrySelectorStyle = css`
   flex-grow: 1;
 
   .MuiFormControl-root {
-    height: 4.5rem;
+    height: 2.5rem;
     align-items: center;
     display: flex;
     justify-content: center;
   }
 
   .MuiOutlinedInput-root {
-    height: 4rem;
+    height: 2.5rem;
     border: ${palette.blueGrey[50]} 1px solid;
-    border-radius: 0.8rem;
+    border-radius: 0.5rem;
     color: ${palette.blueGrey[700]};
-    padding: 0 1.6rem 0 1.6rem;
+    padding: 0 1rem 0 1rem;
   }
 
   .MuiOutlinedInput-notchedOutline {

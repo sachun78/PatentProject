@@ -31,7 +31,7 @@ function Sidebar({}: SidebarProps) {
     </ul>
     <div css={dividerStyle}>{''}</div>
     <div css={userStyle}>
-      <Avatar alt='user-avatar' src={gravatar.url(user.email, { s: '60px', d: 'retro' })}
+      <Avatar alt='user-avatar' src='/assets/KimMinjun.png'
               sx={{ width: 60, height: 60 }}
               onClick={() => navigate('/profile')} />
       <span>{user.username}</span>

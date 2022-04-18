@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import media from '../../lib/styles/media'
+import media from 'lib/styles/media'
 import VerticalBarItem from './VerticalBarItem'
 import { Link } from 'react-router-dom'
 
@@ -9,8 +9,8 @@ function VerticalBar({}: VerticalBarProps) {
   return (
     <div css={bar}>
       <div css={endBlock('top')}>
-        <Link to="/">
-          <img src={"/assets/wemet_logo.png"} alt="small logo" className="logo" />
+        <Link to='/'>
+          <img src={'/assets/wemet_logo.png'} alt='small logo' className='logo' />
         </Link>
       </div>
       <div css={links}>

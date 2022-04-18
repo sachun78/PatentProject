@@ -28,8 +28,3 @@ export const buttonStyle = css`
 
   border-radius: 0.5rem;
 `
-export const headerStyle = css`
-  font-size: 2.25rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-`

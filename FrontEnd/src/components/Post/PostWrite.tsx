@@ -126,7 +126,6 @@ function PostWrite() {
     </div>
   </>
   );
-
 }
 
 export default PostWrite
@@ -136,7 +135,6 @@ const editorStyle = css`
   
 `
 const quillWrapperStyle = css`
-  
   margin: 1rem;
     .ql-editor {
       font-size: 1.125rem;

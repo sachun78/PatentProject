@@ -28,7 +28,6 @@ export const tableStyle = css`
   display: flex;
   flex-wrap: wrap;
   flex: 1;
-  margin-top: 1.5625rem;
   height: 100%;
 `
 
@@ -91,12 +90,19 @@ export const calendarStyle = css`
     line-height: 1.15;
   }
 
-  margin-top: 0.625rem;
-  margin-bottom: 0.625rem;
   max-width: 80.3125rem;
   max-height: 42.9375rem;
   padding: 1.875rem;
   border-radius: 1rem;
   box-shadow: 0 3px 6px #00000029;
   background: rgba(255, 255, 255, 0.7);
+`
+
+export const labelStyle = css`
+  .MuiTypography-root {
+    color: #6c6c6c;
+    font: normal normal normal 17px/19px NanumSquareOTF !important;
+  }
+
+  margin-bottom: 20px;
 `

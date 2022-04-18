@@ -149,7 +149,6 @@ export async function sendResultMail(req: IRequest, res: Response) {
 export async function sendInvitMail(req: IRequest, res: Response) {
   const user_id = req.userId;
   const bodyData = req.body;
-  const meetingId = req.params.id;
   const origin: string = req.get('origin');
 
   try {

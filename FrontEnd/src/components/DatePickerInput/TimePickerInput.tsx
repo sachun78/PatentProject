@@ -86,7 +86,7 @@ const textStyle = css`
   cursor: pointer;
   padding-left: 1.6rem;
   padding-right: 1.6rem;
-
+  width: 100%;
   &:focus-visible {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
   }

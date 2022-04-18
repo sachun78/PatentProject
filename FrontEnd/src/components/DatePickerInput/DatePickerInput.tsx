@@ -65,6 +65,7 @@ const textStyle = css`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+
   &:focus-visible {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
   }
@@ -73,9 +74,9 @@ const textStyle = css`
 const calendarStyle = css`
   position: absolute;
   background: white;
-  z-index: 5;
+  z-index: 99;
   bottom: -0.1rem;
-
+  max-width: 293px;
   box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.07);
   border-radius: 0.5rem;
   transform: translate3d(0, 100%, 0);

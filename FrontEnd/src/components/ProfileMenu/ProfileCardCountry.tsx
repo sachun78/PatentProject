@@ -41,7 +41,8 @@ function ProfileCardCountry({ title, editable, country, onChange }: ProfileCardC
 }
 
 const countryNormalStyle = css`
-  padding-top: 1rem;
+  display: flex;
+  align-items: center;
 `
 
 export default ProfileCardCountry

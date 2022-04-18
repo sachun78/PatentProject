@@ -9,7 +9,9 @@ import { useCallback } from 'react'
 import { useQueryClient } from 'react-query'
 import { toast } from 'react-toastify'
 import media from 'lib/styles/media'
-import { useMeetingReqUser } from '../../atoms/meetingReqState'
+import { useMeetingReqUser } from 'atoms/meetingReqState'
+import { FiEdit } from 'react-icons/fi'
+import { BiTrash } from 'react-icons/bi'
 
 export type EventCardProps = {
   id: string
@@ -28,7 +30,7 @@ function EventCard({ title, startDate, endDate, id, count, cardView = false }: E
   const [, setEvent] = useCurrentEventState()
   const [, setMeetuser] = useMeetingReqUser()
 
-  const handleEdit = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+  const handleEdit = useCallback((e: React.MouseEvent<SVGElement>) => {
     e.stopPropagation()
     setOpen(true)
     setEdit(true)
@@ -37,7 +39,7 @@ function EventCard({ title, startDate, endDate, id, count, cardView = false }: E
     setEndDate(new Date(endDate))
   }, [endDate, id, startDate, title])
 
-  const onDelete = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onDelete = (e: React.MouseEvent<SVGElement>) => {
     e.stopPropagation()
     deleteEvent(id)
       .then(() => {
@@ -69,10 +71,13 @@ function EventCard({ title, startDate, endDate, id, count, cardView = false }: E
     }}>
       <div css={eventHeaderStyle}>
         <span className='event-card-header'>{title}</span>
+        {!cardView && <div className={'toolbar'}>
+          <FiEdit onClick={handleEdit} />
+        </div>}
       </div>
       <div css={contentStyle}>
         <span>Period: <b>{startDate.replace(/T.*$/, '')}</b> ~ <b>{endDate.replace(/T.*$/, '')}</b></span>
-        <span>Schedules: <b>{count}</b></span>
+        <span>Schedule(s): <b>{count}</b></span>
       </div>
     </div>
     {!cardView &&
@@ -89,15 +94,18 @@ const wrapper = (maxWidth: boolean) => css`
     width: 37.5rem;
     margin-bottom: 0;
     margin-right: 0;
+    height: 6rem;
+    padding: 0 1rem;
   ` : css`
     width: 37.5rem;
+    min-width: 37.5rem;
     margin-bottom: 1.5625rem;
     margin-right: 1.25rem;
+    height: 13.9375rem;
+    padding: 1.875rem;
   `}
 
   max-width: 37.5rem;
-  height: 13.9375rem;
-  padding: 1.875rem;
   border-radius: 1rem;
 
   ${media.xsmall} {
@@ -113,12 +121,16 @@ const wrapper = (maxWidth: boolean) => css`
     .event-card-header {
       color: ${brandColor};
     }
+
+    .toolbar {
+      visibility: visible;
+    }
   }
 `
 
 const buttonStyle = css`
   background-color: ${brandColor};
-  margin: 3.5rem -1.875rem 0;
+  margin: 3rem -1.875rem 0;
 
   border-bottom-right-radius: 1rem;
   border-bottom-left-radius: 1rem;
@@ -139,12 +151,25 @@ const buttonStyle = css`
 const eventHeaderStyle = css`
   display: flex;
   margin-top: 7px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  justify-content: space-between;
 
   .event-card-header {
     font: normal normal 800 18px NanumSquareOTF;
     color: #333333;
     line-height: 1.166666667;
+  }
+
+  .toolbar {
+    visibility: hidden;
+
+    svg {
+      font-size: 1.25rem;
+    }
+
+    svg + svg {
+      margin-left: 0.625rem;
+    }
   }
 `
 const contentStyle = css`

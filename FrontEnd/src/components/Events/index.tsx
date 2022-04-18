@@ -6,11 +6,12 @@ import useDateRangeHook from 'hooks/useDateRangeHook'
 import { useEventModal } from 'hooks/useEventTitle'
 import React from 'react'
 import { useRecoilState } from 'recoil'
-import { eventSwitchState } from '../../atoms/memberShipTabState'
+import { eventSwitchState } from 'atoms/memberShipTabState'
 import EventCalendar from './EventCalendar'
 import EventCard from './EventCard'
 import EventModal from './EventModal'
 import { noScheduleStyle, wrapper } from './styles'
+import { labelStyle } from '../Schedules/styles'
 
 type EventsProps = {}
 
@@ -57,7 +58,8 @@ function Events({}: EventsProps) {
                                        onChange={handleChange}
                                        name={'checked'}
                                        inputProps={{ 'aria-label': 'event-calendar' }} />}
-                      label={checked ? 'CALENDAR' : 'CARD'} />
+                      label={checked ? 'CALENDAR' : 'CARD'}
+                      css={labelStyle} />
     {checked
       ? <EventCalendar />
       : <div css={wrapper}>
@@ -68,7 +70,7 @@ function Events({}: EventsProps) {
             count={event.meeting_list.length} />)}
       </div>}
 
-    <Fab sx={{ position: 'fixed', bottom: 164, right: 32, zIndex: 10 }}
+    <Fab sx={{ position: 'fixed', bottom: 103, right: 32, zIndex: 10 }}
          color='primary'
          onClick={() => {
            setOpen(true)
