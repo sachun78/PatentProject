@@ -4,7 +4,7 @@ import { css } from '@emotion/react'
 import Input from '../Input/Input'
 import { Button, Chip } from '@mui/material'
 import IconControl from '../IconControl/IconControl'
-import useToggle from '../../hooks/useToggle'
+import useToggle from 'hooks/useToggle'
 
 export type ProfileCardFieldProps = {
   title: string
@@ -25,7 +25,7 @@ function ProfileCardField({ title, text, editable, onChange, onAdd, onRemove, fi
         <label>{title}</label>
       </div>
       <div css={textStyle}>
-        {edit && <div css={css`display: flex`}>
+        {edit && <div css={css`display: flex;`}>
           <Input
             placeholder={title}
             name={title}
@@ -33,7 +33,8 @@ function ProfileCardField({ title, text, editable, onChange, onAdd, onRemove, fi
             onChange={onChange}
             css={inputStyle}
           />
-          <Button disabled={text === ''} className='plus' onClick={onAdd}>add</Button>
+          <Button disabled={text === ''} className='plus' onClick={onAdd}
+                  style={{ width: '1.5rem', fontSize: '0.875rem', height: '40px' }}>add</Button>
         </div>}
         <div className='text'>
           <div css={tagStyle}>

@@ -2,12 +2,13 @@ import React from 'react'
 import ScheduleCard from './ScheduleCard'
 import IconControl from '../IconControl'
 import useMeetingQuery from 'hooks/query/useMeetingQuery'
-import { noScheduleStyle, tableStyle } from './styles'
+import { labelStyle, noScheduleStyle, tableStyle } from './styles'
 import { FormControlLabel, Switch } from '@mui/material'
 import ScheduleCalendar from './ScheduleCalendar'
 import { meetingSwitchState } from 'atoms/memberShipTabState'
 import { useRecoilState } from 'recoil'
 import ScheduleSkeleton from './ScheduleSkeleton'
+import { css } from '@emotion/react'
 
 type ScheduleViewProps = {}
 
@@ -41,7 +42,8 @@ function Schedules({}: ScheduleViewProps) {
                                        onChange={handleChange}
                                        name={'checked'}
                                        inputProps={{ 'aria-label': 'schedule-calendar' }} />}
-                      label={checked ? 'CALENDAR' : 'CARD'} />
+                      label={checked ? 'CALENDAR' : 'CARD'}
+                      css={labelStyle} />
     {checked
       ? <ScheduleCalendar />
       : <div css={tableStyle}>
@@ -55,6 +57,7 @@ function Schedules({}: ScheduleViewProps) {
       </div>}
   </>
 }
+
 
 
 export default Schedules

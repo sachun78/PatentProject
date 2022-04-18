@@ -17,7 +17,6 @@ function LoginForm({}: LoginFormProps) {
     return signin({ ...form })
   }, {
     onSuccess: (res) => {
-      console.log(res.user)
       toast('Login Success', { type: 'success', position: 'top-center', autoClose: 2000, hideProgressBar: true })
       queryClient.setQueryData('user', res.user)
     },

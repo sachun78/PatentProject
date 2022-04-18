@@ -6,6 +6,7 @@ import { css } from '@emotion/react'
 import { useQuery } from 'react-query'
 import { Navigate } from 'react-router-dom'
 import { Button, ButtonGroup } from '@mui/material'
+import EventDetailCard from './EventDetailCard'
 
 export type EventDetailLeftProps = {
   id: string
@@ -24,52 +25,43 @@ function EventDetailContainer({ id }: EventDetailLeftProps) {
   return <>
     <h1 css={titleEventStyle}>{event.title}</h1>
     <section css={dateSectionStyle}><MdCalendarToday />
-      <span>Period : <b>{event.start_date.replace(/T.*$/, '')}</b> ~ <b>{event.end_date.replace(/T.*$/, '')}</b></span>
+      <span>{event.start_date.replace(/T.*$/, '')} ~ {event.end_date.replace(/T.*$/, '')}</span>
     </section>
     {event.meeting_list.length > 0 &&
       <>
-        <h3 css={titleNameStyle}>Schedules - {event.meeting_list.length}</h3>
+        <h3 css={titleEventStyle}>Meeting List</h3>
         <div css={scheduleWrapStyle}>
           {event.meeting_list.map((meeting: any) => {
-            return <ScheduleCard key={meeting.id}
-                                 from={meeting.ownerEmail} to={meeting.toEmail}
-                                 comment={meeting.comment}
-                                 place={meeting.location}
-                                 date={meeting.date} time={meeting.time}
-                                 title={meeting.title}
-                                 state={meeting.status} id={meeting.id} />
+            return <EventDetailCard key={meeting.id}
+                                    from={meeting.ownerEmail} to={meeting.toEmail}
+                                    comment={meeting.comment}
+                                    place={meeting.location}
+                                    date={meeting.date} time={meeting.time}
+                                    title={meeting.title}
+                                    state={meeting.status} id={meeting.id} />
           })}
         </div>
       </>}
-    <ButtonGroup>
-      <Button variant={'contained'}> EDIT </Button>
-      <Button variant={'contained'} color={'error'}> DEL </Button>
-    </ButtonGroup>
   </>
 }
 
-const titleNameStyle = css`
-  font-size: 1.5rem;
-  line-height: 1.5;
-  font-weight: 600;
-  margin-bottom: 1rem;
-`
 const titleEventStyle = css`
-  font-size: 2rem;
-  line-height: 1.5;
-  font-weight: bold;
+  font: normal normal 800 20px/23px NanumSquareOTF;
+  margin: 0 0 15px;
+  color: #333333;
 `
 const dateSectionStyle = css`
   display: flex;
   align-items: center;
+  color: #6C6C6C;
 
   svg {
-    font-size: 2.4rem;
-    margin-right: 0.8rem;
+    font-size: 1rem;
+    margin-right: 0.625rem;
   }
 
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  font: normal normal normal 16px/18px NanumSquareOTF;
+  margin-bottom: 15px;
 `
 
 const scheduleWrapStyle = css`

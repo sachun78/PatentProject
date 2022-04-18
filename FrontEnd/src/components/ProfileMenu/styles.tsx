@@ -1,5 +1,6 @@
 import { css } from '@emotion/react'
 import palette, { brandColor } from 'lib/palette'
+import { resetButton } from '../../lib/styles/resetButton'
 
 export const emailStyle = css`
   flex-grow: 1;
@@ -39,12 +40,7 @@ export const countryWrapper = css`
   flex-direction: column;
 
   div {
-    height: 4rem;
-  }
-
-  button {
-    margin-left: 1rem;
-    margin-top: 1rem;
+    height: 2.5rem;
   }
 
   svg {
@@ -61,6 +57,10 @@ export const textStyle = css`
 
   div {
     flex-grow: 1;
+  }
+
+  button {
+    ${resetButton};
   }
 
   .text {
