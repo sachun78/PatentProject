@@ -16,25 +16,40 @@ export type EventDetailCardProps = {
   title: string
 }
 
-function EventDetailCard({ title, from, to, date, time, place, state, id }: EventDetailCardProps) {
-  return <Link css={wrapper} to={'/membership/schedule/' + id}>
-    <h1>{title}</h1>
-    <AvatarGroup max={3} css={avatarGroupStyle}>
-      <Avatar alt={from} src='/assets/KimMinjun.png' />
-      <Avatar alt={to} src='/assets/ParkMina.png' />
-    </AvatarGroup>
-    <hr css={dividerStyle} />
-    <ScheduleDetailContents>
-      <p className={'schedule-td'}> {new Date(date).toLocaleDateString()}
-        {' '}
-        {new Date(time).toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit'
-        })}</p>
-      <p className={'schedule-place'}>{place}</p>
-      <div className={'schedule-state'} css={stateStyle(state)}>{state === 'none' ? 'pending' : state}</div>
-    </ScheduleDetailContents>
-  </Link>
+function EventDetailCard({
+  title,
+  from,
+  to,
+  date,
+  time,
+  place,
+  state,
+  id,
+}: EventDetailCardProps) {
+  return (
+    <Link css={wrapper} to={'/membership/schedule/' + id}>
+      <h1>{title}</h1>
+      <AvatarGroup max={3} css={avatarGroupStyle}>
+        <Avatar alt={from} src="/assets/KimMinjun.png" />
+        <Avatar alt={to} src="/assets/ParkMina.png" />
+      </AvatarGroup>
+      <hr css={dividerStyle} />
+      <ScheduleDetailContents>
+        <p className={'schedule-td'}>
+          {' '}
+          {new Date(date).toLocaleDateString()}{' '}
+          {new Date(time).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
+        </p>
+        <p className={'schedule-place'}>{place}</p>
+        <div className={'schedule-state'} css={stateStyle(state)}>
+          {state === 'none' ? 'pending' : state}
+        </div>
+      </ScheduleDetailContents>
+    </Link>
+  )
 }
 
 const wrapper = css`
@@ -59,13 +74,19 @@ const wrapper = css`
   }
 
   h1 {
+    width: 202px;
     margin: 0 0 30px;
     font: normal normal 800 18px/21px NanumSquareOTF;
     color: #333333;
+    height: 21px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
   }
 `
 const dividerStyle = css`
-  border: 0.5px solid #D9D9D9;
+  border: 0.5px solid #d9d9d9;
   width: 100%;
   margin: 0 0 10px;
 `
@@ -85,7 +106,7 @@ const ScheduleDetailContents = styled.section`
 
   p {
     margin: 0;
-    color: #6C6C6C;
+    color: #6c6c6c;
     text-align: center;
   }
 
@@ -96,16 +117,23 @@ const ScheduleDetailContents = styled.section`
 
   .schedule-place {
     font: normal normal normal 16px/21px NanumSquareOTF;
+    height: 42px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 
   .schedule-state {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
+
     text-align: center;
     height: 37px;
-    margin-bottom: 17px;
+
     font: normal normal normal 16px/18px NanumSquareOTF;
     border-radius: 0.25rem;
     box-shadow: 0px 8px 6px #00000029;
@@ -114,16 +142,18 @@ const ScheduleDetailContents = styled.section`
 `
 
 const stateStyle = (state: string) => css`
-  color: #F9F9FC;
+  color: #f9f9fc;
   background: ${brandColor};
 
-  ${state === 'confirm' && css`
+  ${state === 'confirm' &&
+  css`
     background: #fff;
-    color: #6C6C6C;
+    color: #6c6c6c;
   `}
 
-  ${state === 'none' && css`
-    background: #9C9C9C;
+  ${state === 'none' &&
+  css`
+    background: #9c9c9c;
     color: #fff;
   `}
 `

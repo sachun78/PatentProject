@@ -29,6 +29,7 @@ export const tableStyle = css`
   flex-wrap: wrap;
   flex: 1;
   height: 100%;
+  flex-direction: row;
 `
 
 export const calendarStyle = css`
@@ -40,7 +41,7 @@ export const calendarStyle = css`
     font: normal normal 800 15px 'NanumSquare' !important;
     line-height: 1.133333333 !important;
 
-    background-color: #A1045A !important;
+    background-color: #a1045a !important;
     color: #fff !important;
 
     &:disabled {
@@ -51,14 +52,14 @@ export const calendarStyle = css`
 
   .fc-daygrid-day-number {
     padding: 0.5rem 0.5rem 0.25rem !important;
-    color: #6C6C6C;
+    color: #6c6c6c;
     font: normal normal 800 15px 'NanumSquare';
     line-height: 1.133333333;
   }
 
   .fc-col-header {
-    background: #D9D9D9;
-    color: #6C6C6C;
+    background: #d9d9d9;
+    color: #6c6c6c;
     font: normal normal normal 17px NanumSquareOTF;
     line-height: 1.117647059;
   }
@@ -67,11 +68,13 @@ export const calendarStyle = css`
     margin-bottom: 1.125rem !important;
   }
 
-  .fc-day-past, .fc-day-future {
+  .fc-day-past,
+  .fc-day-future {
     background: #fff;
   }
 
-  .fc-prev-button, .fc-next-button {
+  .fc-prev-button,
+  .fc-next-button {
     background: transparent !important;
     width: 24px !important;
     height: 24px !important;
@@ -79,13 +82,13 @@ export const calendarStyle = css`
     border-radius: 1rem !important;
 
     span {
-      color: #6C6C6C !important;
+      color: #6c6c6c !important;
       margin-bottom: 0.3rem;
     }
   }
 
   .fc .fc-toolbar-title {
-    color: #6C6C6C;
+    color: #6c6c6c;
     font: normal normal normal 20px NanumSquareOTF;
     line-height: 1.15;
   }
@@ -103,6 +106,4 @@ export const labelStyle = css`
     color: #6c6c6c;
     font: normal normal normal 17px/19px NanumSquareOTF !important;
   }
-
-  margin-bottom: 20px;
 `

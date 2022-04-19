@@ -1,17 +1,14 @@
 import { css } from '@emotion/react'
 import { brandColor } from 'lib/palette'
 import { Link, useNavigate } from 'react-router-dom'
-import { deleteEvent } from 'lib/api/event/deleteEvent'
 import { useCurrentEventState } from 'atoms/eventState'
 import { useEventModal } from 'hooks/useEventTitle'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import { useCallback } from 'react'
 import { useQueryClient } from 'react-query'
-import { toast } from 'react-toastify'
 import media from 'lib/styles/media'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
 import { FiEdit } from 'react-icons/fi'
-import { BiTrash } from 'react-icons/bi'
 
 export type EventCardProps = {
   id: string
@@ -20,9 +17,18 @@ export type EventCardProps = {
   endDate: string
   count: number
   cardView?: boolean
+  disabled?: boolean
 }
 
-function EventCard({ title, startDate, endDate, id, count, cardView = false }: EventCardProps) {
+function EventCard({
+  title,
+  startDate,
+  endDate,
+  id,
+  count,
+  cardView = false,
+  disabled = false,
+}: EventCardProps) {
   const qc = useQueryClient()
   const navigate = useNavigate()
   const { setOpen, setEdit } = useEventModal()
@@ -30,80 +36,104 @@ function EventCard({ title, startDate, endDate, id, count, cardView = false }: E
   const [, setEvent] = useCurrentEventState()
   const [, setMeetuser] = useMeetingReqUser()
 
-  const handleEdit = useCallback((e: React.MouseEvent<SVGElement>) => {
-    e.stopPropagation()
-    setOpen(true)
-    setEdit(true)
-    setEvent({ id, title })
-    setStartDate(new Date(startDate))
-    setEndDate(new Date(endDate))
-  }, [endDate, id, startDate, title])
-
-  const onDelete = (e: React.MouseEvent<SVGElement>) => {
-    e.stopPropagation()
-    deleteEvent(id)
-      .then(() => {
-        qc.invalidateQueries(['events', 1])
-      })
-      .catch((e) => {
-        const { message } = e.response?.data
-        toast.error(message, {
-          position: 'top-center',
-          pauseOnHover: false,
-          pauseOnFocusLoss: false,
-          autoClose: 3000
-        })
-      })
-  }
+  const handleEdit = useCallback(
+    (e: React.MouseEvent<SVGElement>) => {
+      e.stopPropagation()
+      setOpen(true)
+      setEdit(true)
+      setEvent({ id, title })
+      setStartDate(new Date(startDate))
+      setEndDate(new Date(endDate))
+    },
+    [
+      endDate,
+      id,
+      setEdit,
+      setEndDate,
+      setEvent,
+      setOpen,
+      setStartDate,
+      startDate,
+      title,
+    ]
+  )
 
   const onCreateSchedule = useCallback(() => {
     setEvent({ id, title })
     setStartDate(new Date(startDate))
     setEndDate(new Date(endDate))
     setMeetuser('')
-  }, [endDate, id, setEndDate, setEvent, setMeetuser, setStartDate, startDate, title])
+  }, [
+    endDate,
+    id,
+    setEndDate,
+    setEvent,
+    setMeetuser,
+    setStartDate,
+    startDate,
+    title,
+  ])
 
-  return <div css={wrapper(cardView)}>
-    <div className={'inner'} onClick={() => {
-      if (!cardView) {
-        navigate(`/membership/event/${id}`)
-      }
-    }}>
-      <div css={eventHeaderStyle}>
-        <span className='event-card-header'>{title}</span>
-        {!cardView && <div className={'toolbar'}>
-          <FiEdit onClick={handleEdit} />
-        </div>}
+  return (
+    <div css={wrapper(cardView)}>
+      <div
+        className={'inner'}
+        onClick={() => {
+          if (!cardView) {
+            navigate(`/membership/event/${id}`)
+          }
+        }}
+      >
+        <div css={eventHeaderStyle}>
+          <span className="event-card-header">{title}</span>
+          {!cardView && (
+            <div className={'toolbar'}>
+              <FiEdit onClick={!disabled ? handleEdit : undefined} />
+            </div>
+          )}
+        </div>
+        <div css={contentStyle}>
+          <span>
+            Period: <b>{startDate.replace(/T.*$/, '')}</b> ~{' '}
+            <b>{endDate.replace(/T.*$/, '')}</b>
+          </span>
+          <span>
+            Schedule(s): <b>{count}</b>
+          </span>
+        </div>
       </div>
-      <div css={contentStyle}>
-        <span>Period: <b>{startDate.replace(/T.*$/, '')}</b> ~ <b>{endDate.replace(/T.*$/, '')}</b></span>
-        <span>Schedule(s): <b>{count}</b></span>
-      </div>
+      {!cardView && (
+        <div
+          css={buttonStyle(disabled)}
+          onClick={!disabled ? onCreateSchedule : undefined}
+          aria-disabled={true}
+        >
+          <Link to={!disabled ? '/membership/schedule/request' : '#'}>
+            <div className="text">+ New Schedule</div>
+          </Link>
+        </div>
+      )}
     </div>
-    {!cardView &&
-      <div css={buttonStyle} onClick={onCreateSchedule}>
-        <Link to={'/membership/schedule/request'}>
-          <div className='text'>+ New Schedule</div>
-        </Link>
-      </div>}
-  </div>
+  )
 }
 
 const wrapper = (maxWidth: boolean) => css`
-  ${maxWidth ? css`
-    width: 37.5rem;
-    margin-bottom: 0;
-    margin-right: 0;
-    height: 6rem;
-    padding: 0 1rem;
-  ` : css`
-    width: 37.5rem;
-    min-width: 37.5rem;
-    margin-bottom: 1.5625rem;
-    margin-right: 1.25rem;
-    height: 13.9375rem;
-    padding: 1.875rem;
-  `}
+  ${maxWidth
+    ? css`
+        width: 37.5rem;
+        margin-bottom: 0;
+        margin-right: 0;
+        height: 6rem;
+        padding: 0 1rem;
+      `
+    : css`
+        width: 37.5rem;
+        min-width: 37.5rem;
+        margin-bottom: 1.5625rem;
+        margin-right: 1.25rem;
+        height: 13.9375rem;
+        padding: 1.875rem;
+      `}
 
   max-width: 37.5rem;
   border-radius: 1rem;
@@ -128,8 +158,15 @@ const wrapper = (maxWidth: boolean) => css`
   }
 `
 
-const buttonStyle = css`
-  background-color: ${brandColor};
+const buttonStyle = (disabled: boolean) => css`
+  ${!disabled
+    ? css`
+        background-color: ${brandColor};
+      `
+    : css`
+        background-color: #9c9c9c;
+      `}
+
   margin: 3rem -1.875rem 0;
 
   border-bottom-right-radius: 1rem;
@@ -144,7 +181,7 @@ const buttonStyle = css`
   }
 
   a {
-    text-decoration: none
+    text-decoration: none;
   }
 `
 
@@ -181,7 +218,7 @@ const contentStyle = css`
   font: normal normal normal 18px NanumSquareOTF;
 
   span {
-    margin-bottom: 0.5rem
+    margin-bottom: 0.5rem;
   }
 `
 export default EventCard

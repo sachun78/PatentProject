@@ -15,13 +15,13 @@ function NetworkList({}: NetworkListProps) {
     return <div>No data</div>
   }
 
-  return <div css={networkStyle}>
-    {buddyData.buddy.map((buddy: any) => {
-      return <NetworkItem key={buddy.email} data={buddy} />
-    })}
-    {/*<NetworkItem key={buddyData.buddy[0].email} data={buddyData.buddy[0]} />*/}
-    {/*<NetworkItem key={buddyData.buddy[0].email} data={buddyData.buddy[0]} />*/}
-  </div>
+  return (
+    <div css={networkStyle}>
+      {buddyData.buddy.map((buddy: any) => {
+        return <NetworkItem key={buddy.email} data={buddy} />
+      })}
+    </div>
+  )
 }
 
 const networkStyle = css`

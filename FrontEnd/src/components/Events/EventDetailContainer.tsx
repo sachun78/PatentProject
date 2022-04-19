@@ -1,11 +1,9 @@
 import React from 'react'
 import { MdCalendarToday } from 'react-icons/md'
 import { getEvent } from 'lib/api/event/getEvent'
-import ScheduleCard from '../Schedules/ScheduleCard'
 import { css } from '@emotion/react'
 import { useQuery } from 'react-query'
 import { Navigate } from 'react-router-dom'
-import { Button, ButtonGroup } from '@mui/material'
 import EventDetailCard from './EventDetailCard'
 
 export type EventDetailLeftProps = {
@@ -13,36 +11,54 @@ export type EventDetailLeftProps = {
 }
 
 function EventDetailContainer({ id }: EventDetailLeftProps) {
-  const { data: event, isLoading, error } = useQuery(['event', id], getEvent, {
+  const {
+    data: event,
+    isLoading,
+    error,
+  } = useQuery(['event', id], getEvent, {
     enabled: !!id,
-    retry: false
+    retry: false,
   })
 
-  if (isLoading) return (<div>Loading!</div>)
-  if (error) return (<Navigate to={'/'} />)
-  if (!event) return (<div>No event</div>)
+  if (isLoading) return <div>Loading!</div>
+  if (error) return <Navigate to={'/'} />
+  if (!event) return <div>No event</div>
 
-  return <>
-    <h1 css={titleEventStyle}>{event.title}</h1>
-    <section css={dateSectionStyle}><MdCalendarToday />
-      <span>{event.start_date.replace(/T.*$/, '')} ~ {event.end_date.replace(/T.*$/, '')}</span>
-    </section>
-    {event.meeting_list.length > 0 &&
-      <>
-        <h3 css={titleEventStyle}>Meeting List</h3>
-        <div css={scheduleWrapStyle}>
-          {event.meeting_list.map((meeting: any) => {
-            return <EventDetailCard key={meeting.id}
-                                    from={meeting.ownerEmail} to={meeting.toEmail}
-                                    comment={meeting.comment}
-                                    place={meeting.location}
-                                    date={meeting.date} time={meeting.time}
-                                    title={meeting.title}
-                                    state={meeting.status} id={meeting.id} />
-          })}
-        </div>
-      </>}
-  </>
+  return (
+    <>
+      <h1 css={titleEventStyle}>{event.title}</h1>
+      <section css={dateSectionStyle}>
+        <MdCalendarToday />
+        <span>
+          {event.start_date.replace(/T.*$/, '')} ~{' '}
+          {event.end_date.replace(/T.*$/, '')}
+        </span>
+      </section>
+      {event.meeting_list.length > 0 && (
+        <>
+          <h3 css={titleEventStyle}>Meeting List</h3>
+          <div css={scheduleWrapStyle}>
+            {event.meeting_list.map((meeting: any) => {
+              return (
+                <EventDetailCard
+                  key={meeting.id}
+                  from={meeting.ownerEmail}
+                  to={meeting.toEmail}
+                  comment={meeting.comment}
+                  place={meeting.location}
+                  date={meeting.date}
+                  time={meeting.time}
+                  title={meeting.title}
+                  state={meeting.status}
+                  id={meeting.id}
+                />
+              )
+            })}
+          </div>
+        </>
+      )}
+    </>
+  )
 }
 
 const titleEventStyle = css`
@@ -53,7 +69,7 @@ const titleEventStyle = css`
 const dateSectionStyle = css`
   display: flex;
   align-items: center;
-  color: #6C6C6C;
+  color: #6c6c6c;
 
   svg {
     font-size: 1rem;

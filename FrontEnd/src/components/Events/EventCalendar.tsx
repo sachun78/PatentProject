@@ -7,6 +7,7 @@ import { brandColor } from 'lib/palette'
 import { useNavigate } from 'react-router-dom'
 import listPlugin from '@fullcalendar/list'
 import { calendarStyle } from '../Schedules/styles'
+import { formatDistanceToNow } from 'date-fns'
 
 export type ScheduleCalendarProps = {}
 
@@ -19,6 +20,9 @@ function EventCalendar({}: ScheduleCalendarProps) {
     if (data) {
       for (const event of data) {
         const ed = new Date(event.end_date)
+        const dist = formatDistanceToNow(ed, {
+          addSuffix: true,
+        })
         ed.setDate(ed.getDate() + 1)
         const edStr = ed.toISOString()
         const eventObj = {
@@ -26,7 +30,7 @@ function EventCalendar({}: ScheduleCalendarProps) {
           title: event.title,
           start: event.start_date.replace(/T.*$/, ''),
           end: edStr.replace(/T.*$/, ''),
-          backgroundColor: brandColor
+          backgroundColor: dist.includes('ago') ? '#9c9c9c' : brandColor,
         }
         retArr.push(eventObj)
       }
@@ -38,35 +42,34 @@ function EventCalendar({}: ScheduleCalendarProps) {
     navigate('/membership/event/' + clickInfo.event.id)
   }
 
-  return <div css={calendarStyle}>
-    <FullCalendar
-      ref={calendarRef}
-      plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
-      headerToolbar={{
-        left: 'prev next',
-        center: 'title',
-        right: 'today'
-      }}
-      initialView='dayGridMonth'
-      editable={false}
-      selectable={true}
-      selectMirror={true}
-      dayMaxEvents={true}
-      weekends={true}
-      showNonCurrentDates={false}
-      dayMaxEventRows={true}
-      fixedWeekCount={false}
-      events={calendarEvents}
-      eventClick={handleEventClick}
-      aspectRatio={2.079796265}
-      select={(info) => {
-        console.log(info)
-        alert(info.start.toDateString() + ' clicked')
-        // calendarRef?.current?.getApi().unselect()
-        info.view.calendar.unselect()
-      }}
-    />
-  </div>
+  return (
+    <div css={calendarStyle}>
+      <FullCalendar
+        ref={calendarRef}
+        plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
+        headerToolbar={{
+          left: 'prev next',
+          center: 'title',
+          right: 'today',
+        }}
+        initialView="dayGridMonth"
+        editable={false}
+        selectable={true}
+        selectMirror={true}
+        dayMaxEvents={true}
+        weekends={true}
+        showNonCurrentDates={false}
+        dayMaxEventRows={true}
+        fixedWeekCount={false}
+        events={calendarEvents}
+        eventClick={handleEventClick}
+        aspectRatio={2.079796265}
+        select={(info) => {
+          info.view.calendar.unselect()
+        }}
+      />
+    </div>
+  )
 }
 
 export default EventCalendar
