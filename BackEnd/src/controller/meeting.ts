@@ -37,16 +37,9 @@ const checkInviteCode = async (code: string, data: any): Promise<any> => {
 
 export async function getMeetings(req: IRequest, res: Response) {
   const user_id = req.userId;
-  const bodyData: Object = req.body;
+  const filter = req.query.filter;
 
-  let data;
-  if (bodyData.constructor === Object && Object.keys(bodyData).length === 0) {
-    data = await meetingRepo.getAll(user_id);
-  }
-  else {
-    data = await meetingRepo.getAll(user_id, bodyData);
-  }
-
+  const data = await meetingRepo.getAll(user_id, filter);
   res.status(200).json(data);
 }
 
