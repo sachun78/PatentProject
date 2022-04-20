@@ -11,7 +11,7 @@ export async function createMhistory(req: IRequest, res: Response, next: NextFun
     const id = req.params.id;
     const mhistory = await MhisRepo.createMhistory(req.body);
     if (mhistory) {
-      const meeting = await meetingRepo.updateMeeting(id, {history: mhistory._id});
+      const meeting = await meetingRepo.updateMeeting(id, {history: mhistory.id});
       if (!meeting) {
         return res.status(404).json({ message: `meeting(${id}) is not found`});
       }

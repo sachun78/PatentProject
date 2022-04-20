@@ -11,42 +11,60 @@ import { FieldItem } from '../../pages/User/styles'
 import getCountryName from 'lib/countryName'
 
 export type NetworkItemProps = {
-  data: { email: string, profile: IProfile }
+  data: { email: string; profile: IProfile }
 }
 
 function NetworkItem({ data }: NetworkItemProps) {
   const navigate = useNavigate()
-  return <div css={itemStyle} onClick={() => navigate('/u/' + data.email)}>
-    <div css={iconStyle}>
-      <Avatar alt='user-avatar' src={gravatar.url(data.email, { s: '60px', d: 'retro' })}
-              sx={{ width: 60, height: 60 }} />
+  return (
+    <div css={itemStyle} onClick={() => navigate('/u/' + data.email)}>
+      <div css={iconStyle}>
+        <Avatar
+          alt="user-avatar"
+          src={gravatar.url(data.email, { s: '60px', d: 'retro' })}
+          sx={{ width: 60, height: 60 }}
+        />
+      </div>
+      <div css={nameStyle}>{data.email}</div>
+      <div css={informStyle}>
+        <Tooltip title="Company" placement={'left'}>
+          <span>
+            <MdOutlineWork />
+            {data.profile.company}
+          </span>
+        </Tooltip>
+        <Tooltip title="Field" placement={'left'}>
+          <span>
+            <GrUserManager />
+            <Grid container>
+              {data.profile.field?.map((elem: string) => (
+                <FieldItem key={elem}>{elem}</FieldItem>
+              ))}
+            </Grid>
+          </span>
+        </Tooltip>
+        <Tooltip title="Country" placement={'left'}>
+          <span>
+            <MdOutlineSafetyDivider />
+            {getCountryName(data.profile.country!)}
+          </span>
+        </Tooltip>
+      </div>
+      <div css={stateStyle}>
+        <span>online</span>
+      </div>
     </div>
-    <div css={nameStyle}>{data.email}</div>
-    <div css={informStyle}>
-      <Tooltip title='Company' placement={'left'}><span><MdOutlineWork />{data.profile.company}</span></Tooltip>
-      <Tooltip title='Field'
-               placement={'left'}><span><GrUserManager />
-        <Grid container>
-        {data.profile.field?.map((elem: string) => (
-          <FieldItem key={elem}>{elem}</FieldItem>
-        ))}
-      </Grid></span></Tooltip>
-      <Tooltip title='Country'
-               placement={'left'}><span><MdOutlineSafetyDivider />{getCountryName(data.profile.country!)}</span></Tooltip>
-    </div>
-    <div css={stateStyle}>
-      <span>online?</span>
-    </div>
-  </div>
+  )
 }
 
 const itemStyle = css`
   display: flex;
   width: 100%;
-  height: 6rem;
+  min-height: 6rem;
   align-items: center;
   background: rgba(255, 255, 255, 0.7);
   border-radius: 0.5rem;
+  padding: 1rem;
 
   &:hover {
     color: ${brandColor};

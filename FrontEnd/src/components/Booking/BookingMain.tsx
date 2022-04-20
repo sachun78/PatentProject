@@ -1,10 +1,12 @@
 import { css } from '@emotion/react'
-import { resetButton } from '../../lib/styles/resetButton'
-import palette from '../../lib/palette'
-import IconControl from '../IconControl'
-import { confirmMeeting } from '../../lib/api/meeting/confirmMeeting'
-import { cancelMeeting } from '../../lib/api/meeting/cancelMeeting'
-import React from 'react'
+import { resetButton } from 'lib/styles/resetButton'
+import palette, { brandColor } from 'lib/palette'
+import { confirmMeeting } from 'lib/api/meeting/confirmMeeting'
+import { cancelMeeting } from 'lib/api/meeting/cancelMeeting'
+import React, { useCallback } from 'react'
+import { useMutation, useQueryClient } from 'react-query'
+import { Box, Button } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 export type BookingMainProps = {
   code: string | null
@@ -12,76 +14,98 @@ export type BookingMainProps = {
 }
 
 function BookingMain({ code, status }: BookingMainProps) {
-  const [isConfirm, setIsConfirm] = React.useState(false)
-  const [isCancel, setIsCancel] = React.useState(false)
-  const onConfirm = async () => {
-    try {
-      if (!code) {
-        return
-      }
-      const result = await confirmMeeting(code)
-      setIsConfirm(true)
-    } catch (e) {
-      console.error(e)
-    }
-  }
+  const qc = useQueryClient()
 
-  const onCancel = async () => {
-    console.log('예약 취소')
-    try {
-      if (!code) {
-        return
-      }
-      const result = await cancelMeeting(code)
-      setIsCancel(true)
-    } catch (e) {
-      console.error(e)
-    }
-  }
-  return <div css={mainStyle}>
-    <IconControl name={'welcome'} />
-    {status === 'none' && !isConfirm && !isCancel && (
-      <>
-        <button onClick={onConfirm}>Confirm</button>
-        <button onClick={onCancel}>Decline</button>
-      </>)}
-    {(status === 'confirm' || isConfirm) && <>
-      <div>예약이 승인되었습니다.</div>
-    </>}
-    {(status === 'cancel' || isCancel) && <>
-      <div>this Meeting is Canceled</div>
-    </>}
-  </div>
+  const confirmMut = useMutation(confirmMeeting, {
+    onSuccess: () => {
+      qc.invalidateQueries(['booking', code])
+    },
+  })
+
+  const cancelMut = useMutation(cancelMeeting, {
+    onSuccess: () => {
+      qc.invalidateQueries(['booking', code])
+    },
+  })
+
+  const onConfirm = useCallback(() => {
+    if (!code) return
+    confirmMut.mutate(code)
+  }, [code, confirmMut])
+
+  const onCancel = useCallback(() => {
+    if (!code) return
+    cancelMut.mutate(code)
+  }, [cancelMut, code])
+
+  if (!code) return null
+
+  return (
+    <div css={mainStyle}>
+      <img src="/assets/wemet_logo.png" alt="wemet-logo" />
+      {status === 'none' && (
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          minWidth={400}
+          marginTop={1}
+        >
+          <Button
+            onClick={onConfirm}
+            disabled={cancelMut.isLoading || confirmMut.isLoading}
+          >
+            Confirm
+          </Button>
+          <Button
+            onClick={onCancel}
+            disabled={cancelMut.isLoading || confirmMut.isLoading}
+          >
+            Cancel
+          </Button>
+        </Box>
+      )}
+      {status === 'confirm' && (
+        <>
+          <div>The Meeting is Confirmed.</div>
+        </>
+      )}
+      {status === 'cancel' && (
+        <>
+          <div>The Meeting is Canceled</div>
+        </>
+      )}
+      {status !== 'none' && <Link to={'/'}>Back</Link>}
+    </div>
+  )
 }
 
 const mainStyle = css`
   flex: 1 1 50%;
   width: 50%;
-  transition: all 0.22s ease-out;
 
   padding-bottom: 2.5rem;
   padding-left: 3rem;
   padding-right: 2.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-around;
+  align-items: center;
 
-  svg {
-    width: 100%;
-    height: 100%;
+  img {
+    width: 50%;
   }
 
   button {
     ${resetButton};
     background-color: ${palette.blueGrey[50]};
-    margin-bottom: 1rem;
-    min-height: 6rem;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 600;
-    border-radius: 0.8rem;
+    border-radius: 0.5rem;
+    padding: 1rem;
 
     &:hover {
-      background-color: ${palette.blueGrey[100]};
+      background-color: ${brandColor};
+      color: #fff;
     }
   }
 `

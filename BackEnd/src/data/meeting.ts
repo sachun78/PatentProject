@@ -40,15 +40,12 @@ useVirtualId(meetingSchema);
 
 const meeting = mongoose.model('meetings', meetingSchema);
 
-export async function getAll(userId: string, data?: any) {
-  if (!data) {
-    return meeting.find({ownerId: userId}).sort({createAt: -1});
+export async function getAll(userId: string, filter?: string) {
+  if (!filter) {
+    return meeting.find({ownerId: userId}).sort({date: -1});
   }
 
-  let filters: any = {ownerId: userId};
-  Object.assign(filters, data.filter);
-
-  return meeting.find(filters).sort(data.sort);
+  return meeting.find({ownerId: userId, toEmail: filter}).sort({date: -1});
 }
 
 export async function getById(meetingId: string) {

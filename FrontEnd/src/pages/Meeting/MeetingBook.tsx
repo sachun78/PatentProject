@@ -8,28 +8,29 @@ const Booking = loadable(() => import('components/Booking'))
 const Reschedule = loadable(() => import('components/Reschedule'))
 
 function MeetingBook({}: MeetingConfirmProps) {
-  return <div css={pageStyle}>
-    <div css={wrapper}>
-      <Routes>
-        <Route path='/detail' element={<Booking />} />
-        <Route path='/replan' element={<Reschedule />} />
-      </Routes>
+  return (
+    <div css={pageStyle}>
+      <div css={wrapper}>
+        <Routes>
+          <Route path="/detail" element={<Booking />} />
+          <Route path="/replan" element={<Reschedule />} />
+        </Routes>
+      </div>
     </div>
-  </div>
+  )
 }
 
 const pageStyle = css`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  background-color: #fbfcfd;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 `
 const wrapper = css`
-  min-height: 700px;
   padding-right: 5%;
   padding-left: 5%;
-  margin-top: 6.6rem;
-  margin-bottom: 3rem;
+  margin: auto;
   display: flex;
   justify-content: center;
 `

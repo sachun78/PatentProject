@@ -8,7 +8,7 @@ import {
   NameMailContainer,
   Summary,
   UserBody,
-  UserHeader
+  UserHeader,
 } from './styles'
 import gravatar from 'gravatar'
 import React, { useCallback } from 'react'
@@ -17,7 +17,12 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { User as UserType } from 'lib/api/types'
 import useBuddyQuery from 'hooks/query/useBuddyQuery'
 import { IoMdMail } from 'react-icons/io'
-import { MdOutlineSafetyDivider, MdOutlineWork, MdPersonAdd, MdPersonRemove } from 'react-icons/md'
+import {
+  MdOutlineSafetyDivider,
+  MdOutlineWork,
+  MdPersonAdd,
+  MdPersonRemove,
+} from 'react-icons/md'
 import { GrUserManager } from 'react-icons/gr'
 import { getProfilebyEmail } from 'lib/api/me/getProfile'
 import { toast } from 'react-toastify'
@@ -40,11 +45,15 @@ function User({}: UserProps) {
   const { email } = useParams<{ email: string }>()
   const [, setOpen] = useRecoilState(eventSelectModalState)
   const [, setMeetuser] = useMeetingReqUser()
-  const { data: profileData, isLoading: isLoadingProfile } = useQuery(['profile', email ?? ''], getProfilebyEmail, {
-    enabled: !!email,
-    retry: false,
-    staleTime: 5000
-  })
+  const { data: profileData, isLoading: isLoadingProfile } = useQuery(
+    ['profile', email ?? ''],
+    getProfilebyEmail,
+    {
+      enabled: !!email,
+      retry: false,
+      staleTime: 5000,
+    }
+  )
 
   const addBuddyMutation = useMutation(addBuddy, {
     onSuccess: () => {
@@ -54,7 +63,7 @@ function User({}: UserProps) {
     onError: (err: AxiosError) => {
       console.error(err)
       toast.error(err.response?.data.message)
-    }
+    },
   })
 
   const delBuddyMutation = useMutation(deleteBuddy, {
@@ -65,7 +74,7 @@ function User({}: UserProps) {
     onError: (err: AxiosError) => {
       console.error(err)
       toast.error(err.response?.data.message)
-    }
+    },
   })
 
   const onAddNetwork = useCallback(() => {
@@ -79,7 +88,7 @@ function User({}: UserProps) {
   }, [delBuddyMutation, email])
 
   const onRequestMeeting = useCallback(() => {
-    setOpen(prev => !prev)
+    setOpen((prev) => !prev)
     setMeetuser(email ?? '')
   }, [email, setMeetuser, setOpen])
 
@@ -92,76 +101,113 @@ function User({}: UserProps) {
       toast.error(`Cannot found user(${email}) information`, {
         toastId: 'user-not-found',
         pauseOnFocusLoss: false,
-        pauseOnHover: false
+        pauseOnHover: false,
       })
     }
     return <Navigate to={'/'} />
   }
 
-  return (<Container>
-    <UserHeader>
-      <img src={gravatar.url(email, { s: '100px', d: 'retro' })} alt={email} />
-      <NameMailContainer>
-        <h1>{email} {user.email === email && '(나)'}</h1>
-        <span>{profileData.username}</span>
-      </NameMailContainer>
-      <ButtonGroup variant='outlined'>
-        {user.email === email ? null
-          : buddyData.buddy?.findIndex((elem: { email: string, profile: any }) => elem.email === email) === -1
-            ? <Button disabled={addBuddyMutation.isLoading} onClick={onAddNetwork}>
+  return (
+    <Container>
+      <UserHeader>
+        <img
+          src={gravatar.url(email, { s: '100px', d: 'retro' })}
+          alt={email}
+        />
+        <NameMailContainer>
+          <h1>
+            {email} {user.email === email && '(나)'}
+          </h1>
+          <span>{profileData.username}</span>
+        </NameMailContainer>
+        <ButtonGroup variant="outlined">
+          {user.email === email ? null : buddyData.buddy?.findIndex(
+              (elem: { email: string; profile: any }) => elem.email === email
+            ) === -1 ? (
+            <Button
+              disabled={addBuddyMutation.isLoading}
+              onClick={onAddNetwork}
+              variant={'contained'}
+            >
               <MdPersonAdd />
             </Button>
-            : <Button disabled={delBuddyMutation.isLoading} onClick={onDeleteNetwork}>
+          ) : (
+            <Button
+              disabled={delBuddyMutation.isLoading}
+              onClick={onDeleteNetwork}
+            >
               <MdPersonRemove />
-            </Button>}
-        {user.email !== email && <Button onClick={onRequestMeeting}>Request Meeting</Button>}
-      </ButtonGroup>
-      {user.email !== email &&
-        <Link css={mailToStyle} to={'#'} onClick={(e) => {
-          window.location.href = `mailto:${email}`
-          e.preventDefault()
-        }}><IoMdMail /></Link>}
-    </UserHeader>
-    <UserBody>
-      <Summary>
-        <h3>Summary</h3>
-        <Tooltip title='Company' placement={'left'}>
-          <span><MdOutlineWork />{profileData.company}</span>
-        </Tooltip>
-        <Tooltip title='Position' placement={'left'}>
-          <span><GrUserManager /> {profileData.position}</span>
-        </Tooltip>
-        <Tooltip title='Department' placement={'left'}>
-          <span><MdOutlineSafetyDivider /> {profileData.department}</span>
-        </Tooltip>
-        <Tooltip title='Country' placement={'left'}>
-          <span><BiWorld /> {getCountryName(profileData.country!)}</span>
-        </Tooltip>
-      </Summary>
-      <Middle>
-        <div className='career-summary'>
-          <h3>About</h3>
-          <pre>LONGLONG LONGLONG LONGLONG TEXT
-            LONGLONG LONGLONG LONGLONG TEXT
-            LONGLONG LONGLONG LONGLONG TEXT LONGLONG LONGLONG LONGLONG TEXT
-          LONGLONG LONGLONG LONGLONG TEXT
-          LONGLONG LONGLONG LONGLONG TEXT</pre>
-        </div>
-        <div className='History'>
-          <h3>Previous Meeting</h3>
-        </div>
-      </Middle>
-      <Field>
-        <h3>Fields</h3>
-        <Grid container>
-          {profileData.field?.map((elem: string) => (
-            <FieldItem key={elem}>{elem}</FieldItem>
-          ))}
-        </Grid>
-      </Field>
-    </UserBody>
-    <EventSelectDialog />
-  </Container>)
+            </Button>
+          )}
+          {user.email !== email && (
+            <Button onClick={onRequestMeeting} variant={'contained'}>
+              Request Meeting
+            </Button>
+          )}
+        </ButtonGroup>
+        {user.email !== email && (
+          <Link
+            css={mailToStyle}
+            to={'#'}
+            onClick={(e) => {
+              window.location.href = `mailto:${email}`
+              e.preventDefault()
+            }}
+          >
+            <IoMdMail />
+          </Link>
+        )}
+      </UserHeader>
+      <UserBody>
+        <Summary>
+          <h3>Summary</h3>
+          <Tooltip title="Company" placement={'left'}>
+            <span>
+              <MdOutlineWork />
+              {profileData.company}
+            </span>
+          </Tooltip>
+          <Tooltip title="Position" placement={'left'}>
+            <span>
+              <GrUserManager /> {profileData.position}
+            </span>
+          </Tooltip>
+          <Tooltip title="Department" placement={'left'}>
+            <span>
+              <MdOutlineSafetyDivider /> {profileData.department}
+            </span>
+          </Tooltip>
+          <Tooltip title="Country" placement={'left'}>
+            <span>
+              <BiWorld /> {getCountryName(profileData.country!)}
+            </span>
+          </Tooltip>
+        </Summary>
+        <Middle>
+          <div className="career-summary">
+            <h3>About</h3>
+            <pre>
+              LONGLONG LONGLONG LONGLONG TEXT LONGLONG LONGLONG LONGLONG TEXT
+              LONGLONG LONGLONG LONGLONG TEXT LONGLONG LONGLONG LONGLONG TEXT
+              LONGLONG LONGLONG LONGLONG TEXT LONGLONG LONGLONG LONGLONG TEXT
+            </pre>
+          </div>
+          <div className="History">
+            <h3>Previous Meeting</h3>
+          </div>
+        </Middle>
+        <Field>
+          <h3>Fields</h3>
+          <Grid container>
+            {profileData.field?.map((elem: string) => (
+              <FieldItem key={elem}>{elem}</FieldItem>
+            ))}
+          </Grid>
+        </Field>
+      </UserBody>
+      <EventSelectDialog />
+    </Container>
+  )
 }
 
 export default User

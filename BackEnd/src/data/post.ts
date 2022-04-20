@@ -1,36 +1,61 @@
 import mongoose from 'mongoose'
+import { useVirtualId } from 'database/database'
 
-interface IPost {
-  user_id: string
-  text: string
-  comment: IComment[]
+type PostType = {
+  owner_id: string;
+  owner_thumb: string;
+  contents: string;
+  images: string[];
+  like_cnt: number;
+  comment: CommentType[];
 }
 
-interface IComment {
-  user_id: string
-  text: string
-  created_at: Date
-  updated_at: Date
+type CommentType = {
+  owner_id: string;
+  ower_thumb: string;
+  contents: string;
+  createdAt: Date;
 }
 
-export const postSchema = new mongoose.Schema<IPost>({
-  user_id: { type: String, required: true },
-  text: { type: String, required: true },
+const postSchema = new mongoose.Schema<PostType>({
+  owner_id: { type: String, required: true },
+  owner_thumb: { type: String, default: '' },
+  contents: { type: String, required: true },
+  images: { type: [String], default: [] },
+  like_cnt: { type: Number, default: 0},
   comment: {
-    type:
-      [{
-        user_id: String,
-        text: String,
-        created_at: Date,
-        updated_at: Date
-      }]
+    type: [{
+      owner_id: { type: String, required: true},
+      owner_thumb: { type: String, default: ''},
+      contents: { type: String, required: true},
+      createdAt: { type: Date, required: true}
+    }], default: []
   }
+}, 
+{
+  timestamps: true,
+  versionKey: false
 })
+useVirtualId(postSchema);
 
+const Post = mongoose.model('post', postSchema);
 
-const Post = mongoose.model('posts', postSchema)
+export async function findByPostID(postId: string): Promise<PostType | null> {
+  return Post.findById(postId);
+}
 
-export function createPost(post: IPost) {
-  const new_post = new Post(post)
-  return new_post.save()
+export async function getPostAll(): Promise<PostType[] | null> {
+  return Post.find().sort({createAt: -1});
+}
+
+export async function createPost(postData: PostType): Promise<PostType> {
+  return new Post(postData).save();
+}
+
+export async function editPost(postId: string, editData: any): Promise<PostType | null> {
+  return Post.findByIdAndUpdate(postId, editData, { new: true});
+}
+
+export async function deletePost(postId: string) {
+  return Post.findByIdAndDelete(postId);
 }

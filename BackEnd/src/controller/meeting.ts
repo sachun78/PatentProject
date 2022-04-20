@@ -37,16 +37,9 @@ const checkInviteCode = async (code: string, data: any): Promise<any> => {
 
 export async function getMeetings(req: IRequest, res: Response) {
   const user_id = req.userId;
-  const bodyData: Object = req.body;
+  const filter = req.query.filter;
 
-  let data;
-  if (bodyData.constructor === Object && Object.keys(bodyData).length === 0) {
-    data = await meetingRepo.getAll(user_id);
-  }
-  else {
-    data = await meetingRepo.getAll(user_id, bodyData);
-  }
-
+  const data = await meetingRepo.getAll(user_id, filter);
   res.status(200).json(data);
 }
 
@@ -122,14 +115,13 @@ export async function replanlMeeting(req: IRequest, res: Response) {
 export async function sendResultMail(req: IRequest, res: Response) {
   const mId = req.body.meetingId;
   const mStatus = req.body.status;
-  const origin: string = req.get('origin');
 
   try {
     const meeting = await meetingRepo.getById(mId);
     if (meeting) {
       meeting["status"] = mStatus;
       console.log(meeting);
-      const mailInfo = sendmail(origin, meeting, EMAILTYPE.RESULT);
+      const mailInfo = sendmail(meeting, EMAILTYPE.RESULT);
       if (!mailInfo) {
         return res.status(500).json({ message: `Failed email send ${meeting.toEmail}`});
       }
@@ -149,7 +141,6 @@ export async function sendResultMail(req: IRequest, res: Response) {
 export async function sendInvitMail(req: IRequest, res: Response) {
   const user_id = req.userId;
   const bodyData = req.body;
-  const origin: string = req.get('origin');
 
   try {
     const meetingData = await createMeeting(user_id, bodyData);
@@ -157,7 +148,7 @@ export async function sendInvitMail(req: IRequest, res: Response) {
       return res.status(500).json({ message: `Failed save meeting ${bodyData.toEmail}`});
     }
 
-    const mailInfo = sendmail(origin, meetingData, EMAILTYPE.INVI);
+    const mailInfo = sendmail(meetingData, EMAILTYPE.INVI);
     if (!mailInfo) {
       return res.status(500).json({ message: `Failed email send ${bodyData.toEmail}`});
     }

@@ -6,15 +6,15 @@ const theme = createTheme({
   palette: {
     primary: {
       main: '#A1045A',
-      contrastText: '#f7f7f8'
+      contrastText: '#f7f7f8',
     },
     secondary: {
-      main: '#A1045A'
+      main: '#A1045A',
     },
     error: {
-      main: red.A400
-    }
-  }
+      main: red.A400,
+    },
+  },
 })
 
 export default theme

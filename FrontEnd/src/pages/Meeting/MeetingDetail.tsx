@@ -1,28 +1,52 @@
-import { Link, Navigate, useLocation } from 'react-router-dom'
-import React, { useMemo } from 'react'
-import { useQuery } from 'react-query'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import React, { useCallback, useMemo } from 'react'
+import { useMutation, useQuery } from 'react-query'
 import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
 import { toast } from 'react-toastify'
-import {
-  Accordion, AccordionDetails, AccordionSummary, Box,
-  Button,
-  Container,
-  Stack,
-  Typography
-} from '@mui/material'
-import { css } from '@emotion/react'
-import IconControl from 'components/IconControl'
+import { Box, Button, Stack } from '@mui/material'
 import { ContainerBlock, MeetingSection } from './styles'
+import sendResult from '../../lib/api/meeting/sendResult'
 
 export type MeetingDetailProps = {}
 
 function MeetingDetail({}: MeetingDetailProps) {
   const location = useLocation()
+  const navi = useNavigate()
   const code = useMemo(() => location.pathname.split('/')[3], [location])
-  const { data, isLoading, error } = useQuery(['meeting', code], () => getMeetingOne(code), {
-    retry: false,
-    refetchOnWindowFocus: false
+  const { data, isLoading, error, refetch } = useQuery(
+    ['meeting', code],
+    () => getMeetingOne(code),
+    {
+      retry: false,
+      refetchOnWindowFocus: false,
+      staleTime: 5000,
+    }
+  )
+
+  const replanResponseMut = useMutation(sendResult, {
+    onSuccess: () => {
+      toast.success('정상적으로 전송되었습니다.')
+      refetch()
+    },
+    onError: (err) => {
+      console.dir(err)
+      toast.error('error')
+    },
   })
+
+  const onResult = useCallback(() => {
+    navi('result')
+  }, [])
+
+  const onConfirm = useCallback(() => {
+    if (!data) return
+    replanResponseMut.mutate({ status: 'confirm', meetingId: data.id })
+  }, [data, replanResponseMut])
+
+  const onCancel = useCallback(() => {
+    if (!data) return
+    replanResponseMut.mutate({ status: 'cancel', meetingId: data.id })
+  }, [data, replanResponseMut])
 
   if (location.pathname.split('/')[3] === '') {
     return <Navigate replace to={'/'} />
@@ -33,7 +57,7 @@ function MeetingDetail({}: MeetingDetailProps) {
       toast.error('오류가 발생했습니다.', {
         toastId: 'meeting-detail',
         pauseOnFocusLoss: false,
-        pauseOnHover: false
+        pauseOnHover: false,
       })
     }
     return <Navigate replace to={'/'} />
@@ -43,99 +67,71 @@ function MeetingDetail({}: MeetingDetailProps) {
     return <div>Loading...</div>
   }
 
-  return <Stack direction={'row'}>
-    <ContainerBlock>
-      <h1>{data.title} [{data.status}]</h1>
-      <MeetingSection>
-        <h2>Organizer</h2>
-        <p>{data.ownerEmail}</p>
-      </MeetingSection>
-      <MeetingSection>
-        <h2>Participants</h2>
-        <Stack direction='row' spacing={2}>
-          <p>{data.toEmail}</p>
-          <Link to={`/u/${data.toEmail}`}><Button variant='contained' style={{ height: '24px' }}>정보확인</Button></Link>
-        </Stack>
-      </MeetingSection>
-      <MeetingSection>
-        <h2>Schedule Information</h2>
-        <p>{data.location}</p>
-        <p> {data.date.replace(/T.*$/, '')} {new Date(data.time).toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit'
-        })}</p>
-      </MeetingSection>
-      <MeetingSection>
-        <h2>Request Message</h2>
-        <p> {data.comment}</p>
-      </MeetingSection>
-      <Box display='flex' justifyContent='space-between'>
-        {data.status === 'confirm' && <Button variant='contained'>Result</Button>}
-        {data.status === 'replan'
-          && <>
-            <Button variant='contained' style={{ width: '180px' }}>Confirm</Button>
-            <Button variant='contained' style={{ width: '180px', backgroundColor: '#9C9C9C' }}>Cancel</Button>
-          </>}
-      </Box>
-    </ContainerBlock>
-    <Container>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<IconControl name={'plus'} />}
-          aria-controls='panel1a-content'
-          id='panel1a-header'>
-          <Typography>"Request" from ME to Opponent</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            message/ time/ place/ data
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<IconControl name={'plus'} />}
-          aria-controls='panel2a-content'
-          id='panel2a-header'
-        >
-          <Typography>"Replan" from Opponent to me</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            message/ time/ place/ data
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<IconControl name={'plus'} />}
-          aria-controls='panel3a-content'
-          id='panel3a-header'
-        >
-          <Typography>"Replan(change)" from me to Opponent</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            message/ time/ place/ data
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<IconControl name={'plus'} />}
-          aria-controls='panel4a-content'
-          id='panel4a-header'
-        >
-          <Typography>"Confirm" or Reject by Opponent</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            message/ time/ place/ data
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-    </Container>
-  </Stack>
+  return (
+    <Stack direction={'row'}>
+      <ContainerBlock>
+        <h1>
+          {data.title} [{data.status}]
+        </h1>
+        <MeetingSection>
+          <h2>Organizer</h2>
+          <p>{data.ownerEmail}</p>
+        </MeetingSection>
+        <MeetingSection>
+          <h2>Participants</h2>
+          <Stack direction="row" spacing={2}>
+            <p>{data.toEmail}</p>
+            <Link to={`/u/${data.toEmail}`}>
+              <Button variant="contained" style={{ height: '24px' }}>
+                more
+              </Button>
+            </Link>
+          </Stack>
+        </MeetingSection>
+        <MeetingSection>
+          <h2>Schedule Information</h2>
+          <p>{data.location}</p>
+          <p>
+            {' '}
+            {data.date.replace(/T.*$/, '')}{' '}
+            {new Date(data.time).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </p>
+        </MeetingSection>
+        <MeetingSection>
+          <h2>Request Message</h2>
+          <p> {data.comment}</p>
+        </MeetingSection>
+        <Box display="flex" justifyContent="space-between">
+          {data.status === 'confirm' && (
+            <Button variant="contained" onClick={onResult}>
+              Result
+            </Button>
+          )}
+          {data.status === 'replan' && (
+            <>
+              <Button
+                variant="contained"
+                style={{ width: '180px' }}
+                onClick={onConfirm}
+              >
+                Confirm
+              </Button>
+              <Button
+                variant="contained"
+                style={{ width: '180px', backgroundColor: '#9C9C9C' }}
+                onClick={onCancel}
+              >
+                Cancel
+              </Button>
+            </>
+          )}
+        </Box>
+      </ContainerBlock>
+    </Stack>
+  )
 }
 
 export default MeetingDetail
