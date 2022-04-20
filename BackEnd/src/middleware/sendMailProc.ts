@@ -8,7 +8,7 @@ export const enum EMAILTYPE {
   RESULT
 }
 
-const createAuthEmail = (origin: string, code: string) => {
+const createAuthEmail = (code: string) => {
   const keywords = {
         type: 'signup',
         text: 'Email verification'
@@ -20,9 +20,9 @@ const createAuthEmail = (origin: string, code: string) => {
     <b style="black">Hello! </b>Click the link below to continue ${keywords.text}. If you made a request by mistake, or if you did not request it, please disregard this email.
   </div>
   
-  <a href="${origin}/${keywords.type}?code=${code}" style="text-decoration: none; width: 400px; text-align:center; display:block; margin: 0 auto; margin-top: 1rem; background: #845ef7; padding-top: 1rem; color: white; font-size: 1.25rem; padding-bottom: 1rem; font-weight: 600; border-radius: 4px;">continue</a>
+  <a href="${envConfig.host.client_url}/${keywords.type}?code=${code}" style="text-decoration: none; width: 400px; text-align:center; display:block; margin: 0 auto; margin-top: 1rem; background: #845ef7; padding-top: 1rem; color: white; font-size: 1.25rem; padding-bottom: 1rem; font-weight: 600; border-radius: 4px;">continue</a>
   
-  <div style="text-align: center; margin-top: 1rem; color: #868e96; font-size: 0.85rem;"><div>Click the button above or open the following link: <br/> <a style="color: #b197fc;" href="${origin}/${keywords.type}?code=${code}">${origin}/${keywords.type}?code=${code}</a></div><br/><div>This link is valid for 24 hours. </div></div>`;
+  <div style="text-align: center; margin-top: 1rem; color: #868e96; font-size: 0.85rem;"><div>Click the button above or open the following link: <br/> <a style="color: #b197fc;" href="${envConfig.host.client_url}/${keywords.type}?code=${code}">${envConfig.host.client_url}/${keywords.type}?code=${code}</a></div><br/><div>This link is valid for 24 hours. </div></div>`;
 
   return {
     subject,
@@ -30,16 +30,16 @@ const createAuthEmail = (origin: string, code: string) => {
   };
 }
 
-const createInviteEmail = (origin: string, data: any) => {
+const createInviteEmail = (data: any) => {
   const keywords = {
     type: 'invitation',
     subType: ['detail', 'replan'],
     text: 'invitation letter'
   };
   const subject = `Wemet [${keywords.text}] - ${data.ownerName}`;
-  const html = `<a href="${origin}"
+  const html = `<a href="${envConfig.host.client_url}"
   ><img
-    src="${origin}/asset/wemet_logo.png"
+    src="${envConfig.host.url}/asset/wemet_logo.png"
     style="display: block; width: 128px; margin: 0 auto; margin-bottom: 1rem;"
   /></a>
   <div style="max-width: 100%; width: 600px; margin: 0 auto;">
@@ -59,7 +59,7 @@ const createInviteEmail = (origin: string, data: any) => {
       <div>
         <img
           style="height: 64px; width: 64px; display: block; border-radius: 32px;"
-          src="${origin}/asset/default.png"
+          src="${envConfig.host.url}/asset/default.png"
         />
       </div>
       <div style="flex: 1; margin-left: 1.5rem; color: #495057;">
@@ -76,12 +76,12 @@ const createInviteEmail = (origin: string, data: any) => {
           <b style="color: black">comment:</b> ${data.comment}
         </div>
         <a
-          href="${origin}/${keywords.type}/${keywords.subType[0]}?code=${data.code}"
+          href="${envConfig.host.client_url}/${keywords.type}/${keywords.subType[0]}?code=${data.code}"
           style="outline: none; border: none; background: #845ef7; color: white; padding-top: 0.5rem; padding-bottom: 0.5rem; font-size: 1rem; font-weight: 600; display: inline-block; background: #845ef7; padding-left: 1rem; padding-right: 1rem; align-items: center; margin-top: 1rem; border-radius: 4px; text-decoration: none;"
           >View meeting detail</a
         >
         <a
-          href="${origin}/${keywords.type}/${keywords.subType[1]}?code=${data.code}"
+          href="${envConfig.host.client_url}/${keywords.type}/${keywords.subType[1]}?code=${data.code}"
           style="outline: none; border: none; background: #845ef7; color: white; padding-top: 0.5rem; padding-bottom: 0.5rem; font-size: 1rem; font-weight: 600; display: inline-block; background: #845ef7; padding-left: 1rem; padding-right: 1rem; align-items: center; margin-top: 1rem; border-radius: 4px; text-decoration: none;"
           >Change meeting schedule</a
         >
@@ -95,7 +95,7 @@ const createInviteEmail = (origin: string, data: any) => {
   return {subject, html};
 }
 
-const createResultEmail = (origin: string, data: any) => {
+const createResultEmail = (data: any) => {
   const keywords = {
     text: 'Send results',
   };
@@ -103,9 +103,9 @@ const createResultEmail = (origin: string, data: any) => {
     ? { comment: 'Accept meeting' } : { comment: 'Cancel meeting' };
 
   const subject = `Wemet [${keywords.text}] - ${data.ownerName}`;
-  const html = `<a href="${origin}"
+  const html = `<a href="${envConfig.host.client_url}"
   ><img
-    src="${origin}/asset/wemet_logo.png"
+    src="${envConfig.host.url}/asset/wemet_logo.png"
     style="display: block; width: 128px; margin: 0 auto; margin-bottom: 1rem;"
   /></a>
   <div style="max-width: 100%; width: 600px; margin: 0 auto;">
@@ -115,7 +115,7 @@ const createResultEmail = (origin: string, data: any) => {
     <div style="display:-webkit-flex;display:-ms-flexbox;display:flex; margin-top: 1rem;">
       <img
           style="height: 32px; width: 32px; display: block; border-radius: 32px;"
-          src="${origin}/asset/confirm.png"
+          src="${envConfig.host.url}/asset/confirm.png"
         />
       <p style="flex: 1; color: #495057; margin: 0; text-decoration: none; margin-left: 1.5rem; font-weight: 600; font-size: 1.125rem;">
         ${result.comment}
@@ -129,7 +129,7 @@ const createResultEmail = (origin: string, data: any) => {
       <div>
         <img
           style="height: 64px; width: 64px; display: block; border-radius: 32px;"
-          src="${origin}/asset/default.png"
+          src="${envConfig.host.url}/asset/default.png"
         />
       </div>
       <div style="flex: 1; margin-left: 1.5rem; color: #495057;">
@@ -158,21 +158,21 @@ const createResultEmail = (origin: string, data: any) => {
   return {subject, html};
 }
 
-export const sendmail = async (origin: string, emailInfo: any, mailType: EMAILTYPE) => {
+export const sendmail = async (emailInfo: any, mailType: EMAILTYPE) => {
   let user_email;
   let emailTemplete;
 
   if (mailType === EMAILTYPE.AUTH) {
     user_email = emailInfo.email;
-    emailTemplete = createAuthEmail(origin, emailInfo.code);
+    emailTemplete = createAuthEmail(emailInfo.code);
   }
   else if (mailType === EMAILTYPE.INVI) {
     user_email = emailInfo.toEmail;
-    emailTemplete = createInviteEmail(origin, emailInfo);
+    emailTemplete = createInviteEmail(emailInfo);
   }
   else {
     user_email = emailInfo.toEmail;
-    emailTemplete = createResultEmail(origin, emailInfo);
+    emailTemplete = createResultEmail(emailInfo);
   }
 
   let serviceContent: SMTPTransport.Options = {
@@ -185,6 +185,7 @@ export const sendmail = async (origin: string, emailInfo: any, mailType: EMAILTY
       user: envConfig.email.userid,
       clientId: envConfig.email.client_id,
       clientSecret: envConfig.email.client_secret,
+      refreshToken: envConfig.email.refresh_token,
       accessToken: envConfig.email.access_token
     },
   }
