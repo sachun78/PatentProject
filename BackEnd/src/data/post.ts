@@ -44,6 +44,10 @@ export async function findByPostID(postId: string): Promise<PostType | null> {
   return Post.findById(postId);
 }
 
+export async function getPostAll(): Promise<PostType[] | null> {
+  return Post.find().sort({createAt: -1});
+}
+
 export async function createPost(postData: PostType): Promise<PostType> {
   return new Post(postData).save();
 }

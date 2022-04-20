@@ -6,6 +6,17 @@ interface IRequest extends Request {
   [key: string]: any
 }
 
+export async function getPosts(req: IRequest, res: Response) {
+  try {
+    const posts = await postRepo.getPostAll();
+    res.status(200).json(posts);
+  }
+  catch(e) {
+    console.error(`[Post][getPosts] ${e}`);
+    throw new Error(`[Post][getPosts] ${e}`);
+  }
+}
+
 export async function createPost(req: IRequest, res: Response) {
   try {
     const postData = req.body;

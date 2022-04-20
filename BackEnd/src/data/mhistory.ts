@@ -10,7 +10,7 @@ interface IMhistory {
 export const mhistoryScheme = new mongoose.Schema<IMhistory>({
   with: { type: [String], default: ["test1"]},
   result: { type: String, require: true},
-  photopath: { type: String, required: true}
+  photopath: { type: String, default: ''}
 }, {
   timestamps: false,
   versionKey: false
