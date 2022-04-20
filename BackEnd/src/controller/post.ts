@@ -8,8 +8,12 @@ interface IRequest extends Request {
 
 export async function getPosts(req: IRequest, res: Response) {
   try {
-    const posts = await postRepo.getPostAll();
-    res.status(200).json(posts);
+    const postId = req.params.id;
+    if (!postId) {
+      const posts = await postRepo.getPostAll();
+      return res.status(200).json(posts);
+    }
+    return res.status(200).json(await postRepo.findById(postId));
   }
   catch(e) {
     console.error(`[Post][getPosts] ${e}`);
@@ -23,6 +27,7 @@ export async function createPost(req: IRequest, res: Response) {
     const userData = await userRepo.findById(req.userId);
     if (userData) {
       postData['owner_id'] = userData.id;
+      postData['owner_username'] = userData.username;
       postData['owner_thumb'] = userData.photo_path;
     }
     else {
@@ -39,7 +44,7 @@ export async function createPost(req: IRequest, res: Response) {
 
 export async function editPost(req: IRequest, res: Response) {
   try{
-    const findPost = await postRepo.findByPostID(req.params.id);
+    const findPost = await postRepo.findById(req.params.id);
     if (findPost) {
       if (req.userId === findPost.owner_id) {
         const editPost = await postRepo.editPost(req.params.id, req.body);
@@ -61,7 +66,7 @@ export async function editPost(req: IRequest, res: Response) {
 
 export async function deletePost(req: IRequest, res: Response) {
   try{
-    const findPost = await postRepo.findByPostID(req.params.id);
+    const findPost = await postRepo.findById(req.params.id);
     if (findPost) {
       if (req.userId === findPost.owner_id) {
         const editPost = await postRepo.deletePost(req.params.id);
@@ -78,5 +83,36 @@ export async function deletePost(req: IRequest, res: Response) {
   catch(e) {
     console.error(`[Post][deletePost] ${e}`);
     throw new Error(`[Post][deletePost] ${e}`);
+  }
+}
+
+export async function createComment(req: IRequest, res: Response) {
+  const postId = req.params.id;
+  const comment = req.body;
+  try{
+    const user = await userRepo.findById(req.userId);
+    if (!user) {
+      return res.status(409).json({ message: `user not found`});
+    }
+
+    comment['owner_id'] = user.id;
+    comment['owner_username'] = user.username;
+    comment['owner_thumb'] = user.photo_path;
+
+    const findPost = await postRepo.findById(postId);
+    if (!findPost) {
+      return res.status(409).json({ message: `POST(${postId}) is not found`});
+    }
+
+    let postComment = [comment, ...findPost.comment];
+    console.log(postComment);
+
+    const update = await postRepo.editPost(postId, {comment: postComment});
+    console.log(update?.comment[0]);
+    res.status(200).json(update?.comment[0]);
+  }
+  catch(e) {
+    console.error(`[Post][createComment] ${e}`);
+    throw new Error(`[Post][createComment] ${e}`);
   }
 }

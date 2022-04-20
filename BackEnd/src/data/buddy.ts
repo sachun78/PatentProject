@@ -21,7 +21,7 @@ useVirtualId(buddySchema);
 
 const Buddy = mongoose.model('Buddy', buddySchema);
 
-export function createBuddy(userId: string, buddy: any) {
+export async function createBuddy(userId: string, buddy: any) {
   return authRepo.findById(userId).then((user) => {
     return new Buddy({
       owner_id: userId,
@@ -30,23 +30,23 @@ export function createBuddy(userId: string, buddy: any) {
   });
 }
 
-export function findById(buddyId: string) {
+export async function findById(buddyId: string) {
   return Buddy.findById(buddyId);
 }
 
-export function updateBuddy(buddyId: string, arrBuddy: string[]) {
+export async function updateBuddy(buddyId: string, arrBuddy: string[]) {
   return Buddy.findByIdAndUpdate(buddyId, {buddy: arrBuddy}, {new: true});
 }
 
-export function getBuddy(userId: string) {
+export async function getBuddy(userId: string) {
   return Buddy.findOne({owner_id: userId}).populate({path: 'buddy.profile', model: 'Profile'});
 }
 
-export function deleteBuddy(userId: string, _email: string) {
+export async function deleteBuddy(userId: string, _email: string) {
   return Buddy.updateOne({owner_id: userId}, {$pull: {"buddy": {"email": _email}}});
 }
 
 // Query an Array of Embedded Documents
-export function getBuddyByEmail(_email: string) {
+export async function getBuddyByEmail(_email: string) {
   return Buddy.find({"buddy.email": _email}, {_id: false});
 }
