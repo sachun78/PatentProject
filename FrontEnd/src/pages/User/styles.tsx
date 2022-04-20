@@ -109,12 +109,12 @@ export const mailToStyle = css`
   justify-content: center;
   font-size: 1.75rem;
   margin-left: 1rem;
-  color: #ccc;
-  border-radius: 0.875rem;
+  color: ${palette.white};
   background-color: ${palette.blue[600]};
-  padding: 0.35rem;
+  border-radius: 0.4rem;
+  padding: 0.35rem 0.5rem;
 
   &:hover {
-    color: #c1c1c1;
+    background-color: ${palette.blue[500]};
   }
 `

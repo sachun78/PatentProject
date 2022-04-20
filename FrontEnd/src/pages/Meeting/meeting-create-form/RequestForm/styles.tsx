@@ -16,10 +16,10 @@ export const sectionStyle = css`
 
 export const buttonStyle = css`
   ${resetButton};
-  height: 1.75rem;
+  height: 2.25rem;
   color: white;
   background: ${brandColor};
-  width: 5rem;
+  width: 100%;
 
   &:hover,
   &:focus-visible {

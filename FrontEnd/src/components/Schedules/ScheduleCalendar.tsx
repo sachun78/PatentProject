@@ -7,6 +7,8 @@ import useMeetingQuery from 'hooks/query/useMeetingQuery'
 import { useCallback, useMemo } from 'react'
 import { calendarStyle } from './styles'
 import { useNavigate } from 'react-router-dom'
+import { formatDistanceToNow } from 'date-fns'
+import { brandColor } from '../../lib/palette'
 
 export type ScheduleCalendarProps = {}
 
@@ -18,11 +20,16 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
     const ret = []
     if (data) {
       for (const meeting of data) {
+        const ed = new Date(meeting.date)
+        const dist = formatDistanceToNow(ed, {
+          addSuffix: true,
+        })
         const eventObj = {
           id: meeting.id,
           title: meeting.title,
           start: meeting.date,
-          end: meeting.date
+          end: meeting.date,
+          backgroundColor: dist.includes('ago') ? '#9c9c9c' : brandColor,
         }
         ret.push(eventObj)
       }

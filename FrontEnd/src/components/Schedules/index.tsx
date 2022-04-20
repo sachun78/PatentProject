@@ -13,7 +13,9 @@ import { formatDistanceToNow } from 'date-fns'
 type ScheduleViewProps = {}
 
 function Schedules({}: ScheduleViewProps) {
-  const { data, isLoading } = useMeetingQuery(1)
+  const { data, isLoading } = useMeetingQuery(1, {
+    staleTime: 2000,
+  })
   const [checked, setChecked] = useRecoilState(meetingSwitchState)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,8 +38,8 @@ function Schedules({}: ScheduleViewProps) {
     return (
       <div css={noScheduleStyle}>
         <IconControl name={'welcome'} />
-        <div>There's no schedule created.</div>
-        <div>Please make a new schedule.</div>
+        <div>There is no registered schedule.</div>
+        <div>Register your schedule through an event.</div>
       </div>
     )
 
@@ -65,6 +67,7 @@ function Schedules({}: ScheduleViewProps) {
               addSuffix: true,
             })
             if (dist.includes('ago')) return null
+            if (v.history) return null
             return (
               <ScheduleCard
                 key={v.id}

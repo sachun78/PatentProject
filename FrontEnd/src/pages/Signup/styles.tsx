@@ -14,10 +14,15 @@ export const undoStyle = css`
   display: flex;
   margin-top: 1rem;
   justify-content: flex-end;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  align-self: self-end;
 
   a {
     text-decoration: none;
+  }
+
+  &:hover {
+    color: ${palette.grey[600]};
   }
 `
 
@@ -40,26 +45,5 @@ export const privacyStyle = css`
 
   a:hover {
     text-decoration: underline;
-  }
-`
-
-export const mailCheckStyle = css`
-  display: inline-flex;
-  width: 100%;
-  height: 4rem;
-  text-decoration: none;
-  text-align: center;
-  background: ${palette.purple[500]};
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
-  justify-content: center;
-  align-items: center;
-
-  span {
-    color: #fff;
-  }
-
-  &:hover {
-    background: ${palette.purple[400]};
   }
 `

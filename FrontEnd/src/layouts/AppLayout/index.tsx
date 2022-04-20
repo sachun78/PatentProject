@@ -22,39 +22,44 @@ export default function AppLayout({}: AppLayoutProps) {
   const { data, isLoading } = useUserQuery()
 
   if (isLoading) {
-    return <Backdrop
-      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      open={isLoading}>
-      <CircularProgress color='inherit' />
-    </Backdrop>
+    return (
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    )
   }
 
   if (!data) {
     return <Navigate replace to={'/login'} />
   }
 
-  return <>
-    <AppLayout.Sidebar>
-      <Sidebar />
-      {/*<VerticalBar />*/}
-    </AppLayout.Sidebar>
-    <AppLayout.Main>
-      <Routes>
-        <Route index element={<Home />} />
-        <Route path='/postDetail/:id' element={<PostDetail />} />
-        <Route path='/membership/*' element={<Member />} />
-        <Route path='/network' element={<Network />} />
-        <Route path='/profile' element={<Profile />} />
-        <Route path='/conference' element={<div>컨퍼런스</div>} />
-        <Route path='/u/:email' element={<User />} />
-        <Route path='/*' element={<div>404 NOT FOUND</div>} />
-        <Route path='/postWrite/' element={<PostWrite />} />
-      </Routes>
-    </AppLayout.Main>
-    <AppLayout.Footer>
-      <Sponsor />
-    </AppLayout.Footer>
-  </>
+  return (
+    <>
+      <AppLayout.Sidebar>
+        <Sidebar />
+        {/*<VerticalBar />*/}
+      </AppLayout.Sidebar>
+      <AppLayout.Main>
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path="/postDetail/:id" element={<PostDetail />} />
+          <Route path="/membership/*" element={<Member />} />
+          <Route path="/buddy" element={<Network />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/conference" element={<div>컨퍼런스</div>} />
+          <Route path="/u/:email" element={<User />} />
+          <Route path="/*" element={<div>404 NOT FOUND</div>} />
+          <Route path="/postWrite/" element={<PostWrite />} />
+        </Routes>
+      </AppLayout.Main>
+      <AppLayout.Footer>
+        <Sponsor />
+      </AppLayout.Footer>
+    </>
+  )
 }
 
 export type MainProps = {

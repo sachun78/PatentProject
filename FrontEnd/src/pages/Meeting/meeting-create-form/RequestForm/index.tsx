@@ -5,16 +5,16 @@ import useInputs from 'hooks/useInputs'
 import { createMeeting } from 'lib/api/meeting/createMeeting'
 import DatePickerInput from 'components/DatePickerInput'
 import TimePickerInput from 'components/DatePickerInput/TimePickerInput'
-import Input from 'components/Input'
 import LocationInput from 'components/LocationMap/LocationInput'
 import RequestSection from './RequestSection'
 import { toast } from 'react-toastify'
-import { buttonStyle, sectionStyle, wrapper } from './styles'
+import { buttonStyle, sectionStyle } from './styles'
 import { Navigate, useNavigate } from 'react-router-dom'
 import useDateRangeHook from 'hooks/useDateRangeHook'
-import { useMeetingReqUser } from '../../../../atoms/meetingReqState'
+import { useMeetingReqUser } from 'atoms/meetingReqState'
 import { useMutation } from 'react-query'
 import { OutlinedInput } from '@mui/material'
+import { ContainerBlock } from 'pages/Meeting/styles'
 
 type RequestViewProps = {}
 
@@ -28,7 +28,7 @@ export default function RequestForm({}: RequestViewProps) {
     to: '',
     place: '성수역1번출구',
     comment: '',
-    title: ''
+    title: '',
   })
 
   const createScheduleMut = useMutation(createMeeting, {
@@ -37,7 +37,7 @@ export default function RequestForm({}: RequestViewProps) {
         position: toast.POSITION.TOP_CENTER,
         pauseOnHover: false,
         pauseOnFocusLoss: false,
-        autoClose: 3000
+        autoClose: 3000,
       })
       navi('/membership')
     },
@@ -46,55 +46,71 @@ export default function RequestForm({}: RequestViewProps) {
         position: toast.POSITION.TOP_CENTER,
         pauseOnHover: false,
         pauseOnFocusLoss: false,
-        autoClose: 3000
+        autoClose: 3000,
       })
-    }
+    },
   })
 
-  const onChangeDate = useCallback((change: Date) => {
-    if (!(change.getDate() <= endDate.getDate() && change.getDate() >= startDate.getDate())) {
-      toast.error('Error Date Not Contained', {
-        position: toast.POSITION.TOP_CENTER,
-        pauseOnHover: false,
-        pauseOnFocusLoss: false,
-        autoClose: 3000
+  const onChangeDate = useCallback(
+    (change: Date) => {
+      if (
+        !(
+          change.getDate() <= endDate.getDate() &&
+          change.getDate() >= startDate.getDate()
+        )
+      ) {
+        toast.error('Error Date Not Contained', {
+          position: toast.POSITION.TOP_CENTER,
+          pauseOnHover: false,
+          pauseOnFocusLoss: false,
+          autoClose: 3000,
+        })
+        return
+      }
+      change.setHours(time.getHours())
+      change.setMinutes(time.getMinutes())
+      setDate(change)
+    },
+    [endDate, setDate, startDate, time]
+  )
+
+  const onChangeTime = useCallback(
+    (change: Date) => {
+      const newDate = new Date(date)
+      newDate.setHours(change.getHours())
+      newDate.setMinutes(change.getMinutes())
+      setTime(change)
+      setDate(newDate)
+    },
+    [date, setDate, setTime]
+  )
+
+  const onSubmit = useCallback(
+    (e) => {
+      e.preventDefault()
+      const { title, to, place, comment } = form
+      if ((!to.trim() && !meetuser) || !place.trim() || !title.trim()) {
+        toast.error('Please fill out all fields', {
+          position: toast.POSITION.TOP_CENTER,
+          pauseOnHover: false,
+          pauseOnFocusLoss: false,
+          autoClose: 3000,
+        })
+        return
+      }
+
+      createScheduleMut.mutate({
+        eventId: curEvent.id,
+        title,
+        date,
+        time,
+        toEmail: meetuser ? meetuser.toLowerCase() : to.toLowerCase(),
+        location: place,
+        comment,
       })
-      return
-    }
-    change.setHours(time.getHours())
-    change.setMinutes(time.getMinutes())
-    setDate(change)
-  }, [endDate, setDate, startDate, time])
-
-  const onChangeTime = useCallback((change: Date) => {
-    const newDate = new Date(date)
-    newDate.setHours(change.getHours())
-    newDate.setMinutes(change.getMinutes())
-    setTime(change)
-    setDate(newDate)
-  }, [date, setDate, setTime])
-
-  const onSubmit = useCallback((e) => {
-    e.preventDefault()
-    const { title, to, place, comment } = form
-    if ((!to.trim() && !meetuser) || !place.trim() || !title.trim()) {
-      toast.error('Please fill out all fields', {
-        position: toast.POSITION.TOP_CENTER,
-        pauseOnHover: false,
-        pauseOnFocusLoss: false,
-        autoClose: 3000
-      })
-      return
-    }
-
-    createScheduleMut.mutate({
-      eventId: curEvent.id,
-      title, date, time,
-      toEmail: meetuser ? meetuser : to,
-      location: place,
-      comment
-    })
-  }, [createScheduleMut, curEvent.id, date, form, meetuser, time])
+    },
+    [createScheduleMut, curEvent.id, date, form, meetuser, time]
+  )
 
   useEffect(() => {
     const tempTime = new Date(startDate)
@@ -112,27 +128,46 @@ export default function RequestForm({}: RequestViewProps) {
   }
 
   return (
-    <div css={wrapper}>
+    <ContainerBlock>
       <form css={sectionStyle} onSubmit={onSubmit}>
         <RequestSection title={'Event Info'}>
           <span>{curEvent.title}</span>
           &nbsp;
-          <div> {startDate.toLocaleDateString()} ~ {endDate.toLocaleDateString()} </div>
+          <div>
+            {startDate.toLocaleDateString()} ~ {endDate.toLocaleDateString()}
+          </div>
         </RequestSection>
         <RequestSection title={'Meeting Title'}>
-          <OutlinedInput name='title' type={'text'} value={form.title} onChange={onChange} fullWidth />
-          {/*<Input name='title' type={'text'} value={form.title} onChange={onChange} />*/}
+          <OutlinedInput
+            name="title"
+            type={'text'}
+            value={form.title}
+            onChange={onChange}
+            fullWidth
+            style={{ height: '38px', backgroundColor: '#fff' }}
+          />
         </RequestSection>
         <RequestSection title={'Email'}>
-          {meetuser ? <span>{meetuser}</span>
-            : <OutlinedInput name='to' type={'email'} value={form.to} onChange={onChange} fullWidth />
-            /*<Input name='to' type={'email'} value={form.to} onChange={onChange} />*/}
+          {meetuser ? (
+            <span>{meetuser}</span>
+          ) : (
+            <OutlinedInput
+              name="to"
+              type={'email'}
+              value={form.to}
+              onChange={onChange}
+              fullWidth
+              style={{ height: '38px', backgroundColor: '#fff' }}
+            />
+          )}
         </RequestSection>
         <RequestSection title={'Meeting Date'}>
-          <DatePickerInput value={date}
-                           minimum={startDate}
-                           maximum={endDate}
-                           onChange={onChangeDate} />
+          <DatePickerInput
+            value={date}
+            minimum={startDate}
+            maximum={endDate}
+            onChange={onChangeDate}
+          />
         </RequestSection>
         <RequestSection title={'Meeting Time'}>
           <TimePickerInput onChange={onChangeTime} value={time} />
@@ -141,20 +176,25 @@ export default function RequestForm({}: RequestViewProps) {
           <LocationInput />
         </RequestSection>
         <RequestSection title={'Comment'}>
-          <OutlinedInput placeholder='Leave a comment'
-                         name='comment'
-                         value={form.comment}
-                         onChange={onChange}
-                         multiline fullWidth
-                         rows={3} />
-          {/*<Input placeholder='Leave a comment'*/}
-          {/*       name='comment'*/}
-          {/*       value={form.comment}*/}
-          {/*       onChange={onChange}*/}
-          {/*       multiple={true} />*/}
+          <OutlinedInput
+            placeholder="Leave a message"
+            name="comment"
+            value={form.comment}
+            onChange={onChange}
+            multiline
+            fullWidth
+            minRows={3}
+            style={{ backgroundColor: '#fff' }}
+          />
         </RequestSection>
-        <button css={buttonStyle} disabled={createScheduleMut.isLoading} type={'submit'}>OK</button>
+        <button
+          css={buttonStyle}
+          disabled={createScheduleMut.isLoading}
+          type={'submit'}
+        >
+          PROPOSE MEETING
+        </button>
       </form>
-    </div>
+    </ContainerBlock>
   )
 }

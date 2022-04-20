@@ -11,9 +11,11 @@ function EventDetail({}: EventProps) {
     return null
   }
 
-  return <div css={pageStyle}>
-    <EventDetailContainer id={location.pathname.split('/')[3]} />
-  </div>
+  return (
+    <div css={pageStyle}>
+      <EventDetailContainer id={location.pathname.split('/')[3]} />
+    </div>
+  )
 }
 
 const pageStyle = css`

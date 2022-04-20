@@ -34,9 +34,9 @@ function EventDetailContainer({ id }: EventDetailLeftProps) {
           {event.end_date.replace(/T.*$/, '')}
         </span>
       </section>
-      {event.meeting_list.length > 0 && (
-        <>
-          <h3 css={titleEventStyle}>Meeting List</h3>
+      <>
+        <h3 css={titleEventStyle}>Meeting List</h3>
+        {event.meeting_list.length > 0 ? (
           <div css={scheduleWrapStyle}>
             {event.meeting_list.map((meeting: any) => {
               return (
@@ -55,8 +55,10 @@ function EventDetailContainer({ id }: EventDetailLeftProps) {
               )
             })}
           </div>
-        </>
-      )}
+        ) : (
+          <div> No schedule</div>
+        )}
+      </>
     </>
   )
 }

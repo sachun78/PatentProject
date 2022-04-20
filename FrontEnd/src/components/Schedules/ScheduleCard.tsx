@@ -12,27 +12,46 @@ export type ScheduleCardProps = {
   date: Date
   state: string
   title: string
+  outdated?: boolean
 }
 
-function ScheduleCard({ from, to, comment, place, time, date, state, id, title }: ScheduleCardProps) {
-  return <Link css={wrapper} to={'/membership/schedule/' + id}>
-    <div css={headerStyle}>
-      <h3>{title}</h3> &nbsp;
-      <p>who#{to}</p>
-    </div>
-    <p css={commentStyle}>{comment}</p>
-    <div css={bottomStyle}>
-      <div className={'state-box'}><span>{state}</span></div>
-      <div>
-        {place} &nbsp;
-        {new Date(date).toLocaleDateString()}
-        {new Date(time).toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit'
-        })}
+function ScheduleCard({
+  from,
+  to,
+  comment,
+  place,
+  time,
+  date,
+  state,
+  id,
+  title,
+  outdated = false,
+}: ScheduleCardProps) {
+  return (
+    <Link css={wrapper} to={'/membership/schedule/' + id}>
+      <div css={headerStyle}>
+        <h3>{title}</h3> &nbsp;
+        <p>who#{to}</p>
       </div>
-    </div>
-  </Link>
+      <p css={commentStyle}>{comment}</p>
+      <div css={bottomStyle}>
+        <div className={'state-box'}>
+          <span>
+            {state}
+            {outdated && '/outdated'}
+          </span>
+        </div>
+        <div>
+          {place} &nbsp;
+          {new Date(date).toLocaleDateString()}
+          {new Date(time).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
+        </div>
+      </div>
+    </Link>
+  )
 }
 
 export const wrapper = css`
@@ -58,7 +77,7 @@ export const wrapper = css`
     box-shadow: 2px 5px 11px #00000029;
 
     h3 {
-      color: #A1045A;
+      color: #a1045a;
       margin: 5px 0 0.9375rem;
     }
   }
@@ -66,10 +85,12 @@ export const wrapper = css`
   h3 {
     font: normal normal 800 20px/23px 'NanumSquareOTF';
     margin: 5px 0 0.9375rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `
 export const commentStyle = css`
-  color: #6C6C6C;
+  color: #6c6c6c;
   font: normal normal normal 15px/17px 'NanumSquareOTF';
   word-break: break-all;
   margin: 0;
@@ -83,7 +104,7 @@ export const bottomStyle = css`
   justify-content: space-between;
   align-items: center;
   text-align: center;
-  color: #6C6C6C;
+  color: #6c6c6c;
   font: normal normal normal 16px/18px NanumSquareOTF;
 
   .state-box {
@@ -91,8 +112,8 @@ export const bottomStyle = css`
     padding-left: 15px;
     padding-right: 15px;
 
-    background: #A1045A;
-    border: 1px solid #D9D9D9;
+    background: #a1045a;
+    border: 1px solid #d9d9d9;
     border-radius: 12px;
 
     span {

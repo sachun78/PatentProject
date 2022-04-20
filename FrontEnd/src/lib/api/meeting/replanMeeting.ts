@@ -7,7 +7,13 @@ type replanMeetingArgs = {
   comment?: string
 }
 
-export async function replanMeeting(code: string, data: replanMeetingArgs) {
+export async function replanMeeting({
+  code,
+  data,
+}: {
+  code: string
+  data: replanMeetingArgs
+}) {
   const response = await client.patch('/api/meeting/replan/' + code, data)
   return response.data
 }

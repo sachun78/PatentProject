@@ -1,4 +1,4 @@
-import { Navigate, NavLink } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import React, { useCallback, useState } from 'react'
 import { undoStyle } from 'pages/Signup/styles'
 import Auth from 'layouts/Auth'
@@ -23,24 +23,35 @@ export default function MailCheck({}: RegisterProps) {
   if (data) {
     if (replan?.code) {
       return <Navigate replace to={'/invitation/replan?code=' + replan.code} />
-    } else
-      return <Navigate replace to={'/'} />
+    } else return <Navigate replace to={'/'} />
   }
 
   return (
     <Auth>
-      <div css={containerStyle}>
+      <div
+        css={containerStyle}
+        style={{ padding: '2rem', height: 'auto', width: 'auto' }}
+      >
         <div css={undoStyle}>
-          <NavLink to={'/login'} className='link'> <span>Back</span> </NavLink>
+          <Link to={'/login'} className="link">
+            <span>Back</span>
+          </Link>
         </div>
-        {sendMail
-          ? <div>
-            <h2 className='title'>Check Email</h2>
+        {sendMail ? (
+          <div>
+            <h2 className="title">Check Email</h2>
             <p>We sent a verification email</p>
-            <p>Please check your email and click the link to verify your email address.</p>
-            <Button variant='contained' size='large'>OK</Button>
+            <p>
+              Please check your email and click the link to verify your email
+              address.
+            </p>
+            <Button variant="contained" size="large">
+              OK
+            </Button>
           </div>
-          : <MailCheckForm onSendmail={onSendmail} />}
+        ) : (
+          <MailCheckForm onSendmail={onSendmail} />
+        )}
       </div>
     </Auth>
   )

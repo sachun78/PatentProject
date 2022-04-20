@@ -11,7 +11,12 @@ function NetworkList({}: NetworkListProps) {
     return <div>Loading...</div>
   }
 
-  if (!buddyData || buddyData.length === 0 || buddyData.buddy.length === 0) {
+  if (
+    !buddyData ||
+    buddyData.length === 0 ||
+    !buddyData.buddy ||
+    buddyData.buddy.length === 0
+  ) {
     return <div>No data</div>
   }
 

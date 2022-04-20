@@ -79,11 +79,11 @@ function MeetingDetail({}: MeetingDetailProps) {
         </MeetingSection>
         <MeetingSection>
           <h2>Participants</h2>
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={2} style={{ alignItems: 'center' }}>
             <p>{data.toEmail}</p>
-            <Link to={`/u/${data.toEmail}`}>
-              <Button variant="contained" style={{ height: '24px' }}>
-                more
+            <Link to={`/u/${data.toEmail}`} style={{ height: '18px' }}>
+              <Button variant="contained" style={{ height: '18px' }}>
+                INFO
               </Button>
             </Link>
           </Stack>
@@ -92,8 +92,7 @@ function MeetingDetail({}: MeetingDetailProps) {
           <h2>Schedule Information</h2>
           <p>{data.location}</p>
           <p>
-            {' '}
-            {data.date.replace(/T.*$/, '')}{' '}
+            {data.date.replace(/T.*$/, '')}
             {new Date(data.time).toLocaleTimeString([], {
               hour: '2-digit',
               minute: '2-digit',

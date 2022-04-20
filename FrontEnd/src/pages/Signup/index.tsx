@@ -1,11 +1,22 @@
 import { css } from '@emotion/react'
 import palette from 'lib/palette'
-import { Navigate, NavLink, useNavigate, useSearchParams } from 'react-router-dom'
+import {
+  Navigate,
+  NavLink,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom'
 import React, { useCallback, useState } from 'react'
 import { inputStyle, privacyStyle, undoStyle } from './styles'
 import Auth from 'layouts/Auth'
 import useUserQuery from 'hooks/query/useUserQuery'
-import { Button, CircularProgress, FormHelperText, InputAdornment, TextField } from '@mui/material'
+import {
+  Button,
+  CircularProgress,
+  FormHelperText,
+  InputAdornment,
+  TextField,
+} from '@mui/material'
 import useInputs from 'hooks/useInputs'
 import Joi from 'joi'
 import { useMutation, useQuery } from 'react-query'
@@ -26,74 +37,90 @@ export default function Signup({}: RegisterProps) {
   const [form, onChange] = useInputs({
     username: '',
     password: '',
-    password_confirm: ''
+    password_confirm: '',
   })
   const [replan] = useRecoilState(replanState)
 
   const code = useSearchParams()[0].get('code')
   const navigate = useNavigate()
-  const { data, error: codeError, isLoading: isLoadingCode } = useQuery('authCode', () => checkCode(code ?? ''), {
+  const {
+    data,
+    error: codeError,
+    isLoading: isLoadingCode,
+  } = useQuery('authCode', () => checkCode(code ?? ''), {
     staleTime: Infinity,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
-    retry: false
+    retry: false,
   })
 
-  const mutation = useMutation('signUp', () => (signup({ ...form, email: data?.email || '' })), {
-    onSuccess: () => {
-      // Global Toast 표시, 로그인 페이지로 이동
-      toast.success('register success', { position: 'top-center' })
-      if (replan?.code) {
-        navigate('/invitation/replan?code=' + replan.code)
-      } else
-        navigate('/login')
-    },
-    onError(err: AxiosError) {
-      setError(err.response?.data.message)
+  const mutation = useMutation(
+    'signUp',
+    () => signup({ ...form, email: data?.email || '' }),
+    {
+      onSuccess: () => {
+        // Global Toast 표시, 로그인 페이지로 이동
+        toast.success('register success', { position: 'top-center' })
+        if (replan?.code) {
+          navigate('/invitation/replan?code=' + replan.code)
+        } else navigate('/login')
+      },
+      onError(err: AxiosError) {
+        setError(err.response?.data.message)
+      },
     }
-  })
+  )
 
-  const onSubmit = useCallback((e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    if (form.password !== form.password_confirm) {
-      setError('password does not match')
-      return
-    }
+  const onSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault()
+      setError('')
+      if (form.password !== form.password_confirm) {
+        setError('password does not match')
+        return
+      }
 
-    const schema = Joi.object().keys({
-      username: Joi.string().required().messages({
-        'string.empty': 'name is required',
-        'string.base': 'name is required'
-      }),
-      password: Joi.string()
-        .pattern(new RegExp('^[a-zA-Z0-9]{8,20}$')).required().messages({
-          'string.pattern.base': 'password must be 8-20 characters',
-          'string.empty': 'password is required',
-          'string.base': 'password is required'
+      const schema = Joi.object().keys({
+        username: Joi.string().required().messages({
+          'string.empty': 'name is required',
+          'string.base': 'name is required',
         }),
-      password_confirm: Joi.ref('password')
-    })
-    schema.validateAsync(form)
-      .then(() => {
-        //mutate with register
-        mutation.mutate()
+        password: Joi.string()
+          .pattern(new RegExp('^[a-zA-Z0-9]{8,20}$'))
+          .required()
+          .messages({
+            'string.pattern.base': 'password must be 8-20 characters',
+            'string.empty': 'password is required',
+            'string.base': 'password is required',
+          }),
+        password_confirm: Joi.ref('password'),
       })
-      .catch(err => {
-        setError(err.message)
-      })
-  }, [form, mutation])
+      schema
+        .validateAsync(form)
+        .then(() => {
+          //mutate with register
+          mutation.mutate()
+        })
+        .catch((err) => {
+          setError(err.message)
+        })
+    },
+    [form, mutation]
+  )
 
   if (isLoading || isLoadingCode) {
-    return <div css={wrapper}><CircularProgress /></div>
+    return (
+      <div css={wrapper}>
+        <CircularProgress />
+      </div>
+    )
   }
 
   if (userData) {
     if (replan?.code) {
       return <Navigate replace to={'/invitation/replan?code=' + replan.code} />
-    } else
-      return <Navigate replace to={'/'} />
+    } else return <Navigate replace to={'/'} />
   }
 
   if (codeError) {
@@ -108,38 +135,87 @@ export default function Signup({}: RegisterProps) {
   }
   return (
     <Auth>
-      <div css={containerStyle}>
+      <div css={containerStyle} style={{ padding: '2rem' }}>
         <div css={undoStyle}>
-          <NavLink to={'/login'} className='link'>
+          <NavLink to={'/login'} className="link">
             <span>Back</span>
           </NavLink>
         </div>
-        <h2 className='title'>Sign Up</h2>
+        <h2 className="title">Sign Up</h2>
         <section>
           <form onSubmit={onSubmit}>
-            {/*TODO: email get from code check queryClient on MAILCHECK*/}
-            <TextField label='Email' variant='outlined' type='text' name='email'
-                       value={data.email} css={inputStyle}
-                       InputProps={{
-                         style: { fontSize: 12 },
-                         endAdornment: <InputAdornment position='end'><MdLock /></InputAdornment>
-                       }} />
-            <TextField label='Name' variant='outlined' type='text' name='username'
-                       value={form.username} onChange={onChange} css={inputStyle} autoComplete='off'
-                       InputProps={{ style: { fontSize: 12 } }} />
-            <TextField label='Password' variant='outlined' type='password' name='password'
-                       value={form.password} onChange={onChange} css={inputStyle} autoComplete='password'
-                       InputProps={{ style: { fontSize: 12 } }} />
-            <TextField label='Confirm Password' variant='outlined' type='password'
-                       name='password_confirm' autoComplete='password-confirm'
-                       value={form.password_confirm} onChange={onChange} css={inputStyle}
-                       InputProps={{ style: { fontSize: 12 } }} />
-            <div css={privacyStyle}><p>By clicking Sign Up, you are indicating that you have read and acknowledge the
-              <NavLink to={'/login'}> Terms of Service</NavLink> and <NavLink to={'/'}>Privacy Notice</NavLink>.</p>
+            <TextField
+              label="Email"
+              variant="outlined"
+              type="text"
+              name="email"
+              value={data.email}
+              css={inputStyle}
+              InputProps={{
+                style: { fontSize: 12 },
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <MdLock />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              label="Name"
+              variant="outlined"
+              type="text"
+              name="username"
+              value={form.username}
+              onChange={onChange}
+              css={inputStyle}
+              autoComplete="off"
+              InputProps={{ style: { fontSize: 12 } }}
+            />
+            <TextField
+              label="Password"
+              variant="outlined"
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={onChange}
+              css={inputStyle}
+              autoComplete="password"
+              InputProps={{ style: { fontSize: 12 } }}
+            />
+            <TextField
+              label="Confirm Password"
+              variant="outlined"
+              type="password"
+              name="password_confirm"
+              autoComplete="password-confirm"
+              value={form.password_confirm}
+              onChange={onChange}
+              css={inputStyle}
+              InputProps={{ style: { fontSize: 12 } }}
+            />
+            <div css={privacyStyle}>
+              <p>
+                By clicking Sign Up, you are indicating that you have read and
+                <br />
+                acknowledge the
+                <NavLink to={'/login'}> Terms of Service</NavLink> and{' '}
+                <NavLink to={'/'}>Privacy Notice</NavLink>.
+              </p>
             </div>
-            {error && <FormHelperText error id='helper-text-signup-error'>{error}</FormHelperText>}
-            <div className='button-div'>
-              <Button variant='contained' disabled={mutation.isLoading} type='submit' size='large'>Sign Up</Button>
+            {error && (
+              <FormHelperText error id="helper-text-signup-error">
+                {error}
+              </FormHelperText>
+            )}
+            <div className="button-div">
+              <Button
+                variant="contained"
+                disabled={mutation.isLoading}
+                type="submit"
+                fullWidth
+              >
+                Sign Up
+              </Button>
             </div>
           </form>
         </section>

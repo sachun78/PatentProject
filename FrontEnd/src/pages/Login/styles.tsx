@@ -20,7 +20,7 @@ export const loginFormStyle = css`
 
     button {
       flex: 1;
-      background: #A1045A;
+      background: #a1045a;
       mix-blend-mode: multiply;
       border-radius: 7px;
       font: normal normal normal 12px/14px NanumBarunGothic;
@@ -35,13 +35,13 @@ export const inputStyle = css`
 
   &:hover {
     .MuiOutlinedInput-notchedOutline {
-      border-color: #A1045A;
+      border-color: #a1045a;
     }
   }
 
   input {
     &::placeholder {
-      color: #9C9C9C;
+      color: #9c9c9c;
     }
 
     font: normal normal normal 1rem NanumSquareOTF;
@@ -50,12 +50,12 @@ export const inputStyle = css`
     padding: 13.5px 25px;
   }
 
-  input[type=password] {
+  input[type='password'] {
     font: normal normal normal 1rem NanumBarunGothic;
   }
 `
 export const dividerStyle = css`
-  color: #9C9C9C;
+  color: #9c9c9c;
   font: normal normal bold 11px/15px NanumBarunGothic;
   line-height: 1.363636364;
 
@@ -64,8 +64,9 @@ export const dividerStyle = css`
     padding-right: 19.5px;
   }
 
-  &:before, &:after {
-    border-color: #9C9C9C;
+  &:before,
+  &:after {
+    border-color: #9c9c9c;
     margin-bottom: 1rem;
   }
 `
@@ -80,7 +81,7 @@ export const underBlockStyle = css`
 
     h4 {
       text-align: center;
-      color: #6C6C6C;
+      color: #6c6c6c;
       font: normal normal bold 15px/17px 'NanumSquareOTF';
       margin: 0;
 
@@ -119,5 +120,11 @@ export const containerStyle = css`
       max-height: 100%;
       height: 150px;
     }
+  }
+
+  .title {
+    color: #333;
+    margin: 0 0 1rem;
+    font: normal normal 800 20px/23px NanumSquareOTF;
   }
 `
