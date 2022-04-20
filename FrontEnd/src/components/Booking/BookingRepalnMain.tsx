@@ -7,7 +7,7 @@ import TimePickerInput from '../DatePickerInput/TimePickerInput'
 import Input from '../Input/Input'
 import LocationInput from '../LocationMap/LocationInput'
 import { Button, Typography } from '@mui/material'
-import React, { useCallback } from 'react'
+import React, { ChangeEvent, useCallback } from 'react'
 import { replanMeeting } from '../../lib/api/meeting/replanMeeting'
 import { useQueryClient } from 'react-query'
 
@@ -16,7 +16,7 @@ export type BookingRepalnMainProps = {
 }
 
 function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
-  const [location, onChangeLocation] = useInput(meeting.location)
+  const [location, ,onChangeLocation] = useInput(meeting.location)
   const [date, , setDate] = useInput(new Date(meeting.date))
   const [time, , setTime] = useInput(new Date(meeting.time))
   const [comment, onChangeComment] = useInput('')
@@ -69,7 +69,10 @@ function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
         }} value={time} />
       </RequestSection>
       <RequestSection title={'Location'}>
-        <LocationInput />
+        <LocationInput onChange={(value: any) => {
+            console.log(value)
+            onChangeLocation(value)
+        }} value={location} />
       </RequestSection>
       <RequestSection title={'Comment'}>
         <Input
