@@ -31,14 +31,14 @@ function ScheduleCard({
     <Link css={wrapper} to={'/membership/schedule/' + id}>
       <div css={headerStyle}>
         <h3>{title}</h3> &nbsp;
-        <p>who#{to}</p>
+        <p>{to}</p>
       </div>
       <p css={commentStyle}>{comment}</p>
       <div css={bottomStyle}>
         <div className={'state-box'}>
           <span>
             {state}
-            {outdated && '/outdated'}
+            {outdated && state === 'none' ? '/expired' : ''}
           </span>
         </div>
         <div>

@@ -10,19 +10,27 @@ export type PostHeaderProps = {
   created_at: Date
 }
 
-function PostHeader({ writer, created_at}: PostHeaderProps) {
-  return <div css={headerStyle}>
-    <div css={iconStyle}>
-      <Avatar alt='user-avatar' src={gravatar.url('test.email', { s: '60px', d: 'retro' })}
-              sx={{ width: 60, height: 60 }} />
+function PostHeader({ writer, created_at }: PostHeaderProps) {
+  return (
+    <div css={headerStyle}>
+      <div css={iconStyle}>
+        <Avatar
+          alt="user-avatar"
+          src={gravatar.url('test.email', { s: '60px', d: 'retro' })}
+          sx={{ width: 60, height: 60 }}
+        />
+      </div>
+      <div css={titleStyle}>
+        <h4>
+          <span>{writer}/ etc ..</span>
+        </h4>
+        <div className={'time-date'}>{created_at.toDateString()}</div>
+      </div>
+      <div css={moreStyle} onClick={() => {}}>
+        <MdMoreHoriz />
+      </div>
     </div>
-    <div css={titleStyle}>
-      <h4><span>{writer}/ etc ..</span></h4>
-      <div className={'time-date'}>{created_at.toDateString()}</div>
-    </div>
-    <div css={moreStyle} onClick={() => {
-    }}><MdMoreHoriz /></div>
-  </div>
+  )
 }
 
 const headerStyle = css`
@@ -33,9 +41,9 @@ const headerStyle = css`
   align-items: flex-start;
 `
 const moreStyle = css`
-  width: 3.6rem;
-  height: 3.6rem;
-  padding: 0.8rem;
+  width: 3rem;
+  height: 3rem;
+  padding: 0.5rem;
   border-radius: 999px;
 
   &:hover {
@@ -47,7 +55,6 @@ const moreStyle = css`
     height: 2rem;
     color: ${brandColor};
   }
-
 `
 const titleStyle = css`
   flex-grow: 1;
@@ -74,7 +81,7 @@ const titleStyle = css`
     font-family: 'NanumSquare';
     font-size: 14px;
     line-height: 1.142857143;
-    color: #9C9C9C;
+    color: #9c9c9c;
   }
 `
 const iconStyle = css`

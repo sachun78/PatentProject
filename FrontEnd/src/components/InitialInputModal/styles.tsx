@@ -1,24 +1,25 @@
 import { css } from '@emotion/react'
-import palette from '../../lib/palette'
 
 export const boxWrapper = css`
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 60rem;
+  width: 40rem;
   background: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 1rem;
 
-  .css-1999axt-MuiAvatar-root {
-    background-color: ${palette.blueGrey[600]};
+  img {
+    margin-top: 1rem;
+    width: 4rem;
   }
-
-  svg {
-    color: ${palette.blueGrey[100]};
+  h1 {
+    margin-bottom: -2rem;
+    font: normal normal 800 20px/23px NanumSquareOTF;
+    color: #333333;
   }
 `
 
@@ -32,6 +33,6 @@ export const formWrapper = css`
   margin-bottom: 2rem;
 
   .bot-button {
-    height: 4rem;
+    height: 2.75rem;
   }
 `

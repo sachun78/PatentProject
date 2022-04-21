@@ -10,6 +10,7 @@ import useUserQuery from 'hooks/query/useUserQuery'
 import 'react-toastify/dist/ReactToastify.min.css'
 import { ToastContainer } from 'react-toastify'
 import usePostQuery from 'hooks/query/usePostQuery'
+import InitialInputModal from './components/InitialInputModal'
 
 const Login = loadable(() => import('pages/Login'))
 const SignUp = loadable(() => import('pages/Signup'))
@@ -36,6 +37,7 @@ function App() {
       </Routes>
       <Global styles={globalStyle} />
       <ToastContainer />
+      <InitialInputModal />
     </>
   )
 }
@@ -55,7 +57,8 @@ const globalStyle = css`
 
     * {
       box-sizing: inherit;
-
+      margin: 0;
+      padding: 0;
       ::selection {
         background: ${palette.purple[50]};
       }

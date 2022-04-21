@@ -1,32 +1,30 @@
-import { useRef, useEffect, useState} from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import Quill from 'quill';
+import React, { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Quill from 'quill'
 import 'quill/dist/quill.snow.css'
 import { css } from '@emotion/react'
 import palette from 'lib/palette'
-import React from 'react';
-import { usePosts } from 'lib/api/post/usePosts';
-import { string } from 'joi';
-import { User } from 'lib/api/types';
-import { useQueryClient } from 'react-query';
+import { usePosts } from 'lib/api/post/usePosts'
+import { User } from 'lib/api/types'
+import { useQueryClient } from 'react-query'
 
 function PostWrite() {
   const qc = useQueryClient()
-  const [body, setBody] = useState("")
-  const [title, setTitle] = useState("")
+  const [body, setBody] = useState('')
+  const [title, setTitle] = useState('')
   const [image, setImage] = useState<any>()
-  const quillElement = useRef<any>(null);
-  const quillInstance = useRef<any>(null);
-  const navigate = useNavigate();
-  const posts = usePosts();
+  const quillElement = useRef<any>(null)
+  const quillInstance = useRef<any>(null)
+  const navigate = useNavigate()
+  const posts = usePosts()
   const user = qc.getQueryData<User>('user') as User
-  const imgData = [] as any;
+  const imgData = [] as any
 
   const onChange = (e: any) => {
     setTitle(e.target.value)
   }
 
-  const onPost = () => {        
+  const onPost = () => {
     posts.push({
       id: String(posts.length + 1),
       title: title,
@@ -35,116 +33,120 @@ function PostWrite() {
       like: 0,
       comments: [],
       writer: user.username,
-      images: image
-    })    
+      images: image,
+    })
     navigate('/')
-  }    
+  }
   const onCancle = () => {
-    navigate(-1);
+    navigate(-1)
   }
 
   // 이미지 처리를 하는 핸들러
   const imageHandler = () => {
-    console.log('에디터에서 이미지 버튼을 클릭하면 이 핸들러가 시작됩니다!');
+    console.log('에디터에서 이미지 버튼을 클릭하면 이 핸들러가 시작됩니다!')
 
     // 1. 이미지를 저장할 input type=file DOM을 만든다.
-    const input: any = document.createElement('input');
+    const input: any = document.createElement('input')
     // 속성 써주기
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click(); 
+    input.setAttribute('type', 'file')
+    input.setAttribute('accept', 'image/*')
+    input.click()
 
     // input에 변화가 생긴다면 = 이미지를 선택
     input.addEventListener('change', async () => {
-      console.log('온체인지');
-      const file = input.files[0];            
+      console.log('온체인지')
+      const file = input.files[0]
       console.log(file)
-      
-      imgData.push({        
+
+      imgData.push({
         img: file,
         imgName: file.name,
-        src: `/${file.name}`
+        src: `/${file.name}`,
       })
 
-      qc.setQueryData('images', imgData);
-      const results: any = qc.getQueryData('images');     
-      const IMG_URL = `/${results[imgData.length - 1].imgName}`                 
-      
-      try {                
-        
-        const range: { index: Number, length: Number } = quillInstance.current.getSelection();                
-        quillInstance.current.insertEmbed(range.index, 'image', IMG_URL);
-        setImage(results)        
+      qc.setQueryData('images', imgData)
+      const results: any = qc.getQueryData('images')
+      const IMG_URL = `/${results[imgData.length - 1].imgName}`
+
+      try {
+        const range: { index: Number; length: Number } =
+          quillInstance.current.getSelection()
+        quillInstance.current.insertEmbed(range.index, 'image', IMG_URL)
+        setImage(results)
       } catch (error) {
         console.log(error)
-        
       }
-    });
-  };
+    })
+  }
 
   useEffect(() => {
     quillInstance.current = new Quill(quillElement.current, {
-        theme: 'snow',
-        placeholder: '   Please enter the contents...',
-        modules: {
-          toolbar:{
-            container: [
-              [ {size: [ 'small', false, 'large', 'huge']}],
-              ['bold', 'italic', 'underline', 'strike'],
-              [{ list: 'ordered'}, { list: 'bullet'}],
-              ['blockquote', 'code-block', 'link', 'image']            
-            ],
-            handlers: {
-              image: imageHandler
-            }
-          } 
+      theme: 'snow',
+      placeholder: '   Please enter the contents...',
+      modules: {
+        toolbar: {
+          container: [
+            [{ size: ['small', false, 'large', 'huge'] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            ['blockquote', 'code-block', 'link', 'image'],
+          ],
+          handlers: {
+            image: imageHandler,
+          },
         },
-        
+      },
     })
-    
+
     const quill = quillInstance.current
 
-    quill.root.innerText = body;
+    quill.root.innerText = body
     quill.on('text-change', () => {
-        setBody(quill.root.innerText);
-    });
-    
-  },[])
+      setBody(quill.root.innerText)
+    })
+  }, [])
 
   return (
-  <>
-    <div css={postWriteStyle}>
-      <input css={inputStyle} onChange={onChange} placeholder='Please enter a title' />
-      <div className={'divider'}>{''}</div>
-      <div css={quillWrapperStyle}>
-        <div css={editorStyle} ref={quillElement} />
+    <>
+      <div css={postWriteStyle}>
+        <input
+          css={inputStyle}
+          onChange={onChange}
+          placeholder="Please enter a title"
+        />
+        <div className={'divider'}>{''}</div>
+        <div css={quillWrapperStyle}>
+          <div css={editorStyle} ref={quillElement} />
+        </div>
       </div>
-    </div>
-    <div css={buttonWrapStyle}>
-      <button css={buttonStyle} onClick={onPost}>Posting</button>
-      <button css={buttonStyle} onClick={onCancle}>Cancle</button>
-    </div>
-  </>
-  );
+      <div css={buttonWrapStyle}>
+        <button css={buttonStyle} onClick={onPost}>
+          Posting
+        </button>
+        <button css={buttonStyle} onClick={onCancle}>
+          Cancel
+        </button>
+      </div>
+    </>
+  )
 }
 
 export default PostWrite
 
 const editorStyle = css`
   height: 22rem;
-  
 `
 const quillWrapperStyle = css`
   margin: 1rem;
-    .ql-editor {
-      font-size: 1.125rem;
-      line-height: 1.5;
-      margin-top: 2rem;        
-      margin-left: 1rem;            
-    }    
+
+  .ql-editor {
+    font-size: 1.125rem;
+    line-height: 1.5;
+    margin-top: 2rem;
+    margin-left: 1rem;
+  }
 `
 const postWriteStyle = css`
-
   max-width: 54.375rem;
   height: 35rem;
   margin-bottom: 1.6rem;
@@ -159,8 +161,8 @@ const postWriteStyle = css`
     margin: auto;
     margin-top: 1.25rem;
     margin-bottom: 1.875rem;
-    border: 1px solid #9C9C9C;
-    width: 95%
+    border: 1px solid #9c9c9c;
+    width: 95%;
   }
 `
 
@@ -172,7 +174,6 @@ const inputStyle = css`
   margin-top: 2rem;
   padding: 0 2rem;
   font-size: 2rem;
-
 `
 const buttonWrapStyle = css`
   margin-top: 1rem;

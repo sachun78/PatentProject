@@ -5,7 +5,7 @@ import {
   ImageList,
   ImageListItem,
   Modal,
-  OutlinedInput
+  OutlinedInput,
 } from '@mui/material'
 import gravatar from 'gravatar'
 import useInput from 'hooks/useInput'
@@ -28,7 +28,7 @@ type postDetailProps = {
 function PostDetail({ isLike = false }: postDetailProps) {
   const qc = useQueryClient()
   const location: any = useLocation()
-  const { postNumber, imageData } = location.state as any  
+  const { postNumber, imageData } = location.state as any
   const post = usePost(postNumber)
   const posts = usePosts()
   const { title, text, writer, created_at, like, comments } = post
@@ -41,12 +41,12 @@ function PostDetail({ isLike = false }: postDetailProps) {
 
   // 이미지 처리
   const [open, setOpen] = useState(false)
-  const [imgSrc, setImgSrc] = useState("")
-  const handleOpen = (e: any) => {    
+  const [imgSrc, setImgSrc] = useState('')
+  const handleOpen = (e: any) => {
     setImgSrc(e.target.src)
     setOpen(true)
   }
-  const handleClose = () =>setOpen(false)
+  const handleClose = () => setOpen(false)
 
   useEffect(() => {
     if (post.writer === user.username) {
@@ -91,7 +91,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
           </div>
           <div css={titleStyle}>
             <h4>
-              <span>{writer}/ etc ..</span>
+              <span>{writer}</span>
             </h4>
             <div className={'time-date'}>{created_at.toDateString()}</div>
           </div>
@@ -107,19 +107,13 @@ function PostDetail({ isLike = false }: postDetailProps) {
                   loading="lazy"
                   style={{
                     borderRadius: '1rem',
-                    cursor: 'zoom-in'
+                    cursor: 'zoom-in',
                   }}
                   onClick={handleOpen}
                 />
-                <Modal 
-                  open={open} 
-                  onClose={handleClose}
-                  css={modalStyle}                                   
-                >
-                  <Box
-                    css={boxWrapper}                   
-                  >
-                    <img src={imgSrc} css={imageStyle} alt={image.alt}/>
+                <Modal open={open} onClose={handleClose} css={modalStyle}>
+                  <Box css={boxWrapper}>
+                    <img src={imgSrc} css={imageStyle} alt={image.alt} />
                   </Box>
                 </Modal>
               </ImageListItem>
@@ -148,7 +142,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
               startAdornment={
                 <Avatar
                   alt="post-user-avatar"
-                  src={gravatar.url('ryanhe4@gmail.com', {
+                  src={gravatar.url(user.email, {
                     s: '44px',
                     d: 'retro',
                   })}
@@ -158,41 +152,44 @@ function PostDetail({ isLike = false }: postDetailProps) {
             />
           </div>
         )}
-        {comments.length === 0 ? <div></div> : 
-        <div css={commentStyle}>
-          {comments.map((comment: IComment) => (
-            <div
-              key={comment.id}
-              style={{
-                paddingTop: '1rem',
-                display: 'flex',
-                justifyContent: 'center',
-                verticalAlign: 'center',
-                borderBottom: `0.5px solid ${palette.grey[400]}`,
-              }}
-            >
-              <div style={{ display: 'flex' }}>
-                <Avatar
-                  alt="user-avatar"
-                  src={gravatar.url(`test.email${comment.id}`, {
-                    s: '60px',
-                    d: 'retro',
-                  })}
-                  sx={{ width: 20, height: 20, marginBottom: '0.5rem' }}
-                />
-              </div>
+        {comments.length === 0 ? (
+          <div></div>
+        ) : (
+          <div css={commentStyle}>
+            {comments.map((comment: IComment) => (
               <div
+                key={comment.id}
                 style={{
-                  flex: '1',
-                  marginLeft: '1rem',
+                  paddingTop: '1rem',
+                  display: 'flex',
+                  justifyContent: 'center',
                   verticalAlign: 'center',
+                  borderBottom: `0.5px solid ${palette.grey[400]}`,
                 }}
               >
-                {comment.text}
+                <div style={{ display: 'flex' }}>
+                  <Avatar
+                    alt="user-avatar"
+                    src={gravatar.url(`test.email${comment.id}`, {
+                      s: '60px',
+                      d: 'retro',
+                    })}
+                    sx={{ width: 20, height: 20, marginBottom: '0.5rem' }}
+                  />
+                </div>
+                <div
+                  style={{
+                    flex: '1',
+                    marginLeft: '1rem',
+                    verticalAlign: 'center',
+                  }}
+                >
+                  {comment.text}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>}
+            ))}
+          </div>
+        )}
       </div>
     </>
   )
@@ -201,7 +198,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
 export default React.memo(PostDetail)
 
 const modalStyle = css`
-  .MuiBackdrop-root {    
+  .MuiBackdrop-root {
     background: rgba(0, 0, 0, -1);
   }
 `
@@ -212,16 +209,16 @@ export const boxWrapper = css`
   left: 50%;
   transform: translate(-50%, -50%);
   min-width: 700px;
-  min-height: 250px;  
-  display: flex;  
+  min-height: 250px;
+  display: flex;
   align-items: center;
   border: none;
   border-radius: 1rem;
-  background: rgba(0, 0, 0, -1);    
+  background: rgba(0, 0, 0, -1);
 `
 const imageStyle = css`
   width: 100%;
-  border-radius: 1rem;   
+  border-radius: 1rem;
 `
 const commentStyle = css`
   font-size: 0.5rem;

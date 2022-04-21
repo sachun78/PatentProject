@@ -3,8 +3,8 @@ import { Avatar, TextField } from '@mui/material'
 import React, { useRef } from 'react'
 import { careerStyle, emailStyle, itemStyle, photoStyle } from './styles'
 import IconControl from '../IconControl'
-import { upload } from '../../lib/api/me/upload'
-import { updateUserPhoto, userState } from '../../atoms/authState'
+import { upload } from 'lib/api/me/upload'
+import { updateUserPhoto, userState } from 'atoms/authState'
 import { useSetRecoilState } from 'recoil'
 import gravatar from 'gravatar'
 import ProfileCardText from './ProfileCardText'
@@ -88,6 +88,7 @@ function ProfileCardItem({
             <div>
               <Avatar
                 sx={{ width: 100, height: 100 }}
+                style={{ border: '0.1px solid lightgray' }}
                 imgProps={{
                   crossOrigin: 'anonymous',
                 }}
@@ -97,7 +98,7 @@ function ProfileCardItem({
                         s: '100px',
                         d: 'retro',
                       })
-                    : `https://wemet-server.herokuapp.com/static/${photo}`
+                    : `http://localhost:4000/static/${photo}`
                 }
               />
             </div>

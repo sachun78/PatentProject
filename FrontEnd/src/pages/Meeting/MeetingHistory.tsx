@@ -26,7 +26,7 @@ function MeetingHistory({}: MeetingHistoryProps) {
 
   return (
     <div css={tableStyle}>
-      {data?.reverse().map((v) => {
+      {data?.map((v) => {
         const dist = formatDistanceToNow(new Date(v.date), {
           addSuffix: true,
         })

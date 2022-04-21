@@ -32,12 +32,12 @@ function Events({}: EventsProps) {
   const { setStartDate, setEndDate } = useDateRangeHook()
   const [checked, setChecked] = useRecoilState(eventSwitchState)
   const [outdateChecked, setOutdateChecked] = useState(false)
-  const [event, setEvent] = useCurrentEventState()
+  const [, setEvent] = useCurrentEventState()
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked)
   }
-  const onOutdateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onOutdateChange = () => {
     setOutdateChecked((prev) => !prev)
   }
 
@@ -80,7 +80,7 @@ function Events({}: EventsProps) {
   return (
     <>
       <FormGroup row={true} style={{ marginBottom: '20px' }}>
-        <Alert severity="info" style={{ alignItems: 'center' }}>
+        <Alert severity="info" style={{ alignItems: 'center', width: '100%' }}>
           <FormControlLabel
             control={
               <Switch
