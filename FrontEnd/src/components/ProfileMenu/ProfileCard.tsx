@@ -98,7 +98,7 @@ function ProfileCardItem({
                         s: '100px',
                         d: 'retro',
                       })
-                    : `http://localhost:4000/static/${photo}`
+                    : `https://wemet-server.herokuapp.com/static/${photo}`
                 }
               />
             </div>
