@@ -1,17 +1,23 @@
-import InputBase from '../InputBase'
 import { css } from '@emotion/react'
-import { SetStateAction, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import useOnClickOutside from 'use-onclickoutside'
+import InputBase from '../InputBase'
 import LocationMap from './LocationMap'
 
-function LocationInput() {
+export type locationInputProps = {
+  value: string
+  onChange(value: any): void
+}
+
+function LocationInput({ value, onChange }: locationInputProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
-  const [address, setAddress] = useState('156 E Cedar 54, Livingston, NJ 07039 미국')
+  const [address, setAddress] = useState(value)
 
-  const getLocation = (newLoc: SetStateAction<string>) => {
+  const getLocation = (newLoc: any) => {
     setAddress(newLoc)
+    onChange(newLoc)
   }
 
   const onClose: Parameters<typeof useOnClickOutside>[1] = (e) => {
@@ -47,7 +53,7 @@ function LocationInput() {
 }
 
 const wrapper = css`
-  position: relative;
+  position: relative;  
   width: 100%;
   max-width: 90rem;
 `

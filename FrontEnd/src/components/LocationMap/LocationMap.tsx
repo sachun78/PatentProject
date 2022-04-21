@@ -129,7 +129,7 @@ export default LocationMap
 
 const mapStyles = css`
   width: 40rem;
-  height: 40rem;
+  height: 35rem;  
 `
 const inputStyels = css`
   background-color: #fff;

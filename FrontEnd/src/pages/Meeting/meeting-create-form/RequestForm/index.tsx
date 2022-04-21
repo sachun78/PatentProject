@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useCurrentEventState } from 'atoms/eventState'
 import useDateTimeHook from 'hooks/useDateTimeHook'
 import useInputs from 'hooks/useInputs'
@@ -23,10 +23,10 @@ export default function RequestForm({}: RequestViewProps) {
   const { startDate, endDate } = useDateRangeHook()
   const { date, time, setDate, setTime } = useDateTimeHook()
   const [meetuser, setMeetuser] = useMeetingReqUser()
+  const [location, setLoaction] = useState("성수역 1번 출구")
   const navi = useNavigate()
   const [form, onChange] = useInputs({
-    to: '',
-    place: '성수역1번출구',
+    to: '',    
     comment: '',
     title: '',
   })
@@ -84,33 +84,32 @@ export default function RequestForm({}: RequestViewProps) {
     },
     [date, setDate, setTime]
   )
+  
+  const onChangeLocation = useCallback((change: string) => {
+    setLoaction(change)
 
-  const onSubmit = useCallback(
-    (e) => {
-      e.preventDefault()
-      const { title, to, place, comment } = form
-      if ((!to.trim() && !meetuser) || !place.trim() || !title.trim()) {
-        toast.error('Please fill out all fields', {
-          position: toast.POSITION.TOP_CENTER,
-          pauseOnHover: false,
-          pauseOnFocusLoss: false,
-          autoClose: 3000,
-        })
-        return
-      }
+  },[location])
 
-      createScheduleMut.mutate({
-        eventId: curEvent.id,
-        title,
-        date,
-        time,
-        toEmail: meetuser ? meetuser.toLowerCase() : to.toLowerCase(),
-        location: place,
-        comment,
+  const onSubmit = useCallback((e) => {
+    e.preventDefault()
+    const { title, to, comment } = form
+    if ((!to.trim() && !meetuser) || !location.trim() || !title.trim()) {
+      toast.error('Please fill out all fields', {
+        position: toast.POSITION.TOP_CENTER,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000
       })
-    },
-    [createScheduleMut, curEvent.id, date, form, meetuser, time]
-  )
+      return
+    }
+
+    createScheduleMut.mutate({
+      eventId: curEvent.id,
+      title, date, time, location,
+      toEmail: meetuser ? meetuser : to,      
+      comment
+    })
+  }, [createScheduleMut, curEvent.id, date, form, meetuser, time])
 
   useEffect(() => {
     const tempTime = new Date(startDate)
@@ -173,7 +172,7 @@ export default function RequestForm({}: RequestViewProps) {
           <TimePickerInput onChange={onChangeTime} value={time} />
         </RequestSection>
         <RequestSection title={'Location'}>
-          <LocationInput />
+          <LocationInput onChange={onChangeLocation} value={location} />
         </RequestSection>
         <RequestSection title={'Comment'}>
           <OutlinedInput
