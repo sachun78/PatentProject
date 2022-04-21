@@ -8,7 +8,8 @@ export const wrapper = css`
   display: flex;
   flex-wrap: wrap;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     cursor: pointer;
   }
 `
@@ -16,9 +17,8 @@ export const wrapper = css`
 export const noScheduleStyle = css`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  text-align: center;
 
   svg {
     width: 33%;
@@ -29,9 +29,10 @@ export const noScheduleStyle = css`
 
   div {
     margin-top: 10px;
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: 600;
     color: ${brandColor};
     user-select: none;
+    text-align: center;
   }
 `

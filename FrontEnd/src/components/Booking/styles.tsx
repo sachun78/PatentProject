@@ -5,12 +5,16 @@ export const mainStyle = css`
   width: 50%;
   transition: all 0.22s ease-out;
 
-  padding-bottom: 2.5rem;
-  padding-left: 3rem;
-  padding-right: 2.5rem;
+  padding: 3rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  height: 100%;
+  align-items: center;
+
+  img {
+    width: 30%;
+    margin-bottom: 1rem;
+  }
 `
 
 export const wrapper = css`

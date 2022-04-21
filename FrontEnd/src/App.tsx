@@ -18,7 +18,7 @@ const MeetingBook = loadable(() => import('pages/Meeting/MeetingBook'))
 const AppLayout = loadable(() => import('layouts/AppLayout'))
 
 function App() {
-  useCsrfQuery({ retry: true, staleTime: Infinity })
+  useCsrfQuery({ retry: true, staleTime: 1000 * 60 * 30 })
   useUserQuery()
   usePostQuery()
 
@@ -27,12 +27,12 @@ function App() {
       <DebugObserver />
       <ReactQueryDevtools initialIsOpen={false} />
       <Routes>
-        <Route path='login' element={<Login />} />
-        <Route path='signup' element={<SignUp />} />
-        <Route path='email/check' element={<MailCheck />} />
-        <Route path='invitation/*' element={<MeetingBook />} />
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<SignUp />} />
+        <Route path="email/check" element={<MailCheck />} />
+        <Route path="invitation/*" element={<MeetingBook />} />
         {/*with AUTH*/}
-        <Route path='*' element={<AppLayout />} />
+        <Route path="*" element={<AppLayout />} />
       </Routes>
       <Global styles={globalStyle} />
       <ToastContainer />
@@ -46,7 +46,7 @@ const globalStyle = css`
   #root {
     overflow-x: hidden;
     min-height: 100%;
-    background: url("/assets/background.jpg") no-repeat center center fixed;
+    background: url('/assets/background.jpg') no-repeat center center fixed;
     background-size: cover;
   }
 

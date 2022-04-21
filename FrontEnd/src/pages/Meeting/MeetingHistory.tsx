@@ -8,7 +8,9 @@ import ScheduleSkeleton from '../../components/Schedules/ScheduleSkeleton'
 export type MeetingHistoryProps = {}
 
 function MeetingHistory({}: MeetingHistoryProps) {
-  const { data, isLoading } = useMeetingQuery(1)
+  const { data, isLoading } = useMeetingQuery(1, {
+    staleTime: 2000,
+  })
 
   if (isLoading)
     return (
@@ -28,7 +30,7 @@ function MeetingHistory({}: MeetingHistoryProps) {
         const dist = formatDistanceToNow(new Date(v.date), {
           addSuffix: true,
         })
-        if (!dist.includes('ago')) return null
+        if (!dist.includes('ago') && !v.history) return null
         return (
           <ScheduleCard
             key={v.id}
@@ -41,6 +43,7 @@ function MeetingHistory({}: MeetingHistoryProps) {
             title={v.title}
             state={v.status}
             id={v.id}
+            outdated={!v.history}
           />
         )
       })}

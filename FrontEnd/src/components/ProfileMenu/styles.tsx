@@ -71,8 +71,8 @@ export const textStyle = css`
         color: ${brandColor};
       }
 
-      width: 1.5rem;
-      height: 1.5rem;
+      width: 1rem;
+      height: 1rem;
       cursor: pointer;
     }
   }
@@ -131,7 +131,7 @@ export const itemStyle = css`
   padding: 1.25rem;
 
   &:not(:first-of-type) {
-    border-top: 1px solid rgba(0, 0, 0, .1);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   .inner {

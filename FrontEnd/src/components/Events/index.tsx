@@ -1,6 +1,7 @@
 import AddIcon from '@mui/icons-material/Add'
 import {
   Alert,
+  Button,
   Checkbox,
   CircularProgress,
   Fab,
@@ -21,15 +22,17 @@ import EventModal from './EventModal'
 import { noScheduleStyle, wrapper } from './styles'
 import { labelStyle } from '../Schedules/styles'
 import { formatDistanceToNow } from 'date-fns'
+import { useCurrentEventState } from '../../atoms/eventState'
 
 type EventsProps = {}
 
 function Events({}: EventsProps) {
-  const { data, isLoading } = useEventQuery(1)
+  const { data, isLoading } = useEventQuery(1, { staleTime: 2000 })
   const { setOpen, setEdit } = useEventModal()
   const { setStartDate, setEndDate } = useDateRangeHook()
   const [checked, setChecked] = useRecoilState(eventSwitchState)
   const [outdateChecked, setOutdateChecked] = useState(false)
+  const [event, setEvent] = useCurrentEventState()
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked)
@@ -52,21 +55,23 @@ function Events({}: EventsProps) {
       <>
         <div css={noScheduleStyle}>
           <IconControl name={'welcome'} />
-          <div>There's no event created.</div>
-          <div>Please make a new event.</div>
+          <div>No events were generated.</div>
+          <div>
+            Create your new event
+            <Button
+              variant={'contained'}
+              onClick={() => {
+                setOpen(true)
+                setEdit(false)
+                setStartDate(new Date())
+                setEndDate(new Date())
+              }}
+              style={{ marginLeft: '1rem' }}
+            >
+              +
+            </Button>
+          </div>
         </div>
-        <Fab
-          sx={{ position: 'fixed', bottom: 60, right: 32 }}
-          color="primary"
-          onClick={() => {
-            setOpen(true)
-            setEdit(false)
-            setStartDate(new Date())
-            setEndDate(new Date())
-          }}
-        >
-          <AddIcon />
-        </Fab>
         <EventModal />
       </>
     )
@@ -132,6 +137,7 @@ function Events({}: EventsProps) {
           setEdit(false)
           setStartDate(new Date())
           setEndDate(new Date())
+          setEvent({ id: '', title: '' })
         }}
       >
         <AddIcon />

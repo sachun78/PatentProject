@@ -24,20 +24,17 @@ function Member({}: MemberShipProps) {
         <ul css={tabStyle}>
           <li>
             <NavLink css={itemStyle} to={'event'}>
-              {' '}
-              EVENTS{' '}
+              EVENTS
             </NavLink>
           </li>
           <li>
             <NavLink css={itemStyle} to={'schedule'}>
-              {' '}
-              SCHEDULES{' '}
+              SCHEDULES
             </NavLink>
           </li>
           <li>
             <NavLink css={itemStyle} to={'history'}>
-              {' '}
-              HISTORY{' '}
+              HISTORY
             </NavLink>
           </li>
         </ul>

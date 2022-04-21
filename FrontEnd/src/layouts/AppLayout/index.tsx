@@ -23,11 +23,14 @@ export default function AppLayout({}: AppLayoutProps) {
   const { data, isLoading } = useUserQuery()
 
   if (isLoading) {
-    return <Backdrop
-      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      open={isLoading}>
-      <CircularProgress color='inherit' />
-    </Backdrop>
+    return (
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    )
   }
 
   if (!data) {
@@ -56,7 +59,7 @@ export default function AppLayout({}: AppLayoutProps) {
       <Sponsor />
     </AppLayout.Footer>
   </>
-}
+
 
 export type MainProps = {
   children: React.ReactNode

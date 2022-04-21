@@ -5,8 +5,13 @@ import { User } from 'lib/api/types'
 import useAuth from 'hooks/useAuth'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Avatar } from '@mui/material'
-import gravatar from 'gravatar'
-import { dividerStyle, logoStyle, menuStyle, sidebarStyle, userStyle } from './styles'
+import {
+  dividerStyle,
+  logoStyle,
+  menuStyle,
+  sidebarStyle,
+  userStyle,
+} from './styles'
 import { MdOutlineLogout } from 'react-icons/md'
 
 type SidebarProps = {}
@@ -19,26 +24,30 @@ function Sidebar({}: SidebarProps) {
 
   if (!user) return null
 
-  return <div css={sidebarStyle}>
-    <NavLink to='/' css={logoStyle}>
-      <img src={'/assets/wemet_logo.png'} alt={'main-logo'} />
-    </NavLink>
-    <ul css={menuStyle}>
-      <SidebarItem text='Feed' to='' />
-      <SidebarItem text='Membership' to='/membership' />
-      <SidebarItem text='Network' to='/network' />
-      <SidebarItem text='Conference' to='/conference' />
-    </ul>
-    <div css={dividerStyle}>{''}</div>
-    <div css={userStyle}>
-      <Avatar alt='user-avatar' src='/assets/KimMinjun.png'
-              sx={{ width: 60, height: 60 }}
-              onClick={() => navigate('/profile')} />
-      <span>{user.username}</span>
-      <MdOutlineLogout onClick={() => logout()} />
+  return (
+    <div css={sidebarStyle}>
+      <NavLink to="/" css={logoStyle}>
+        <img src={'/assets/wemet_logo.png'} alt={'main-logo'} />
+      </NavLink>
+      <ul css={menuStyle}>
+        <SidebarItem text="Feed" to="" />
+        <SidebarItem text="Membership" to="/membership" />
+        <SidebarItem text="Buddy" to="/buddy" />
+        <SidebarItem text="Conference" to="/conference" />
+      </ul>
+      <div css={dividerStyle}>{''}</div>
+      <div css={userStyle}>
+        <Avatar
+          alt="user-avatar"
+          src="/assets/KimMinjun.png"
+          sx={{ width: 60, height: 60 }}
+          onClick={() => navigate('/profile')}
+        />
+        <span>{user.username}</span>
+        <MdOutlineLogout onClick={() => logout()} />
+      </div>
     </div>
-  </div>
+  )
 }
-
 
 export default Sidebar
