@@ -27,7 +27,7 @@ function EventDetailCard({
   id,
 }: EventDetailCardProps) {
   return (
-    <Link css={wrapper} to={'/membership/schedule/' + id}>
+    <Link css={wrapper} to={'/meeting/schedule/' + id}>
       <h1>{title}</h1>
       <AvatarGroup max={3} css={avatarGroupStyle}>
         <Avatar alt={from} src="/assets/KimMinjun.png" />

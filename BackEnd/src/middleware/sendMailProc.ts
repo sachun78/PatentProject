@@ -1,7 +1,6 @@
 import nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import envConfig from 'config';
-import { resolve } from 'path';
 
 export const enum EMAILTYPE {
   AUTH, // authorization
@@ -40,7 +39,7 @@ const createInviteEmail = (data: any) => {
   const subject = `Wemet [${keywords.text}] - ${data.ownerName}`;
   const html = `<a href="${envConfig.host.client_url}"
   ><img
-    src="${envConfig.host.url}/asset/wemet_logo.png"
+    src="${envConfig.host.url}/static/wemet_logo.png"
     style="display: block; width: 128px; margin: 0 auto; margin-bottom: 1rem;"
   /></a>
   <div style="max-width: 100%; width: 600px; margin: 0 auto;">
@@ -60,7 +59,7 @@ const createInviteEmail = (data: any) => {
       <div>
         <img
           style="height: 64px; width: 64px; display: block; border-radius: 32px;"
-          src="${envConfig.host.url}/asset/default.png"
+          src="${envConfig.host.url}/static/default.png"
         />
       </div>
       <div style="flex: 1; margin-left: 1.5rem; color: #495057;">
@@ -106,7 +105,7 @@ const createResultEmail = (data: any) => {
   const subject = `Wemet [${keywords.text}] - ${data.ownerName}`;
   const html = `<a href="${envConfig.host.client_url}"
   ><img
-    src="${envConfig.host.url}/asset/wemet_logo.png"
+    src="${envConfig.host.url}/static/wemet_logo.png"
     style="display: block; width: 128px; margin: 0 auto; margin-bottom: 1rem;"
   /></a>
   <div style="max-width: 100%; width: 600px; margin: 0 auto;">
@@ -116,7 +115,7 @@ const createResultEmail = (data: any) => {
     <div style="display:-webkit-flex;display:-ms-flexbox;display:flex; margin-top: 1rem;">
       <img
           style="height: 32px; width: 32px; display: block; border-radius: 32px;"
-          src="${envConfig.host.url}/asset/confirm.png"
+          src="${envConfig.host.url}/static/confirm.png"
         />
       <p style="flex: 1; color: #495057; margin: 0; text-decoration: none; margin-left: 1.5rem; font-weight: 600; font-size: 1.125rem;">
         ${result.comment}
@@ -130,7 +129,7 @@ const createResultEmail = (data: any) => {
       <div>
         <img
           style="height: 64px; width: 64px; display: block; border-radius: 32px;"
-          src="${envConfig.host.url}/asset/default.png"
+          src="${envConfig.host.url}/static/default.png"
         />
       </div>
       <div style="flex: 1; margin-left: 1.5rem; color: #495057;">

@@ -80,7 +80,7 @@ function EventCard({
         className={'inner'}
         onClick={() => {
           if (!cardView) {
-            navigate(`/membership/event/${id}`)
+            navigate(`/meeting/event/${id}`)
           }
         }}
       >
@@ -108,7 +108,7 @@ function EventCard({
           onClick={!disabled ? onCreateSchedule : undefined}
           aria-disabled={true}
         >
-          <Link to={!disabled ? '/membership/schedule/request' : '#'}>
+          <Link to={!disabled ? '/meeting/schedule/request' : '#'}>
             <div className="text">+ New Schedule</div>
           </Link>
         </div>

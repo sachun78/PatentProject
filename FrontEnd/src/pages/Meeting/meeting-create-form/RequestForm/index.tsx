@@ -22,11 +22,12 @@ export default function RequestForm({}: RequestViewProps) {
   const [curEvent] = useCurrentEventState()
   const { startDate, endDate } = useDateRangeHook()
   const { date, time, setDate, setTime } = useDateTimeHook()
+  const [endTime, setEndTime] = useState<Date | null>(null)
   const [meetuser, setMeetuser] = useMeetingReqUser()
-  const [location, setLoaction] = useState("성수역 1번 출구")
+  const [location, setLoaction] = useState('성수역 1번 출구')
   const navi = useNavigate()
   const [form, onChange] = useInputs({
-    to: '',    
+    to: '',
     comment: '',
     title: '',
   })
@@ -39,7 +40,7 @@ export default function RequestForm({}: RequestViewProps) {
         pauseOnFocusLoss: false,
         autoClose: 3000,
       })
-      navi('/membership')
+      navi('/meeting')
     },
     onError: () => {
       toast.error('Something went wrong', {
@@ -67,8 +68,10 @@ export default function RequestForm({}: RequestViewProps) {
         })
         return
       }
-      change.setHours(time.getHours())
-      change.setMinutes(time.getMinutes())
+      if (time) {
+        change.setHours(time.getHours())
+        change.setMinutes(time.getMinutes())
+      }
       setDate(change)
     },
     [endDate, setDate, startDate, time]
@@ -84,38 +87,53 @@ export default function RequestForm({}: RequestViewProps) {
     },
     [date, setDate, setTime]
   )
-  
-  const onChangeLocation = useCallback((change: string) => {
-    setLoaction(change)
 
-  },[location])
+  const onChangeEndTime = useCallback((change: Date) => {
+    setEndTime(change)
+  }, [])
 
-  const onSubmit = useCallback((e) => {
-    e.preventDefault()
-    const { title, to, comment } = form
-    if ((!to.trim() && !meetuser) || !location.trim() || !title.trim()) {
-      toast.error('Please fill out all fields', {
-        position: toast.POSITION.TOP_CENTER,
-        pauseOnHover: false,
-        pauseOnFocusLoss: false,
-        autoClose: 3000
+  const onChangeLocation = useCallback(
+    (change: string) => {
+      setLoaction(change)
+    },
+    [location]
+  )
+
+  const onSubmit = useCallback(
+    (e) => {
+      e.preventDefault()
+      const { title, to, comment } = form
+      if (
+        (!to.trim() && !meetuser) ||
+        !location.trim() ||
+        !title.trim() ||
+        !time
+      ) {
+        toast.error('Please fill out all fields', {
+          position: toast.POSITION.TOP_CENTER,
+          pauseOnHover: false,
+          pauseOnFocusLoss: false,
+          autoClose: 3000,
+        })
+        return
+      }
+
+      createScheduleMut.mutate({
+        eventId: curEvent.id,
+        title,
+        date,
+        time,
+        location,
+        toEmail: meetuser ? meetuser : to,
+        comment,
       })
-      return
-    }
-
-    createScheduleMut.mutate({
-      eventId: curEvent.id,
-      title, date, time, location,
-      toEmail: meetuser ? meetuser : to,      
-      comment
-    })
-  }, [createScheduleMut, curEvent.id, date, form, meetuser, time])
+    },
+    [createScheduleMut, curEvent.id, date, form, meetuser, time]
+  )
 
   useEffect(() => {
-    const tempTime = new Date(startDate)
-    tempTime.setMinutes(0)
     setDate(startDate)
-    setTime(tempTime)
+    setTime(null)
 
     return () => {
       setMeetuser('')
@@ -123,18 +141,17 @@ export default function RequestForm({}: RequestViewProps) {
   }, [])
 
   if (curEvent.id === '') {
-    return <Navigate to={'/membership'} />
+    return <Navigate to={'/meeting'} />
   }
 
   return (
     <ContainerBlock>
       <form css={sectionStyle} onSubmit={onSubmit}>
-        <RequestSection title={'Event Info'}>
-          <span>{curEvent.title}</span>
-          &nbsp;
-          <div>
+        <RequestSection title={curEvent.title}>
+          <span>
+            {' '}
             {startDate.toLocaleDateString()} ~ {endDate.toLocaleDateString()}
-          </div>
+          </span>
         </RequestSection>
         <RequestSection title={'Meeting Title'}>
           <OutlinedInput
@@ -168,8 +185,10 @@ export default function RequestForm({}: RequestViewProps) {
             onChange={onChangeDate}
           />
         </RequestSection>
-        <RequestSection title={'Meeting Time'}>
+        <RequestSection title={'Meeting Time (a half-hour unit)'}>
           <TimePickerInput onChange={onChangeTime} value={time} />
+          <span style={{ margin: '0 1rem', fontSize: '1.25rem' }}>~</span>
+          <TimePickerInput onChange={onChangeEndTime} value={endTime} />
         </RequestSection>
         <RequestSection title={'Location'}>
           <LocationInput onChange={onChangeLocation} value={location} />

@@ -27,6 +27,6 @@ export async function createMhistory(_history: IMhistory) {
   }).save();
 }
 
-export async function updateMhistory(userId: string, data: IMhistory) {
-
+export async function updateMhistory(id: string, data: any) {
+  return mhistory.findByIdAndUpdate(id, data, { new: true});
 }

@@ -8,6 +8,7 @@ route.get('/', isAuth, postCtrl.getPosts);
 route.get('/:id', isAuth, postCtrl.getPosts);
 route.post('/', isAuth, postCtrl.createPost);
 route.post('/comment/:id', isAuth, postCtrl.createComment);
+route.post('/upload/:id', isAuth, postCtrl.postImgUpload);
 route.patch('/post/:id', isAuth, postCtrl.editPost);
 route.patch('/comment/', isAuth, postCtrl.editComment);
 route.delete('/post/:id', isAuth, postCtrl.deletePost);

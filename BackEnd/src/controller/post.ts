@@ -2,9 +2,45 @@ import { Request, Response, NextFunction } from 'express';
 import shortid from 'shortid';
 import * as postRepo from "data/post";
 import * as userRepo from 'data/auth';
+import multer from 'multer';
 
 interface IRequest extends Request {
   [key: string]: any
+}
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/')
+  },
+  filename: (req, files, cb) => {
+    cb(null, `${Date.now()}_${files.originalname}`)
+  }
+})
+
+const upload = multer({
+  storage: storage
+}).array('post_img', 2);
+
+export function postImgUpload(req: IRequest, res: Response, next: NextFunction) {
+  const postId = req.params.id;
+
+  upload(req, res, (err) => {
+
+    console.log(req.files);
+    if (err) {
+      console.error(err)
+      return res.status(409).json({ success: false, error: `${err.code}`})
+    }
+    
+    const files = req.files as Express.Multer.File[];
+    const _images = files.map(value => value.filename);
+
+    postRepo.editPost(postId, {images: _images});
+    return res.json({
+      success: true,
+      files: req.files
+    })
+  })
 }
 
 export async function getPosts(req: IRequest, res: Response) {

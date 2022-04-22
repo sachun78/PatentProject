@@ -6,13 +6,18 @@ import { useRef, useState } from 'react'
 import useOnClickOutside from 'use-onclickoutside'
 
 export type DatePickerProps = {
-  value: Date,
-  maximum?: Date,
-  minimum?: Date,
+  value: Date
+  maximum?: Date
+  minimum?: Date
   onChange(value: Date): void
 }
 
-function DatePickerInput({ value, maximum, minimum, onChange }: DatePickerProps) {
+function DatePickerInput({
+  value,
+  maximum,
+  minimum,
+  onChange,
+}: DatePickerProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -35,23 +40,33 @@ function DatePickerInput({ value, maximum, minimum, onChange }: DatePickerProps)
   }
   useOnClickOutside(ref, onClose)
 
-  return <InputBase css={wrapper} ref={ref}>
-    <div
-      css={textStyle}
-      tabIndex={0}
-      onClick={handleOpen}
-      onKeyDown={(e) => {
-        if (['Enter', 'Space'].includes(e.key)) {
-          handleOpen()
-        }
-      }}>
-      {value?.toDateString()}
-    </div>
-
-    {open && <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <CalendarPicker date={value} onChange={handleChange} css={calendarStyle} minDate={minimum} maxDate={maximum} />
-    </LocalizationProvider>}
-  </InputBase>
+  return (
+    <InputBase css={wrapper} ref={ref}>
+      <div
+        css={textStyle}
+        tabIndex={0}
+        onClick={handleOpen}
+        onKeyDown={(e) => {
+          if (['Enter', 'Space'].includes(e.key)) {
+            handleOpen()
+          }
+        }}
+      >
+        {value?.toDateString()}
+      </div>
+      {open && (
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <CalendarPicker
+            date={value}
+            onChange={handleChange}
+            css={calendarStyle}
+            minDate={minimum}
+            maxDate={maximum}
+          />
+        </LocalizationProvider>
+      )}
+    </InputBase>
+  )
 }
 
 const wrapper = css`

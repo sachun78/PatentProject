@@ -1,5 +1,6 @@
 import { css } from '@emotion/react'
 import { brandColor } from 'lib/palette'
+import styled from '@emotion/styled'
 
 export const wrapper = css`
   height: 100%;
@@ -35,4 +36,11 @@ export const noScheduleStyle = css`
     user-select: none;
     text-align: center;
   }
+`
+
+export const OptionContainer = styled.div`
+  align-items: center;
+  background: rgba(255, 255, 255, 0.4);
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
 `

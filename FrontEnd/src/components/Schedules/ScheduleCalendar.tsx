@@ -37,25 +37,30 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
     }
   }, [data])
 
-  const onScheduleClick = useCallback((clickInfo: EventClickArg) => {
-    navigate('/membership/schedule/' + clickInfo.event.id)
-  }, [navigate])
+  const onScheduleClick = useCallback(
+    (clickInfo: EventClickArg) => {
+      navigate('/meeting/schedule/' + clickInfo.event.id)
+    },
+    [navigate]
+  )
 
-  return <div css={calendarStyle}>
-    <FullCalendar
-      plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
-      headerToolbar={{
-        center: 'title',
-        left: 'prev next today',
-        right: ''
-      }}
-      initialEvents={scheduleEvents}
-      showNonCurrentDates={false}
-      fixedWeekCount={false}
-      eventClick={onScheduleClick}
-      aspectRatio={2.079796265}>
-    </FullCalendar>
-  </div>
+  return (
+    <div css={calendarStyle}>
+      <FullCalendar
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
+        headerToolbar={{
+          center: 'title',
+          left: 'prev next',
+          right: 'today',
+        }}
+        initialEvents={scheduleEvents}
+        showNonCurrentDates={false}
+        fixedWeekCount={false}
+        eventClick={onScheduleClick}
+        aspectRatio={2.079796265}
+      ></FullCalendar>
+    </div>
+  )
 }
 
 /*

@@ -4,14 +4,13 @@ import React, { useRef } from 'react'
 import { careerStyle, emailStyle, itemStyle, photoStyle } from './styles'
 import IconControl from '../IconControl'
 import { upload } from 'lib/api/me/upload'
-import { updateUserPhoto, userState } from 'atoms/authState'
-import { useSetRecoilState } from 'recoil'
 import gravatar from 'gravatar'
 import ProfileCardText from './ProfileCardText'
 import ProfileCardField from './ProfileCardField'
 import ProfileCardEmail from './ProfileCardEmail'
 import ProfileCardCountry from './ProfileCardCountry'
 import ProfileCardSave from './ProfileCardSave'
+import { useQueryClient } from 'react-query'
 
 export type ProfileCardProps = {
   children: React.ReactNode
@@ -46,11 +45,8 @@ function ProfileCardItem({
   email,
   username,
   photo,
-  isEditMode,
 }: ProfileCardItemProps) {
-  const setAuthState = useSetRecoilState(userState)
-  const setAuthPhoto = (value: string) =>
-    setAuthState((state) => updateUserPhoto(state, value))
+  const queryClient = useQueryClient()
   const fileRef = useRef<HTMLInputElement>(null)
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,11 +55,7 @@ function ProfileCardItem({
     if (file) {
       const formData = new FormData()
       formData.append('profile_img', file)
-      const result = await upload(formData)
-
-      if (result) {
-        setAuthPhoto(result.fileName)
-      }
+      upload(formData).then(() => queryClient.invalidateQueries('user'))
     }
   }
 
@@ -98,31 +90,27 @@ function ProfileCardItem({
                         s: '100px',
                         d: 'retro',
                       })
-                    : `https://wemet-server.herokuapp.com/static/${photo}`
+                    : /*`http://localhost:4000/static/${photo}`*/ `https://wemet-server.herokuapp.com/static/${photo}`
                 }
               />
             </div>
-            {isEditMode && (
-              <>
-                <input
-                  ref={fileRef}
-                  onChange={handleFileUpload}
-                  type="file"
-                  style={{ display: 'none' }}
-                  accept="image/*"
-                  name="profile_img"
-                />
-                <button
-                  className={'btn'}
-                  onClick={(e) => {
-                    fileRef?.current?.click()
-                    e.preventDefault()
-                  }}
-                >
-                  <IconControl name={'upload'} />
-                </button>
-              </>
-            )}
+            <input
+              ref={fileRef}
+              onChange={handleFileUpload}
+              type="file"
+              style={{ display: 'none' }}
+              accept="image/*"
+              name="profile_img"
+            />
+            <button
+              className={'btn'}
+              onClick={(e) => {
+                fileRef?.current?.click()
+                e.preventDefault()
+              }}
+            >
+              <IconControl name={'upload'} />
+            </button>
           </div>
         )}
         {/*3. Name TYPE*/}
