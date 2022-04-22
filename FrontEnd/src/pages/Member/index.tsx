@@ -15,7 +15,7 @@ const EventDetail = loadable(() => import('pages/EventDetail'))
 function Member({}: MemberShipProps) {
   const loc = useLocation()
 
-  if (loc.pathname === '/membership') {
+  if (loc.pathname === '/meeting') {
     return <Navigate to={'event'} />
   }
   return (

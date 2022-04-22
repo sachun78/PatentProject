@@ -31,8 +31,8 @@ function Sidebar({}: SidebarProps) {
       </NavLink>
       <ul css={menuStyle}>
         <SidebarItem text="Feed" to="" />
-        <SidebarItem text="Membership" to="/membership" />
-        <SidebarItem text="Buddy" to="/buddy" />
+        <SidebarItem text="Meeting" to="/meeting" />
+        <SidebarItem text="Network" to="/network" />
         <SidebarItem text="Conference" to="/conference" />
       </ul>
       <div css={dividerStyle}>{''}</div>

@@ -1,14 +1,14 @@
-import React from 'react'
-import ScheduleCard from './ScheduleCard'
+import React, { useMemo } from 'react'
 import IconControl from '../IconControl'
 import useMeetingQuery from 'hooks/query/useMeetingQuery'
-import { labelStyle, noScheduleStyle, tableStyle } from './styles'
-import { FormControlLabel, Switch } from '@mui/material'
+import { labelStyle, noScheduleStyle } from './styles'
+import { FormControlLabel, FormGroup, Switch } from '@mui/material'
 import ScheduleCalendar from './ScheduleCalendar'
 import { meetingSwitchState } from 'atoms/memberShipTabState'
 import { useRecoilState } from 'recoil'
-import ScheduleSkeleton from './ScheduleSkeleton'
 import { formatDistanceToNow } from 'date-fns'
+import ScheduleTable from './ScheduleTable'
+import { OptionContainer } from 'components/Events/styles'
 
 type ScheduleViewProps = {}
 
@@ -17,24 +17,22 @@ function Schedules({}: ScheduleViewProps) {
     staleTime: 2000,
   })
   const [checked, setChecked] = useRecoilState(meetingSwitchState)
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked)
   }
 
-  if (isLoading)
-    return (
-      <div css={tableStyle}>
-        <ScheduleSkeleton />
-        <ScheduleSkeleton />
-        <ScheduleSkeleton />
-        <ScheduleSkeleton />
-        <ScheduleSkeleton />
-        <ScheduleSkeleton />
-      </div>
-    )
+  const meetings = useMemo(() => {
+    if (!data) return []
+    return data.filter((meeting) => {
+      const dist = formatDistanceToNow(new Date(meeting.date), {
+        addSuffix: true,
+      })
+      return !dist.includes('ago') && !meeting.history
+    })
+  }, [data])
 
-  if (data?.length === 0)
+  if (isLoading) return <div>Loading...</div>
+  if (meetings?.length === 0)
     return (
       <div css={noScheduleStyle}>
         <IconControl name={'welcome'} />
@@ -45,46 +43,24 @@ function Schedules({}: ScheduleViewProps) {
 
   return (
     <>
-      <FormControlLabel
-        control={
-          <Switch
-            edge={'end'}
-            checked={checked}
-            onChange={handleChange}
-            name={'checked'}
-            inputProps={{ 'aria-label': 'schedule-calendar' }}
-          />
-        }
-        label={checked ? 'CALENDAR' : 'CARD'}
-        css={labelStyle}
-      />
-      {checked ? (
-        <ScheduleCalendar />
-      ) : (
-        <div css={tableStyle}>
-          {data?.reverse().map((v) => {
-            const dist = formatDistanceToNow(new Date(v.date), {
-              addSuffix: true,
-            })
-            if (dist.includes('ago')) return null
-            if (v.history) return null
-            return (
-              <ScheduleCard
-                key={v.id}
-                from={v.ownerEmail}
-                to={v.toEmail}
-                comment={v.comment}
-                place={v.location}
-                date={v.date}
-                time={v.time}
-                title={v.title}
-                state={v.status}
-                id={v.id}
+      <FormGroup row={true} style={{ marginBottom: '20px' }}>
+        <OptionContainer>
+          <FormControlLabel
+            control={
+              <Switch
+                edge={'end'}
+                checked={checked}
+                onChange={handleChange}
+                name={'checked'}
+                inputProps={{ 'aria-label': 'schedule-calendar' }}
               />
-            )
-          })}
-        </div>
-      )}
+            }
+            label={checked ? 'CALENDAR' : 'CARD'}
+            css={labelStyle}
+          />
+        </OptionContainer>
+      </FormGroup>
+      {checked ? <ScheduleCalendar /> : <ScheduleTable meetings={meetings} />}
     </>
   )
 }

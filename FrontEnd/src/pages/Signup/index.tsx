@@ -25,8 +25,6 @@ import { AxiosError } from 'axios'
 import { MdLock } from 'react-icons/md'
 import { checkCode } from 'lib/api/auth/sendmail'
 import { toast } from 'react-toastify'
-import { replanState } from 'atoms/replanState'
-import { useRecoilState } from 'recoil'
 import { containerStyle } from '../Login/styles'
 
 type RegisterProps = {}
@@ -39,7 +37,6 @@ export default function Signup({}: RegisterProps) {
     password: '',
     password_confirm: '',
   })
-  const [replan] = useRecoilState(replanState)
 
   const code = useSearchParams()[0].get('code')
   const navigate = useNavigate()
@@ -62,9 +59,7 @@ export default function Signup({}: RegisterProps) {
       onSuccess: () => {
         // Global Toast 표시, 로그인 페이지로 이동
         toast.success('register success', { position: 'top-center' })
-        if (replan?.code) {
-          navigate('/invitation/replan?code=' + replan.code)
-        } else navigate('/login')
+        navigate('/login')
       },
       onError(err: AxiosError) {
         setError(err.response?.data.message)
@@ -118,9 +113,7 @@ export default function Signup({}: RegisterProps) {
   }
 
   if (userData) {
-    if (replan?.code) {
-      return <Navigate replace to={'/invitation/replan?code=' + replan.code} />
-    } else return <Navigate replace to={'/'} />
+    return <Navigate replace to={'/'} />
   }
 
   if (codeError) {

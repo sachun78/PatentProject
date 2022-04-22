@@ -37,29 +37,30 @@ export default function AppLayout({}: AppLayoutProps) {
     return <Navigate replace to={'/login'} />
   }
 
-  return <>
-    <AppLayout.Sidebar>
-      <Sidebar />
-      {/*<VerticalBar />*/}
-    </AppLayout.Sidebar>
-    <AppLayout.Main>
-      <Routes>
-        <Route index element={<Home />} />
-        <Route path='/postDetail/:id' element={<PostDetail />} />
-        <Route path='/membership/*' element={<Member />} />
-        <Route path='/network' element={<Network />} />
-        <Route path='/profile' element={<Profile />} />
-        <Route path='/conference' element={<Conference />} />
-        <Route path='/u/:email' element={<User />} />
-        <Route path='/*' element={<div>404 NOT FOUND</div>} />
-        <Route path='/postWrite/' element={<PostWrite />} />        
-        <Route path='/postEdit/' element={<PostEdit />} />
-      </Routes>
-    </AppLayout.Main>
-    <AppLayout.Footer>
-      <Sponsor />
-    </AppLayout.Footer>
-  </>
+  return (
+    <>
+      <AppLayout.Sidebar>
+        <Sidebar />
+      </AppLayout.Sidebar>
+      <AppLayout.Main>
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path="/postDetail/:id" element={<PostDetail />} />
+          <Route path="/meeting/*" element={<Member />} />
+          <Route path="/network" element={<Network />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/conference" element={<Conference />} />
+          <Route path="/u/:email" element={<User />} />
+          <Route path="/*" element={<div>404 NOT FOUND</div>} />
+          <Route path="/postWrite/" element={<PostWrite />} />
+          <Route path="/postEdit/" element={<PostEdit />} />
+        </Routes>
+      </AppLayout.Main>
+      <AppLayout.Footer>
+        <Sponsor />
+      </AppLayout.Footer>
+    </>
+  )
 }
 
 export type MainProps = {

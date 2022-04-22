@@ -14,7 +14,7 @@ export type ScheduleCalendarProps = {}
 function EventCalendar({}: ScheduleCalendarProps) {
   const { data } = useEventQuery(1, { enabled: false })
   const navigate = useNavigate()
-  const calendarRef = useRef<any>(null)
+  const calendarRef = useRef<FullCalendar | null>(null)
   const calendarEvents = useMemo(() => {
     const retArr = []
     if (data) {
@@ -39,7 +39,7 @@ function EventCalendar({}: ScheduleCalendarProps) {
   }, [data])
 
   const handleEventClick = (clickInfo: EventClickArg) => {
-    navigate('/membership/event/' + clickInfo.event.id)
+    navigate('/meeting/event/' + clickInfo.event.id)
   }
 
   return (
