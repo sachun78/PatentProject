@@ -14,5 +14,4 @@ route.patch('/comment/', isAuth, postCtrl.editComment);
 route.delete('/post/:id', isAuth, postCtrl.deletePost);
 route.delete('/comment/', isAuth, postCtrl.deleteComment);
 
-
 export default route;
