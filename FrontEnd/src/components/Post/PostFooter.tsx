@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom'
 import PostIconBox from './PostIconBox'
 
 export type PostFooterProps = {
-  id: string
+  _id: string
   contents: string  
   isLike?: boolean
   owner_thumb: string
@@ -21,7 +21,7 @@ export type PostFooterProps = {
   createdAt: Date
 }
 
-function PostFooter({ id, contents, isLike = false, like_cnt, comment, imageData, owner_thumb, owner_username, createdAt }: PostFooterProps) {  
+function PostFooter({ _id, contents, isLike = false, like_cnt, comment, imageData, owner_thumb, owner_username, createdAt }: PostFooterProps) {  
 
   const [likeClick, onToggleLike] = useToggle(isLike)  
    
@@ -45,9 +45,9 @@ function PostFooter({ id, contents, isLike = false, like_cnt, comment, imageData
         {/* {like + Number(likeClick)} */}
       </div>
       <Link
-        to={`/postDetail/${id}`}
+        to={`/postDetail/${_id}`}
         state={{
-          id: id,
+          _id: _id,
           images: imageData,
           owner_username: owner_username,
           owner_thumb: owner_thumb,

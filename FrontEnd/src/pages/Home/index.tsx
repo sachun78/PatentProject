@@ -1,5 +1,6 @@
 import { css } from '@emotion/react'
 import { Stack } from '@mui/material'
+import InitialInputModal from 'components/InitialInputModal'
 import Post from 'components/Post/'
 import usePostQuery from 'hooks/query/usePostQuery'
 import { IPost } from 'lib/api/types'
@@ -10,7 +11,7 @@ import PostForm from './form/PostForm'
 type HomeProps = {}
 
 function Home({}: HomeProps) {
-  const { data: posts, isLoading } = usePostQuery(1)
+  const { data: posts, isLoading } = usePostQuery()
   
   if(isLoading) return <div>로딩중!!</div>
 
@@ -25,8 +26,8 @@ function Home({}: HomeProps) {
       <div css={postViewStyle}>        
         {posts?.map((post: IPost) =>
         <Post 
-          key={post.id}
-          id={post.id}                              
+          key={post._id}
+          _id={post._id}                              
           owner_username={post.owner_username}
           owner_thumb={post.owner_thumb}
           like_cnt={post.like_cnt}

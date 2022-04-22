@@ -32,7 +32,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
   const location: any = useLocation()
 
   const {
-    id,
+    _id,
     images,
     owner_username,
     owner_thumb,
@@ -42,16 +42,16 @@ function PostDetail({ isLike = false }: postDetailProps) {
     contents,
   } = location.state as IPost  
 
-  const { data: post, isLoading } = useQuery(['post', id], getPost, {
+  const { data: post, isLoading } = useQuery(['post', _id], getPost, {
     retry: false,    
   })  
-
+  console.log(_id)
+  console.log(post)
   const [commentVisible, onToggleComment, setCommentVisible] = useToggle(false)
   const [comments, onChangeComments, setComments] = useInput('')
   const [likeClick, onToggleLike] = useToggle(isLike)
-  const user = qc.getQueryData<User>('user') as User
-  // 임시 트루
-  const [owner, setOwner] = useState(true)  
+  const user = qc.getQueryData<User>('user') as User  
+  const [owner, setOwner] = useState(false)  
 
   // 이미지 처리
   const [open, setOpen] = useState(false)
@@ -66,7 +66,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
     (e: any) => {
       if (e.key === 'Enter') {
         e.preventDefault()
-        createCommentMut.mutate([{ contents: comments }, id])
+        createCommentMut.mutate([{ contents: comments }, _id])
 
         setComments('')
         setCommentVisible(!commentVisible)
@@ -77,7 +77,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
   ) 
 
   useEffect(() => {
-    if (owner_username === user.username) {
+    if (_id === user._id) {
       setOwner(true)
     }
     
@@ -95,7 +95,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
   const createCommentMut = useMutation(createComments, {
     onSuccess: () => {
       
-      qc.invalidateQueries(['post', id])      
+      qc.invalidateQueries(['post', _id])      
       
     },
     onError: () => {
@@ -158,7 +158,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
           <div className={'item'} onClick={onToggleComment}>
             <BsChatLeftDots /> {comment.length}
           </div>
-          {owner && <PostActionButtons id={id} />}
+          {owner && <PostActionButtons id={_id} />}
         </div>
         {commentVisible && (
           <div style={{ textAlign: 'center' }}>
