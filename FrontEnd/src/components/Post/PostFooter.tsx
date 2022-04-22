@@ -2,71 +2,78 @@ import { css } from '@emotion/react'
 import { Avatar, OutlinedInput } from '@mui/material'
 import gravatar from 'gravatar'
 import useToggle from 'hooks/useToggle'
-import { usePost } from 'lib/api/post/usePost'
-import { usePosts } from 'lib/api/post/usePosts'
-import { IComment, IPost } from 'lib/api/types'
+import { IComment } from 'lib/api/types'
 import { brandColor } from 'lib/palette'
 import React from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
-import { useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
 
 export type PostFooterProps = {
   id: string
-  index: number  
-  isLike: boolean
-  comments: IComment[]  
-  like: number
+  contents: string  
+  isLike?: boolean
+  owner_thumb: string
+  owner_username: string
+  comment: IComment[]  
+  like_cnt: number
   imageData: any
+  createdAt: Date
 }
 
-function PostFooter({ id, index, isLike, like, comments, imageData }: PostFooterProps) {  
+function PostFooter({ id, contents, isLike = false, like_cnt, comment, imageData, owner_thumb, owner_username, createdAt }: PostFooterProps) {  
 
   const [likeClick, onToggleLike] = useToggle(isLike)  
-  const post = usePost(index)    
-  const viewComments = comments.filter((comment: IComment) => (comments.indexOf(comment) < 2))   
-
+   
+  const viewComments = comment.filter((comments: IComment) => (comment.indexOf(comments) < 2))
+  
   const onLike = () => {
     
     if(!likeClick) {
-      post.like = like + 1      
+      // like = like + 1      
     } else {
-      post.like = like     
+      // like = like     
     }
     onToggleLike()   
         
-  }
+  } 
 
   return <div css={footerStyle /*flex*/}>
     <div css={buttonWrapper}>
       <div className={'item'} onClick={onLike}>
         {likeClick ? <BsHeartFill className={'filled'} /> : <BsHeart />}
-        {like + Number(likeClick)}
+        {/* {like + Number(likeClick)} */}
       </div>
       <Link
         to={`/postDetail/${id}`}
         state={{
-          postNumber: index,
-          imageData: imageData          
+          id: id,
+          images: imageData,
+          owner_username: owner_username,
+          owner_thumb: owner_thumb,
+          like_cnt: like_cnt,
+          comment: comment,
+          createdAt: createdAt,
+          contents: contents,          
         }}
       >
         <div className={'item'}>
-          <BsChatLeftDots /> {comments.length}
+          <BsChatLeftDots /> {comment.length}
         </div>
       </Link>
     </div>     
     {viewComments.length === 0 ? <div></div> :
     <div css={commentStyle}>
-      {viewComments.map((comment: IComment) => (
-      <OutlinedInput key={comment.id} value={comment.text}
+      {viewComments.map((viewComment: IComment) => (
+      <OutlinedInput key={viewComment._id} value={viewComment.contents}
         fullWidth multiline
         sx={{ borderRadius: '1rem', paddingLeft: '1.25rem' }}
         startAdornment={<Avatar alt='post-user-avatar'
-                                src={gravatar.url('temp.email' + comment.id,
+                                src={gravatar.url('temp.email' + viewComment.owner_id,
                                   { s: '44px', d: 'retro' })}
                                 sx={{ width: 22, height: 22, mr: '25px' }} />} 
-      />         
+      />      
       ))}
+      
     </div>
     }
   </div>
@@ -124,4 +131,4 @@ const buttonWrapper = css`
   }
 `
 
-export default React.memo(PostFooter)
+export default PostFooter

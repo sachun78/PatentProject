@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { createPost } from 'lib/api/post/createPost';
+import { editPost } from 'lib/api/post/editPost';
 import { usePosts } from 'lib/api/post/usePosts';
 import { User } from 'lib/api/types';
 import palette from 'lib/palette';
@@ -7,13 +8,12 @@ import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-function PostWrite() {
+function PostEdit() {
   const qc = useQueryClient()
-  const [body, setBody] = useState("")
-  const [title, setTitle] = useState("")
+  const [body, setBody] = useState("")  
   const [image, setImage] = useState<any>()
   const quillElement = useRef<any>(null);
   const quillInstance = useRef<any>(null);
@@ -22,9 +22,12 @@ function PostWrite() {
   const user = qc.getQueryData<User>('user') as User
   const imgData = [] as any;  
 
-  const createPostMut = useMutation(createPost, {
+  
+const { state } = useLocation();
+
+  const postEditMut = useMutation(editPost, {
     onSuccess: () => {
-      toast.success('Posting Successful', {
+      toast.success('Editing Successful', {
         position: toast.POSITION.TOP_CENTER,
         pauseOnHover: false,
         pauseOnFocusLoss: false,
@@ -54,28 +57,12 @@ function PostWrite() {
       return
     }
 
-    createPostMut.mutate({
-      contents: body
-    })
+    postEditMut.mutate(
+      [{contents: body}, state as string]
+      
+    )
   }, [body])
-
-  const onChange = (e: any) => {
-    setTitle(e.target.value)
-  }
-
-  const onPost = () => {        
-    // posts.push({
-    //   id: String(posts.length + 1),
-    //   title: title,
-    //   text: body,
-    //   created_at: new Date(),
-    //   like: 0,
-    //   comments: [],
-    //   writer: user.username,
-    //   images: image
-    // })    
-    navigate('/')
-  }    
+  
   const onCancle = () => {
     navigate(-1);
   }
@@ -151,21 +138,21 @@ function PostWrite() {
   return (
   <>
     <div css={postWriteStyle}>
-      <input css={inputStyle} value="Feel Free To Write" readOnly/>
+      <input css={inputStyle} value="Edit Contents" readOnly/>
       <div className={'divider'}>{''}</div>
       <div css={quillWrapperStyle}>
         <div css={editorStyle} ref={quillElement} />
       </div>
     </div>
     <div css={buttonWrapStyle}>
-      <button css={buttonStyle} onClick={onSubmit}>Posting</button>
+      <button css={buttonStyle} onClick={onSubmit}>Edit</button>
       <button css={buttonStyle} onClick={onCancle}>Cancle</button>
     </div>
   </>
   );
 }
 
-export default PostWrite
+export default PostEdit
 
 const editorStyle = css`
   height: 22rem;

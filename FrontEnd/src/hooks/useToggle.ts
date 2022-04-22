@@ -5,5 +5,5 @@ export default function useToggle(defaultValue: boolean) {
   const onToggle = useCallback(() => {
     setValue(!value);
   }, [value]);
-  return [value, onToggle] as [boolean, typeof onToggle];
+  return [value, onToggle, setValue] as [boolean, typeof onToggle, typeof setValue];
 }

@@ -5,20 +5,22 @@ import {
   ImageList,
   ImageListItem,
   Modal,
-  OutlinedInput
+  OutlinedInput,
 } from '@mui/material'
 import gravatar from 'gravatar'
 import useInput from 'hooks/useInput'
 import useToggle from 'hooks/useToggle'
-import { usePost } from 'lib/api/post/usePost'
+import { createComments } from 'lib/api/post/createComment'
+import { getPost } from 'lib/api/post/getPost'
 import { usePosts } from 'lib/api/post/usePosts'
 import palette, { brandColor } from 'lib/palette'
 import media from 'lib/styles/media'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useReducer, useState } from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
-import { useQueryClient } from 'react-query'
-import { useLocation } from 'react-router-dom'
-import { IComment, User } from '../../lib/api/types'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { IComment, IPost, User } from '../../lib/api/types'
 import PostActionButtons from './PostActionButtons'
 
 type postDetailProps = {
@@ -28,55 +30,89 @@ type postDetailProps = {
 function PostDetail({ isLike = false }: postDetailProps) {
   const qc = useQueryClient()
   const location: any = useLocation()
-  const { postNumber, imageData } = location.state as any  
-  const post = usePost(postNumber)
-  const posts = usePosts()
-  const { title, text, writer, created_at, like, comments } = post
-  const [commentVisible, onToggleComment] = useToggle(false)
-  const [comment, onChangeComment, setComment] = useInput('')
+
+  const {
+    id,
+    images,
+    owner_username,
+    owner_thumb,
+    like_cnt,
+    comment,
+    createdAt,
+    contents,
+  } = location.state as IPost
+
+  console.log(id)
+
+  const { data: post, isLoading } = useQuery(['post', id], getPost, {
+    retry: false,
+  })
+  if (isLoading) console.log('로딩')
+  console.log(post)  
+
+  const [commentVisible, onToggleComment, setCommentVisible] = useToggle(false)
+  const [comments, onChangeComments, setComments] = useInput('')
   const [likeClick, onToggleLike] = useToggle(isLike)
   const user = qc.getQueryData<User>('user') as User
   // 임시 트루
   const [owner, setOwner] = useState(true)
+  const navigate = useNavigate()
+  const [, forceUpdate] = useReducer((x) => x + 1, 0)
 
   // 이미지 처리
   const [open, setOpen] = useState(false)
-  const [imgSrc, setImgSrc] = useState("")
-  const handleOpen = (e: any) => {    
+  const [imgSrc, setImgSrc] = useState('')
+  const handleOpen = (e: any) => {
     setImgSrc(e.target.src)
     setOpen(true)
   }
-  const handleClose = () =>setOpen(false)
+  const handleClose = () => setOpen(false)
+  const [state, setState] = useState(0)
+
+  const onKeyDown = useCallback(
+    (e: any) => {
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        createCommentMut.mutate([{ contents: comments }, id])
+
+        setComments('')
+        setCommentVisible(!commentVisible)
+      }
+    },
+    [comments]
+  ) 
 
   useEffect(() => {
-    if (post.writer === user.username) {
+    if (owner_username === user.username) {
       setOwner(true)
     }
-  }, [])
+    
+  }, [commentVisible])
 
   const onLike = () => {
     onToggleLike()
     if (!likeClick) {
-      post.like = like + 1
+      // like_cnt = like_cnt + 1
     } else {
-      post.like = like - 1
+      // like_cnt = like_cnt - 1
     }
   }
 
-  const onKeyPress = (e: any) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      comments.push({
-        id: String(comments.length + 1),
-        text: comment,
-        writer: user.username,
-        created_at: new Date(),
+  const createCommentMut = useMutation(createComments, {
+    onSuccess: () => {
+      qc.invalidateQueries(['posts', 1])
+      qc.invalidateQueries(['post', id])
+      
+    },
+    onError: () => {
+      toast.error('Something went wrong', {
+        position: toast.POSITION.TOP_CENTER,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000,
       })
-      posts[postNumber] = post
-      qc.setQueryData('posts', posts)
-      setComment('')
-    }
-  }
+    },
+  })
 
   return (
     <>
@@ -85,21 +121,20 @@ function PostDetail({ isLike = false }: postDetailProps) {
           <div css={iconStyle}>
             <Avatar
               alt="user-avatar"
-              src={gravatar.url('test.email', { s: '60px', d: 'retro' })}
+              src={owner_thumb}
               sx={{ width: 60, height: 60 }}
             />
           </div>
           <div css={titleStyle}>
             <h4>
-              <span>{writer}/ etc ..</span>
+              <span>{owner_username}/ etc ..</span>
             </h4>
-            <div className={'time-date'}>{created_at.toDateString()}</div>
+            <div className={'time-date'}>{createdAt}</div>
           </div>
-          <div>{title}</div>
         </div>
         <figure>
           <ImageList variant="masonry" cols={3} gap={8}>
-            {imageData.map((image: any) => (
+            {images?.map((image: any) => (
               <ImageListItem key={image.imageId}>
                 <img
                   src={image.src}
@@ -107,43 +142,38 @@ function PostDetail({ isLike = false }: postDetailProps) {
                   loading="lazy"
                   style={{
                     borderRadius: '1rem',
-                    cursor: 'zoom-in'
+                    cursor: 'zoom-in',
                   }}
                   onClick={handleOpen}
                 />
-                <Modal 
-                  open={open} 
-                  onClose={handleClose}
-                  css={modalStyle}                                   
-                >
-                  <Box
-                    css={boxWrapper}                   
-                  >
-                    <img src={imgSrc} css={imageStyle} alt={image.alt}/>
+                <Modal open={open} onClose={handleClose} css={modalStyle}>
+                  <Box css={boxWrapper}>
+                    <img src={imgSrc} css={imageStyle} alt={image.alt} />
                   </Box>
                 </Modal>
               </ImageListItem>
             ))}
           </ImageList>
         </figure>
-        <div css={bodyStyle}>{text}</div>
+        <div css={bodyStyle}>{contents}</div>
         <div css={buttonWrapper}>
           <div className={'item'} onClick={onLike}>
             {likeClick ? <BsHeartFill className={'filled'} /> : <BsHeart />}
-            {like}
+            {like_cnt}
           </div>
           <div className={'item'} onClick={onToggleComment}>
-            <BsChatLeftDots /> {comments.length}
+            <BsChatLeftDots /> {comment.length}
           </div>
-          {owner && <PostActionButtons id={postNumber} />}
+          {owner && <PostActionButtons id={id} />}
         </div>
         {commentVisible && (
           <div style={{ textAlign: 'center' }}>
             <OutlinedInput
               placeholder={'Write your comment'}
-              value={comment}
-              onChange={onChangeComment}
-              onKeyPress={onKeyPress}
+              value={comments}
+              onChange={onChangeComments}
+              onKeyDown={onKeyDown}
+              // onKeyPress={onKeyPress}
               sx={{ borderRadius: '1rem', margin: '0 0.5rem', width: '95%' }}
               startAdornment={
                 <Avatar
@@ -158,50 +188,53 @@ function PostDetail({ isLike = false }: postDetailProps) {
             />
           </div>
         )}
-        {comments.length === 0 ? <div></div> : 
-        <div css={commentStyle}>
-          {comments.map((comment: IComment) => (
-            <div
-              key={comment.id}
-              style={{
-                paddingTop: '1rem',
-                display: 'flex',
-                justifyContent: 'center',
-                verticalAlign: 'center',
-                borderBottom: `0.5px solid ${palette.grey[400]}`,
-              }}
-            >
-              <div style={{ display: 'flex' }}>
-                <Avatar
-                  alt="user-avatar"
-                  src={gravatar.url(`test.email${comment.id}`, {
-                    s: '60px',
-                    d: 'retro',
-                  })}
-                  sx={{ width: 20, height: 20, marginBottom: '0.5rem' }}
-                />
-              </div>
+        {post.comment.length === 0 ? (
+          <div></div>
+        ) : (
+          <div css={commentStyle}>
+            {post.comment.map((comment: IComment) => (
               <div
+                key={comment._id}
                 style={{
-                  flex: '1',
-                  marginLeft: '1rem',
+                  paddingTop: '1rem',
+                  display: 'flex',
+                  justifyContent: 'center',
                   verticalAlign: 'center',
+                  borderBottom: `0.5px solid ${palette.grey[400]}`,
                 }}
               >
-                {comment.text}
+                <div style={{ display: 'flex' }}>
+                  <Avatar
+                    alt="user-avatar"
+                    src={gravatar.url(`test.email${comment._id}`, {
+                      s: '60px',
+                      d: 'retro',
+                    })}
+                    sx={{ width: 20, height: 20, marginBottom: '0.5rem' }}
+                  />
+                </div>
+                <div
+                  style={{
+                    flex: '1',
+                    marginLeft: '1rem',
+                    verticalAlign: 'center',
+                  }}
+                >
+                  {comment.contents}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>}
+            ))}
+          </div>
+        )}
       </div>
     </>
   )
 }
 
-export default React.memo(PostDetail)
+export default PostDetail
 
 const modalStyle = css`
-  .MuiBackdrop-root {    
+  .MuiBackdrop-root {
     background: rgba(0, 0, 0, -1);
   }
 `
@@ -212,16 +245,16 @@ export const boxWrapper = css`
   left: 50%;
   transform: translate(-50%, -50%);
   min-width: 700px;
-  min-height: 250px;  
-  display: flex;  
+  min-height: 250px;
+  display: flex;
   align-items: center;
   border: none;
   border-radius: 1rem;
-  background: rgba(0, 0, 0, -1);    
+  background: rgba(0, 0, 0, -1);
 `
 const imageStyle = css`
   width: 100%;
-  border-radius: 1rem;   
+  border-radius: 1rem;
 `
 const commentStyle = css`
   font-size: 0.5rem;

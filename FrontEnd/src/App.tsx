@@ -19,8 +19,7 @@ const AppLayout = loadable(() => import('layouts/AppLayout'))
 
 function App() {
   useCsrfQuery({ retry: true, staleTime: Infinity })
-  useUserQuery()
-  usePostQuery()
+  useUserQuery()  
 
   return (
     <>

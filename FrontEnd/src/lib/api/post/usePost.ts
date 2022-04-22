@@ -1,10 +1,8 @@
-import { useQueryClient } from 'react-query';
-import { IPost } from '../types';
-import { usePosts } from './usePosts';
+import { getPosts } from './getPosts';
 
 export function usePost(index: number) {
-    const qc = useQueryClient();
-    const posts = usePosts();    
+    
+    const posts: any = getPosts();    
     const post = posts[index]
     return post        
 }
