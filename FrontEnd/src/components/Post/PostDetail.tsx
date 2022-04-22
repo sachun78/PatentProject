@@ -5,23 +5,23 @@ import {
   ImageList,
   ImageListItem,
   Modal,
-  OutlinedInput,
+  OutlinedInput
 } from '@mui/material'
 import gravatar from 'gravatar'
 import useInput from 'hooks/useInput'
 import useToggle from 'hooks/useToggle'
 import { createComments } from 'lib/api/post/createComment'
 import { getPost } from 'lib/api/post/getPost'
-import { usePosts } from 'lib/api/post/usePosts'
 import palette, { brandColor } from 'lib/palette'
 import media from 'lib/styles/media'
-import React, { useCallback, useEffect, useReducer, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { IComment, IPost, User } from '../../lib/api/types'
 import PostActionButtons from './PostActionButtons'
+import PostIconBox from './PostIconBox'
 
 type postDetailProps = {
   isLike?: boolean
@@ -43,17 +43,15 @@ function PostDetail({ isLike = false }: postDetailProps) {
   } = location.state as IPost  
 
   const { data: post, isLoading } = useQuery(['post', id], getPost, {
-    retry: false,
-  })   
+    retry: false,    
+  })  
 
   const [commentVisible, onToggleComment, setCommentVisible] = useToggle(false)
   const [comments, onChangeComments, setComments] = useInput('')
   const [likeClick, onToggleLike] = useToggle(isLike)
   const user = qc.getQueryData<User>('user') as User
   // 임시 트루
-  const [owner, setOwner] = useState(true)
-  const navigate = useNavigate()
-  const [, forceUpdate] = useReducer((x) => x + 1, 0)
+  const [owner, setOwner] = useState(true)  
 
   // 이미지 처리
   const [open, setOpen] = useState(false)
@@ -72,6 +70,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
 
         setComments('')
         setCommentVisible(!commentVisible)
+        
       }
     },
     [comments]
@@ -95,8 +94,8 @@ function PostDetail({ isLike = false }: postDetailProps) {
 
   const createCommentMut = useMutation(createComments, {
     onSuccess: () => {
-      qc.invalidateQueries(['posts', 1])
-      qc.invalidateQueries(['post', id])
+      
+      qc.invalidateQueries(['post', id])      
       
     },
     onError: () => {
@@ -187,9 +186,9 @@ function PostDetail({ isLike = false }: postDetailProps) {
           <div></div>
         ) : (
           <div css={commentStyle}>
-            {post.comment.map((comment: IComment) => (
+            {post.comment.map((commen: IComment) => (
               <div
-                key={comment._id}
+                key={commen._id}
                 style={{
                   paddingTop: '1rem',
                   display: 'flex',
@@ -201,7 +200,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
                 <div style={{ display: 'flex' }}>
                   <Avatar
                     alt="user-avatar"
-                    src={gravatar.url(`test.email${comment._id}`, {
+                    src={gravatar.url(`test.email${commen._id}`, {
                       s: '60px',
                       d: 'retro',
                     })}
@@ -215,7 +214,10 @@ function PostDetail({ isLike = false }: postDetailProps) {
                     verticalAlign: 'center',
                   }}
                 >
-                  {comment.contents}
+                  {commen.contents}                  
+                </div>
+                <div> 
+                  <PostIconBox />
                 </div>
               </div>
             ))}
