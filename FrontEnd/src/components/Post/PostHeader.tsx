@@ -6,31 +6,24 @@ import { Avatar } from '@mui/material'
 import React from 'react'
 
 export type PostHeaderProps = {
-  writer: string
-  created_at: Date
+  owner_username: string
+  owner_thumb: string
+  createdAt: Date
 }
 
-function PostHeader({ writer, created_at }: PostHeaderProps) {
-  return (
-    <div css={headerStyle}>
-      <div css={iconStyle}>
-        <Avatar
-          alt="user-avatar"
-          src={gravatar.url('test.email', { s: '60px', d: 'retro' })}
-          sx={{ width: 60, height: 60 }}
-        />
-      </div>
-      <div css={titleStyle}>
-        <h4>
-          <span>{writer}/ etc ..</span>
-        </h4>
-        <div className={'time-date'}>{created_at.toDateString()}</div>
-      </div>
-      <div css={moreStyle} onClick={() => {}}>
-        <MdMoreHoriz />
-      </div>
+function PostHeader({ owner_username, owner_thumb, createdAt }: PostHeaderProps) {  
+  return <div css={headerStyle}>
+    <div css={iconStyle}>
+      <Avatar alt='user-avatar' src={owner_thumb}
+              sx={{ width: 60, height: 60 }} />
     </div>
-  )
+    <div css={titleStyle}>
+      <h4><span>{owner_username}/ etc ..</span></h4>
+      <div className={'time-date'}>{createdAt}</div>
+    </div>
+    <div css={moreStyle} onClick={() => {
+    }}><MdMoreHoriz /></div>
+  </div>
 }
 
 const headerStyle = css`

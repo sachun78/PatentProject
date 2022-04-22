@@ -1,30 +1,28 @@
 import { css } from '@emotion/react'
 import { ImageList, ImageListItem } from '@mui/material'
-import { usePost } from 'lib/api/post/usePost'
 import { IComment } from 'lib/api/types'
 import media from 'lib/styles/media'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { writer } from 'repl'
 import PostFooter from './PostFooter'
 import PostHeader from './PostHeader'
 
 type PostProps = {
-
-  index: number
+  
   id: string
-  text: string
-  like: number
-  comments: IComment[]
-  writer: string
-  created_at: Date
-  isLike?: boolean  
-  // post: IPost
+  owner_username: string
+  owner_thumb: string
+  like_cnt: number
+  contents: string
+  comment: IComment[]
+  images: string[]
+  createdAt: Date
+  isLike?: boolean
+   
 }
 
-function Post({ index, id, isLike = false }: PostProps) {
-  const post = usePost(index);
-  const { writer, created_at, text, comments, like, images } = post  
+function Post({ id, isLike = false, owner_username, owner_thumb, like_cnt, comment, images, createdAt, contents}: PostProps) {
+
   const imageData = [] as any;  
   
   for(let i = 0; i < 9; i++) {
@@ -33,21 +31,27 @@ function Post({ index, id, isLike = false }: PostProps) {
       src: 'https://picsum.photos/810/300?random=' + i,
       alt: 'image' + i
     })
-  }
+  } 
 
   return (
-    <div css={postStyle}>
-      <PostHeader writer={writer} created_at={created_at} />
+    <div css={postStyle}>      
+      <PostHeader owner_username={owner_username} owner_thumb={owner_thumb} createdAt={createdAt} />
       <Link
         to={`/postDetail/${id}`}
         state={{
-          postNumber: index,
-          imageData: imageData          
+          id: id,
+          images: imageData,
+          owner_username: owner_username,
+          owner_thumb: owner_thumb,
+          like_cnt: like_cnt,
+          comment: comment,
+          createdAt: createdAt,
+          contents: contents,          
         }}
       >
       <figure>
         <ImageList variant='masonry' cols={3} gap={8}>
-          {imageData.map((image: any) => (
+          {imageData?.map((image: any) => (
             <ImageListItem key={image.imageId}>
               <img 
                 src={image.src}
@@ -62,10 +66,10 @@ function Post({ index, id, isLike = false }: PostProps) {
         </ImageList>      
       </figure>      
       <div css={bodyStyle}>
-        {text}
+        {contents}
       </div>
-      </Link>
-      <PostFooter id={id} index={index} comments={comments} like={like} isLike={isLike} imageData={imageData} />
+      </Link>      
+      <PostFooter id={id} contents={contents} owner_thumb={owner_thumb} owner_username={owner_username} comment={comment} like_cnt={like_cnt} isLike={isLike} imageData={imageData} createdAt={createdAt}/>
     </div>
   )
 }

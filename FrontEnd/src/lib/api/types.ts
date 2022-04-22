@@ -48,21 +48,26 @@ export type IAuthCode = {
 }
 
 export type IPost = {
-  id: string
-  title: string
-  text: string
-  comments: IComment[]
-  like: number
-  writer: string
-  created_at: Date
-  updated_at?: Date
-  images: any
+  id: string,  
+  contents: string,
+  comment: IComment[],
+  owner_id: string,
+  owner_thumb: string,
+  owner_username: string,
+  like_cnt: number,
+  writer: string,
+  createdAt: Date,
+  updated_at?: Date,
+  images: string []
 }
 
 export type IComment = {
-  id: string
-  text: string
-  created_at?: Date
-  updated_at?: Date
+  _id: string,
+  owner_id: string,
+  owner_thumb: string,
+  text: string,
+  contents: string,
+  created_at?: Date,
+  updated_at?: Date,
   writer: string
 }
