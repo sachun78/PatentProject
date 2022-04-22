@@ -29,7 +29,7 @@ export function postImgUpload(req: IRequest, res: Response, next: NextFunction) 
     console.log(req.files);
     if (err) {
       console.error(err)
-      return res.status(409).json({ success: false, error: 'UPLOAD ERROR' })
+      return res.status(409).json({ success: false, error: `${err.code}`})
     }
     
     const files = req.files as Express.Multer.File[];

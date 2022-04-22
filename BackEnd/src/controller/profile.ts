@@ -24,7 +24,7 @@ export function profileImage(req: IRequest, res: Response, next: NextFunction) {
   upload(req, res, (err) => {
     if (err) {
       console.error(err)
-      return res.status(409).json({ success: false, error: 'UPLOAD ERROR' })
+      return res.status(409).json({ success: false, error: `${err.code}` })
     }
     userRepo.updateUser(req.userId, { photo_path: req.file?.filename });
     return res.json({
