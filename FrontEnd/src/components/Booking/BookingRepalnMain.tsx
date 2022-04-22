@@ -3,13 +3,13 @@ import { IMeeting } from '../../lib/api/types'
 import useInput from 'hooks/useInput'
 import RequestSection from 'pages/Meeting/meeting-create-form/RequestForm/RequestSection'
 import DatePickerInput from '../DatePickerInput'
-import TimePickerInput from '../DatePickerInput/TimePickerInput'
 import LocationInput from '../LocationMap/LocationInput'
 import { Button, OutlinedInput, Typography } from '@mui/material'
 import React, { useCallback } from 'react'
 import { replanMeeting } from '../../lib/api/meeting/replanMeeting'
 import { useMutation, useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
+import TimeGridInput from '../DatePickerInput/TimeGridInput'
 
 export type BookingRepalnMainProps = {
   meeting: IMeeting
@@ -32,6 +32,11 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault()
+
+      if (!comment) {
+        return
+      }
+
       replanMut.mutate({
         code: meeting.code,
         data: {
@@ -49,7 +54,7 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
     return (
       <div css={mainStyle}>
         <Typography variant="h5">
-          Confirmation or scheduling has been completed.
+          Confirmation or Rescheduling has been completed.
         </Typography>
         <Link to={'/'} style={{ textAlign: 'center', marginTop: '1rem' }}>
           Back
@@ -61,7 +66,6 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
   return (
     <div css={mainStyle}>
       <Typography component="h6" variant="h3" align={'center'}>
-        {' '}
         Replan
       </Typography>
       <form onSubmit={onSubmit}>
@@ -77,19 +81,7 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
           />
         </RequestSection>
         <RequestSection title={'Meeting Time'}>
-          <TimePickerInput
-            onChange={(value: Date) => {
-              setTime(value)
-              setDate((prev) => {
-                const newDate = new Date(prev)
-                newDate.setHours(value.getHours())
-                newDate.setMinutes(value.getMinutes())
-                console.log(newDate)
-                return newDate
-              })
-            }}
-            value={time}
-          />
+          <TimeGridInput time={time} />
         </RequestSection>
         <RequestSection title={'Location'}>
           <LocationInput
@@ -103,14 +95,15 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
           <OutlinedInput
             placeholder="Leave a comment"
             name="comment"
+            fullWidth
             value={comment}
             onChange={onChangeComment}
             minRows={3}
             multiline
           />
         </RequestSection>
-        <Button variant={'contained'} type={'submit'}>
-          Submit{' '}
+        <Button variant={'contained'} type={'submit'} fullWidth>
+          Submit
         </Button>
       </form>
     </div>

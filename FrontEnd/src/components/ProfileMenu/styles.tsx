@@ -27,7 +27,15 @@ export const photoStyle = css`
   }
 
   svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    padding: 0.75rem;
+    border-radius: 1rem;
+    color: ${brandColor};
+
     &:hover {
+      background: ${palette.grey[50]};
+      border: 1px solid ${brandColor};
       color: ${brandColor};
     }
 
@@ -154,7 +162,7 @@ export const itemStyle = css`
 
   .btn {
     all: unset;
-    display: inline-flex;
+    display: inline-block;
   }
 `
 export const inputStyle = css`

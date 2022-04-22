@@ -9,10 +9,9 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material'
-import { ContainerBlock, MeetingSection } from './styles'
+import { ContainerBlock, MeetingSection } from '../../pages/Meeting/styles'
 import { getEvent } from 'lib/api/event/getEvent'
 import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
-import { format } from 'date-fns'
 import useInput from 'hooks/useInput'
 import { createMeetingResult } from 'lib/api/meeting/createMeetingResult'
 
@@ -90,27 +89,7 @@ function MeetingResult({}: MeetingResultProps) {
 
   return (
     <>
-      <ContainerBlock style={{ position: 'fixed' }}>
-        <h1>
-          {eventData.title}::{metData.title}
-        </h1>
-        <MeetingSection>
-          <h2>Met People</h2>
-          <p>{metData.toEmail}</p>
-        </MeetingSection>
-        <MeetingSection>
-          <h2>Met Date</h2>
-          <p>
-            {format(new Date(metData.date), 'yyyy-MM-dd')}{' '}
-            {format(new Date(metData.time), 'HH:mm aaa')}
-          </p>
-        </MeetingSection>
-        <MeetingSection>
-          <h2>Met Place</h2>
-          <p>{metData.location}</p>
-        </MeetingSection>
-      </ContainerBlock>
-      <ContainerBlock style={{ marginLeft: '30.0625rem' }}>
+      <ContainerBlock>
         {!metData.history ? (
           <form onSubmit={onSubmit}>
             <MeetingSection>

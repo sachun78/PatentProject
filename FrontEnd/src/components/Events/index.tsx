@@ -1,6 +1,5 @@
 import AddIcon from '@mui/icons-material/Add'
 import {
-  Alert,
   Button,
   Checkbox,
   CircularProgress,
@@ -19,7 +18,7 @@ import { eventSwitchState } from 'atoms/memberShipTabState'
 import EventCalendar from './EventCalendar'
 import EventCard from './EventCard'
 import EventModal from './EventModal'
-import { noScheduleStyle, wrapper } from './styles'
+import { noScheduleStyle, OptionContainer, wrapper } from './styles'
 import { labelStyle } from '../Schedules/styles'
 import { formatDistanceToNow } from 'date-fns'
 import { useCurrentEventState } from '../../atoms/eventState'
@@ -80,7 +79,7 @@ function Events({}: EventsProps) {
   return (
     <>
       <FormGroup row={true} style={{ marginBottom: '20px' }}>
-        <Alert severity="info" style={{ alignItems: 'center', width: '100%' }}>
+        <OptionContainer>
           <FormControlLabel
             control={
               <Switch
@@ -101,7 +100,7 @@ function Events({}: EventsProps) {
               label="Outdated"
             />
           )}
-        </Alert>
+        </OptionContainer>
       </FormGroup>
       {checked ? (
         <EventCalendar />

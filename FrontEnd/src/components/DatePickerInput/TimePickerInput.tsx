@@ -1,13 +1,13 @@
-import { LocalizationProvider, StaticTimePicker } from '@mui/lab'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import InputBase from '../InputBase'
 import { css } from '@emotion/react'
 import { useRef, useState } from 'react'
 import useOnClickOutside from 'use-onclickoutside'
+import { LocalizationProvider, StaticTimePicker } from '@mui/lab'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import { TextField } from '@mui/material'
 
 export type TimePickerProps = {
-  value: Date
+  value: Date | null
   onChange(value: Date): void
 }
 
@@ -24,7 +24,7 @@ function TimePickerInput({ value, onChange }: TimePickerProps) {
 
   const handleChange = (new_value: Date | null) => {
     if (new_value) {
-      if (value.getMinutes() !== new_value.getMinutes()) {
+      if (value && value.getMinutes() !== new_value.getMinutes()) {
         onChange(new_value)
         setOpen(false)
       }
@@ -48,9 +48,13 @@ function TimePickerInput({ value, onChange }: TimePickerProps) {
           }
         }}
       >
-        {value?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        {value
+          ? value?.toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            })
+          : 'Select time'}
       </div>
-
       {open && (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <div css={calendarStyle}>
@@ -67,7 +71,7 @@ function TimePickerInput({ value, onChange }: TimePickerProps) {
                 }
               }}
               onChange={handleChange}
-              minutesStep={5}
+              minutesStep={30}
               displayStaticWrapperAs="desktop"
               showToolbar={false}
               renderInput={(params) => <TextField {...params} />}
@@ -84,14 +88,14 @@ const wrapper = css`
   width: 100%;
 `
 
-const textStyle = css`
+export const textStyle = css`
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  padding-left: 1.6rem;
-  padding-right: 1.6rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
   width: 100%;
 
   &:focus-visible {

@@ -186,7 +186,7 @@ function ProfileMenu({}: ProfileMenuProps) {
         />
       </InfoViewSection>
       <InfoViewSection title="Additional">
-        <InfoViewCard.Item title="Previous company" type={'career'} />
+        <InfoViewCard.Item title="About" type={'career'} />
       </InfoViewSection>
     </div>
   )
