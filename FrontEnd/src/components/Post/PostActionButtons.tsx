@@ -1,13 +1,14 @@
+import { deletePost } from 'lib/api/post/deletePost'
 import { usePost } from 'lib/api/post/usePost'
 import { usePosts } from 'lib/api/post/usePosts'
 import { IPost } from 'lib/api/types'
-import React, { useState } from 'react'
-import { useQueryClient } from 'react-query'
+import React, { useCallback, useState } from 'react'
+import { useMutation, useQueryClient } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 import AskRemoveModal from './AskRemoveModal'
 
 type postActionButtonsProps = {
-  id: number
+  id: string
 }
 
 const PostActionButtons = ({ id }: postActionButtonsProps) => {
@@ -33,15 +34,31 @@ const PostActionButtons = ({ id }: postActionButtonsProps) => {
     setModal(false)
   }
 
+  const deletePostlMut = useMutation(deletePost, {
+    onSuccess: () => {
+      qc.invalidateQueries(['post', id])
+      navigate(-1)
+    },
+  })  
+
+  const onDelete = useCallback(() => {
+    if (!id) return
+    deletePostlMut.mutate(id)
+  }, [deletePostlMut, id])
+
+  const onEdit = () => {
+    navigate('/PostEdit/', { state: id })
+  }
+
   return (
     <>
-      <div className={'item'}>수정</div>
+      <div className={'item'} onClick={onEdit}>Edit</div>
       <div className={'item'} onClick={onRemoveClick}>
-        삭제
+        Delete
       </div>
       <AskRemoveModal
         visible={modal}
-        onConfirm={onConfirm}
+        onConfirm={onDelete}
         onCancel={onCancel}
       />
     </>

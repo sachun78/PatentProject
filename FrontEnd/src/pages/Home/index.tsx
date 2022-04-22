@@ -2,7 +2,6 @@ import { css } from '@emotion/react'
 import { Stack } from '@mui/material'
 import Post from 'components/Post/'
 import usePostQuery from 'hooks/query/usePostQuery'
-import { usePosts } from 'lib/api/post/usePosts'
 import { IPost } from 'lib/api/types'
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
@@ -11,51 +10,37 @@ import PostForm from './form/PostForm'
 type HomeProps = {}
 
 function Home({}: HomeProps) {
-  const { data, isLoading } = usePostQuery({ staleTime: Infinity })
-  const posts = usePosts()
+  const { data: posts, isLoading } = usePostQuery(1)
+  
+  if(isLoading) return <div>로딩중!!</div>
 
-  //scroll event for infinite scroll
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll) //clean up
-    }
-  }, [])
-
-  const handleScroll = (e: Event) => {
-    const window = e.currentTarget as Window
-    if (window.scrollY === 0) {
-      console.log('top')
-    }
-  }
-
-  return (
-    <>
-      <Stack>
-        <Link css={linkStyle} to={'/postWrite/'} state={{}}>
-          <PostForm />
-        </Link>
-        <div css={postViewStyle}>
-          {posts
-            .sort((a: IPost, b: IPost) => Number(b.id) - Number(a.id))
-            .map((post: IPost) => (
-              <Post
-                key={post.id}
-                id={post.id}
-                index={posts.indexOf(post)}
-                text={post.text}
-                like={post.like}
-                comments={post.comments}
-                writer={post.writer}
-                created_at={post.created_at}
-              />
-            ))}
-        </div>
-      </Stack>
-      {/* 임시 주석처리 */}
-      {/* <InitialInputModal /> */}
-    </>
-  )
+  return <>
+    <Stack>
+      <Link css={linkStyle} to={'/postWrite/'}
+        state={{
+        }}
+      > 
+        <PostForm />
+      </Link>
+      <div css={postViewStyle}>        
+        {posts?.map((post: IPost) =>
+        <Post 
+          key={post.id}
+          id={post.id}                              
+          owner_username={post.owner_username}
+          owner_thumb={post.owner_thumb}
+          like_cnt={post.like_cnt}
+          contents={post.contents}
+          comment={post.comment}
+          images={post.images}
+          createdAt={post.createdAt}                    
+        />
+        )}        
+      </div>
+    </Stack>
+    {/* 임시 주석처리 */}
+    {/* <InitialInputModal /> */}
+  </>
 }
 
 const postViewStyle = css`
