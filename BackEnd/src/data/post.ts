@@ -12,6 +12,7 @@ type PostType = {
 }
 
 type CommentType = {
+  id: string;
   owner_id: string;
   owner_username: string;
   ower_thumb: string;
@@ -28,6 +29,7 @@ const postSchema = new mongoose.Schema<PostType>({
   like_cnt: { type: Number, default: 0},
   comment: {
     type: [{
+      id: { type: String, required: true},
       owner_id: { type: String, required: true},
       owner_username: { type: String, required: true },
       owner_thumb: { type: String, default: ''},

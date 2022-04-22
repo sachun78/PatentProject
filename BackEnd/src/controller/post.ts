@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import shortid from 'shortid';
 import * as postRepo from "data/post";
 import * as userRepo from 'data/auth';
 
@@ -9,11 +10,8 @@ interface IRequest extends Request {
 export async function getPosts(req: IRequest, res: Response) {
   try {
     const postId = req.params.id;
-    if (!postId) {
-      const posts = await postRepo.getPostAll();
-      return res.status(200).json(posts);
-    }
-    return res.status(200).json(await postRepo.findById(postId));
+    const posts = await (postId ? postRepo.findById(postId) : postRepo.getPostAll());
+    res.status(200).json(posts);
   }
   catch(e) {
     console.error(`[Post][getPosts] ${e}`);
@@ -73,7 +71,7 @@ export async function deletePost(req: IRequest, res: Response) {
         res.status(200).json({message: 'delete success!!!'});
       }
       else {
-        return res.status(409).json({ message: 'owner is different'});
+        return res.status(403).send('[deletePost] forbidden');
       }
     }
     else {
@@ -95,6 +93,7 @@ export async function createComment(req: IRequest, res: Response) {
       return res.status(409).json({ message: `user not found`});
     }
 
+    comment['id'] = shortid.generate();
     comment['owner_id'] = user.id;
     comment['owner_username'] = user.username;
     comment['owner_thumb'] = user.photo_path;
@@ -104,7 +103,7 @@ export async function createComment(req: IRequest, res: Response) {
       return res.status(409).json({ message: `POST(${postId}) is not found`});
     }
 
-    let postComment = [comment, ...findPost.comment];
+    let postComment = [...findPost.comment, comment];
     console.log(postComment);
 
     const update = await postRepo.editPost(postId, {comment: postComment});
@@ -114,5 +113,55 @@ export async function createComment(req: IRequest, res: Response) {
   catch(e) {
     console.error(`[Post][createComment] ${e}`);
     throw new Error(`[Post][createComment] ${e}`);
+  }
+}
+
+export async function editComment(req: IRequest, res: Response) {
+  const postId: string = req.query.postId as string;
+  const commentId: string = req.query.commentId as string;
+  const bodyData = req.body;
+
+  try {
+    const post = await postRepo.findById(postId);
+    if (!post) {
+      return res.status(409).json({ message: 'post is not found'});
+    }
+    else {
+      const comments = post.comment;
+      const result = comments.find(comment => comment.id === commentId);
+      console.log('pre', result);
+      if (result) {
+        result.contents = bodyData.contents; 
+        result.createdAt = bodyData.createdAt;
+      }
+      const update = await postRepo.editPost(postId, {comment: result});
+      res.status(200).json(update);
+    }
+  }
+  catch(e) {
+    console.error(`[Post][editComment] ${e}`);
+    throw new Error(`[Post][editComment] ${e}`);
+  }
+}
+
+export async function deleteComment(req: IRequest, res: Response) {
+  const postId: string = req.query.postId as string;
+  const commentId: string = req.query.commentId as string;
+
+  try {
+    const post = await postRepo.findById(postId);
+    if (!post) {
+      return res.status(409).json({ message: 'post is not found'});
+    }
+    else {
+      const comments = post.comment;
+      const result = comments.filter(comment => comment.id !== commentId);
+      const update = await postRepo.editPost(postId, {comment: result});
+      res.status(200).json(update);
+    }
+  }
+  catch(e) {
+    console.error(`[Post][deleteComment] ${e}`);
+    throw new Error(`[Post][deleteComment] ${e}`);
   }
 }

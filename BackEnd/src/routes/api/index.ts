@@ -25,7 +25,7 @@ apiRoute.use((req: Request, res: Response, next: NextFunction) => {
 
 apiRoute.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(error);
-  res.sendStatus(500);
+  res.sendStatus(500).json(error);
 });
 
 export default apiRoute

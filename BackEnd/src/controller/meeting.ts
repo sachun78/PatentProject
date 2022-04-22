@@ -50,7 +50,7 @@ export async function getMeeting(req: IRequest, res: Response) {
   const data = await meetingRepo.getById(id);
   if (data) {
     if (data.ownerId !== user_id) {
-      return res.status(403).send('forbidden');
+      return res.status(403).send('[getMeeting] forbidden');
     }
     res.status(200).json(data);
   }
@@ -122,11 +122,18 @@ export async function sendResultMail(req: IRequest, res: Response) {
       meeting["status"] = mStatus;
       console.log(meeting);
       const mailInfo = sendmail(meeting, EMAILTYPE.RESULT);
+
       if (!mailInfo) {
         return res.status(500).json({ message: `Failed email send ${meeting.toEmail}`});
       }
       await meetingRepo.updateMeeting(meeting.id, meeting);
       return res.status(200).json({ message: `Success send email: ${meeting.toEmail}`});
+      // sendmail(meeting, EMAILTYPE.RESULT)
+      // .then(mailInfo => {
+      //   meetingRepo.updateMeeting(meeting.id, meeting);
+      //   return res.status(200).json({ message: `Success send email: ${meeting.toEmail}`});
+      // })
+      // .catch(reason => res.status(500).json({ message: `Failed email send ${meeting.toEmail}`}));
     }
     else {
       return res.status(409).json({ message: `[Meeting(${mId}) not found] or [status(${mStatus}) is wrong]`});
@@ -148,12 +155,16 @@ export async function sendInvitMail(req: IRequest, res: Response) {
       return res.status(500).json({ message: `Failed save meeting ${bodyData.toEmail}`});
     }
 
-    const mailInfo = sendmail(meetingData, EMAILTYPE.INVI);
-    if (!mailInfo) {
-      return res.status(500).json({ message: `Failed email send ${bodyData.toEmail}`});
-    }
+    sendmail(meetingData, EMAILTYPE.INVI)
+    .then( value => res.status(200).json({ message: `Success send email: ${bodyData.toEmail}`}))
+    .catch( reason => res.status(500).json({ message: `Failed email send ${bodyData.toEmail}`}));
 
-    res.status(200).json({ message: `Success send email: ${bodyData.toEmail}`});
+    // const mailInfo = sendmail(meetingData, EMAILTYPE.INVI);
+    // if (!mailInfo) {
+    //   return res.status(500).json({ message: `Failed email send ${bodyData.toEmail}`});
+    // }
+
+    // res.status(200).json({ message: `Success send email: ${bodyData.toEmail}`});
   }
   catch(e) {
     console.error(e);
