@@ -1,7 +1,6 @@
 import nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import envConfig from 'config';
-import { resolve } from 'path';
 
 export const enum EMAILTYPE {
   AUTH, // authorization
