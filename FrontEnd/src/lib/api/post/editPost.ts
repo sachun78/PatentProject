@@ -1,7 +1,7 @@
 import client from '../client'
 
 export async function editPost([input, post_id]: [editInput, string]) {
-  const response = await client.patch(`/api/post/${post_id}`, {
+  const response = await client.patch(`/api/post/post/${post_id}`, {
     ...input
   })
   return response.data
@@ -10,4 +10,5 @@ export async function editPost([input, post_id]: [editInput, string]) {
 type editInput = {
   contents: string
 }
+
 

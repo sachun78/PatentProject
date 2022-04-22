@@ -1,5 +1,5 @@
 export type User = {
-  id: string
+  _id: string
   email: string
   username: string
   photo_path: string
@@ -48,7 +48,7 @@ export type IAuthCode = {
 }
 
 export type IPost = {
-  id: string,  
+  _id: string,  
   contents: string,
   comment: IComment[],
   owner_id: string,

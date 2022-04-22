@@ -1,15 +1,17 @@
 import { css } from '@emotion/react'
 import { ImageList, ImageListItem } from '@mui/material'
+import { getPost } from 'lib/api/post/getPost'
 import { IComment } from 'lib/api/types'
 import media from 'lib/styles/media'
 import React from 'react'
+import { useQuery } from 'react-query'
 import { Link } from 'react-router-dom'
 import PostFooter from './PostFooter'
 import PostHeader from './PostHeader'
 
 type PostProps = {
   
-  id: string
+  _id: string
   owner_username: string
   owner_thumb: string
   like_cnt: number
@@ -21,7 +23,10 @@ type PostProps = {
    
 }
 
-function Post({ id, isLike = false, owner_username, owner_thumb, like_cnt, comment, images, createdAt, contents}: PostProps) {
+function Post({ _id, isLike = false, owner_username, owner_thumb, like_cnt, comment, images, createdAt, contents}: PostProps) {
+  const { data: post, isLoading } = useQuery(['post', _id], getPost, {
+    retry: false,    
+  })
 
   const imageData = [] as any;  
   
@@ -37,9 +42,9 @@ function Post({ id, isLike = false, owner_username, owner_thumb, like_cnt, comme
     <div css={postStyle}>      
       <PostHeader owner_username={owner_username} owner_thumb={owner_thumb} createdAt={createdAt} />
       <Link
-        to={`/postDetail/${id}`}
+        to={`/postDetail/${_id}`}
         state={{
-          id: id,
+          _id: _id,
           images: imageData,
           owner_username: owner_username,
           owner_thumb: owner_thumb,
@@ -69,7 +74,7 @@ function Post({ id, isLike = false, owner_username, owner_thumb, like_cnt, comme
         {contents}
       </div>
       </Link>      
-      <PostFooter id={id} contents={contents} owner_thumb={owner_thumb} owner_username={owner_username} comment={comment} like_cnt={like_cnt} isLike={isLike} imageData={imageData} createdAt={createdAt}/>
+      <PostFooter _id={_id} contents={contents} owner_thumb={owner_thumb} owner_username={owner_username} comment={comment} like_cnt={like_cnt} isLike={isLike} imageData={imageData} createdAt={createdAt}/>
     </div>
   )
 }

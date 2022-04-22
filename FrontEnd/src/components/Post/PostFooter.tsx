@@ -7,9 +7,10 @@ import { brandColor } from 'lib/palette'
 import React from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
+import PostIconBox from './PostIconBox'
 
 export type PostFooterProps = {
-  id: string
+  _id: string
   contents: string  
   isLike?: boolean
   owner_thumb: string
@@ -20,7 +21,7 @@ export type PostFooterProps = {
   createdAt: Date
 }
 
-function PostFooter({ id, contents, isLike = false, like_cnt, comment, imageData, owner_thumb, owner_username, createdAt }: PostFooterProps) {  
+function PostFooter({ _id, contents, isLike = false, like_cnt, comment, imageData, owner_thumb, owner_username, createdAt }: PostFooterProps) {  
 
   const [likeClick, onToggleLike] = useToggle(isLike)  
    
@@ -44,9 +45,9 @@ function PostFooter({ id, contents, isLike = false, like_cnt, comment, imageData
         {/* {like + Number(likeClick)} */}
       </div>
       <Link
-        to={`/postDetail/${id}`}
+        to={`/postDetail/${_id}`}
         state={{
-          id: id,
+          _id: _id,
           images: imageData,
           owner_username: owner_username,
           owner_thumb: owner_thumb,
@@ -64,14 +65,17 @@ function PostFooter({ id, contents, isLike = false, like_cnt, comment, imageData
     {viewComments.length === 0 ? <div></div> :
     <div css={commentStyle}>
       {viewComments.map((viewComment: IComment) => (
+        <>
       <OutlinedInput key={viewComment._id} value={viewComment.contents}
         fullWidth multiline
         sx={{ borderRadius: '1rem', paddingLeft: '1.25rem' }}
         startAdornment={<Avatar alt='post-user-avatar'
                                 src={gravatar.url('temp.email' + viewComment.owner_id,
                                   { s: '44px', d: 'retro' })}
-                                sx={{ width: 22, height: 22, mr: '25px' }} />} 
-      />      
+                                sx={{ width: 22, height: 22, mr: '25px' }} />}
+        endAdornment={<PostIconBox />}                         
+      />                                
+      </>  
       ))}
       
     </div>
