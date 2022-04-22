@@ -40,15 +40,11 @@ function PostDetail({ isLike = false }: postDetailProps) {
     comment,
     createdAt,
     contents,
-  } = location.state as IPost
-
-  console.log(id)
+  } = location.state as IPost  
 
   const { data: post, isLoading } = useQuery(['post', id], getPost, {
     retry: false,
-  })
-  if (isLoading) console.log('로딩')
-  console.log(post)  
+  })   
 
   const [commentVisible, onToggleComment, setCommentVisible] = useToggle(false)
   const [comments, onChangeComments, setComments] = useInput('')
@@ -67,7 +63,6 @@ function PostDetail({ isLike = false }: postDetailProps) {
     setOpen(true)
   }
   const handleClose = () => setOpen(false)
-  const [state, setState] = useState(0)
 
   const onKeyDown = useCallback(
     (e: any) => {
@@ -178,7 +173,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
               startAdornment={
                 <Avatar
                   alt="post-user-avatar"
-                  src={gravatar.url('ryanhe4@gmail.com', {
+                  src={gravatar.url(user.email, {
                     s: '44px',
                     d: 'retro',
                   })}

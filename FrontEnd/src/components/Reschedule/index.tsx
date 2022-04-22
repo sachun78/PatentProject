@@ -1,13 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import useUserQuery from 'hooks/query/useUserQuery'
-import {
-  Button,
-  Modal,
-  Paper,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Button, Dialog, Stack, TextField } from '@mui/material'
 import { inputStyle } from 'pages/Login/styles'
 import useInput from 'hooks/useInput'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
@@ -22,6 +15,7 @@ import { wrapper } from '../Booking/styles'
 import { IMeeting } from 'lib/api/types'
 import { useRecoilState } from 'recoil'
 import { replanState } from 'atoms/replanState'
+import { ContainerBlock } from 'pages/Meeting/styles'
 
 export type MeetingRescheduleProps = {}
 
@@ -97,19 +91,25 @@ function MeetingReschedule({}: MeetingRescheduleProps) {
 
   if (!userData) {
     return (
-      <div>
+      <ContainerBlock
+        style={{
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
         <h1>Replan Need Login</h1>
         <Stack alignItems={'stretch'} spacing={2} direction={'row'}>
-          <Button onClick={toggleLoginModal}>Login</Button>
-          <Button onClick={onNavigateSignup}>Sign up</Button>
+          <Button onClick={toggleLoginModal} variant={'contained'}>
+            Login
+          </Button>
+          <Button onClick={onNavigateSignup} variant={'contained'}>
+            Sign up
+          </Button>
         </Stack>
-        <Modal open={loginModalOpen} onClose={toggleLoginModal}>
-          <Paper sx={{ width: '50%' }}>
-            <Typography id="modal-modal-title" variant="h2" component="h2">
-              {' '}
-              Login{' '}
-            </Typography>
-            <form onSubmit={onSubmit}>
+        <Dialog open={loginModalOpen} onClose={toggleLoginModal}>
+          <ContainerBlock>
+            <h1> Login </h1>
+            <form onSubmit={onSubmit} style={{ display: 'flex' }}>
               <TextField
                 label="Email"
                 variant="outlined"
@@ -118,7 +118,6 @@ function MeetingReschedule({}: MeetingRescheduleProps) {
                 value={email}
                 onChange={onChangeEmail}
                 css={inputStyle}
-                InputProps={{ style: { fontSize: 15 } }}
               />
               <TextField
                 label="Password"
@@ -129,13 +128,18 @@ function MeetingReschedule({}: MeetingRescheduleProps) {
                 onChange={onChangePassword}
                 css={inputStyle}
                 autoComplete="password"
-                InputProps={{ style: { fontSize: 15 } }}
               />
-              <Button type="submit">Login</Button>
+              <Button
+                type="submit"
+                style={{ height: '50px' }}
+                variant={'contained'}
+              >
+                Login
+              </Button>
             </form>
-          </Paper>
-        </Modal>
-      </div>
+          </ContainerBlock>
+        </Dialog>
+      </ContainerBlock>
     )
   }
 

@@ -1,5 +1,4 @@
-import { AutocompleteValue, Avatar, Box, Button, Modal, Typography } from '@mui/material'
-import IconControl from '../IconControl'
+import { AutocompleteValue, Box, Button, Modal } from '@mui/material'
 import ProfileSection from '../ProfileMenu/ProfileSection'
 import ProfileCard from '../ProfileMenu/ProfileCard'
 import useInputs from 'hooks/useInputs'
@@ -19,26 +18,32 @@ function InitialInputModal({}: InitialInputModalProps) {
   const { data } = useProfileQuery()
   const { open, setOpen, handleClose } = useModal(false)
   const qc = useQueryClient()
-  const mutation = useMutation(() => patchProfile({ ...form, field: fields, country }), {
-    onSuccess: (data) => {
-      setOpen(false)
-      qc.setQueryData('profile', data)
-    },
-    onError: (err: AxiosError) => {
-      setError(err.message)
+  const mutation = useMutation(
+    () => patchProfile({ ...form, field: fields, country }),
+    {
+      onSuccess: (data) => {
+        setOpen(false)
+        qc.setQueryData('profile', data)
+      },
+      onError: (err: AxiosError) => {
+        setError(err.message)
+      },
     }
-  })
+  )
   const [error, setError] = useState<string | null>(null)
   const [form, onChange] = useInputs({
     company: '',
     department: '',
-    position: ''
+    position: '',
   })
   const { company, department, position } = form
 
   // COUNTRY CONTROL
   const [country, setCountry] = useState('AD')
-  const handleCountry = (e: SyntheticEvent, v: AutocompleteValue<CountryType, undefined, undefined, undefined>) => {
+  const handleCountry = (
+    e: SyntheticEvent,
+    v: AutocompleteValue<CountryType, undefined, undefined, undefined>
+  ) => {
     if (!v) return
     setCountry(v.code)
     console.log(v)
@@ -53,7 +58,7 @@ function InitialInputModal({}: InitialInputModalProps) {
   }
 
   const onFieldRemove = useCallback((tag_name: string) => {
-    setFields(prevFields => prevFields.filter(v => v !== tag_name))
+    setFields((prevFields) => prevFields.filter((v) => v !== tag_name))
   }, [])
 
   const onFieldAdd = useCallback(() => {
@@ -65,29 +70,34 @@ function InitialInputModal({}: InitialInputModalProps) {
     }
   }, [fieldText, fields])
 
-  const handleSubmit = useCallback((e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-    if (!form.company || !form.company.trim()
-      || !form.department || !form.department.trim()
-      || !form.position || !form.position.trim()) {
-      setError('Please fill all fields')
-      return
-    }
-    if (fields?.length === 0) {
-      setError('Please add at least one field')
-      return
-    }
+  const handleSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault()
+      setError(null)
+      if (
+        !form.company.trim() ||
+        !form.department.trim() ||
+        !form.position.trim()
+      ) {
+        setError('Please enter all items')
+        return
+      }
+      if (fields?.length === 0) {
+        setError('Enter at least one of your fields')
+        return
+      }
 
-    // MUTATION
-    mutation.mutate()
-  }, [fields?.length, form.company, form.department, form.position, mutation])
+      // MUTATION
+      mutation.mutate()
+    },
+    [fields?.length, form.company, form.department, form.position, mutation]
+  )
 
   useEffect(() => {
     if (data?.company === '') {
       setOpen(true)
     }
-  }, [data?.company])
+  }, [data?.company, setOpen])
 
   useEffect(() => {
     if (error === '') return
@@ -95,34 +105,72 @@ function InitialInputModal({}: InitialInputModalProps) {
       position: 'bottom-center',
       pauseOnHover: false,
       pauseOnFocusLoss: false,
-      autoClose: 3000
+      autoClose: 3000,
     })
     setError('')
   }, [error])
 
-  return <Modal open={open} onClose={handleClose}
-                disableEscapeKeyDown disableEnforceFocus>
-    <Box css={boxWrapper}>
-      <Avatar sx={{ m: 2, bgcolor: 'secondary.main' }}>
-        <IconControl name={'edit'} />
-      </Avatar>
-      <Typography component='h1' variant='h3'>
-        Welcome Your First Login
-      </Typography>
-      <form css={formWrapper} onSubmit={handleSubmit}>
-        <ProfileSection title='Belonging' description={'This information also change on Profile page.'}>
-          <ProfileCard.Text title='company' text={company} editable onChange={onChange} />
-          <ProfileCard.Text title='department' text={department} editable onChange={onChange} />
-          <ProfileCard.Text title='position' text={position} editable onChange={onChange} />
-          <ProfileCard.Field title='field' text={fieldText} onChange={onChangeFieldText}
-                             onAdd={onFieldAdd} fields={fields} onRemove={onFieldRemove} editable />
-          <ProfileCard.Country title='country' onChange={handleCountry}
-                               country={country} editable />
-        </ProfileSection>
-        <Button className={'bot-button'} type='submit' fullWidth color='primary' variant='contained'>OK</Button>
-      </form>
-    </Box>
-  </Modal>
+  return (
+    <Modal
+      open={open}
+      onClose={handleClose}
+      disableEscapeKeyDown
+      disableEnforceFocus
+    >
+      <Box css={boxWrapper}>
+        <img src={'/assets/wemet_logo.png'} alt={'logo'} />
+        <h1>Enter your profile</h1>
+        <form css={formWrapper} onSubmit={handleSubmit}>
+          <ProfileSection
+            title="Profile"
+            description={'Please enter your default profile.'}
+          >
+            <ProfileCard.Text
+              title="company"
+              text={company}
+              editable
+              onChange={onChange}
+            />
+            <ProfileCard.Text
+              title="department"
+              text={department}
+              editable
+              onChange={onChange}
+            />
+            <ProfileCard.Text
+              title="position"
+              text={position}
+              editable
+              onChange={onChange}
+            />
+            <ProfileCard.Field
+              title="field"
+              text={fieldText}
+              onChange={onChangeFieldText}
+              onAdd={onFieldAdd}
+              fields={fields}
+              onRemove={onFieldRemove}
+              editable
+            />
+            <ProfileCard.Country
+              title="country"
+              onChange={handleCountry}
+              country={country}
+              editable
+            />
+          </ProfileSection>
+          <Button
+            className={'bot-button'}
+            type="submit"
+            color="primary"
+            variant="contained"
+          >
+            OK
+          </Button>
+        </form>
+      </Box>
+    </Modal>
+  )
 }
 
 export default InitialInputModal

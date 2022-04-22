@@ -11,7 +11,6 @@ export type PostHeaderProps = {
   createdAt: Date
 }
 
-
 function PostHeader({ owner_username, owner_thumb, createdAt }: PostHeaderProps) {  
   return <div css={headerStyle}>
     <div css={iconStyle}>
@@ -35,9 +34,9 @@ const headerStyle = css`
   align-items: flex-start;
 `
 const moreStyle = css`
-  width: 3.6rem;
-  height: 3.6rem;
-  padding: 0.8rem;
+  width: 3rem;
+  height: 3rem;
+  padding: 0.5rem;
   border-radius: 999px;
 
   &:hover {
@@ -49,7 +48,6 @@ const moreStyle = css`
     height: 2rem;
     color: ${brandColor};
   }
-
 `
 const titleStyle = css`
   flex-grow: 1;
@@ -76,7 +74,7 @@ const titleStyle = css`
     font-family: 'NanumSquare';
     font-size: 14px;
     line-height: 1.142857143;
-    color: #9C9C9C;
+    color: #9c9c9c;
   }
 `
 const iconStyle = css`

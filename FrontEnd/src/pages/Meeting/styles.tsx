@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 
 export const ContainerBlock = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 29.0625rem;
@@ -13,6 +14,8 @@ export const ContainerBlock = styled.div`
     color: #333;
     margin: 0 0 1.25rem;
     font: normal normal 800 20px/23px NanumSquareOTF;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `
 
@@ -21,15 +24,17 @@ export const MeetingSection = styled.section`
   flex-direction: column;
   margin-bottom: 1.875rem;
   color: #333333;
-  
+
   h2 {
     font: normal normal 800 16px/18px NanumSquareOTF;
     margin: 0 0 1.25rem;
   }
+
   p {
     margin: 0;
     font: normal normal normal 16px/18px NanumSquareOTF;
   }
+
   p + p {
     margin-top: 0.625rem;
   }

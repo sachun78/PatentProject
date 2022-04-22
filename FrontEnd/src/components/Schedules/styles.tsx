@@ -4,7 +4,7 @@ import palette from 'lib/palette'
 export const noScheduleStyle = css`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   text-align: center;
 
@@ -17,7 +17,7 @@ export const noScheduleStyle = css`
 
   div {
     margin-top: 10px;
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: 600;
     color: ${palette.purple[600]};
     user-select: none;

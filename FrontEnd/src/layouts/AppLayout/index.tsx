@@ -1,5 +1,4 @@
 import React from 'react'
-import VerticalBar from 'components/Sidebar/VerticalBar'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Sponsor from 'components/Sponsor'
 import Sidebar from 'components/Sidebar'
@@ -8,7 +7,6 @@ import useUserQuery from 'hooks/query/useUserQuery'
 import loadable from '@loadable/component'
 import { Backdrop, CircularProgress } from '@mui/material'
 import User from '../../pages/User'
-
 
 const Home = loadable(() => import('pages/Home'))
 const Profile = loadable(() => import('pages/Profile'))
@@ -25,11 +23,14 @@ export default function AppLayout({}: AppLayoutProps) {
   const { data, isLoading } = useUserQuery()
 
   if (isLoading) {
-    return <Backdrop
-      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      open={isLoading}>
-      <CircularProgress color='inherit' />
-    </Backdrop>
+    return (
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    )
   }
 
   if (!data) {

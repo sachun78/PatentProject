@@ -8,7 +8,9 @@ route.get('/', isAuth, postCtrl.getPosts);
 route.get('/:id', isAuth, postCtrl.getPosts);
 route.post('/', isAuth, postCtrl.createPost);
 route.post('/comment/:id', isAuth, postCtrl.createComment);
-route.patch('/:id', isAuth, postCtrl.editPost);
-route.delete('/:id', isAuth, postCtrl.deletePost)
+route.patch('/post/:id', isAuth, postCtrl.editPost);
+route.patch('/comment/', isAuth, postCtrl.editComment);
+route.delete('/post/:id', isAuth, postCtrl.deletePost);
+route.delete('/comment/', isAuth, postCtrl.deleteComment);
 
 export default route;

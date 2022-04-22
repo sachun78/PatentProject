@@ -3,7 +3,7 @@ import { Stack } from '@mui/material'
 import Post from 'components/Post/'
 import usePostQuery from 'hooks/query/usePostQuery'
 import { IPost } from 'lib/api/types'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import PostForm from './form/PostForm'
 
@@ -51,13 +51,13 @@ const postViewStyle = css`
   align-items: flex-start;
 `
 const linkStyle = css`
-  
+  text-decoration: none;
+
+  a:link,
+  a:visited,
+  a:hover {
     text-decoration: none;
-    text-decoration-line: none;
-  
-  a:link, a:visited, a:hover {
-      text-decoration: none;
-      cursor: pointer;
+    cursor: pointer;
   }
 `
 export default Home

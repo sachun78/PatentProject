@@ -7,7 +7,7 @@ import useOnClickOutside from 'use-onclickoutside'
 import { TextField } from '@mui/material'
 
 export type TimePickerProps = {
-  value: Date,
+  value: Date
   onChange(value: Date): void
 }
 
@@ -36,46 +36,52 @@ function TimePickerInput({ value, onChange }: TimePickerProps) {
   }
   useOnClickOutside(ref, onClose)
 
-  return <InputBase css={wrapper} ref={ref}>
-    <div
-      css={textStyle}
-      tabIndex={0}
-      onClick={handleOpen}
-      onKeyDown={(e) => {
-        if (['Enter', 'Space'].includes(e.key)) {
-          handleOpen()
-        }
-      }}>
-      {value?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-    </div>
-
-    {open && <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <div css={calendarStyle}>
-        <StaticTimePicker ampm={true}
-                          ampmInClock={true}
-                          orientation='portrait'
-                          openTo='hours'
-                          value={value}
-                          onAccept={(new_value) => {
-                            if (new_value) {
-                              onChange(new_value)
-                              setOpen(false)
-                            }
-                          }}
-                          onChange={handleChange}
-                          minutesStep={5}
-                          displayStaticWrapperAs='desktop'
-                          showToolbar={false}
-                          renderInput={(params) => <TextField {...params} />} />
+  return (
+    <InputBase css={wrapper} ref={ref}>
+      <div
+        css={textStyle}
+        tabIndex={0}
+        onClick={handleOpen}
+        onKeyDown={(e) => {
+          if (['Enter', 'Space'].includes(e.key)) {
+            handleOpen()
+          }
+        }}
+      >
+        {value?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
       </div>
-    </LocalizationProvider>}
-  </InputBase>
+
+      {open && (
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <div css={calendarStyle}>
+            <StaticTimePicker
+              ampm={true}
+              ampmInClock={true}
+              orientation="portrait"
+              openTo="hours"
+              value={value}
+              onAccept={(new_value) => {
+                if (new_value) {
+                  onChange(new_value)
+                  setOpen(false)
+                }
+              }}
+              onChange={handleChange}
+              minutesStep={5}
+              displayStaticWrapperAs="desktop"
+              showToolbar={false}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </div>
+        </LocalizationProvider>
+      )}
+    </InputBase>
+  )
 }
 
 const wrapper = css`
   position: relative;
   width: 100%;
-  max-width: 16rem;
 `
 
 const textStyle = css`
@@ -87,6 +93,7 @@ const textStyle = css`
   padding-left: 1.6rem;
   padding-right: 1.6rem;
   width: 100%;
+
   &:focus-visible {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
   }

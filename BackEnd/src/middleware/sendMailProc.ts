@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import envConfig from 'config';
+import { resolve } from 'path';
 
 export const enum EMAILTYPE {
   AUTH, // authorization
@@ -158,48 +159,44 @@ const createResultEmail = (data: any) => {
   return {subject, html};
 }
 
-export const sendmail = async (emailInfo: any, mailType: EMAILTYPE) => {
-  let user_email;
-  let emailTemplete;
+export let sendmail = (emailInfo: any, mailType: EMAILTYPE) => 
+  new Promise((resolve, reject) => {
+    let user_email;
+    let emailTemplete;
 
-  if (mailType === EMAILTYPE.AUTH) {
-    user_email = emailInfo.email;
-    emailTemplete = createAuthEmail(emailInfo.code);
-  }
-  else if (mailType === EMAILTYPE.INVI) {
-    user_email = emailInfo.toEmail;
-    emailTemplete = createInviteEmail(emailInfo);
-  }
-  else {
-    user_email = emailInfo.toEmail;
-    emailTemplete = createResultEmail(emailInfo);
-  }
+    if (mailType === EMAILTYPE.AUTH) {
+      user_email = emailInfo.email;
+      emailTemplete = createAuthEmail(emailInfo.code);
+    }
+    else if (mailType === EMAILTYPE.INVI) {
+      user_email = emailInfo.toEmail;
+      emailTemplete = createInviteEmail(emailInfo);
+    }
+    else {
+      user_email = emailInfo.toEmail;
+      emailTemplete = createResultEmail(emailInfo);
+    }
 
-  let serviceContent: SMTPTransport.Options = {
-    service: 'gmail',
-    port: 587,
-    host: 'smtp.google.com',
-    secure: true,
-    auth: {
-      type: "OAuth2",
-      user: envConfig.email.userid,
-      clientId: envConfig.email.client_id,
-      clientSecret: envConfig.email.client_secret,
-      refreshToken: envConfig.email.refresh_token,
-      accessToken: envConfig.email.access_token
-    },
-  }
-  let transporter = nodemailer.createTransport(serviceContent);
-
-  let info = transporter.sendMail({
-    from: envConfig.email.userid,
-    to: user_email,
-    ...emailTemplete
-  }).then((value) => {
-    console.info(`[sendMailProc] env(${value.envelope}) res(${value.response})`);
-  }).catch((e) => {
-    console.error("[sendMailProc][ERROR]", e.message);
+    let serviceContent: SMTPTransport.Options = {
+      service: 'gmail',
+      port: 587,
+      host: 'smtp.google.com',
+      secure: true,
+      auth: {
+        type: "OAuth2",
+        user: envConfig.email.userid,
+        clientId: envConfig.email.client_id,
+        clientSecret: envConfig.email.client_secret,
+        refreshToken: envConfig.email.refresh_token,
+        accessToken: envConfig.email.access_token
+      },
+    }
+    let transporter = nodemailer.createTransport(serviceContent);
+    let info = transporter.sendMail({
+      from: envConfig.email.userid,
+      to: user_email,
+      ...emailTemplete
+    })
+    .then( value => resolve(`[sendMailProc] env(${value.envelope}) res(${value.response})`))
+    .catch( reason => reject(`[sendMailProc][ERROR] ${reason.message})`))
   });
-
-  return info;
-}

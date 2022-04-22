@@ -3,8 +3,8 @@ import { Avatar, TextField } from '@mui/material'
 import React, { useRef } from 'react'
 import { careerStyle, emailStyle, itemStyle, photoStyle } from './styles'
 import IconControl from '../IconControl'
-import { upload } from '../../lib/api/me/upload'
-import { updateUserPhoto, userState } from '../../atoms/authState'
+import { upload } from 'lib/api/me/upload'
+import { updateUserPhoto, userState } from 'atoms/authState'
 import { useSetRecoilState } from 'recoil'
 import gravatar from 'gravatar'
 import ProfileCardText from './ProfileCardText'
@@ -28,7 +28,7 @@ const wrapper = css`
   border: 1px solid rgba(0, 0, 0, 0.1);
 `
 
-type cardItemType = 'email' | 'photo' | 'country' | 'username' | 'text' | 'field' | 'career'
+type cardItemType = 'email' | 'photo' | 'username' | 'career'
 // INFOVIEW CARD ITEM
 export type ProfileCardItemProps = {
   title: string
@@ -41,11 +41,16 @@ export type ProfileCardItemProps = {
 }
 
 function ProfileCardItem({
-                           title, type, email, username,
-                           photo, isEditMode
-                         }: ProfileCardItemProps) {
+  title,
+  type,
+  email,
+  username,
+  photo,
+  isEditMode,
+}: ProfileCardItemProps) {
   const setAuthState = useSetRecoilState(userState)
-  const setAuthPhoto = (value: string) => setAuthState((state) => updateUserPhoto(state, value))
+  const setAuthPhoto = (value: string) =>
+    setAuthState((state) => updateUserPhoto(state, value))
   const fileRef = useRef<HTMLInputElement>(null)
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,57 +67,79 @@ function ProfileCardItem({
     }
   }
 
-  return <div css={itemStyle}>
-    <div className='inner'>
-      <div className='title'>
-        <label>{title}</label></div>
-      {/*1. EMAIL TYPE*/}
-      {type === 'email' && <div css={emailStyle}>
-        <div className='email-block'>{email}</div>
-        <p>
-          <strong>Verified.</strong> Thank you for verifying your email.
-        </p>
-      </div>}
-      {/*2. PHOTO TYPE*/}
-      {type === 'photo' && email &&
-        <div css={photoStyle}>
-          <div>
-            <Avatar sx={{ width: 100, height: 100, fontSize: 40 }}>
-              {!photo
-                ? (<img src={gravatar.url(email, { s: '100px', d: 'retro' })} alt={email} />)
-                : (<img crossOrigin='anonymous' src={`/static/${photo}`} alt={username} />)
-              }
-            </Avatar>
-          </div>
-          {isEditMode && (
-            <>
-              <input
-                ref={fileRef}
-                onChange={handleFileUpload}
-                type='file'
-                style={{ display: 'none' }}
-                accept='image/*'
-                name='profile_img'
-              />
-              <button className={'btn'} onClick={(e) => {
-                fileRef?.current?.click()
-                e.preventDefault()
-              }}><IconControl name={'upload'} /></button>
-            </>)
-          }
-        </div>}
-      {/*3. Name TYPE*/}
-      {type === 'username' && <div css={emailStyle}>
-        <div className='email-block'>{username}</div>
-      </div>}
-      {/*4. CAREER TYPE*/}
-      {type === 'career' &&
-        <div css={careerStyle}>
-          <TextField multiline fullWidth />
+  return (
+    <div css={itemStyle}>
+      <div className="inner">
+        <div className="title">
+          <label>{title}</label>
         </div>
-      }
+        {/*1. EMAIL TYPE*/}
+        {type === 'email' && (
+          <div css={emailStyle}>
+            <div className="email-block">{email}</div>
+            <p>
+              <strong>Verified.</strong> Thank you for verifying your email.
+            </p>
+          </div>
+        )}
+        {/*2. PHOTO TYPE*/}
+        {type === 'photo' && email && (
+          <div css={photoStyle}>
+            <div>
+              <Avatar
+                sx={{ width: 100, height: 100 }}
+                style={{ border: '0.1px solid lightgray' }}
+                imgProps={{
+                  crossOrigin: 'anonymous',
+                }}
+                src={
+                  !photo
+                    ? gravatar.url(email, {
+                        s: '100px',
+                        d: 'retro',
+                      })
+                    : `https://wemet-server.herokuapp.com/static/${photo}`
+                }
+              />
+            </div>
+            {isEditMode && (
+              <>
+                <input
+                  ref={fileRef}
+                  onChange={handleFileUpload}
+                  type="file"
+                  style={{ display: 'none' }}
+                  accept="image/*"
+                  name="profile_img"
+                />
+                <button
+                  className={'btn'}
+                  onClick={(e) => {
+                    fileRef?.current?.click()
+                    e.preventDefault()
+                  }}
+                >
+                  <IconControl name={'upload'} />
+                </button>
+              </>
+            )}
+          </div>
+        )}
+        {/*3. Name TYPE*/}
+        {type === 'username' && (
+          <div css={emailStyle}>
+            <div className="email-block">{username}</div>
+          </div>
+        )}
+        {/*4. CAREER TYPE*/}
+        {type === 'career' && (
+          <div css={careerStyle}>
+            <TextField multiline fullWidth />
+          </div>
+        )}
+      </div>
     </div>
-  </div>
+  )
 }
 
 ProfileCard.Item = ProfileCardItem

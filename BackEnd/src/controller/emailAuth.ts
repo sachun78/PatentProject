@@ -28,12 +28,9 @@ export async function sendAuthEmail(req: IRequest, res: Response, next: NextFunc
     console.log("[emailInfo]", emailInfo);
 
     const savedMail = await EmaiAuthlRepo.saveAuthMaiil(emailInfo);
-    const sendInfo = sendmail(savedMail, EMAILTYPE.AUTH);
-    if (!sendInfo) {
-      return res.status(500).json({ message: `Failed email send ${emailInfo.email}`});
-    }
-
-    res.status(200).json({ message: `Success send email: ${emailInfo.email}`})
+    sendmail(savedMail, EMAILTYPE.AUTH)
+      .then( value => res.status(200).json({ message: `Success send email: ${emailInfo.email}`}))
+      .catch( reason => res.status(500).json({ message: `Failed email send ${emailInfo.email}`}));
   }
   catch(e) {
     console.error(e);

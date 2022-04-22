@@ -10,6 +10,7 @@ import useUserQuery from 'hooks/query/useUserQuery'
 import 'react-toastify/dist/ReactToastify.min.css'
 import { ToastContainer } from 'react-toastify'
 import usePostQuery from 'hooks/query/usePostQuery'
+import InitialInputModal from './components/InitialInputModal'
 
 const Login = loadable(() => import('pages/Login'))
 const SignUp = loadable(() => import('pages/Signup'))
@@ -18,23 +19,24 @@ const MeetingBook = loadable(() => import('pages/Meeting/MeetingBook'))
 const AppLayout = loadable(() => import('layouts/AppLayout'))
 
 function App() {
-  useCsrfQuery({ retry: true, staleTime: Infinity })
-  useUserQuery()  
+  useCsrfQuery({ retry: true, staleTime: 1000 * 60 * 30 })
+  useUserQuery()
 
   return (
     <>
       <DebugObserver />
       <ReactQueryDevtools initialIsOpen={false} />
       <Routes>
-        <Route path='login' element={<Login />} />
-        <Route path='signup' element={<SignUp />} />
-        <Route path='email/check' element={<MailCheck />} />
-        <Route path='invitation/*' element={<MeetingBook />} />
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<SignUp />} />
+        <Route path="email/check" element={<MailCheck />} />
+        <Route path="invitation/*" element={<MeetingBook />} />
         {/*with AUTH*/}
-        <Route path='*' element={<AppLayout />} />
+        <Route path="*" element={<AppLayout />} />
       </Routes>
       <Global styles={globalStyle} />
       <ToastContainer />
+      <InitialInputModal />
     </>
   )
 }
@@ -45,7 +47,7 @@ const globalStyle = css`
   #root {
     overflow-x: hidden;
     min-height: 100%;
-    background: url("/assets/background.jpg") no-repeat center center fixed;
+    background: url('/assets/background.jpg') no-repeat center center fixed;
     background-size: cover;
   }
 
@@ -54,7 +56,8 @@ const globalStyle = css`
 
     * {
       box-sizing: inherit;
-
+      margin: 0;
+      padding: 0;
       ::selection {
         background: ${palette.purple[50]};
       }

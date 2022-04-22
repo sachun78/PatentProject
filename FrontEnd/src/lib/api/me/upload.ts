@@ -4,6 +4,5 @@ export async function upload(form_data: FormData) {
   const response = await client.post('/api/profile/upload', form_data, {
     headers: { 'content-type': 'multipart/form-data' },
   })
-  console.log(response.data)
   return response.data
 }

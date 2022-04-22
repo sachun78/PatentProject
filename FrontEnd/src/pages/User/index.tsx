@@ -121,7 +121,8 @@ function User({}: UserProps) {
           <span>{profileData.username}</span>
         </NameMailContainer>
         <ButtonGroup variant="outlined">
-          {user.email === email ? null : buddyData.buddy?.findIndex(
+          {user.email === email ? null : !buddyData.buddy ||
+            buddyData.buddy?.findIndex(
               (elem: { email: string; profile: any }) => elem.email === email
             ) === -1 ? (
             <Button

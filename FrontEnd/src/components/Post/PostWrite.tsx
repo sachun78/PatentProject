@@ -12,13 +12,13 @@ import { toast } from 'react-toastify';
 
 function PostWrite() {
   const qc = useQueryClient()
-  const [body, setBody] = useState("")
-  const [title, setTitle] = useState("")
+  const [body, setBody] = useState('')
+  const [title, setTitle] = useState('')
   const [image, setImage] = useState<any>()
-  const quillElement = useRef<any>(null);
-  const quillInstance = useRef<any>(null);
-  const navigate = useNavigate();
-  const posts = usePosts();
+  const quillElement = useRef<any>(null)
+  const quillInstance = useRef<any>(null)
+  const navigate = useNavigate()
+  const posts = usePosts()
   const user = qc.getQueryData<User>('user') as User
   const imgData = [] as any;  
 
@@ -58,38 +58,21 @@ function PostWrite() {
       contents: body
     })
   }, [body])
-
-  const onChange = (e: any) => {
-    setTitle(e.target.value)
-  }
-
-  const onPost = () => {        
-    // posts.push({
-    //   id: String(posts.length + 1),
-    //   title: title,
-    //   text: body,
-    //   created_at: new Date(),
-    //   like: 0,
-    //   comments: [],
-    //   writer: user.username,
-    //   images: image
-    // })    
-    navigate('/')
-  }    
+  
   const onCancle = () => {
-    navigate(-1);
+    navigate(-1)
   }
 
   // 이미지 처리를 하는 핸들러
   const imageHandler = () => {
-    console.log('에디터에서 이미지 버튼을 클릭하면 이 핸들러가 시작됩니다!');
+    console.log('에디터에서 이미지 버튼을 클릭하면 이 핸들러가 시작됩니다!')
 
     // 1. 이미지를 저장할 input type=file DOM을 만든다.
-    const input: any = document.createElement('input');
+    const input: any = document.createElement('input')
     // 속성 써주기
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click(); 
+    input.setAttribute('type', 'file')
+    input.setAttribute('accept', 'image/*')
+    input.click()
 
     // input에 변화가 생긴다면 = 이미지를 선택
     input.addEventListener('change', async () => {
@@ -99,7 +82,7 @@ function PostWrite() {
       imgData.push({        
         img: file,
         imgName: file.name,
-        src: `/${file.name}`
+        src: `/${file.name}`,
       })
 
       qc.setQueryData('images', imgData);
@@ -116,37 +99,35 @@ function PostWrite() {
 
         //        
       }
-    });
-  };
+    })
+  }
 
   useEffect(() => {
     quillInstance.current = new Quill(quillElement.current, {
-        theme: 'snow',
-        placeholder: '   Please enter the contents...',
-        modules: {
-          toolbar:{
-            container: [
-              [ {size: [ 'small', false, 'large', 'huge']}],
-              ['bold', 'italic', 'underline', 'strike'],
-              [{ list: 'ordered'}, { list: 'bullet'}],
-              ['blockquote', 'code-block', 'link', 'image']            
-            ],
-            handlers: {
-              image: imageHandler
-            }
-          } 
+      theme: 'snow',
+      placeholder: '   Please enter the contents...',
+      modules: {
+        toolbar: {
+          container: [
+            [{ size: ['small', false, 'large', 'huge'] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            ['blockquote', 'code-block', 'link', 'image'],
+          ],
+          handlers: {
+            image: imageHandler,
+          },
         },
-        
+      },
     })
-    
+
     const quill = quillInstance.current
 
-    quill.root.innerText = body;
+    quill.root.innerText = body
     quill.on('text-change', () => {
-        setBody(quill.root.innerText);
-    });
-    
-  },[])
+      setBody(quill.root.innerText)
+    })
+  }, [])
 
   return (
   <>
@@ -169,7 +150,6 @@ export default PostWrite
 
 const editorStyle = css`
   height: 22rem;
-  
 `
 const quillWrapperStyle = css`
   margin: 1rem;
@@ -182,7 +162,6 @@ const quillWrapperStyle = css`
   height: 22rem;
 `
 const postWriteStyle = css`
-
   max-width: 54.375rem;
   height: 35rem;
   margin-bottom: 1.6rem;
@@ -197,8 +176,8 @@ const postWriteStyle = css`
     margin: auto;
     margin-top: 1.25rem;
     margin-bottom: 1.875rem;
-    border: 1px solid #9C9C9C;
-    width: 95%
+    border: 1px solid #9c9c9c;
+    width: 95%;
   }
 `
 
