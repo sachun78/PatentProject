@@ -3,7 +3,6 @@ import * as authCtrl from 'controller/auth'
 import { isAuth } from '../../middleware/authChecker'
 import { body } from 'express-validator'
 import { validate } from '../../middleware/validator'
-// import { sendAuthMail } from 'middleware/authSendMail'
 
 const route = express.Router()
 

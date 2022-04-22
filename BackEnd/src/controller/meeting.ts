@@ -121,19 +121,13 @@ export async function sendResultMail(req: IRequest, res: Response) {
     if (meeting) {
       meeting["status"] = mStatus;
       console.log(meeting);
-      const mailInfo = sendmail(meeting, EMAILTYPE.RESULT);
 
-      if (!mailInfo) {
-        return res.status(500).json({ message: `Failed email send ${meeting.toEmail}`});
-      }
-      await meetingRepo.updateMeeting(meeting.id, meeting);
-      return res.status(200).json({ message: `Success send email: ${meeting.toEmail}`});
-      // sendmail(meeting, EMAILTYPE.RESULT)
-      // .then(mailInfo => {
-      //   meetingRepo.updateMeeting(meeting.id, meeting);
-      //   return res.status(200).json({ message: `Success send email: ${meeting.toEmail}`});
-      // })
-      // .catch(reason => res.status(500).json({ message: `Failed email send ${meeting.toEmail}`}));
+      sendmail(meeting, EMAILTYPE.RESULT)
+        .then( value => {
+            meetingRepo.updateMeeting(meeting.id, meeting);
+            return res.status(200).json({ message: `Success send email: ${meeting.toEmail}`})
+        })
+        .catch( reason => res.status(500).json({ message: `Failed email send ${meeting.toEmail}`}));
     }
     else {
       return res.status(409).json({ message: `[Meeting(${mId}) not found] or [status(${mStatus}) is wrong]`});
@@ -156,19 +150,12 @@ export async function sendInvitMail(req: IRequest, res: Response) {
     }
 
     sendmail(meetingData, EMAILTYPE.INVI)
-    .then( value => res.status(200).json({ message: `Success send email: ${bodyData.toEmail}`}))
-    .catch( reason => res.status(500).json({ message: `Failed email send ${bodyData.toEmail}`}));
-
-    // const mailInfo = sendmail(meetingData, EMAILTYPE.INVI);
-    // if (!mailInfo) {
-    //   return res.status(500).json({ message: `Failed email send ${bodyData.toEmail}`});
-    // }
-
-    // res.status(200).json({ message: `Success send email: ${bodyData.toEmail}`});
+      .then( value => res.status(200).json({ message: `Success send email: ${meetingData.toEmail}`}))
+      .catch( reason => res.status(500).json({ message: `Failed email send ${meetingData.toEmail}`}));
   }
   catch(e) {
     console.error(e);
-    return res.status(500).json({ message: `${e} => ${bodyData.toEmail}`});
+    return res.status(500).json({ message: `[sendInvitMail] ${e}`});
   }
 }
 
