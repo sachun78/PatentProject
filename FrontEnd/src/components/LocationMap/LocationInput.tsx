@@ -76,11 +76,9 @@ const calendarStyle = css`
   position: absolute;
   background: white;
   z-index: 10;
-  top: 0.1rem;
-
-  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.07);
-  border-radius: 0.5rem;
+  top: 0.1rem;  
   transform: translate3d(0, -100%, 0);
+  height: 35rem;
 `
 
 export default LocationInput

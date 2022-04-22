@@ -118,9 +118,12 @@ const LocationMap = ({ location, getLocation }: { location: string, getLocation:
 
   return (
     <>
+      <div className='searchBox' css={searchBoxStyle}>
+          <input id='input' type='text' placeholder='Search Place' css={inputStyels} />
+          <input id='search' type='button' value='search' className='button' css={buttonStyles} />
+      </div>
+
       <div id='map' className='map' ref={mapRef} css={mapStyles}></div>
-      <input id='input' type='text' placeholder='Search Place' css={inputStyels} />
-      <input id='search' type='button' value='search' className='button' css={buttonStyles} />
     </>
   )
 }
@@ -128,9 +131,17 @@ const LocationMap = ({ location, getLocation }: { location: string, getLocation:
 export default LocationMap
 
 const mapStyles = css`
+  position: relative;
   width: 40rem;
   height: 35rem;  
 `
+const searchBoxStyle = css`
+  position: absolute;
+  width: 25rem;  
+  display: flex;
+  z-index: 5;
+`
+
 const inputStyels = css`
   background-color: #fff;
   border: 0;
@@ -140,8 +151,7 @@ const inputStyels = css`
   padding: 0 0.5em;
   font: 400 18px Roboto, Arial, sans-serif;
   overflow: hidden;
-  line-height: 30px;
-  margin-right: 0;
+  line-height: 30px;  
 `
 const buttonStyles = css`
   background-color: blue;
