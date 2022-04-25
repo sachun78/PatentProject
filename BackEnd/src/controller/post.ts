@@ -22,24 +22,18 @@ const upload = multer({
 }).array('post_img', 2);
 
 export function postImgUpload(req: IRequest, res: Response, next: NextFunction) {
-  const postId = req.params.id;
-
   upload(req, res, (err) => {
-
-    console.log(req.files);
     if (err) {
       console.error(err)
       return res.status(409).json({ success: false, error: `${err.code}`})
     }
     
     const files = req.files as Express.Multer.File[];
-    const _images = files.map(value => value.filename);
+    if (!files) {
+      return res.status(409).json("files are not found");
+    }
 
-    postRepo.editPost(postId, {images: _images});
-    return res.json({
-      success: true,
-      files: req.files
-    })
+    res.json({success: true, files: req.files});
   })
 }
 
@@ -67,6 +61,22 @@ export async function createPost(req: IRequest, res: Response) {
     else {
       return res.status(409).json({ message: 'user is not found'});
     }
+
+    upload(req, res, (err) => {
+      console.log(req.files);
+      if (err) {
+        console.error(err)
+        return res.status(409).json({ success: false, error: `${err.code}`})
+      } 
+      const files = req.files as Express.Multer.File[];
+      if (files) {
+        const _images = files.map(value => value.filename);
+        postData['images'] = _images;
+        console.log(_images);
+      }     
+    })
+    console.log(postData);
+
     const post = await postRepo.createPost(postData);
     res.status(200).json(post);
   }
