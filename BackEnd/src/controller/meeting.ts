@@ -59,15 +59,50 @@ export async function getMeeting(req: IRequest, res: Response) {
   }
 }
 
-export async function getMeetingByCode(req: IRequest, res: Response) {
+export async function getMeetingByCode(req: IRequest, res: Response, next: NextFunction) {
   const code = req.params.code;
 
-  const data = await meetingRepo.getByCode(code);
-  if (!data) {
-    return res.status(404).json({ message: `meeting code:(${code}) not found`});
-  }
+  try {
+    const data = await meetingRepo.getByCode(code);
+    if (!data) {
+      return res.status(409).json({ message: `meeting code:(${code}) not found`});
+    }
 
-  res.status(200).json(data);
+    if (data.status !== 'replan') {
+      return res.status(200).json(data);
+    }
+
+    const eventId = data.eventId;
+    if (!eventId) {
+      return res.status(409).json({ message: `event is not found`});
+    }
+    const eventData = await eventRepo.getById(eventId);
+    if (!eventData) {
+      return res.status(404).json({ message: `wrong event data`});
+    }
+    
+    let sendData: any = {};
+    sendData['event_startDate'] = eventData.start_date;
+    sendData['evnet_endDate'] = eventData.end_date;
+
+    let tmpML = [];
+    let meetTimeList = [];
+    const meetList = eventData.meeting_list;
+    for (let i = 0; i < meetList.length; i++) {
+      let tmpObj: any = {};
+      tmpML[i] = JSON.parse(JSON.stringify(meetList[i]));
+      tmpObj['startTime'] = tmpML[i].startTime;
+      tmpObj['endTime'] = tmpML[i].endTime;
+      meetTimeList.push(tmpObj);
+    }
+    sendData['meeting_timeList'] = meetTimeList;
+    console.log(sendData);
+    res.status(200).json({data, sendData});
+  }
+  catch(e) {
+    console.error(`[meetingCtrl][getMeetingByCode] message (${e})`);
+    next(e);
+  }
 }
 
 export async function confirmMeeting(req: IRequest, res: Response) {
@@ -154,8 +189,8 @@ export async function sendInvitMail(req: IRequest, res: Response) {
       .catch( reason => res.status(500).json({ message: `Failed email send ${meetingData.toEmail}`}));
   }
   catch(e) {
-    console.error(e);
-    return res.status(500).json({ message: `[sendInvitMail] ${e}`});
+    console.error(`[meetingCtrl][sendInvitMail] ${e}`);
+    return res.status(500).json({ message: `[meetingCtrl][sendInvitMail] ${e}`});
   }
 }
 
