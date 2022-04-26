@@ -94,3 +94,7 @@ export async function updateMeeting(meetingId: string, data: any) {
 export async function deleteMeeting(meetingId: string) {
   return meeting.findByIdAndDelete(meetingId);
 }
+
+export async function deleteMeetings(_eventId: string) {
+  return meeting.deleteMany({eventId: _eventId});
+}

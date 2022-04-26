@@ -206,6 +206,10 @@ export async function sendInvitMail(req: IRequest, res: Response) {
   }
 }
 
+export async function deleteMeetings(eventId: string) {
+  return meetingRepo.deleteMeetings(eventId);
+}
+
 async function createMeeting(userId: string, body: any) {
   const user = await authRepo.findById(userId);
   if (!user) {
