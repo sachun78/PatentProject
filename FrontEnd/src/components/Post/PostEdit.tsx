@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
-import { createPost } from 'lib/api/post/createPost';
 import { editPost } from 'lib/api/post/editPost';
-import { usePosts } from 'lib/api/post/usePosts';
+import { postImgUpload } from 'lib/api/post/postImgUpload';
 import { User } from 'lib/api/types';
 import palette from 'lib/palette';
 import Quill from 'quill';
@@ -14,13 +13,12 @@ import { toast } from 'react-toastify';
 function PostEdit() {
   const qc = useQueryClient()
   const [body, setBody] = useState("")  
-  const [image, setImage] = useState<any>()
+  const [image, setImage] = useState<string[]>()
   const quillElement = useRef<any>(null);
   const quillInstance = useRef<any>(null);
-  const navigate = useNavigate();
-  const posts = usePosts();
+  const navigate = useNavigate();  
   const user = qc.getQueryData<User>('user') as User
-  const imgData = [] as any;  
+  const images = [] as any
 
   
 const { state } = useLocation();
@@ -58,10 +56,16 @@ const { state } = useLocation();
     }
 
     postEditMut.mutate(
-      [{contents: body}, state as string]
+      [
+        {
+          contents: body,
+          images: image as string[],
+        },
+        state as string
+      ]
       
     )
-  }, [body])
+  }, [body, image])
   
   const onCancle = () => {
     navigate(-1);
@@ -83,26 +87,22 @@ const { state } = useLocation();
 
       const file = input.files[0];             
       
-      imgData.push({        
-        img: file,
-        imgName: file.name,
-        src: `/${file.name}`
-      })
+      const formData = new FormData()
+      formData.append('post_img', file)
 
-      qc.setQueryData('images', imgData);
-      const results: any = qc.getQueryData('images');     
-      const IMG_URL = `/${results[imgData.length - 1].imgName}`                 
+      postImgUpload(formData).then((res) => {
+        res.files.map((file: any) => {
+          quillInstance.current.root.innerHTML =
+            quillInstance.current.root.innerHTML +
+            `<img src='http://localhost:8080/static/${file.filename}' crossorigin='anonymous'>`
+
+          images.push(file.filename)
+          
+        })
+      })      
+      console.log(images)
+      setImage(images)      
       
-      try {       
-
-        const range: { index: Number, length: Number } = quillInstance.current.getSelection();                
-        quillInstance.current.insertEmbed(range.index, 'image', IMG_URL);
-        setImage(results)        
-
-      } catch (error) {
-
-        //        
-      }
     });
   };
 
@@ -138,11 +138,13 @@ const { state } = useLocation();
   return (
   <>
     <div css={postWriteStyle}>
-      <input css={inputStyle} value="Edit Contents" readOnly/>
-      <div className={'divider'}>{''}</div>
-      <div css={quillWrapperStyle}>
-        <div css={editorStyle} ref={quillElement} />
-      </div>
+      <form onSubmit={onSubmit} encType="multipart/form-data">
+        <input css={inputStyle} value="Edit Contents" readOnly/>
+        <div className={'divider'}>{''}</div>
+        <div css={quillWrapperStyle}>
+          <div css={editorStyle} ref={quillElement} />
+        </div>
+      </form>
     </div>
     <div css={buttonWrapStyle}>
       <button css={buttonStyle} onClick={onSubmit}>Edit</button>

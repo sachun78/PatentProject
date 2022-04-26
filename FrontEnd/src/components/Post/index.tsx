@@ -27,17 +27,7 @@ function Post({ _id, isLike = false, owner_username, owner_thumb, like_cnt, comm
   const { data: post, isLoading } = useQuery(['post', _id], getPost, {
     retry: false,    
   })
-
-  const imageData = [] as any;  
-  
-  for(let i = 0; i < 9; i++) {
-    imageData.push({
-      imageId: i,
-      src: 'https://picsum.photos/810/300?random=' + i,
-      alt: 'image' + i
-    })
-  } 
-
+   
   return (
     <div css={postStyle}>      
       <PostHeader owner_username={owner_username} owner_thumb={owner_thumb} createdAt={createdAt} />
@@ -45,7 +35,7 @@ function Post({ _id, isLike = false, owner_username, owner_thumb, like_cnt, comm
         to={`/postDetail/${_id}`}
         state={{
           _id: _id,
-          images: imageData,
+          images: images,
           owner_username: owner_username,
           owner_thumb: owner_thumb,
           like_cnt: like_cnt,
@@ -56,25 +46,28 @@ function Post({ _id, isLike = false, owner_username, owner_thumb, like_cnt, comm
       >
       <figure>
         <ImageList variant='masonry' cols={3} gap={8}>
-          {imageData?.map((image: any) => (
-            <ImageListItem key={image.imageId}>
+          {images?.map((image: any) => (            
+            
+            <ImageListItem key={image}>
               <img 
-                src={image.src}
-                alt={image.alt}
+                src={"http://localhost:8080/static/" + image}                
                 loading="lazy"
                 style={{
                   borderRadius: "1rem"
                 }}
+                crossOrigin="anonymous"                
               />
             </ImageListItem> 
           ))}
-        </ImageList>      
+          
+        </ImageList>     
+
       </figure>      
       <div css={bodyStyle}>
         {contents}
       </div>
       </Link>      
-      <PostFooter _id={_id} contents={contents} owner_thumb={owner_thumb} owner_username={owner_username} comment={comment} like_cnt={like_cnt} isLike={isLike} imageData={imageData} createdAt={createdAt}/>
+      <PostFooter _id={_id} contents={contents} owner_thumb={owner_thumb} owner_username={owner_username} comment={comment} like_cnt={like_cnt} isLike={isLike} images={images} createdAt={createdAt}/>
     </div>
   )
 }

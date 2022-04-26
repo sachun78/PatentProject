@@ -1,5 +1,5 @@
 export type User = {
-  _id: string
+  id: string
   email: string
   username: string
   photo_path: string
@@ -62,7 +62,7 @@ export type IPost = {
 }
 
 export type IComment = {
-  _id: string,
+  id: string,
   owner_id: string,
   owner_thumb: string,
   text: string,

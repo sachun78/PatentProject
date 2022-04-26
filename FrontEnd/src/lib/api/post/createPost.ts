@@ -7,7 +7,7 @@ export async function createPost(input: postInput) {
   return response.data
 }
 
-type postInput = {    
-    contents: string
-    images?: string[];    
-  }
+type postInput = {
+  contents: any
+  images: string []
+}
