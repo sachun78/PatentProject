@@ -4,7 +4,8 @@ import shortid from 'shortid';
 import * as meetingRepo from 'data/meeting';
 import * as authRepo from 'data/auth';
 import * as eventRepo from 'data/event';
-import { EMAILTYPE, sendmail } from 'middleware/sendMailProc'
+import * as profileRepo from 'data/profile';
+import { EMAILTYPE, sendmail } from 'middleware/sendMailProc';
 
 interface IRequest {
   [key:string]: any
@@ -69,10 +70,15 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
       return res.status(409).json({ message: `meeting code:(${code}) not found`});
     }
 
-
+    let sendProfile: any = {};
+    const profile = await profileRepo.getProfile(data.ownerId);
+    if (profile) {
+      sendProfile['company'] = profile.company;
+      sendProfile['country'] = profile.country;
+    }
 
     if (status !== 'replan') {
-      return res.status(200).json(data);
+      return res.status(200).json({data , sendProfile});
     }
 
     const eventId = data.eventId;
@@ -94,13 +100,14 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
     for (let i = 0; i < meetList.length; i++) {
       let tmpObj: any = {};
       tmpML[i] = JSON.parse(JSON.stringify(meetList[i]));
+      tmpObj['date'] = tmpML[i].date;
       tmpObj['startTime'] = tmpML[i].startTime;
       tmpObj['endTime'] = tmpML[i].endTime;
       meetTimeList.push(tmpObj);
     }
     sendData['meeting_timeList'] = meetTimeList;
     console.log(sendData);
-    res.status(200).json({data, sendData});
+    res.status(200).json({data, sendProfile, sendData});
   }
   catch(e) {
     console.error(`[meetingCtrl][getMeetingByCode] message (${e})`);
