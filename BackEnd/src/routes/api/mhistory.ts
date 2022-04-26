@@ -5,6 +5,6 @@ import { isAuth } from 'middleware/authChecker';
 const route = express.Router()
 
 route.post('/:id', isAuth, mMhisCtrl.createMhistory);
-route.post('/upload/:id', isAuth, mMhisCtrl.profileImage);
+route.post('/upload/:id', isAuth, mMhisCtrl.mhistoryImage);
 
 export default route

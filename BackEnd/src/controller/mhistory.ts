@@ -20,7 +20,7 @@ const upload = multer({
   storage: storage
 }).single('mhistory_img')
 
-export function profileImage(req: IRequest, res: Response, next: NextFunction) {
+export function mhistoryImage(req: IRequest, res: Response, next: NextFunction) {
   const mhis_id = req.params.id;
 
   upload(req, res, (err) => {
