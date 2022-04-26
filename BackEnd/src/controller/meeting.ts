@@ -61,6 +61,7 @@ export async function getMeeting(req: IRequest, res: Response) {
 
 export async function getMeetingByCode(req: IRequest, res: Response, next: NextFunction) {
   const code = req.params.code;
+  const status = req.query.status;
 
   try {
     const data = await meetingRepo.getByCode(code);
@@ -68,7 +69,7 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
       return res.status(409).json({ message: `meeting code:(${code}) not found`});
     }
 
-    if (data.status !== 'replan') {
+    if (status !== 'replan') {
       return res.status(200).json(data);
     }
 
