@@ -100,10 +100,12 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
     for (let i = 0; i < meetList.length; i++) {
       let tmpObj: any = {};
       tmpML[i] = JSON.parse(JSON.stringify(meetList[i]));
-      tmpObj['date'] = tmpML[i].date;
-      tmpObj['startTime'] = tmpML[i].startTime;
-      tmpObj['endTime'] = tmpML[i].endTime;
-      meetTimeList.push(tmpObj);
+      if (tmpML[i].status !== 'cancel') {
+        tmpObj['date'] = tmpML[i].date;
+        tmpObj['startTime'] = tmpML[i].startTime;
+        tmpObj['endTime'] = tmpML[i].endTime;
+        meetTimeList.push(tmpObj);
+      }
     }
     sendData['meeting_timeList'] = meetTimeList;
     console.log(sendData);
