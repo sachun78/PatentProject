@@ -84,7 +84,7 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
     
     let sendData: any = {};
     sendData['event_startDate'] = eventData.start_date;
-    sendData['evnet_endDate'] = eventData.end_date;
+    sendData['event_endDate'] = eventData.end_date;
 
     let tmpML = [];
     let meetTimeList = [];
