@@ -35,7 +35,7 @@ const config = {
     client_id: required('CLIENT_ID', "431745332301-6g5maknvsi737hu677ppts4hfksketmp.apps.googleusercontent.com"),
     client_secret: required('CLIENT_SECRET', "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"),
     refresh_token: required('GOOGLE_EMAIL_REFRESH_TOKEN', "1//04VfJQJ9aDdyaCgYIARAAGAQSNwF-L9IrMSeNcDRrD99H5FORafZmEpRrbpr6FivWZaw7sItEZVYvPhOXINril1rQOsYoVVzkZT4"),
-    access_token: required('GOOGLE_EMAIL_ACCESS_TOKEN', "ya29.A0ARrdaM980IUS99fgd75CJVenKvRS2-DF6gbCcx6StbJY1vxAbsrIpQLF5mpqibNpnQEM6Ik0yunjXf4R405-mG3U7lVEAa4ZmB1X2R3l07rp79Yb0U-4MVJXyvsUoPgKJysbBGDBlcrLfYWcLkIaTC5fTUgIaA")
+    access_token: required('GOOGLE_EMAIL_ACCESS_TOKEN', "ya29.A0ARrdaM-7pXGnKW2AufKkLDoOuU9_aL-v1Hvau-j3Xa5MaaqMJKJmVwsBYZBNcGAQQV04PShImibzbkOWEOzbnNrkWvqGjWXrre1NBtIiKuHi-xf9D7GCil9-O6gLJO63J0y_afyTmLxMIK7Y6idruT_XRxXkLw")
   }
 
 };
