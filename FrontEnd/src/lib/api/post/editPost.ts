@@ -9,6 +9,7 @@ export async function editPost([input, post_id]: [editInput, string]) {
 
 type editInput = {
   contents: string
+  images: string []
 }
 
 
