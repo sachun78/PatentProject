@@ -24,3 +24,6 @@ yarn-error.log*
 
 #API KEY
 .env
+
+/src/lib/api/client.ts
+/uploads
