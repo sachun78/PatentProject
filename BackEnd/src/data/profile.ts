@@ -20,7 +20,7 @@ export const profileScheme = new mongoose.Schema<IProfile>({
   history: { type: String, default: '' },  // 이전 이력
   field: { type: [String], default: [] },      // 분야
   status: { type: Number, enum: [-1, 0, 1, 2], default: -1 },       // -1: 할당 안됨, 0: 삭제된 유저, 1: 정상 등록 유저, 2: 휴먼 유저
-  country: { type: String }       // 국가
+  country: { type: String, default: '' }       // 국가
 }, 
 { 
   timestamps: true,

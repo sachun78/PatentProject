@@ -4,7 +4,8 @@ import shortid from 'shortid';
 import * as meetingRepo from 'data/meeting';
 import * as authRepo from 'data/auth';
 import * as eventRepo from 'data/event';
-import { EMAILTYPE, sendmail } from 'middleware/sendMailProc'
+import * as profileRepo from 'data/profile';
+import { EMAILTYPE, sendmail } from 'middleware/sendMailProc';
 
 interface IRequest {
   [key:string]: any
@@ -61,6 +62,7 @@ export async function getMeeting(req: IRequest, res: Response) {
 
 export async function getMeetingByCode(req: IRequest, res: Response, next: NextFunction) {
   const code = req.params.code;
+  const status = req.query.status;
 
   try {
     const data = await meetingRepo.getByCode(code);
@@ -68,8 +70,15 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
       return res.status(409).json({ message: `meeting code:(${code}) not found`});
     }
 
-    if (data.status !== 'replan') {
-      return res.status(200).json(data);
+    let sendProfile: any = {};
+    const profile = await profileRepo.getProfile(data.ownerId);
+    if (profile) {
+      sendProfile['company'] = profile.company;
+      sendProfile['country'] = profile.country;
+    }
+
+    if (status !== 'replan') {
+      return res.status(200).json({data , sendProfile});
     }
 
     const eventId = data.eventId;
@@ -83,7 +92,7 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
     
     let sendData: any = {};
     sendData['event_startDate'] = eventData.start_date;
-    sendData['evnet_endDate'] = eventData.end_date;
+    sendData['event_endDate'] = eventData.end_date;
 
     let tmpML = [];
     let meetTimeList = [];
@@ -91,13 +100,16 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
     for (let i = 0; i < meetList.length; i++) {
       let tmpObj: any = {};
       tmpML[i] = JSON.parse(JSON.stringify(meetList[i]));
-      tmpObj['startTime'] = tmpML[i].startTime;
-      tmpObj['endTime'] = tmpML[i].endTime;
-      meetTimeList.push(tmpObj);
+      if (tmpML[i].status !== 'cancel' && tmpML[i].id !== data.id) {
+        tmpObj['date'] = tmpML[i].date;
+        tmpObj['startTime'] = tmpML[i].startTime;
+        tmpObj['endTime'] = tmpML[i].endTime;
+        meetTimeList.push(tmpObj);
+      }
     }
     sendData['meeting_timeList'] = meetTimeList;
     console.log(sendData);
-    res.status(200).json({data, sendData});
+    res.status(200).json({data, sendProfile, sendData});
   }
   catch(e) {
     console.error(`[meetingCtrl][getMeetingByCode] message (${e})`);
@@ -162,7 +174,7 @@ export async function sendResultMail(req: IRequest, res: Response) {
             meetingRepo.updateMeeting(meeting.id, meeting);
             return res.status(200).json({ message: `Success send email: ${meeting.toEmail}`})
         })
-        .catch( reason => res.status(500).json({ message: `Failed email send ${meeting.toEmail}`}));
+        .catch( reason => res.status(500).json({ message: `Failed email send ${reason}`}));
     }
     else {
       return res.status(409).json({ message: `[Meeting(${mId}) not found] or [status(${mStatus}) is wrong]`});
@@ -186,12 +198,16 @@ export async function sendInvitMail(req: IRequest, res: Response) {
 
     sendmail(meetingData, EMAILTYPE.INVI)
       .then( value => res.status(200).json({ message: `Success send email: ${meetingData.toEmail}`}))
-      .catch( reason => res.status(500).json({ message: `Failed email send ${meetingData.toEmail}`}));
+      .catch( reason => res.status(500).json({ message: `Failed email send ${reason}`}));
   }
   catch(e) {
     console.error(`[meetingCtrl][sendInvitMail] ${e}`);
     return res.status(500).json({ message: `[meetingCtrl][sendInvitMail] ${e}`});
   }
+}
+
+export async function deleteMeetings(eventId: string) {
+  return meetingRepo.deleteMeetings(eventId);
 }
 
 async function createMeeting(userId: string, body: any) {

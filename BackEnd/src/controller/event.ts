@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as eventRepo from 'data/event';
+import * as meetingRepo from 'data/meeting';
 
 interface IRequest {
   [key:string]: any
@@ -75,7 +76,9 @@ export async function deleteEvent(req: IRequest, res: Response) {
     return res.status(403).send('forbidden');
   }
 
+  await meetingRepo.deleteMeetings(event.id);
+
   await eventRepo.deleteEvent(id);
-  res.status(204).send('deleted');
+  res.status(204).json({ message: 'delete success'});
 }
 
