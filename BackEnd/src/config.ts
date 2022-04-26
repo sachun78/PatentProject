@@ -34,8 +34,8 @@ const config = {
     userid: required('SEND_EMAIL_ID', "wemetmaster@gmail.com"),
     client_id: required('CLIENT_ID', "431745332301-6g5maknvsi737hu677ppts4hfksketmp.apps.googleusercontent.com"),
     client_secret: required('CLIENT_SECRET', "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"),
-    refresh_token: required('GOOGLE_EMAIL_REFRESH_TOKEN', "1//04VfJQJ9aDdyaCgYIARAAGAQSNwF-L9IrMSeNcDRrD99H5FORafZmEpRrbpr6FivWZaw7sItEZVYvPhOXINril1rQOsYoVVzkZT4"),
-    access_token: required('GOOGLE_EMAIL_ACCESS_TOKEN', "ya29.A0ARrdaM-7pXGnKW2AufKkLDoOuU9_aL-v1Hvau-j3Xa5MaaqMJKJmVwsBYZBNcGAQQV04PShImibzbkOWEOzbnNrkWvqGjWXrre1NBtIiKuHi-xf9D7GCil9-O6gLJO63J0y_afyTmLxMIK7Y6idruT_XRxXkLw")
+    refresh_token: required('GOOGLE_EMAIL_REFRESH_TOKEN', "1//044PRQ7-c09o5CgYIARAAGAQSNwF-L9IrkbiHZJpMIhya6wTw5alNhQKP89KD3fYyN_BdHn7UrsERmHYMz9HeP89RetBqyesaF8Q"),
+    access_token: required('GOOGLE_EMAIL_ACCESS_TOKEN', "ya29.A0ARrdaM9iBXsEeTFRCLhF00wC3walXWZWv4VeHQHIxKYl0neGvKyIgyq5HfdU-rPwv8obqreFLVOvdfkThs_NMW-iuP0qiDeBFZ5sQAMtr6Kowmwrf70ea3O0oAw0heXwPxs2_uhdFIXYCHHyW-ErBQUARUtC")
   }
 
 };

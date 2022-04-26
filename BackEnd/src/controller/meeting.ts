@@ -69,6 +69,8 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
       return res.status(409).json({ message: `meeting code:(${code}) not found`});
     }
 
+
+
     if (status !== 'replan') {
       return res.status(200).json(data);
     }
@@ -163,7 +165,7 @@ export async function sendResultMail(req: IRequest, res: Response) {
             meetingRepo.updateMeeting(meeting.id, meeting);
             return res.status(200).json({ message: `Success send email: ${meeting.toEmail}`})
         })
-        .catch( reason => res.status(500).json({ message: `Failed email send ${meeting.toEmail}`}));
+        .catch( reason => res.status(500).json({ message: `Failed email send ${reason}`}));
     }
     else {
       return res.status(409).json({ message: `[Meeting(${mId}) not found] or [status(${mStatus}) is wrong]`});
@@ -187,7 +189,7 @@ export async function sendInvitMail(req: IRequest, res: Response) {
 
     sendmail(meetingData, EMAILTYPE.INVI)
       .then( value => res.status(200).json({ message: `Success send email: ${meetingData.toEmail}`}))
-      .catch( reason => res.status(500).json({ message: `Failed email send ${meetingData.toEmail}`}));
+      .catch( reason => res.status(500).json({ message: `Failed email send ${reason}`}));
   }
   catch(e) {
     console.error(`[meetingCtrl][sendInvitMail] ${e}`);
