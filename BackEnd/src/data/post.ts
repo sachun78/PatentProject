@@ -51,7 +51,7 @@ export async function findById(postId: string): Promise<PostType | null> {
 }
 
 export async function getPostAll(): Promise<PostType[] | null> {
-  return Post.find().sort({createAt: -1});
+  return Post.find().sort({createdAt: -1});
 }
 
 export async function createPost(postData: PostType): Promise<PostType> {
