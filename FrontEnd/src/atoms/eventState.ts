@@ -12,34 +12,34 @@ export type EventState = {
 
 const initialState: EventState = {
   dateRange: {
-    startDate: new Date(),
-    endDate: new Date()
+    startDate: new Date(new Date().setHours(0, 0, 0, 0)),
+    endDate: new Date(new Date().setHours(24, 0, 0, 0)),
   },
   open: false,
-  isEdit: false
+  isEdit: false,
 }
 
 export const eventState = atom({
   key: 'eventState',
-  default: initialState
+  default: initialState,
 })
 
 export type CurrentEventState = {
-  id: string,
-  title: string,
+  id: string
+  title: string
 }
 
 export const eventSelectModalState = atom({
   key: 'eventSelectModalState',
-  default: false
+  default: false,
 })
 
 const currentEventState = atom<CurrentEventState>({
   key: 'currentEventState',
   default: {
     id: '',
-    title: ''
-  }
+    title: '',
+  },
 })
 
 export function useCurrentEventState() {
@@ -51,7 +51,7 @@ export const dateRangeState = selector<EventState['dateRange']>({
   get: ({ get }) => {
     const event = get(eventState)
     return event.dateRange
-  }
+  },
 })
 
 export const eventModalState = selector<EventState['open']>({
@@ -59,7 +59,7 @@ export const eventModalState = selector<EventState['open']>({
   get: ({ get }) => {
     const event = get(eventState)
     return event.open
-  }
+  },
 })
 
 export const eventEditState = selector<EventState['isEdit']>({
@@ -67,30 +67,20 @@ export const eventEditState = selector<EventState['isEdit']>({
   get: ({ get }) => {
     const event = get(eventState)
     return event.isEdit
-  }
+  },
 })
 
-export const updateDateRange = (
-  state: EventState,
-  key: keyof EventState['dateRange'],
-  value: Date
-) =>
+export const updateDateRange = (state: EventState, key: keyof EventState['dateRange'], value: Date) =>
   produce(state, (draft) => {
     draft.dateRange[key] = value
   })
 
-export const updateEventModalOpen = (
-  state: EventState,
-  value: boolean
-) =>
+export const updateEventModalOpen = (state: EventState, value: boolean) =>
   produce(state, (draft) => {
     draft.open = value
   })
 
-export const updateEventEdit = (
-  state: EventState,
-  value: boolean
-) =>
+export const updateEventEdit = (state: EventState, value: boolean) =>
   produce(state, (draft) => {
     draft.isEdit = value
   })

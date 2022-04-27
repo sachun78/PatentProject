@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, Modal, TextField } from '@mui/material'
+import { Box, Button, Modal, TextField } from '@mui/material'
 import { css } from '@emotion/react'
 import EventDateSections from './EventDateSections'
 import { useEventModal } from 'hooks/useEventTitle'
@@ -21,54 +21,37 @@ function EventModal({}: CreateEventModalProps) {
   const [event, setEvent] = useCurrentEventState()
   const qc = useQueryClient()
 
+  const onMutSuccess = () => {
+    onClose()
+    toast.success('Update event success', {
+      position: 'top-center',
+      pauseOnHover: false,
+      pauseOnFocusLoss: false,
+      autoClose: 3000,
+    })
+    qc.invalidateQueries(['events', 1])
+  }
+  const onMutError = (e: AxiosError) => {
+    const { message } = e.response?.data
+    toast.error(message, {
+      position: 'top-center',
+      pauseOnHover: false,
+      pauseOnFocusLoss: false,
+      autoClose: 3000,
+    })
+  }
   const updateMutation = useMutation(() => updateEvent(event.id, event.title, startDate, endDate), {
-    onSuccess: () => {
-      setEvent({ title: '', id: '' })
-      setOpen(false)
-      toast.success('Update event success', {
-        position: 'top-center',
-        pauseOnHover: false,
-        pauseOnFocusLoss: false,
-        autoClose: 3000
-      })
-      qc.invalidateQueries(['events', 1])
-    },
-    onError: (e: AxiosError) => {
-      const { message } = e.response?.data
-      toast.error(message, {
-        position: 'top-center',
-        pauseOnHover: false,
-        pauseOnFocusLoss: false,
-        autoClose: 3000
-      })
-    }
+    onSuccess: onMutSuccess,
+    onError: onMutError,
   })
 
   const createMutation = useMutation(() => createEvent(event.title, startDate, endDate), {
-    onSuccess: () => {
-      setEvent({ title: '', id: '' })
-      setOpen(false)
-      toast.success('create new event success', {
-        position: 'top-center',
-        pauseOnHover: false,
-        pauseOnFocusLoss: false,
-        autoClose: 3000
-      })
-      qc.invalidateQueries(['events', 1])
-    },
-    onError: (e: AxiosError) => {
-      const { message } = e.response?.data
-      toast.error(message, {
-        position: 'top-center',
-        pauseOnHover: false,
-        pauseOnFocusLoss: false,
-        autoClose: 3000
-      })
-    }
+    onSuccess: onMutSuccess,
+    onError: onMutError,
   })
 
   const onChangeEventTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    setEvent(prev => ({ ...prev, title: e.target.value }))
+    setEvent((prev) => ({ ...prev, title: e.target.value }))
   }
 
   const onClose = () => {
@@ -83,7 +66,7 @@ function EventModal({}: CreateEventModalProps) {
         pauseOnHover: false,
         pauseOnFocusLoss: false,
         autoClose: 3000,
-        hideProgressBar: true
+        hideProgressBar: true,
       })
       return
     }
@@ -92,7 +75,7 @@ function EventModal({}: CreateEventModalProps) {
         position: 'top-center',
         pauseOnHover: false,
         pauseOnFocusLoss: false,
-        autoClose: 3000
+        autoClose: 3000,
       })
       return
     }
@@ -104,25 +87,30 @@ function EventModal({}: CreateEventModalProps) {
     }
   }
 
-  return <Modal open={open} onClose={onClose}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-    <Box style={{ padding: '50px', width: '393px', height: '387px' }} css={boxStyle}>
-      <h3>Event Title</h3>
-      <TextField
-        name='event'
-        label={undefined}
-        type='text'
-        variant='standard'
-        value={event.title}
-        onChange={onChangeEventTitle}
-        fullWidth
-      />
-      <EventDateSections />
-      <Button css={buttonStyle} disabled={createMutation.isLoading || updateMutation.isLoading}
-              fullWidth onClick={onCreate}>{isEdit ? 'EDIT' : 'OK'}
-      </Button>
-    </Box>
-  </Modal>
+  return (
+    <Modal open={open} onClose={onClose} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Box style={{ padding: '50px', width: '393px', height: '387px' }} css={boxStyle}>
+        <h3>Event Title</h3>
+        <TextField
+          name="event"
+          type="text"
+          variant="standard"
+          value={event.title}
+          onChange={onChangeEventTitle}
+          fullWidth
+        />
+        <EventDateSections />
+        <Button
+          css={buttonStyle}
+          disabled={createMutation.isLoading || updateMutation.isLoading}
+          fullWidth
+          onClick={onCreate}
+        >
+          {isEdit ? 'EDIT' : 'OK'}
+        </Button>
+      </Box>
+    </Modal>
+  )
 }
 
 const buttonStyle = css`
@@ -149,7 +137,7 @@ const boxStyle = css`
   h3 {
     margin: 0;
     font: normal normal 800 16px/18px NanumSquareOTF;
-    color: #6C6C6C;
+    color: #6c6c6c;
   }
 `
 

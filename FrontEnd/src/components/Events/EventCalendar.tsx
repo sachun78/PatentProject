@@ -22,14 +22,13 @@ function EventCalendar({}: ScheduleCalendarProps) {
       const dist = formatDistanceToNow(ed, {
         addSuffix: true,
       })
-      ed.setDate(ed.getDate() + 1)
-      const edStr = ed.toISOString()
       return {
         id: event.id,
         title: event.title,
-        start: event.start_date.replace(/T.*$/, ''),
-        end: edStr.replace(/T.*$/, ''),
+        start: event.start_date,
+        end: event.end_date,
         backgroundColor: dist.includes('ago') ? '#9c9c9c' : brandColor,
+        allDay: true,
       }
     })
   }, [data])
