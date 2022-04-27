@@ -1,7 +1,6 @@
-import dotenv from "dotenv";
-import path from "path";
-
-dotenv.config({ path: path.join(__dirname, ".env") });
+import dotenv from 'dotenv';
+import path from 'path';
+dotenv.config({path: path.join(__dirname, ".env")});
 
 function required(key: any, defaultValue: any = undefined) {
   const value = process.env[key] || defaultValue;
@@ -20,7 +19,7 @@ const config = {
     salt_rouunds: parseInt(required("BCRYPT_SALT_ROUNDS", 10)),
   },
   host: {
-    port: parseInt(required("PORT", 8080)),
+    port: parseInt(required("PORT", 5500)),
     url: required("HOST_URL", "http://localhost:5500"),
     client_url: required("CLIENT_HOST_URL", "http://localhost:3000"),
   },
