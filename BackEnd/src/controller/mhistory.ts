@@ -21,19 +21,18 @@ const upload = multer({
 }).single('mhistory_img')
 
 export function mhistoryImage(req: IRequest, res: Response, next: NextFunction) {
-  const mhis_id = req.params.id;
-
   upload(req, res, (err) => {
     if (err) {
       console.error(err)
       return res.status(409).json({ success: false, error: `${err.code}` })
     }
 
-    MhisRepo.updateMhistory(mhis_id, { photopath: req.file?.filename });
-    return res.json({
-      success: true,
-      fileName: req.file?.filename
-    })
+    const files = req.files as Express.Multer.File[];
+    if (!files) {
+      return res.status(409).json("files are not found");
+    }
+
+    res.json({success: true, files: req.files});
   })
 }
 
