@@ -11,19 +11,31 @@ export type PostHeaderProps = {
   createdAt: Date
 }
 
-function PostHeader({ owner_username, owner_thumb, createdAt }: PostHeaderProps) {  
-  return <div css={headerStyle}>
-    <div css={iconStyle}>
-      <Avatar alt='user-avatar' src={owner_thumb}
-              sx={{ width: 60, height: 60 }} />
+function PostHeader({
+  owner_username,
+  owner_thumb,
+  createdAt,
+}: PostHeaderProps) {
+  return (
+    <div css={headerStyle}>
+      <div css={iconStyle}>
+        <Avatar
+          alt="user-avatar"
+          src={owner_thumb}
+          sx={{ width: 60, height: 60 }}
+        />
+      </div>
+      <div css={titleStyle}>
+        <h4>
+          <span>{owner_username}/ etc ..</span>
+        </h4>
+        <div className={'time-date'}>{createdAt}</div>
+      </div>
+      <div css={moreStyle} onClick={() => {}}>
+        <MdMoreHoriz />
+      </div>
     </div>
-    <div css={titleStyle}>
-      <h4><span>{owner_username}/ etc ..</span></h4>
-      <div className={'time-date'}>{createdAt}</div>
-    </div>
-    <div css={moreStyle} onClick={() => {
-    }}><MdMoreHoriz /></div>
-  </div>
+  )
 }
 
 const headerStyle = css`
