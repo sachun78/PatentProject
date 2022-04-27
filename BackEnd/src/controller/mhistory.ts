@@ -27,12 +27,12 @@ export function mhistoryImage(req: IRequest, res: Response, next: NextFunction) 
       return res.status(409).json({ success: false, error: `${err.code}` })
     }
 
-    const files = req.files as Express.Multer.File[];
+    const files = req.file as Express.Multer.File;
     if (!files) {
       return res.status(409).json("files are not found");
     }
 
-    res.json({success: true, files: req.files});
+    res.json({success: true, files: req.file});
   })
 }
 
