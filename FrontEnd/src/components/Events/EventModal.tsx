@@ -12,6 +12,7 @@ import { useMutation, useQueryClient } from 'react-query'
 import { AxiosError } from 'axios'
 import { useCurrentEventState } from 'atoms/eventState'
 import { updateEvent } from 'lib/api/event/updateEvent'
+import { formatDistanceToNow } from 'date-fns'
 
 export type CreateEventModalProps = {}
 
@@ -60,8 +61,9 @@ function EventModal({}: CreateEventModalProps) {
   }
 
   const onCreate = () => {
-    if (!event.title || !event.title.trim()) {
-      toast.error('input title error', {
+    // 제목이 입력되지 않은 경우
+    if (!event.title.trim()) {
+      toast.error('Please enter the event title.', {
         position: 'top-center',
         pauseOnHover: false,
         pauseOnFocusLoss: false,
@@ -70,8 +72,25 @@ function EventModal({}: CreateEventModalProps) {
       })
       return
     }
+
+    // 설정된 종료일이 현재 날짜보다 앞에 있는 경우
+    const ed = new Date(endDate)
+    const dist = formatDistanceToNow(ed, {
+      addSuffix: true,
+    })
+
+    if (dist.includes('ago')) {
+      toast.error("You can't choose The date before today.", {
+        position: 'top-center',
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000,
+      })
+      return
+    }
+    // 시작일이 종료일보다 뒤에 있는 경우
     if (startDate > endDate) {
-      toast.error('StartDate must be before EndDate', {
+      toast.error('Start date must precede end date.', {
         position: 'top-center',
         pauseOnHover: false,
         pauseOnFocusLoss: false,
