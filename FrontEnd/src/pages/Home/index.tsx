@@ -12,36 +12,37 @@ type HomeProps = {}
 
 function Home({}: HomeProps) {
   const { data: posts, isLoading } = usePostQuery()
-  
-  if(isLoading) return <div>로딩중!!</div>
 
-  return <>
-    <Stack>
-      <Link css={linkStyle} to={'/postWrite/'}
-        state={{
-        }}
-      > 
-        <PostForm />
-      </Link>
-      <div css={postViewStyle}>        
-        {posts?.map((post: IPost) =>
-        <Post 
-          key={post._id}
-          _id={post._id}                              
-          owner_username={post.owner_username}
-          owner_thumb={post.owner_thumb}
-          like_cnt={post.like_cnt}
-          contents={post.contents}
-          comment={post.comment}
-          images={post.images}
-          createdAt={post.createdAt}                    
-        />
-        )}        
-      </div>
-    </Stack>
-    {/* 임시 주석처리 */}
-    {/* <InitialInputModal /> */}
-  </>
+  if (isLoading) return <div>로딩중!!</div>
+
+  return (
+    <>
+      <Stack>
+        <Link css={linkStyle} to={'/postWrite/'} state={{}}>
+          <PostForm />
+        </Link>
+        <div css={postViewStyle}>
+          {posts?.map((post: IPost) => (
+            <Post
+              key={post._id}
+              _id={post._id}
+              owner_username={post.owner_username}
+              owner_thumb={post.owner_thumb}
+              owner_id={post.owner_id}
+              like_cnt={post.like_cnt}
+              contents={post.contents}
+              comment={post.comment}
+              images={post.images}
+              createdAt={post.createdAt}
+
+            />
+          ))}
+        </div>
+      </Stack>
+      {/* 임시 주석처리 */}
+      {/* <InitialInputModal /> */}
+    </>
+  )
 }
 
 const postViewStyle = css`

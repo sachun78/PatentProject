@@ -1,101 +1,115 @@
 import { css } from '@emotion/react'
-import { Avatar, OutlinedInput } from '@mui/material'
-import gravatar from 'gravatar'
 import useToggle from 'hooks/useToggle'
-import { IComment } from 'lib/api/types'
+import { IComment, User } from 'lib/api/types'
 import { brandColor } from 'lib/palette'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
+import { useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
-import PostIconBox from './PostIconBox'
+import PostComment from './PostComment'
 
 export type PostFooterProps = {
   _id: string
-  contents: string  
+  contents: string
   isLike?: boolean
   owner_thumb: string
   owner_username: string
-  comment: IComment[]  
+  comment: IComment[]
   like_cnt: number
-  imageData: any
+  images: string[]
   createdAt: Date
 }
 
-function PostFooter({ _id, contents, isLike = false, like_cnt, comment, imageData, owner_thumb, owner_username, createdAt }: PostFooterProps) {  
+function PostFooter({
+  _id,
+  contents,
+  isLike = false,
+  like_cnt,
+  comment,
+  images,
+  owner_thumb,
+  owner_username,
+  createdAt,
+}: PostFooterProps) {
+  const qc = useQueryClient()
+  const [likeClick, onToggleLike] = useToggle(isLike)
+  const user = qc.getQueryData<User>('user') as User
+  // 임시 true 처리
+  const [owner, setOwner] = useState(true)
+  const [editComment, setEditComment] = useState('')
 
-  const [likeClick, onToggleLike] = useToggle(isLike)  
-   
-  const viewComments = comment.filter((comments: IComment) => (comment.indexOf(comments) < 2))
-  
+  const viewComments = comment.filter(
+    (comments: IComment) => comment.indexOf(comments) < 2
+  )
+
+  useEffect(() => {
+    if (_id === user.id) {
+      setOwner(true)
+    }
+  }, [])
+
   const onLike = () => {
-    
-    if(!likeClick) {
-      // like = like + 1      
+    if (!likeClick) {
+      // like = like + 1
     } else {
-      // like = like     
+      // like = like
     }
-    onToggleLike()   
-        
-  } 
+    onToggleLike()
+  }
 
-  return <div css={footerStyle /*flex*/}>
-    <div css={buttonWrapper}>
-      <div className={'item'} onClick={onLike}>
-        {likeClick ? <BsHeartFill className={'filled'} /> : <BsHeart />}
-        {/* {like + Number(likeClick)} */}
-      </div>
-      <Link
-        to={`/postDetail/${_id}`}
-        state={{
-          _id: _id,
-          images: imageData,
-          owner_username: owner_username,
-          owner_thumb: owner_thumb,
-          like_cnt: like_cnt,
-          comment: comment,
-          createdAt: createdAt,
-          contents: contents,          
-        }}
-      >
-        <div className={'item'}>
-          <BsChatLeftDots /> {comment.length}
+  return (
+    <div css={footerStyle /*flex*/}>
+      <div css={buttonWrapper}>
+        <div className={'item'} onClick={onLike}>
+          {likeClick ? <BsHeartFill className={'filled'} /> : <BsHeart />}
+          {/* {like + Number(likeClick)} */}
         </div>
-      </Link>
-    </div>     
-    {viewComments.length === 0 ? <div></div> :
-    <div css={commentStyle}>
-      {viewComments.map((viewComment: IComment) => (
-        <>
-      <OutlinedInput key={viewComment._id} value={viewComment.contents}
-        fullWidth multiline
-        sx={{ borderRadius: '1rem', paddingLeft: '1.25rem' }}
-        startAdornment={<Avatar alt='post-user-avatar'
-                                src={gravatar.url('temp.email' + viewComment.owner_id,
-                                  { s: '44px', d: 'retro' })}
-                                sx={{ width: 22, height: 22, mr: '25px' }} />}
-        endAdornment={<PostIconBox />}                         
-      />                                
-      </>  
-      ))}
-      
+        <Link
+          to={`/postDetail/${_id}`}
+          state={{
+            _id: _id,
+            images: images,
+            owner_username: owner_username,
+            owner_thumb: owner_thumb,
+            like_cnt: like_cnt,
+            comment: comment,
+            createdAt: createdAt,
+            contents: contents,
+          }}
+        >
+          <div className={'item'}>
+            <BsChatLeftDots /> {comment.length}
+          </div>
+        </Link>
+      </div>
+      {viewComments.length === 0 ? (
+        <div></div>
+      ) : (
+        <div css={commentStyle}>
+          {viewComments.map((viewComment: IComment) => (
+            <PostComment
+              key={viewComment.id}
+              viewComment={viewComment}
+              _id={_id}
+            />
+          ))}
+        </div>
+      )}
     </div>
-    }
-  </div>
+  )
 }
 
 const commentStyle = css`
-    
-    font-weight: 400;
-    font-size: 0.5rem;    
-    letter-spacing: 0.00938em;
-    border: thick solid #dddddd;    
-    position: relative; 
-    padding: 1rem;
-    border-radius: 1rem;    
-    margin-bottom: 1.5625rem;
-    font: normal normal bold 14px/16px NanumBarunGothic;
-    background: #fff;
-
+  font-weight: 400;
+  font-size: 0.5rem;
+  letter-spacing: 0.00938em;
+  border: thick solid #dddddd;
+  position: relative;
+  padding: 1rem;
+  border-radius: 1rem;
+  margin-bottom: 1.5625rem;
+  font: normal normal bold 14px/16px NanumBarunGothic;
+  background: #fff;
 `
 const footerStyle = css`
   display: flex;
@@ -116,7 +130,7 @@ const buttonWrapper = css`
     align-items: center;
 
     border-radius: 1.5rem;
-    border: 1px solid #C9C9C9;
+    border: 1px solid #c9c9c9;
     background: #fff;
     color: #333333;
     margin-right: 10px;
@@ -126,7 +140,6 @@ const buttonWrapper = css`
       width: 1rem;
       height: 0.8125rem;
       margin-right: 5px;
-
     }
 
     .filled {

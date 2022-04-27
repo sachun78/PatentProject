@@ -1,8 +1,8 @@
 import { css } from '@emotion/react'
-import { MdMoreHoriz } from 'react-icons/md'
-import palette, { brandColor } from '../../lib/palette'
 import { Avatar } from '@mui/material'
 import React from 'react'
+import { MdMoreHoriz } from 'react-icons/md'
+import palette, { brandColor } from '../../lib/palette'
 
 export type PostHeaderProps = {
   owner_username: string
@@ -10,11 +10,19 @@ export type PostHeaderProps = {
   createdAt: Date
 }
 
-function PostHeader({ owner_username, owner_thumb, createdAt }: PostHeaderProps) {
+function PostHeader({
+  owner_username,
+  owner_thumb,
+  createdAt,
+}: PostHeaderProps) {
   return (
     <div css={headerStyle}>
       <div css={iconStyle}>
-        <Avatar alt="user-avatar" src={owner_thumb} sx={{ width: 60, height: 60 }} />
+        <Avatar
+          alt="user-avatar"
+          src={owner_thumb}
+          sx={{ width: 60, height: 60 }}
+        />
       </div>
       <div css={titleStyle}>
         <h4>
