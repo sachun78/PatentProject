@@ -5,14 +5,9 @@ import { User } from 'lib/api/types'
 import useAuth from 'hooks/useAuth'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Avatar } from '@mui/material'
-import {
-  dividerStyle,
-  logoStyle,
-  menuStyle,
-  sidebarStyle,
-  userStyle,
-} from './styles'
+import { dividerStyle, logoStyle, menuStyle, sidebarStyle, userStyle } from './styles'
 import { MdOutlineLogout } from 'react-icons/md'
+import useProfileImg from '../../hooks/useProfileImg'
 
 type SidebarProps = {}
 
@@ -21,7 +16,7 @@ function Sidebar({}: SidebarProps) {
   const queryClient = useQueryClient()
   const user = queryClient.getQueryData<User>('user')
   const navigate = useNavigate()
-
+  const { profileSrc } = useProfileImg()
   if (!user) return null
 
   return (
@@ -38,10 +33,11 @@ function Sidebar({}: SidebarProps) {
       <div css={dividerStyle}>{''}</div>
       <div css={userStyle}>
         <Avatar
-          alt="user-avatar"
-          src="/assets/KimMinjun.png"
+          alt={user.username}
+          src={profileSrc}
           sx={{ width: 60, height: 60 }}
           onClick={() => navigate('/profile')}
+          imgProps={{ crossOrigin: 'anonymous' }}
         />
         <span>{user.username}</span>
         <MdOutlineLogout onClick={() => logout()} />
