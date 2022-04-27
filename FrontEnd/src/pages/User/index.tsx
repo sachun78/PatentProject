@@ -17,12 +17,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { User as UserType } from 'lib/api/types'
 import useBuddyQuery from 'hooks/query/useBuddyQuery'
 import { IoMdMail } from 'react-icons/io'
-import {
-  MdOutlineSafetyDivider,
-  MdOutlineWork,
-  MdPersonAdd,
-  MdPersonRemove,
-} from 'react-icons/md'
+import { MdOutlineSafetyDivider, MdOutlineWork, MdPersonAdd, MdPersonRemove } from 'react-icons/md'
 import { GrUserManager } from 'react-icons/gr'
 import { getProfilebyEmail } from 'lib/api/me/getProfile'
 import { toast } from 'react-toastify'
@@ -45,15 +40,11 @@ function User({}: UserProps) {
   const { email } = useParams<{ email: string }>()
   const [, setOpen] = useRecoilState(eventSelectModalState)
   const [, setMeetuser] = useMeetingReqUser()
-  const { data: profileData, isLoading: isLoadingProfile } = useQuery(
-    ['profile', email ?? ''],
-    getProfilebyEmail,
-    {
-      enabled: !!email,
-      retry: false,
-      staleTime: 5000,
-    }
-  )
+  const { data: profileData, isLoading: isLoadingProfile } = useQuery(['profile', email ?? ''], getProfilebyEmail, {
+    enabled: !!email,
+    retry: false,
+    staleTime: 5000,
+  })
 
   const addBuddyMutation = useMutation(addBuddy, {
     onSuccess: () => {
@@ -110,10 +101,7 @@ function User({}: UserProps) {
   return (
     <Container>
       <UserHeader>
-        <img
-          src={gravatar.url(email, { s: '100px', d: 'retro' })}
-          alt={email}
-        />
+        <img src={gravatar.url(email, { s: '100px', d: 'retro' })} alt={email} />
         <NameMailContainer>
           <h1>
             {email} {user.email === email && '(나)'}
@@ -122,21 +110,12 @@ function User({}: UserProps) {
         </NameMailContainer>
         <ButtonGroup variant="outlined">
           {user.email === email ? null : !buddyData.buddy ||
-            buddyData.buddy?.findIndex(
-              (elem: { email: string; profile: any }) => elem.email === email
-            ) === -1 ? (
-            <Button
-              disabled={addBuddyMutation.isLoading}
-              onClick={onAddNetwork}
-              variant={'contained'}
-            >
+            buddyData.buddy?.findIndex((elem: { email: string; profile: any }) => elem.email === email) === -1 ? (
+            <Button disabled={addBuddyMutation.isLoading} onClick={onAddNetwork} variant={'contained'}>
               <MdPersonAdd />
             </Button>
           ) : (
-            <Button
-              disabled={delBuddyMutation.isLoading}
-              onClick={onDeleteNetwork}
-            >
+            <Button disabled={delBuddyMutation.isLoading} onClick={onDeleteNetwork}>
               <MdPersonRemove />
             </Button>
           )}
@@ -188,9 +167,8 @@ function User({}: UserProps) {
           <div className="career-summary">
             <h3>About</h3>
             <pre>
-              LONGLONG LONGLONG LONGLONG TEXT LONGLONG LONGLONG LONGLONG TEXT
-              LONGLONG LONGLONG LONGLONG TEXT LONGLONG LONGLONG LONGLONG TEXT
-              LONGLONG LONGLONG LONGLONG TEXT LONGLONG LONGLONG LONGLONG TEXT
+              LONGLONG LONGLONG LONGLONG TEXT LONGLONG LONGLONG LONGLONG TEXT LONGLONG LONGLONG LONGLONG TEXT LONGLONG
+              LONGLONG LONGLONG TEXT LONGLONG LONGLONG LONGLONG TEXT LONGLONG LONGLONG LONGLONG TEXT
             </pre>
           </div>
           <div className="History">

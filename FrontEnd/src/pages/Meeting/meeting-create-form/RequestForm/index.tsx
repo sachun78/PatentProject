@@ -59,18 +59,9 @@ export default function RequestForm({}: RequestViewProps) {
 
   const onChangeDate = useCallback(
     (change: Date) => {
-      if (!(change.getDate() <= endDate.getDate() && change.getDate() >= startDate.getDate())) {
-        toast.error('Error Date Not Contained', {
-          position: toast.POSITION.TOP_CENTER,
-          pauseOnHover: false,
-          pauseOnFocusLoss: false,
-          autoClose: 3000,
-        })
-        return
-      }
       setDate(change)
     },
-    [endDate, setDate, startDate, time]
+    [setDate]
   )
 
   const onChangeTime = useCallback(
