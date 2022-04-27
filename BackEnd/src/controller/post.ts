@@ -164,7 +164,11 @@ export async function editComment(req: IRequest, res: Response) {
         result.contents = bodyData.contents; 
         result.createdAt = bodyData.createdAt;
       }
-      const update = await postRepo.editPost(postId, {comment: result});
+      const oricomment = comments.filter(comment => comment.id !== commentId);
+      let postComment = [...oricomment, result];
+
+      console.log('after', postComment);
+      const update = await postRepo.editPost(postId, {comment: postComment});
       res.status(200).json(update);
     }
   }
