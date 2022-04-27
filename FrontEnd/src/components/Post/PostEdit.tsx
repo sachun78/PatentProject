@@ -10,23 +10,23 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { API_PATH } from '../../lib/api/client'
 
 function PostEdit() {
-  const qc = useQueryClient()  
+  const qc = useQueryClient()
   const [image, setImage] = useState<string[]>()
   const quillElement = useRef<any>(null)
   const quillInstance = useRef<any>(null)
   const navigate = useNavigate()
   const user = qc.getQueryData<User>('user') as User
   const images = [] as any
-  
 
   const { state } = useLocation()
   const { data: post, isLoading } = useQuery(['post', state], getPost, {
     retry: false,
   })
   const oldImages = post.images
-  
+
   const [body, setBody] = useState(post.contents)
 
   const postEditMut = useMutation(editPost, {
@@ -100,7 +100,7 @@ function PostEdit() {
         res.files.map((file: any) => {
           quillInstance.current.root.innerHTML =
             quillInstance.current.root.innerHTML +
-            `<img src='http://localhost:8080/static/${file.filename}' crossorigin='anonymous'>`
+            `<img src='${API_PATH}static/${file.filename}' crossorigin='anonymous'>`
 
           images.push(file.filename)
         })
@@ -111,8 +111,7 @@ function PostEdit() {
   }
 
   useEffect(() => {
-    quillInstance.current = new Quill(quillElement.current, {   
-      
+    quillInstance.current = new Quill(quillElement.current, {
       theme: 'snow',
       placeholder: '   Please enter the contents...',
       modules: {
@@ -131,10 +130,9 @@ function PostEdit() {
     })
 
     const quill = quillInstance.current
-    quill.root.innerText = body    
-    
-    quill.on('text-change', () => {
+    quill.root.innerText = body
 
+    quill.on('text-change', () => {
       setBody(quill.root.innerText)
     })
   }, [])
@@ -169,12 +167,14 @@ const editorStyle = css`
 `
 const quillWrapperStyle = css`
   margin: 1rem;
+
   .ql-editor {
     font-size: 1.125rem;
     line-height: 1.5;
     margin-top: 2rem;
     margin-left: 1rem;
   }
+
   height: 22rem;
 `
 const postWriteStyle = css`
