@@ -3,7 +3,8 @@ import client from '../client'
 type replanMeetingArgs = {
   location: string
   date?: Date
-  time?: Date
+  startTime?: Date
+  endTime?: Date
   comment?: string
 }
 

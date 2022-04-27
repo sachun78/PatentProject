@@ -42,15 +42,16 @@ function ScheduleTable({ meetings }: ScheduleTableProps) {
               hover
               onClick={() => navi('/meeting/schedule/' + row.id)}
             >
-              <StyledTableCell>{row.title}</StyledTableCell>
-              <StyledTableCell align="right">{row.toEmail}</StyledTableCell>
-              <StyledTableCell align="right">
-                {format(new Date(row.date), 'yyyy.MM.dd ')}
-                {format(new Date(row.time), 'HH:mm aaa')}
+              <StyledTableCell align="center">{row.title}</StyledTableCell>
+              <StyledTableCell align="center">{row.toEmail}</StyledTableCell>
+              <StyledTableCell align="center">
+                {format(new Date(row.date), 'yyyy.MM.dd ')} <br />
+                {format(new Date(row.startTime), 'HH:mm ~ ')}
+                {format(new Date(row.endTime), 'HH:mm aaa')}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.location}</StyledTableCell>
-              <StyledTableCell align="right">{row.status}</StyledTableCell>
-              <StyledTableCell align="right">
+              <StyledTableCell align="left">{row.location}</StyledTableCell>
+              <StyledTableCell align="center">{row.status}</StyledTableCell>
+              <StyledTableCell align="center">
                 {row.status === 'confirm' ? 'result' : 'detail'}
               </StyledTableCell>
             </StyledTableRow>

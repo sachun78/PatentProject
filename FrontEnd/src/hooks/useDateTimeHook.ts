@@ -10,7 +10,7 @@ export default function useDateTimeHook() {
     setMeetingState((state) => updateDate(state, value))
     return true
   }
-  const setTime = (value: Date | null) => {
+  const setTime = (value: Date) => {
     setMeetingState((state) => updateTime(state, value))
     return true
   }

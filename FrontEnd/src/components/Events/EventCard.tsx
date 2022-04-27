@@ -9,6 +9,7 @@ import { useQueryClient } from 'react-query'
 import media from 'lib/styles/media'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
 import { FiEdit } from 'react-icons/fi'
+import { periodString } from '../../lib/stringParser'
 
 export type EventCardProps = {
   id: string
@@ -20,15 +21,7 @@ export type EventCardProps = {
   disabled?: boolean
 }
 
-function EventCard({
-  title,
-  startDate,
-  endDate,
-  id,
-  count,
-  cardView = false,
-  disabled = false,
-}: EventCardProps) {
+function EventCard({ title, startDate, endDate, id, count, cardView = false, disabled = false }: EventCardProps) {
   const qc = useQueryClient()
   const navigate = useNavigate()
   const { setOpen, setEdit } = useEventModal()
@@ -45,17 +38,7 @@ function EventCard({
       setStartDate(new Date(startDate))
       setEndDate(new Date(endDate))
     },
-    [
-      endDate,
-      id,
-      setEdit,
-      setEndDate,
-      setEvent,
-      setOpen,
-      setStartDate,
-      startDate,
-      title,
-    ]
+    [endDate, id, setEdit, setEndDate, setEvent, setOpen, setStartDate, startDate, title]
   )
 
   const onCreateSchedule = useCallback(() => {
@@ -63,16 +46,7 @@ function EventCard({
     setStartDate(new Date(startDate))
     setEndDate(new Date(endDate))
     setMeetuser('')
-  }, [
-    endDate,
-    id,
-    setEndDate,
-    setEvent,
-    setMeetuser,
-    setStartDate,
-    startDate,
-    title,
-  ])
+  }, [endDate, id, setEndDate, setEvent, setMeetuser, setStartDate, startDate, title])
 
   return (
     <div css={wrapper(cardView)}>
@@ -94,8 +68,7 @@ function EventCard({
         </div>
         <div css={contentStyle}>
           <span>
-            Period: <b>{startDate.replace(/T.*$/, '')}</b> ~{' '}
-            <b>{endDate.replace(/T.*$/, '')}</b>
+            Period: <b>{periodString(startDate, endDate)}</b>
           </span>
           <span>
             Schedule(s): <b>{count}</b>
@@ -103,11 +76,7 @@ function EventCard({
         </div>
       </div>
       {!cardView && (
-        <div
-          css={buttonStyle(disabled)}
-          onClick={!disabled ? onCreateSchedule : undefined}
-          aria-disabled={true}
-        >
+        <div css={buttonStyle(disabled)} onClick={!disabled ? onCreateSchedule : undefined} aria-disabled={true}>
           <Link to={!disabled ? '/meeting/schedule/request' : '#'}>
             <div className="text">+ New Schedule</div>
           </Link>

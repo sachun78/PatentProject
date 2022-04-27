@@ -4,10 +4,10 @@ import palette from 'lib/palette'
 export const noScheduleStyle = css`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   text-align: center;
-
+  width: 60%;
   svg {
     width: 33%;
     height: 33%;

@@ -6,8 +6,12 @@ export default function useDateRangeHook() {
   const dateRange = useRecoilValue(dateRangeState)
   const setEventState = useSetRecoilState(eventState)
 
-  const today = useMemo(() => new Date(), [])
-  const lastDate = useMemo(() => (new Date(new Date().setFullYear(new Date().getFullYear() + 1))), [])
+  const today = useMemo(() => {
+    const day = new Date()
+    day.setHours(0, 0, 0, 0)
+    return day
+  }, [])
+  const lastDate = useMemo(() => new Date(new Date().setFullYear(new Date().getFullYear() + 1)), [])
 
   const { startDate, endDate } = dateRange
   const setStartDate = (value: Date) => {
@@ -25,6 +29,6 @@ export default function useDateRangeHook() {
     setStartDate,
     setEndDate,
     minDate: today,
-    maxDate: lastDate
+    maxDate: lastDate,
   }
 }

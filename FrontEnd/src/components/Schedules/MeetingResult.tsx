@@ -1,19 +1,13 @@
 import { Navigate, useParams } from 'react-router-dom'
 import { useMutation, useQuery } from 'react-query'
-import React, { useCallback } from 'react'
-import {
-  Box,
-  Button,
-  FormControlLabel,
-  OutlinedInput,
-  Radio,
-  RadioGroup,
-} from '@mui/material'
+import React, { useCallback, useRef, useState } from 'react'
+import { Box, Button, FormControlLabel, OutlinedInput, Radio, RadioGroup } from '@mui/material'
 import { ContainerBlock, MeetingSection } from '../../pages/Meeting/styles'
 import { getEvent } from 'lib/api/event/getEvent'
 import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
 import useInput from 'hooks/useInput'
 import { createMeetingResult } from 'lib/api/meeting/createMeetingResult'
+import { upload } from 'lib/api/meeting/resultUpload'
 
 export type MeetingResultProps = {}
 
@@ -30,21 +24,18 @@ function MeetingResult({}: MeetingResultProps) {
   })
   const [result, onChange, setResult] = useInput('')
   const [metValue, setMetValue] = React.useState('')
-
+  const [filePath, setFilePath] = useState('')
+  const fileRef = useRef<HTMLInputElement>(null)
   const onMetChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setMetValue(event.target.value)
     },
     [setMetValue]
   )
-  const { data: eventData, isLoading } = useQuery(
-    ['event', metData.eventId ?? ''],
-    getEvent,
-    {
-      enabled: !!metData.eventId,
-      retry: false,
-    }
-  )
+  const { data: eventData, isLoading } = useQuery(['event', metData.eventId ?? ''], getEvent, {
+    enabled: !!metData.eventId,
+    retry: false,
+  })
   const metResultMut = useMutation(createMeetingResult, {
     onSuccess: () => {
       refetch()
@@ -54,6 +45,24 @@ function MeetingResult({}: MeetingResultProps) {
       setMetValue('')
     },
   })
+  const imgUplaodMut = useMutation(upload, {
+    onSuccess: (res) => {
+      console.log(res)
+      setFilePath(res.files.filename)
+    },
+  })
+  const onImgUpload = useCallback(
+    (e) => {
+      e.preventDefault()
+      const file = e.target.files?.[0]
+      if (file) {
+        const formData = new FormData()
+        formData.append('mhistory_img', file)
+        imgUplaodMut.mutate(formData)
+      }
+    },
+    [imgUplaodMut]
+  )
 
   const onSubmit = useCallback(
     (e) => {
@@ -75,9 +84,10 @@ function MeetingResult({}: MeetingResultProps) {
         id,
         result: result.trim(),
         status: metValue === 'met',
+        photopath: filePath,
       })
     },
-    [id, metResultMut, metValue, result]
+    [filePath, id, metResultMut, metValue, result]
   )
 
   if (isLoading || isLoadingMet || !eventData) {
@@ -94,28 +104,43 @@ function MeetingResult({}: MeetingResultProps) {
           <form onSubmit={onSubmit}>
             <MeetingSection>
               <h2>Result</h2>
-              <OutlinedInput
-                minRows={4}
-                multiline
-                value={result}
-                onChange={onChange}
-              />
+              <OutlinedInput minRows={4} multiline value={result} onChange={onChange} />
             </MeetingSection>
             <MeetingSection>
               <h2>Photo</h2>
               <Box component="span" sx={{ p: 2, border: '1px dashed grey' }}>
-                <Button>Upload</Button>
+                <input
+                  ref={fileRef}
+                  onChange={onImgUpload}
+                  type="file"
+                  style={{ display: 'none' }}
+                  accept="image/*"
+                  name="mhistory_img"
+                />
+                {filePath ? (
+                  <img
+                    src={`http://localhost:4000/static/${filePath}`}
+                    alt={'img_path'}
+                    crossOrigin="anonymous"
+                    style={{ width: '100%', height: '100%' }}
+                  />
+                ) : (
+                  <Button
+                    onClick={(e) => {
+                      fileRef?.current?.click()
+                      e.preventDefault()
+                    }}
+                  >
+                    Upload
+                  </Button>
+                )}
               </Box>
             </MeetingSection>
             <MeetingSection>
               <h2>Meeting status</h2>
               <RadioGroup row onChange={onMetChange} value={metValue}>
                 <FormControlLabel value="met" control={<Radio />} label="Met" />
-                <FormControlLabel
-                  value="fail"
-                  control={<Radio />}
-                  label="Failure to meet"
-                />
+                <FormControlLabel value="fail" control={<Radio />} label="Failure to meet" />
               </RadioGroup>
             </MeetingSection>
 
@@ -127,37 +152,26 @@ function MeetingResult({}: MeetingResultProps) {
           <>
             <MeetingSection>
               <h2>Result</h2>
-              <OutlinedInput
-                minRows={4}
-                multiline
-                value={metData.history.result}
-              />
+              <OutlinedInput minRows={4} multiline value={metData.history.result} />
             </MeetingSection>
-            {metData.photopath && (
+            {metData.history.photopath && (
               <MeetingSection>
                 <h2>Photo</h2>
-                <Box component="span" sx={{ p: 2, border: '1px dashed grey' }}>
-                  <Button>Upload</Button>
+                <Box component="span" sx={{ p: 1 }}>
+                  <img
+                    src={`http://localhost:4000/static/${metData.history.photopath}`}
+                    alt={'result_photo'}
+                    crossOrigin="anonymous"
+                    style={{ width: '100%', height: '100%' }}
+                  />
                 </Box>
               </MeetingSection>
             )}
             <MeetingSection>
               <h2>Meeting status</h2>
               <RadioGroup row value={metData.status ? 'met' : 'fail'}>
-                {metData.status && (
-                  <FormControlLabel
-                    value="met"
-                    control={<Radio />}
-                    label="Met"
-                  />
-                )}
-                {!metData.status && (
-                  <FormControlLabel
-                    value="fail"
-                    control={<Radio />}
-                    label="Failure to meet"
-                  />
-                )}
+                {metData.status && <FormControlLabel value="met" control={<Radio />} label="Met" />}
+                {!metData.status && <FormControlLabel value="fail" control={<Radio />} label="Failure to meet" />}
               </RadioGroup>
             </MeetingSection>
           </>

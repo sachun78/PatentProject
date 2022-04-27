@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { TableCell, tableCellClasses, TableRow } from '@mui/material'
-import { brandColor } from '../../lib/palette'
+import palette, { brandColor } from '../../lib/palette'
 
 export const ContainerBlock = styled.div`
   position: relative;
@@ -24,17 +24,31 @@ export const ContainerBlock = styled.div`
 export const MeetingSection = styled.section`
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.875rem;
+  margin-bottom: 0.875rem;
   color: #333333;
+  width: 100%;
+
+  .multiline {
+    white-space: pre-wrap;
+    max-width: 100%;
+    overflow-wrap: break-word;
+  }
 
   h2 {
     font: normal normal 800 16px/18px NanumSquareOTF;
-    margin: 0 0 1.25rem;
+    margin: 0 0 0.25rem;
+    border-radius: 0.5rem;
   }
 
   p {
     margin: 0;
     font: normal normal normal 16px/18px NanumSquareOTF;
+    padding: 1rem 0;
+    border-radius: 0.5rem;
+
+    &:hover {
+      background: ${palette.grey[200]};
+    }
   }
 
   p + p {

@@ -1,34 +1,57 @@
 import { mainStyle } from './styles'
-import { IMeeting } from '../../lib/api/types'
+import { IReplan } from '../../lib/api/types'
 import useInput from 'hooks/useInput'
 import RequestSection from 'pages/Meeting/meeting-create-form/RequestForm/RequestSection'
-import DatePickerInput from '../DatePickerInput'
 import LocationInput from '../LocationMap/LocationInput'
 import { Button, OutlinedInput, Typography } from '@mui/material'
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { replanMeeting } from '../../lib/api/meeting/replanMeeting'
 import { useMutation, useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
 import TimeGridInput from '../DatePickerInput/TimeGridInput'
 
 export type BookingRepalnMainProps = {
-  meeting: IMeeting
+  meeting: IReplan
 }
 
 export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
-  const [location, , onChangeLocation] = useInput(meeting.location)
-  const [date, , setDate] = useInput(new Date(meeting.date))
-  const [time, , setTime] = useInput(new Date(meeting.time))
+  const [location, , onChangeLocation] = useInput(meeting.data.location)
+  const [date, , setDate] = useInput(new Date(meeting.data.date))
+  const [startTime, , setStartTime] = useInput(new Date(meeting.data.startTime))
+  const [endTime, , setEndTime] = useInput(new Date(meeting.data.endTime))
   const [comment, onChangeComment] = useInput('')
+  const eventStart = useMemo(
+    () => new Date(meeting.sendData.event_startDate),
+    [meeting.sendData.event_startDate]
+  )
+  const eventEnd = useMemo(
+    () => new Date(meeting.sendData.event_endDate),
+    [meeting.sendData.event_endDate]
+  )
+
   const qc = useQueryClient()
   const replanMut = useMutation(replanMeeting, {
     onSuccess: () => {
-      qc.invalidateQueries(['meeting', meeting.code])
+      qc.invalidateQueries(['meeting', meeting.data.code])
     },
     onError: (err) => {
       console.error(err)
     },
   })
+
+  const onTimeChange = useCallback(
+    (start: Date, end: Date) => {
+      setStartTime(start)
+      setEndTime(end)
+    },
+    [setStartTime, setEndTime]
+  )
+  const onDateChange = useCallback(
+    (date: Date) => {
+      setDate(date)
+    },
+    [setDate]
+  )
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault()
@@ -38,19 +61,20 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
       }
 
       replanMut.mutate({
-        code: meeting.code,
+        code: meeting.data.code,
         data: {
           location,
           date,
-          time,
+          startTime,
+          endTime,
           comment,
         },
       })
     },
-    [location, date, time, comment, replanMut, meeting.code]
+    [comment, replanMut, meeting.data.code, location, date, startTime, endTime]
   )
 
-  if (meeting.status !== 'none') {
+  if (meeting.data.status !== 'none') {
     return (
       <div css={mainStyle}>
         <Typography variant="h5">
@@ -69,19 +93,17 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
         Replan
       </Typography>
       <form onSubmit={onSubmit}>
-        <RequestSection title={'Meeting Date'}>
-          <DatePickerInput
-            value={date}
-            onChange={(value: Date) => {
-              console.log(time)
-              value.setHours(time.getHours())
-              value.setMinutes(time.getMinutes())
-              setDate(value)
-            }}
+        <RequestSection title={'Select Date'}>
+          <TimeGridInput
+            startTime={startTime}
+            endTime={endTime}
+            date={date}
+            startDate={eventStart}
+            endDate={eventEnd}
+            timeChange={onTimeChange}
+            timeEvent={meeting.sendData.meeting_timeList}
+            dateChange={onDateChange}
           />
-        </RequestSection>
-        <RequestSection title={'Meeting Time'}>
-          <TimeGridInput time={time} />
         </RequestSection>
         <RequestSection title={'Location'}>
           <LocationInput

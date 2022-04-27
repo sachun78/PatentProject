@@ -1,9 +1,8 @@
 import { css } from '@emotion/react'
-import { MdMoreHoriz } from 'react-icons/md'
-import palette, { brandColor } from '../../lib/palette'
-import gravatar from 'gravatar'
 import { Avatar } from '@mui/material'
 import React from 'react'
+import { MdMoreHoriz } from 'react-icons/md'
+import palette, { brandColor } from '../../lib/palette'
 
 export type PostHeaderProps = {
   owner_username: string

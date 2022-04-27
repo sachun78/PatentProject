@@ -1,33 +1,75 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import InputBase from '../InputBase/InputBase'
-import useOnClickOutside from 'use-onclickoutside'
 import { textStyle } from './TimePickerInput'
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import dayGridPlugin from '@fullcalendar/daygrid'
+import { differenceInCalendarDays } from 'date-fns'
 
 import styled from '@emotion/styled'
+import { brandColor } from '../../lib/palette'
+import {
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material'
 
 export type TimeGridInputProps = {
-  time: Date
+  startTime: Date
+  endTime: Date | null
+  startDate: Date
+  endDate: Date
+  date: Date
+  timeChange: (start: Date, end: Date) => void
+  dateChange: (date: Date) => void
+  timeEvent: { startTime: string; endTime: string; date: string }[]
 }
 
-function TimeGridInput({ time }: TimeGridInputProps) {
+function TimeGridInput({
+  startTime,
+  endTime,
+  startDate,
+  endDate,
+  timeChange,
+  timeEvent,
+  dateChange,
+  date,
+}: TimeGridInputProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const calendarRef = useRef<FullCalendar | null>(null)
-  const onClose: Parameters<typeof useOnClickOutside>[1] = (e) => {
-    if (ref.current === e.target || ref.current?.contains(e.target as Node)) {
-      return
-    }
-    setOpen(false)
-  }
   const handleOpen = useCallback(() => {
     setOpen(true)
   }, [])
 
-  useOnClickOutside(ref, onClose)
+  const handleClose = useCallback(() => {
+    setOpen(false)
+  }, [])
+  const reserve_event = useMemo(() => {
+    return timeEvent.map((event) => {
+      const date = new Date(event.date)
+      const start = new Date(event.startTime)
+      start.setFullYear(date.getFullYear())
+      start.setDate(date.getDate())
+      const end = new Date(event.endTime)
+      end.setFullYear(date.getFullYear())
+      end.setDate(date.getDate())
+
+      return {
+        title: 'reserved',
+        start: start.toISOString(),
+        end: end.toISOString(),
+        allDay: false,
+        backgroundColor: brandColor,
+      }
+    })
+  }, [timeEvent])
+
+  const dateDiff = useMemo(() => {
+    return differenceInCalendarDays(endDate, startDate) + 1
+  }, [endDate, startDate])
 
   return (
     <InputBase ref={ref} style={{ position: 'relative', width: '100%' }}>
@@ -41,71 +83,82 @@ function TimeGridInput({ time }: TimeGridInputProps) {
           }
         }}
       >
-        {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        {endTime
+          ? `${date.toDateString()}, ${startTime.toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            })} ~ ${endTime.toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}`
+          : 'Select Date'}
       </div>
-      {open && (
-        <CalendarContainer>
-          <FullCalendar
-            ref={calendarRef}
-            plugins={[timeGridPlugin, interactionPlugin, dayGridPlugin]}
-            initialView="timeGridFourDay"
-            selectable={true}
-            slotEventOverlap={false}
-            allDaySlot={false}
-            initialDate={'2022-01-01'}
-            selectOverlap={false}
-            headerToolbar={false}
-            events={[
-              {
-                id: '1',
-                title: 'reserved',
-                start: '2022-01-01T00:00:00',
-                end: '2022-01-01T01:00:00',
-              },
-            ]}
-            selectAllow={(selectInfo) => {
-              let startDate = selectInfo.start
-              let endDate = selectInfo.end
-              endDate.setSeconds(endDate.getSeconds() - 1) // allow full day selection
-              return startDate.getDate() === endDate.getDate()
-            }}
-            visibleRange={{
-              start: new Date('2022-01-01'),
-              end: new Date('2022-04-04'),
-            }}
-            dayHeaderFormat={{
-              month: 'numeric',
-              day: 'numeric',
-              weekday: 'short',
-            }}
-            views={{
-              timeGridFourDay: {
-                type: 'timeGridDay',
-                duration: { days: 20 },
-              },
-            }}
-          />
-        </CalendarContainer>
-      )}
+      <Dialog onClose={handleClose} open={open} fullScreen scroll={'body'}>
+        <DialogTitle>Set Meeting Date</DialogTitle>
+        <DialogContent
+          dividers={true}
+          style={{ overflow: 'auto', maxHeight: '90%' }}
+        >
+          <DialogContentText>
+            Drag and select Start time and end time
+          </DialogContentText>
+          <CalendarContainer style={{ minWidth: '100%' }}>
+            <FullCalendar
+              ref={calendarRef}
+              plugins={[timeGridPlugin, interactionPlugin, dayGridPlugin]}
+              initialView="timeGridFourDay"
+              selectable={true}
+              slotEventOverlap={false}
+              allDaySlot={false}
+              initialDate={startDate}
+              selectOverlap={false}
+              headerToolbar={false}
+              height={800}
+              select={(info) => {
+                timeChange(info.start, info.end)
+                dateChange(info.start)
+                info.view.calendar.unselect()
+                setOpen(false)
+              }}
+              events={reserve_event}
+              selectAllow={(selectInfo) => {
+                let startDate = selectInfo.start
+                let endDate = selectInfo.end
+                endDate.setSeconds(endDate.getSeconds() - 1) // allow full day selection
+                return startDate.getDate() === endDate.getDate()
+              }}
+              dayHeaderFormat={{
+                month: 'numeric',
+                day: 'numeric',
+                weekday: 'short',
+              }}
+              views={{
+                timeGridFourDay: {
+                  type: 'timeGridDay',
+                  duration: { days: dateDiff ?? 1 },
+                },
+              }}
+            />
+          </CalendarContainer>
+        </DialogContent>
+      </Dialog>
     </InputBase>
   )
 }
 
 const CalendarContainer = styled.div`
-  position: absolute;
-  z-index: 99;
-  background: #fff;
-  width: 100%;
-  padding: 1rem;
-  border-radius: 0.5rem;
+  height: 100%;
 
   .fc-view {
     overflow-x: auto;
+    min-width: 100%;
   }
 
   .fc-view > table {
     min-width: 100%;
-    width: 2000px;
+    width: 1000px;
+    border-radius: 1rem;
+    position: relative;
   }
 
   .fc-time-grid .fc-slats {

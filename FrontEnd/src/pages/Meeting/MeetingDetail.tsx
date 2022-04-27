@@ -64,8 +64,13 @@ function MeetingDetail({}: MeetingDetailProps) {
           <h2>Schedule Information</h2>
           <p>{data.location}</p>
           <p>
-            {data.date.replace(/T.*$/, '')}
-            {new Date(data.time).toLocaleTimeString([], {
+            {data.date.replace(/T.*$/, '') + ' '}
+            {new Date(data.startTime).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+            {' ~ '}
+            {new Date(data.endTime).toLocaleTimeString([], {
               hour: '2-digit',
               minute: '2-digit',
             })}
@@ -73,7 +78,7 @@ function MeetingDetail({}: MeetingDetailProps) {
         </MeetingSection>
         <MeetingSection>
           <h2>Request Message</h2>
-          <p> {data.comment}</p>
+          <div className={'multiline'}>{data.comment} </div>
           <p>{data.status}</p>
         </MeetingSection>
       </ContainerBlock>
