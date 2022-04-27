@@ -2,12 +2,12 @@ import client from '../client'
 
 export async function createPost(input: postInput) {
   const response = await client.post('/api/post', {
-    ...input
+    ...input,
   })
   return response.data
 }
 
 type postInput = {
   contents: any
-  images: string []
+  images: string[]
 }
