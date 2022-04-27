@@ -1,14 +1,18 @@
-import AskModal from "./AskModal";
+import AskModal from './AskModal'
 
 type askRemoveModalProps = {
-  visible: boolean,
-  onConfirm?: any,
+  visible: boolean
+  onConfirm?: any
   onCancel?: any
 }
 
-const AskRemoveModal = ({ visible, onConfirm, onCancel }: askRemoveModalProps) => {
-  return(
-    <AskModal 
+const AskRemoveModal = ({
+  visible,
+  onConfirm,
+  onCancel,
+}: askRemoveModalProps) => {
+  return (
+    <AskModal
       visible={visible}
       title="Delete Post"
       description="Do you want to delete?"
@@ -17,7 +21,7 @@ const AskRemoveModal = ({ visible, onConfirm, onCancel }: askRemoveModalProps) =
       onCancel={onCancel}
       cancelText="Cancle"
     />
-  );
-};
+  )
+}
 
-export default AskRemoveModal;
+export default AskRemoveModal
