@@ -28,11 +28,13 @@ function Home({}: HomeProps) {
               _id={post._id}
               owner_username={post.owner_username}
               owner_thumb={post.owner_thumb}
+              owner_id={post.owner_id}
               like_cnt={post.like_cnt}
               contents={post.contents}
               comment={post.comment}
               images={post.images}
               createdAt={post.createdAt}
+
             />
           ))}
         </div>
