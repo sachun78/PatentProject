@@ -1,12 +1,5 @@
 import { css } from '@emotion/react'
-import {
-  Avatar,
-  Box,
-  ImageList,
-  ImageListItem,
-  Modal,
-  OutlinedInput,
-} from '@mui/material'
+import { Avatar, Box, ImageList, ImageListItem, Modal, OutlinedInput } from '@mui/material'
 import gravatar from 'gravatar'
 import useInput from 'hooks/useInput'
 import useToggle from 'hooks/useToggle'
@@ -27,21 +20,14 @@ type postDetailProps = {
   isLike?: boolean
 }
 
+const API_PATH = process.env.REACT_APP_API_PATH
+
 function PostDetail({ isLike = false }: postDetailProps) {
   const qc = useQueryClient()
   const location: any = useLocation()
 
-  const {
-    _id,
-    images,
-    owner_username,
-    owner_thumb,
-    owner_id,
-    like_cnt,
-    comment,
-    createdAt,
-    contents,
-  } = location.state as IPost
+  const { _id, images, owner_username, owner_thumb, owner_id, like_cnt, comment, createdAt, contents } =
+    location.state as IPost
 
   const { data: post, isLoading } = useQuery(['post', _id], getPost, {
     retry: false,
@@ -109,11 +95,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
       <div css={wrapStyle}>
         <div css={detailStyle}>
           <div css={iconStyle}>
-            <Avatar
-              alt="user-avatar"
-              src={owner_thumb}
-              sx={{ width: 60, height: 60 }}
-            />
+            <Avatar alt="user-avatar" src={owner_thumb} sx={{ width: 60, height: 60 }} />
           </div>
           <div css={titleStyle}>
             <h4>
@@ -127,7 +109,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
             {images?.map((image: any) => (
               <ImageListItem key={image}>
                 <img
-                  src={'http://localhost:8080/static/' + image}
+                  src={`${API_PATH}static` + image}
                   loading="lazy"
                   style={{
                     borderRadius: '1rem',
@@ -182,11 +164,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
         ) : (
           <div css={commentStyle} style={{ margin: '10px' }}>
             {post.comment.map((viewComment: IComment) => (
-              <PostComment
-                key={viewComment.id}
-                viewComment={viewComment}
-                _id={_id}
-              />
+              <PostComment key={viewComment.id} viewComment={viewComment} _id={_id} />
             ))}
           </div>
         )}

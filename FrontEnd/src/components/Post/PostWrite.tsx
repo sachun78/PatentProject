@@ -9,6 +9,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { API_PATH } from '../../lib/api/client'
 
 function PostWrite() {
   const qc = useQueryClient()
@@ -77,7 +78,7 @@ function PostWrite() {
 
     // input에 변화가 생긴다면 = 이미지를 선택
     input.addEventListener('change', async () => {
-      const file = input.files[0]      
+      const file = input.files[0]
 
       const formData = new FormData()
       formData.append('post_img', file)
@@ -86,15 +87,13 @@ function PostWrite() {
         res.files.map((file: any) => {
           quillInstance.current.root.innerHTML =
             quillInstance.current.root.innerHTML +
-            `<img src='http://localhost:8080/static/${file.filename}' crossorigin='anonymous'>`
+            `<img src='${API_PATH}static/${file.filename}' crossorigin='anonymous'>`
 
           images.push(file.filename)
-          
         })
-      })      
+      })
       console.log(images)
       setImage(images)
-      
     })
   }
 
@@ -133,7 +132,7 @@ function PostWrite() {
           <div className={'divider'}>{''}</div>
           <div css={quillWrapperStyle}>
             <div css={editorStyle} ref={quillElement} />
-          </div>          
+          </div>
         </form>
       </div>
       <div css={buttonWrapStyle}>
@@ -155,12 +154,14 @@ const editorStyle = css`
 `
 const quillWrapperStyle = css`
   margin: 1rem;
+
   .ql-editor {
     font-size: 1.125rem;
     line-height: 1.5;
     margin-top: 2rem;
     margin-left: 1rem;
   }
+
   height: 22rem;
 `
 const postWriteStyle = css`
