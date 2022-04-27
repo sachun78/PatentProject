@@ -3,11 +3,11 @@ import produce from 'immer'
 
 export type MeetingReqState = {
   date: Date
-  time: Date | null
+  time: Date
 }
 const initialState: MeetingReqState = {
   date: new Date(),
-  time: null,
+  time: new Date(),
 }
 
 export const meetingReqState = atom({
@@ -29,7 +29,7 @@ export const updateDate = (state: MeetingReqState, value: Date) =>
     draft.date = value
   })
 
-export const updateTime = (state: MeetingReqState, value: Date | null) =>
+export const updateTime = (state: MeetingReqState, value: Date) =>
   produce(state, (draft) => {
     draft.time = value
   })

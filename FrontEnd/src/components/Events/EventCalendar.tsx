@@ -16,26 +16,22 @@ function EventCalendar({}: ScheduleCalendarProps) {
   const navigate = useNavigate()
   const calendarRef = useRef<FullCalendar | null>(null)
   const calendarEvents = useMemo(() => {
-    const retArr = []
-    if (data) {
-      for (const event of data) {
-        const ed = new Date(event.end_date)
-        const dist = formatDistanceToNow(ed, {
-          addSuffix: true,
-        })
-        ed.setDate(ed.getDate() + 1)
-        const edStr = ed.toISOString()
-        const eventObj = {
-          id: event.id,
-          title: event.title,
-          start: event.start_date.replace(/T.*$/, ''),
-          end: edStr.replace(/T.*$/, ''),
-          backgroundColor: dist.includes('ago') ? '#9c9c9c' : brandColor,
-        }
-        retArr.push(eventObj)
+    if (!data) return []
+    return data.map((event) => {
+      const ed = new Date(event.end_date)
+      const dist = formatDistanceToNow(ed, {
+        addSuffix: true,
+      })
+      ed.setDate(ed.getDate() + 1)
+      const edStr = ed.toISOString()
+      return {
+        id: event.id,
+        title: event.title,
+        start: event.start_date.replace(/T.*$/, ''),
+        end: edStr.replace(/T.*$/, ''),
+        backgroundColor: dist.includes('ago') ? '#9c9c9c' : brandColor,
       }
-    }
-    return retArr
+    })
   }, [data])
 
   const handleEventClick = (clickInfo: EventClickArg) => {

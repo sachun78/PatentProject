@@ -47,7 +47,7 @@ function EventDetailContainer({ id }: EventDetailLeftProps) {
                   comment={meeting.comment}
                   place={meeting.location}
                   date={meeting.date}
-                  time={meeting.time}
+                  time={meeting.startTime}
                   title={meeting.title}
                   state={meeting.status}
                   id={meeting.id}

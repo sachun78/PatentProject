@@ -1,20 +1,19 @@
 import React, { useMemo } from 'react'
-import { useQuery } from 'react-query'
 import { useSearchParams } from 'react-router-dom'
-import { getMeetingInfoByCode } from 'lib/api/meeting/getMeetingInfoByCode'
 import BookingSide from '../Booking/BookingSide'
 import BookingReplanMain from '../Booking/BookingRepalnMain'
 import { wrapper } from '../Booking/styles'
-import { IMeeting } from 'lib/api/types'
+import { IReplan } from '../../lib/api/types'
+import { useQuery } from 'react-query'
+import { getMeetingInfoByCode } from '../../lib/api/meeting/getMeetingInfoByCode'
 
 export type MeetingRescheduleProps = {}
 
 function MeetingReschedule({}: MeetingRescheduleProps) {
   const [param] = useSearchParams()
   const code = useMemo(() => param.get('code'), [param])
-
-  const { data: meetingData, isLoading } = useQuery<IMeeting>(
-    ['meeting', code ?? ''],
+  const { data: meeting, isLoading } = useQuery<IReplan>(
+    ['meeting', code ?? '', 'replan'],
     getMeetingInfoByCode,
     {
       staleTime: Infinity,
@@ -23,18 +22,14 @@ function MeetingReschedule({}: MeetingRescheduleProps) {
     }
   )
 
-  if (isLoading) {
+  if (!code || !meeting) {
     return <div>Loading</div>
-  }
-
-  if (!meetingData) {
-    return <div>Not Found</div>
   }
 
   return (
     <div css={wrapper}>
-      <BookingSide meeting={meetingData} />
-      <BookingReplanMain meeting={meetingData} />
+      <BookingSide meeting={meeting.data} />
+      <BookingReplanMain meeting={meeting} />
     </div>
   )
 }

@@ -2,7 +2,7 @@ import client from '../client'
 
 export async function createMeeting(input: MeetingInput) {
   const response = await client.post('/api/meeting/send-invitemail', {
-    ...input
+    ...input,
   })
   return response.data
 }
@@ -12,7 +12,8 @@ type MeetingInput = {
   eventId: string
   toEmail: string
   date: Date
-  time: Date
+  startTime: Date
+  endTime: Date
   location: string
   comment: string
 }

@@ -24,7 +24,12 @@ function BookingSide({ meeting }: BookingSideProps) {
         <div>
           <BsClock />{' '}
           <h3>
-            {new Date(meeting.time).toLocaleTimeString([], {
+            {new Date(meeting.startTime).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}{' '}
+            ~{' '}
+            {new Date(meeting.endTime).toLocaleTimeString([], {
               hour: '2-digit',
               minute: '2-digit',
             })}

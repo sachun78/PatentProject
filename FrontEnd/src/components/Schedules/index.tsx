@@ -36,8 +36,8 @@ function Schedules({}: ScheduleViewProps) {
     return (
       <div css={noScheduleStyle}>
         <IconControl name={'welcome'} />
-        <div>There is no registered schedule.</div>
-        <div>Register your schedule through an event.</div>
+        <div>There is no upcoming schedule.</div>
+        <div>Create your schedule through an event.</div>
       </div>
     )
 
