@@ -3,9 +3,7 @@ import loadable from '@loadable/component'
 
 type MeetingProps = {}
 
-const RequestForm = loadable(
-  () => import('pages/Meeting/meeting-create-form/RequestForm')
-)
+const RequestForm = loadable(() => import('pages/Meeting/meeting-create-form/RequestForm'))
 const MeetingDetail = loadable(() => import('./MeetingDetail'))
 
 function Meeting({}: MeetingProps) {

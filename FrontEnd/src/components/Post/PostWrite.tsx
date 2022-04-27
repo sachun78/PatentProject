@@ -1,26 +1,24 @@
-import { css } from '@emotion/react';
-import { createPost } from 'lib/api/post/createPost';
-import { usePosts } from 'lib/api/post/usePosts';
-import { User } from 'lib/api/types';
-import palette from 'lib/palette';
-import Quill from 'quill';
-import 'quill/dist/quill.snow.css';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { css } from '@emotion/react'
+import { createPost } from 'lib/api/post/createPost'
+import { postImgUpload } from 'lib/api/post/postImgUpload'
+import { User } from 'lib/api/types'
+import palette from 'lib/palette'
+import Quill from 'quill'
+import 'quill/dist/quill.snow.css'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useMutation, useQueryClient } from 'react-query'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 function PostWrite() {
   const qc = useQueryClient()
-  const [body, setBody] = useState('')
-  const [title, setTitle] = useState('')
-  const [image, setImage] = useState<any>()
+  const [body, setbody] = useState('')
   const quillElement = useRef<any>(null)
   const quillInstance = useRef<any>(null)
   const navigate = useNavigate()
-  const posts = usePosts()
   const user = qc.getQueryData<User>('user') as User
-  const imgData = [] as any;  
+  const [image, setImage] = useState<string[]>()
+  const images = [] as any
 
   const createPostMut = useMutation(createPost, {
     onSuccess: () => {
@@ -28,7 +26,7 @@ function PostWrite() {
         position: toast.POSITION.TOP_CENTER,
         pauseOnHover: false,
         pauseOnFocusLoss: false,
-        autoClose: 3000
+        autoClose: 3000,
       })
       navigate('/')
     },
@@ -37,33 +35,36 @@ function PostWrite() {
         position: toast.POSITION.TOP_CENTER,
         pauseOnHover: false,
         pauseOnFocusLoss: false,
-        autoClose: 3000
+        autoClose: 3000,
       })
-    }
+    },
   })
 
-  const onSubmit = useCallback((e) => {
-    e.preventDefault()    
-    if (!body.trim()) {
-      toast.error('Please enter the contents', {
-        position: toast.POSITION.TOP_CENTER,
-        pauseOnHover: false,
-        pauseOnFocusLoss: false,
-        autoClose: 3000
-      })
-      return
-    }
+  const onSubmit = useCallback(
+    (e) => {
+      e.preventDefault()
+      if (!body.trim()) {
+        toast.error('Please enter the contents', {
+          position: toast.POSITION.TOP_CENTER,
+          pauseOnHover: false,
+          pauseOnFocusLoss: false,
+          autoClose: 3000,
+        })
+        return
+      }
 
-    createPostMut.mutate({
-      contents: body
-    })
-  }, [body])
-  
+      createPostMut.mutate({
+        contents: body,
+        images: image as string[],
+      })
+    },
+    [body, image]
+  )
+
   const onCancle = () => {
     navigate(-1)
   }
 
-  // 이미지 처리를 하는 핸들러
   const imageHandler = () => {
     console.log('에디터에서 이미지 버튼을 클릭하면 이 핸들러가 시작됩니다!')
 
@@ -76,29 +77,24 @@ function PostWrite() {
 
     // input에 변화가 생긴다면 = 이미지를 선택
     input.addEventListener('change', async () => {
+      const file = input.files[0]      
 
-      const file = input.files[0];             
+      const formData = new FormData()
+      formData.append('post_img', file)
+
+      postImgUpload(formData).then((res) => {
+        res.files.map((file: any) => {
+          quillInstance.current.root.innerHTML =
+            quillInstance.current.root.innerHTML +
+            `<img src='http://localhost:8080/static/${file.filename}' crossorigin='anonymous'>`
+
+          images.push(file.filename)
+          
+        })
+      })      
+      console.log(images)
+      setImage(images)
       
-      imgData.push({        
-        img: file,
-        imgName: file.name,
-        src: `/${file.name}`,
-      })
-
-      qc.setQueryData('images', imgData);
-      const results: any = qc.getQueryData('images');     
-      const IMG_URL = `/${results[imgData.length - 1].imgName}`                 
-      
-      try {       
-
-        const range: { index: Number, length: Number } = quillInstance.current.getSelection();                
-        quillInstance.current.insertEmbed(range.index, 'image', IMG_URL);
-        setImage(results)        
-
-      } catch (error) {
-
-        //        
-      }
     })
   }
 
@@ -125,25 +121,31 @@ function PostWrite() {
 
     quill.root.innerText = body
     quill.on('text-change', () => {
-      setBody(quill.root.innerText)
+      setbody(quill.root.innerText)
     })
   }, [])
 
   return (
-  <>
-    <div css={postWriteStyle}>
-      <input css={inputStyle} value="Feel Free To Write" readOnly/>
-      <div className={'divider'}>{''}</div>
-      <div css={quillWrapperStyle}>
-        <div css={editorStyle} ref={quillElement} />
+    <>
+      <div css={postWriteStyle}>
+        <form onSubmit={onSubmit} encType="multipart/form-data">
+          <input css={inputStyle} value="Feel Free To Write" readOnly />
+          <div className={'divider'}>{''}</div>
+          <div css={quillWrapperStyle}>
+            <div css={editorStyle} ref={quillElement} />
+          </div>          
+        </form>
       </div>
-    </div>
-    <div css={buttonWrapStyle}>
-      <button css={buttonStyle} onClick={onSubmit}>Posting</button>
-      <button css={buttonStyle} onClick={onCancle}>Cancle</button>
-    </div>
-  </>
-  );
+      <div css={buttonWrapStyle}>
+        <button css={buttonStyle} onClick={onSubmit}>
+          Posting
+        </button>
+        <button css={buttonStyle} onClick={onCancle}>
+          Cancle
+        </button>
+      </div>
+    </>
+  )
 }
 
 export default PostWrite
@@ -153,12 +155,12 @@ const editorStyle = css`
 `
 const quillWrapperStyle = css`
   margin: 1rem;
-    .ql-editor {
-      font-size: 1.125rem;
-      line-height: 1.5;
-      margin-top: 2rem;        
-      margin-left: 1rem;                  
-    }
+  .ql-editor {
+    font-size: 1.125rem;
+    line-height: 1.5;
+    margin-top: 2rem;
+    margin-left: 1rem;
+  }
   height: 22rem;
 `
 const postWriteStyle = css`
@@ -222,3 +224,7 @@ const buttonStyle = css`
     background: ${palette.cyan[600]};
   }
 `
+
+function e(e: any) {
+  throw new Error('Function not implemented.')
+}

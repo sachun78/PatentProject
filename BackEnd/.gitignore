@@ -2,3 +2,5 @@
 /.idea
 .env
 /build
+/src/config.ts
+/uploads

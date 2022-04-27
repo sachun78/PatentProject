@@ -5,6 +5,7 @@ import { css } from '@emotion/react'
 import { useQuery } from 'react-query'
 import { Navigate } from 'react-router-dom'
 import EventDetailCard from './EventDetailCard'
+import { periodString } from '../../lib/stringParser'
 
 export type EventDetailLeftProps = {
   id: string
@@ -29,10 +30,7 @@ function EventDetailContainer({ id }: EventDetailLeftProps) {
       <h1 css={titleEventStyle}>{event.title}</h1>
       <section css={dateSectionStyle}>
         <MdCalendarToday />
-        <span>
-          {event.start_date.replace(/T.*$/, '')} ~{' '}
-          {event.end_date.replace(/T.*$/, '')}
-        </span>
+        <span>{periodString(event.start_date, event.end_date)}</span>
       </section>
       <>
         <h3 css={titleEventStyle}>Meeting List</h3>
@@ -47,7 +45,7 @@ function EventDetailContainer({ id }: EventDetailLeftProps) {
                   comment={meeting.comment}
                   place={meeting.location}
                   date={meeting.date}
-                  time={meeting.time}
+                  time={meeting.startTime}
                   title={meeting.title}
                   state={meeting.status}
                   id={meeting.id}

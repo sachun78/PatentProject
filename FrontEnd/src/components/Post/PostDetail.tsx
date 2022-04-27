@@ -5,14 +5,14 @@ import {
   ImageList,
   ImageListItem,
   Modal,
-  OutlinedInput
+  OutlinedInput,
 } from '@mui/material'
 import gravatar from 'gravatar'
 import useInput from 'hooks/useInput'
 import useToggle from 'hooks/useToggle'
 import { createComments } from 'lib/api/post/createComment'
 import { getPost } from 'lib/api/post/getPost'
-import palette, { brandColor } from 'lib/palette'
+import { brandColor } from 'lib/palette'
 import media from 'lib/styles/media'
 import React, { useCallback, useEffect, useState } from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
@@ -21,7 +21,7 @@ import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { IComment, IPost, User } from '../../lib/api/types'
 import PostActionButtons from './PostActionButtons'
-import PostIconBox from './PostIconBox'
+import PostComment from './PostComment'
 
 type postDetailProps = {
   isLike?: boolean
@@ -36,22 +36,22 @@ function PostDetail({ isLike = false }: postDetailProps) {
     images,
     owner_username,
     owner_thumb,
+    owner_id,
     like_cnt,
     comment,
     createdAt,
     contents,
-  } = location.state as IPost  
+  } = location.state as IPost
 
   const { data: post, isLoading } = useQuery(['post', _id], getPost, {
-    retry: false,    
-  })  
-  console.log(_id)
-  console.log(post)
+    retry: false,
+  })
+
   const [commentVisible, onToggleComment, setCommentVisible] = useToggle(false)
   const [comments, onChangeComments, setComments] = useInput('')
   const [likeClick, onToggleLike] = useToggle(isLike)
-  const user = qc.getQueryData<User>('user') as User  
-  const [owner, setOwner] = useState(false)  
+  const user = qc.getQueryData<User>('user') as User
+  const [owner, setOwner] = useState(false)
 
   // 이미지 처리
   const [open, setOpen] = useState(false)
@@ -70,17 +70,15 @@ function PostDetail({ isLike = false }: postDetailProps) {
 
         setComments('')
         setCommentVisible(!commentVisible)
-        
       }
     },
     [comments]
-  ) 
+  )
 
   useEffect(() => {
-    if (_id === user._id) {
+    if (owner_id === user.id) {
       setOwner(true)
     }
-    
   }, [commentVisible])
 
   const onLike = () => {
@@ -94,9 +92,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
 
   const createCommentMut = useMutation(createComments, {
     onSuccess: () => {
-      
-      qc.invalidateQueries(['post', _id])      
-      
+      qc.invalidateQueries(['post', _id])
     },
     onError: () => {
       toast.error('Something went wrong', {
@@ -129,20 +125,20 @@ function PostDetail({ isLike = false }: postDetailProps) {
         <figure>
           <ImageList variant="masonry" cols={3} gap={8}>
             {images?.map((image: any) => (
-              <ImageListItem key={image.imageId}>
+              <ImageListItem key={image}>
                 <img
-                  src={image.src}
-                  alt={image.alt}
+                  src={'http://localhost:8080/static/' + image}
                   loading="lazy"
                   style={{
                     borderRadius: '1rem',
                     cursor: 'zoom-in',
                   }}
                   onClick={handleOpen}
+                  crossOrigin="anonymous"
                 />
                 <Modal open={open} onClose={handleClose} css={modalStyle}>
                   <Box css={boxWrapper}>
-                    <img src={imgSrc} css={imageStyle} alt={image.alt} />
+                    <img src={imgSrc} css={imageStyle} crossOrigin="anonymous" />
                   </Box>
                 </Modal>
               </ImageListItem>
@@ -158,7 +154,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
           <div className={'item'} onClick={onToggleComment}>
             <BsChatLeftDots /> {comment.length}
           </div>
-          {owner && <PostActionButtons id={_id} />}
+          {owner && <PostActionButtons _id={_id} />}
         </div>
         {commentVisible && (
           <div style={{ textAlign: 'center' }}>
@@ -167,7 +163,6 @@ function PostDetail({ isLike = false }: postDetailProps) {
               value={comments}
               onChange={onChangeComments}
               onKeyDown={onKeyDown}
-              // onKeyPress={onKeyPress}
               sx={{ borderRadius: '1rem', margin: '0 0.5rem', width: '95%' }}
               startAdornment={
                 <Avatar
@@ -182,44 +177,16 @@ function PostDetail({ isLike = false }: postDetailProps) {
             />
           </div>
         )}
-        {post.comment.length === 0 ? (
+        {comment.length === 0 ? (
           <div></div>
         ) : (
-          <div css={commentStyle}>
-            {post.comment.map((commen: IComment) => (
-              <div
-                key={commen._id}
-                style={{
-                  paddingTop: '1rem',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  verticalAlign: 'center',
-                  borderBottom: `0.5px solid ${palette.grey[400]}`,
-                }}
-              >
-                <div style={{ display: 'flex' }}>
-                  <Avatar
-                    alt="user-avatar"
-                    src={gravatar.url(`test.email${commen._id}`, {
-                      s: '60px',
-                      d: 'retro',
-                    })}
-                    sx={{ width: 20, height: 20, marginBottom: '0.5rem' }}
-                  />
-                </div>
-                <div
-                  style={{
-                    flex: '1',
-                    marginLeft: '1rem',
-                    verticalAlign: 'center',
-                  }}
-                >
-                  {commen.contents}                  
-                </div>
-                <div> 
-                  <PostIconBox />
-                </div>
-              </div>
+          <div css={commentStyle} style={{ margin: '10px' }}>
+            {post.comment.map((viewComment: IComment) => (
+              <PostComment
+                key={viewComment.id}
+                viewComment={viewComment}
+                _id={_id}
+              />
             ))}
           </div>
         )}

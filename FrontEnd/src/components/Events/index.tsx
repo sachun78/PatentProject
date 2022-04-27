@@ -1,13 +1,5 @@
 import AddIcon from '@mui/icons-material/Add'
-import {
-  Button,
-  Checkbox,
-  CircularProgress,
-  Fab,
-  FormControlLabel,
-  FormGroup,
-  Switch,
-} from '@mui/material'
+import { Button, Checkbox, CircularProgress, Fab, FormControlLabel, FormGroup, Switch } from '@mui/material'
 import IconControl from 'components/IconControl/IconControl'
 import useEventQuery from 'hooks/query/useEventQuery'
 import useDateRangeHook from 'hooks/useDateRangeHook'
@@ -81,22 +73,13 @@ function Events({}: EventsProps) {
       <FormGroup row={true} style={{ marginBottom: '20px' }}>
         <OptionContainer>
           <FormControlLabel
-            control={
-              <Switch
-                checked={checked}
-                onChange={handleChange}
-                name={'checked'}
-                centerRipple={true}
-              />
-            }
+            control={<Switch checked={checked} onChange={handleChange} name={'checked'} centerRipple={true} />}
             label={checked ? 'CALENDAR' : 'CARD'}
             css={labelStyle}
           />
           {!checked && (
             <FormControlLabel
-              control={
-                <Checkbox checked={outdateChecked} onChange={onOutdateChange} />
-              }
+              control={<Checkbox checked={outdateChecked} onChange={onOutdateChange} />}
               label="Outdated"
             />
           )}
@@ -134,9 +117,14 @@ function Events({}: EventsProps) {
         onClick={() => {
           setOpen(true)
           setEdit(false)
-          setStartDate(new Date())
-          setEndDate(new Date())
           setEvent({ id: '', title: '' })
+
+          let temp_date = new Date()
+          temp_date.setHours(0, 0, 0, 0)
+          setStartDate(temp_date)
+          temp_date = new Date()
+          temp_date.setHours(23, 59, 0, 0)
+          setEndDate(temp_date)
         }}
       >
         <AddIcon />

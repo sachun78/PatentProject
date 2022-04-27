@@ -10,71 +10,86 @@ import PostFooter from './PostFooter'
 import PostHeader from './PostHeader'
 
 type PostProps = {
-  
   _id: string
   owner_username: string
   owner_thumb: string
+  owner_id: string
   like_cnt: number
   contents: string
   comment: IComment[]
   images: string[]
   createdAt: Date
   isLike?: boolean
-   
 }
 
-function Post({ _id, isLike = false, owner_username, owner_thumb, like_cnt, comment, images, createdAt, contents}: PostProps) {
+function Post({
+  _id,
+  isLike = false,
+  owner_username,
+  owner_thumb,
+  owner_id,
+  like_cnt,
+  comment,
+  images,
+  createdAt,
+  contents,
+}: PostProps) {
   const { data: post, isLoading } = useQuery(['post', _id], getPost, {
-    retry: false,    
+    retry: false,
   })
 
-  const imageData = [] as any;  
-  
-  for(let i = 0; i < 9; i++) {
-    imageData.push({
-      imageId: i,
-      src: 'https://picsum.photos/810/300?random=' + i,
-      alt: 'image' + i
-    })
-  } 
-
   return (
-    <div css={postStyle}>      
-      <PostHeader owner_username={owner_username} owner_thumb={owner_thumb} createdAt={createdAt} />
+    <div css={postStyle}>
+      <PostHeader
+        owner_username={owner_username}
+        owner_thumb={owner_thumb}
+        createdAt={createdAt}
+      />
       <Link
         to={`/postDetail/${_id}`}
         state={{
           _id: _id,
-          images: imageData,
+          images: images,
           owner_username: owner_username,
           owner_thumb: owner_thumb,
           like_cnt: like_cnt,
           comment: comment,
           createdAt: createdAt,
-          contents: contents,          
+          contents: contents,
+          owner_id: owner_id
         }}
       >
-      <figure>
-        <ImageList variant='masonry' cols={3} gap={8}>
-          {imageData?.map((image: any) => (
-            <ImageListItem key={image.imageId}>
-              <img 
-                src={image.src}
-                alt={image.alt}
-                loading="lazy"
-                style={{
-                  borderRadius: "1rem"
-                }}
-              />
-            </ImageListItem> 
-          ))}
-        </ImageList>      
-      </figure>      
-      <div css={bodyStyle}>
-        {contents}
-      </div>
-      </Link>      
-      <PostFooter _id={_id} contents={contents} owner_thumb={owner_thumb} owner_username={owner_username} comment={comment} like_cnt={like_cnt} isLike={isLike} imageData={imageData} createdAt={createdAt}/>
+        <figure>
+          <ImageList variant="masonry" cols={3} gap={8}>
+            {images?.map((image: any) => (
+              <ImageListItem key={image}>
+                <img
+                  width="100%"
+                  height="100%"
+                  src={'http://localhost:8080/static/' + image}
+                  loading="lazy"
+                  style={{
+                    borderRadius: '1rem',
+                  }}
+                  crossOrigin="anonymous"
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </figure>
+        <div css={bodyStyle}>{contents}</div>
+      </Link>
+      <PostFooter
+        _id={_id}
+        contents={contents}
+        owner_thumb={owner_thumb}
+        owner_username={owner_username}
+        comment={comment}
+        like_cnt={like_cnt}
+        isLike={isLike}
+        images={images}
+        createdAt={createdAt}
+      />
     </div>
   )
 }
@@ -89,18 +104,20 @@ const postStyle = css`
   position: relative;
   opacity: 0.8;
   width: 100%;
-  a:link, a:visited, a:hover {
+  a:link,
+  a:visited,
+  a:hover {
     text-decoration: none;
     cursor: pointer;
   }
 
   figure {
-    max-height: 40rem;    
+    max-height: 40rem;
     display: flex;
-    justify-content: center;    
+    justify-content: center;
     margin: 1.25rem 1.875rem;
     border-radius: 1rem;
-    overflow:hidden;
+    overflow: hidden;
   }
 
   ${media.small} {

@@ -4,13 +4,13 @@ import React, { useRef } from 'react'
 import { careerStyle, emailStyle, itemStyle, photoStyle } from './styles'
 import IconControl from '../IconControl'
 import { upload } from 'lib/api/me/upload'
-import gravatar from 'gravatar'
 import ProfileCardText from './ProfileCardText'
 import ProfileCardField from './ProfileCardField'
 import ProfileCardEmail from './ProfileCardEmail'
 import ProfileCardCountry from './ProfileCardCountry'
 import ProfileCardSave from './ProfileCardSave'
 import { useQueryClient } from 'react-query'
+import useProfileImg from '../../hooks/useProfileImg'
 
 export type ProfileCardProps = {
   children: React.ReactNode
@@ -39,16 +39,10 @@ export type ProfileCardItemProps = {
   fields?: string[]
 }
 
-function ProfileCardItem({
-  title,
-  type,
-  email,
-  username,
-  photo,
-}: ProfileCardItemProps) {
+function ProfileCardItem({ title, type, email, username, photo }: ProfileCardItemProps) {
   const queryClient = useQueryClient()
   const fileRef = useRef<HTMLInputElement>(null)
-
+  const { profileSrc } = useProfileImg()
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
     const file = e.target.files?.[0]
@@ -84,14 +78,7 @@ function ProfileCardItem({
                 imgProps={{
                   crossOrigin: 'anonymous',
                 }}
-                src={
-                  !photo
-                    ? gravatar.url(email, {
-                        s: '100px',
-                        d: 'retro',
-                      })
-                    : /*`http://localhost:4000/static/${photo}`*/ `https://wemet-server.herokuapp.com/static/${photo}`
-                }
+                src={profileSrc}
               />
             </div>
             <input

@@ -153,22 +153,22 @@ function ProfileMenu({}: ProfileMenuProps) {
         description={'Change identifying details for your connecting'}
       >
         <ProfileCard.Text
-          title="company"
+          title="Firm"
           text={company ?? ''}
           onChange={onCompanyChange}
         />
         <ProfileCard.Text
-          title="department"
+          title="Department"
           text={department ?? ''}
           onChange={onDepartmentChange}
         />
         <ProfileCard.Text
-          title="position"
+          title="Position"
           text={position ?? ''}
           onChange={onPositionChange}
         />
         <ProfileCard.Field
-          title="field"
+          title="Field"
           text={fieldText}
           onChange={onChangeFieldText}
           onAdd={onFieldAdd}
@@ -176,7 +176,7 @@ function ProfileMenu({}: ProfileMenuProps) {
           onRemove={onFieldRemove}
         />
         <ProfileCard.Country
-          title="country"
+          title="Country"
           onChange={handleCountry}
           country={country ?? 'AD'}
         />
