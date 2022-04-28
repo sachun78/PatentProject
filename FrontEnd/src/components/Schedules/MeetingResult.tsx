@@ -11,6 +11,8 @@ import { upload } from 'lib/api/meeting/resultUpload'
 
 export type MeetingResultProps = {}
 
+const API_PATH = process.env.REACT_APP_API_PATH
+
 function MeetingResult({}: MeetingResultProps) {
   const { id } = useParams()
   const {
@@ -119,7 +121,7 @@ function MeetingResult({}: MeetingResultProps) {
                 />
                 {filePath ? (
                   <img
-                    src={`http://localhost:4000/static/${filePath}`}
+                    src={`${API_PATH}static/${filePath}`}
                     alt={'img_path'}
                     crossOrigin="anonymous"
                     style={{ width: '100%', height: '100%' }}
@@ -159,7 +161,7 @@ function MeetingResult({}: MeetingResultProps) {
                 <h2>Photo</h2>
                 <Box component="span" sx={{ p: 1 }}>
                   <img
-                    src={`http://localhost:4000/static/${metData.history.photopath}`}
+                    src={`${API_PATH}static/${metData.history.photopath}`}
                     alt={'result_photo'}
                     crossOrigin="anonymous"
                     style={{ width: '100%', height: '100%' }}

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import shortid from 'shortid';
+import Fuse from 'fuse.js';
 
 import * as meetingRepo from 'data/meeting';
 import * as authRepo from 'data/auth';
@@ -36,12 +37,41 @@ const checkInviteCode = async (code: string, data: any): Promise<any> => {
   return meetingUpdate;
 }
 
-export async function getMeetings(req: IRequest, res: Response) {
+export async function getMeetings(req: IRequest, res: Response, next: NextFunction) {
   const user_id = req.userId;
-  const filter = req.query.filter;
+  const toEmail = req.query.toEmail;
+  const title = req.query.title;
+  let retData;
 
-  const data = await meetingRepo.getAll(user_id, filter);
-  res.status(200).json(data);
+  try {
+    const data = await meetingRepo.getAll(user_id);
+
+    if (toEmail) {
+      const fuse = new Fuse(data, {
+        includeScore: true,
+        useExtendedSearch: true,
+        keys: ['toEmail']
+      });
+      retData = fuse.search('=' + toEmail);
+    }
+    else if (title) {
+      const fuse = new Fuse(data, {
+        includeScore: true,
+        useExtendedSearch: true,
+        keys: ['title', 'comment']
+      });
+      retData = fuse.search("'" + title);
+    }
+    else {
+      return res.status(200).json(data);
+    }
+    retData = retData.map(value => value.item);
+    res.status(200).json(retData);
+  }
+  catch(e) {
+    console.error(`[meetingCtrl][getMeetings] Fail meeting get all`);
+    next(e);
+  }
 }
 
 export async function getMeeting(req: IRequest, res: Response) {

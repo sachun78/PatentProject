@@ -8,6 +8,7 @@ import { useQuery } from 'react-query'
 import { Link } from 'react-router-dom'
 import PostFooter from './PostFooter'
 import PostHeader from './PostHeader'
+import { API_PATH } from '../../lib/api/client'
 
 type PostProps = {
   _id: string
@@ -40,11 +41,7 @@ function Post({
 
   return (
     <div css={postStyle}>
-      <PostHeader
-        owner_username={owner_username}
-        owner_thumb={owner_thumb}
-        createdAt={createdAt}
-      />
+      <PostHeader owner_username={owner_username} owner_thumb={owner_thumb} createdAt={createdAt} />
       <Link
         to={`/postDetail/${_id}`}
         state={{
@@ -56,7 +53,7 @@ function Post({
           comment: comment,
           createdAt: createdAt,
           contents: contents,
-          owner_id: owner_id
+          owner_id: owner_id,
         }}
       >
         <figure>
@@ -66,7 +63,7 @@ function Post({
                 <img
                   width="100%"
                   height="100%"
-                  src={'http://localhost:8080/static/' + image}
+                  src={`${API_PATH}static/` + image}
                   loading="lazy"
                   style={{
                     borderRadius: '1rem',

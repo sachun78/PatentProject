@@ -42,11 +42,11 @@ const config = {
     ),
     refresh_token: required(
       'GOOGLE_EMAIL_REFRESH_TOKEN',
-      '1//04VfJQJ9aDdyaCgYIARAAGAQSNwF-L9IrMSeNcDRrD99H5FORafZmEpRrbpr6FivWZaw7sItEZVYvPhOXINril1rQOsYoVVzkZT4'
+      '1//044PRQ7-c09o5CgYIARAAGAQSNwF-L9IrkbiHZJpMIhya6wTw5alNhQKP89KD3fYyN_BdHn7UrsERmHYMz9HeP89RetBqyesaF8Q'
     ),
     access_token: required(
       'GOOGLE_EMAIL_ACCESS_TOKEN',
-      'ya29.A0ARrdaM980IUS99fgd75CJVenKvRS2-DF6gbCcx6StbJY1vxAbsrIpQLF5mpqibNpnQEM6Ik0yunjXf4R405-mG3U7lVEAa4ZmB1X2R3l07rp79Yb0U-4MVJXyvsUoPgKJysbBGDBlcrLfYWcLkIaTC5fTUgIaA'
+      'ya29.A0ARrdaM9iBXsEeTFRCLhF00wC3walXWZWv4VeHQHIxKYl0neGvKyIgyq5HfdU-rPwv8obqreFLVOvdfkThs_NMW-iuP0qiDeBFZ5sQAMtr6Kowmwrf70ea3O0oAw0heXwPxs2_uhdFIXYCHHyW-ErBQUARUtC'
     ),
   },
 };

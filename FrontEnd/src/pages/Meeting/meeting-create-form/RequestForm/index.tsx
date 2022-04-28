@@ -32,11 +32,7 @@ export default function RequestForm({}: RequestViewProps) {
     title: '',
   })
 
-  const {
-    data: event,
-    isLoading,
-    error,
-  } = useQuery(['event', curEvent.id], getEvent, {
+  const { data: event, isLoading } = useQuery(['event', curEvent.id], getEvent, {
     enabled: !!curEvent.id,
     retry: false,
   })
@@ -63,23 +59,9 @@ export default function RequestForm({}: RequestViewProps) {
 
   const onChangeDate = useCallback(
     (change: Date) => {
-      if (
-        !(
-          change.getDate() <= endDate.getDate() &&
-          change.getDate() >= startDate.getDate()
-        )
-      ) {
-        toast.error('Error Date Not Contained', {
-          position: toast.POSITION.TOP_CENTER,
-          pauseOnHover: false,
-          pauseOnFocusLoss: false,
-          autoClose: 3000,
-        })
-        return
-      }
       setDate(change)
     },
-    [endDate, setDate, startDate, time]
+    [setDate]
   )
 
   const onChangeTime = useCallback(
@@ -101,14 +83,8 @@ export default function RequestForm({}: RequestViewProps) {
     (e) => {
       e.preventDefault()
       const { title, to, comment } = form
-      if (
-        (!to.trim() && !meetuser) ||
-        !location.trim() ||
-        !title.trim() ||
-        !time ||
-        !endTime
-      ) {
-        toast.error('Please fill out all fields', {
+      if ((!to.trim() && !meetuser) || !location.trim() || !comment.trim() || !title.trim() || !time || !endTime) {
+        toast.error('Please fill out the form', {
           position: toast.POSITION.TOP_CENTER,
           pauseOnHover: false,
           pauseOnFocusLoss: false,
@@ -124,20 +100,11 @@ export default function RequestForm({}: RequestViewProps) {
         startTime: time,
         endTime,
         location,
-        toEmail: meetuser ? meetuser : to,
+        toEmail: meetuser ? meetuser.toLowerCase() : to.toLowerCase(),
         comment,
       })
     },
-    [
-      createScheduleMut,
-      curEvent.id,
-      date,
-      endTime,
-      form,
-      location,
-      meetuser,
-      time,
-    ]
+    [createScheduleMut, curEvent.id, date, endTime, form, location, meetuser, time]
   )
 
   useEffect(() => {
@@ -161,15 +128,16 @@ export default function RequestForm({}: RequestViewProps) {
       <form css={sectionStyle} onSubmit={onSubmit}>
         <RequestSection title={curEvent.title}>
           <span>
-            {startDate.toLocaleDateString()} ~ {endDate.toLocaleDateString()}
+            {startDate.toLocaleDateString()} ~ {endDate.toLocaleDateString()}{' '}
           </span>
         </RequestSection>
-        <RequestSection title={'Meeting Title'}>
+        <RequestSection title={'Meeting Name'}>
           <OutlinedInput
             name="title"
             type={'text'}
             value={form.title}
             onChange={onChange}
+            placeholder={'Enter the title that will used as meeting name'}
             fullWidth
             style={{ height: '38px', backgroundColor: '#fff' }}
           />
@@ -183,6 +151,7 @@ export default function RequestForm({}: RequestViewProps) {
               type={'email'}
               value={form.to}
               onChange={onChange}
+              placeholder={'Meeting Email'}
               fullWidth
               style={{ height: '38px', backgroundColor: '#fff' }}
             />
@@ -204,19 +173,6 @@ export default function RequestForm({}: RequestViewProps) {
             dateChange={onChangeDate}
           />
         </RequestSection>
-        {/*<RequestSection title={'Meeting Date'}>*/}
-        {/*  <DatePickerInput*/}
-        {/*    value={date}*/}
-        {/*    minimum={startDate}*/}
-        {/*    maximum={endDate}*/}
-        {/*    onChange={onChangeDate}*/}
-        {/*  />*/}
-        {/*</RequestSection>*/}
-        {/*<RequestSection title={'Meeting Time'}>*/}
-        {/*  <TimePickerInput onChange={onChangeTime} value={time} />*/}
-        {/*  <span style={{ margin: '0 1rem', fontSize: '1.25rem' }}>~</span>*/}
-        {/*  <TimePickerInput onChange={onChangeEndTime} value={endTime} />*/}
-        {/*</RequestSection>*/}
         <RequestSection title={'Location'}>
           <LocationInput onChange={onChangeLocation} value={location} />
         </RequestSection>
@@ -232,11 +188,7 @@ export default function RequestForm({}: RequestViewProps) {
             style={{ backgroundColor: '#fff' }}
           />
         </RequestSection>
-        <button
-          css={buttonStyle}
-          disabled={createScheduleMut.isLoading}
-          type={'submit'}
-        >
+        <button css={buttonStyle} disabled={createScheduleMut.isLoading} type={'submit'}>
           PROPOSE MEETING
         </button>
       </form>

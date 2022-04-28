@@ -5,16 +5,11 @@ import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import { differenceInCalendarDays } from 'date-fns'
+import { differenceInCalendarDays, formatDistanceToNow } from 'date-fns'
 
 import styled from '@emotion/styled'
-import { brandColor } from '../../lib/palette'
-import {
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from '@mui/material'
+import palette, { brandColor } from '../../lib/palette'
+import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
 
 export type TimeGridInputProps = {
   startTime: Date
@@ -95,12 +90,9 @@ function TimeGridInput({
       </div>
       <Dialog onClose={handleClose} open={open} fullScreen scroll={'body'}>
         <DialogTitle>Set Meeting Date</DialogTitle>
-        <DialogContent
-          dividers={true}
-          style={{ overflow: 'auto', maxHeight: '90%' }}
-        >
+        <DialogContent dividers={true} style={{ overflow: 'auto', maxHeight: '90%' }}>
           <DialogContentText>
-            Drag and select Start time and end time
+            Drag and select Start time and end time. You can select only validate time
           </DialogContentText>
           <CalendarContainer style={{ minWidth: '100%' }}>
             <FullCalendar
@@ -125,8 +117,20 @@ function TimeGridInput({
                 let startDate = selectInfo.start
                 let endDate = selectInfo.end
                 endDate.setSeconds(endDate.getSeconds() - 1) // allow full day selection
-                return startDate.getDate() === endDate.getDate()
+                const diff = differenceInCalendarDays(startDate, new Date())
+                console.log(diff, startDate)
+                if (diff >= 0) {
+                  return (
+                    startDate.getDate() === endDate.getDate() &&
+                    !formatDistanceToNow(startDate, { addSuffix: true }).includes('ago')
+                  )
+                }
+                // return이 false 이면 disable select.
+                // return이 true 이면 enable select.
+
+                return false
               }}
+              visibleRange={{ start: startDate }}
               dayHeaderFormat={{
                 month: 'numeric',
                 day: 'numeric',
@@ -174,6 +178,10 @@ const CalendarContainer = styled.div`
     position: sticky;
     left: 0;
     background: white;
+  }
+
+  .fc-timegrid-col.fc-day.fc-day-past {
+    background-color: ${palette.grey[300]};
   }
 `
 
