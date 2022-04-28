@@ -1,6 +1,7 @@
 import { css } from '@emotion/react'
 import useBuddyQuery from 'hooks/query/useBuddyQuery'
 import NetworkItem from './NetworkItem'
+import { IBuddy } from '../../lib/api/types'
 
 export type NetworkListProps = {}
 
@@ -11,18 +12,13 @@ function NetworkList({}: NetworkListProps) {
     return <div>Loading...</div>
   }
 
-  if (
-    !buddyData ||
-    buddyData.length === 0 ||
-    !buddyData.buddy ||
-    buddyData.buddy.length === 0
-  ) {
+  if (!buddyData || buddyData.length === 0 || !buddyData.buddy || buddyData.buddy.length === 0) {
     return <div>No data</div>
   }
 
   return (
     <div css={networkStyle}>
-      {buddyData.buddy.map((buddy: any) => {
+      {buddyData.buddy.map((buddy: IBuddy) => {
         return <NetworkItem key={buddy.email} data={buddy} />
       })}
     </div>

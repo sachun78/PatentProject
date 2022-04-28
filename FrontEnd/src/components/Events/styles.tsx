@@ -39,8 +39,16 @@ export const noScheduleStyle = css`
 `
 
 export const OptionContainer = styled.div`
+  display: flex;
   align-items: center;
+  justify-content: center;
   background: rgba(255, 255, 255, 0.4);
   padding: 0.5rem 1rem;
   border-radius: 1rem;
+`
+export const SearchContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
 `

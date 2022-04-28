@@ -4,7 +4,7 @@ import { IProfile } from 'lib/api/types'
 import { useNavigate } from 'react-router-dom'
 import { Avatar, Grid, Tooltip } from '@mui/material'
 import gravatar from 'gravatar'
-import React from 'react'
+import React, { memo } from 'react'
 import { MdOutlineSafetyDivider, MdOutlineWork } from 'react-icons/md'
 import { GrUserManager } from 'react-icons/gr'
 import { FieldItem } from '../../pages/User/styles'
@@ -51,7 +51,7 @@ function NetworkItem({ data }: NetworkItemProps) {
         </Tooltip>
       </div>
       <div css={stateStyle}>
-        <span>online</span>
+        <span>Meet Count</span>
       </div>
     </div>
   )
@@ -60,7 +60,8 @@ function NetworkItem({ data }: NetworkItemProps) {
 const itemStyle = css`
   display: flex;
   width: 100%;
-  min-height: 6rem;
+  max-height: 5rem;
+  height: 5rem;
   align-items: center;
   background: rgba(255, 255, 255, 0.7);
   border-radius: 0.5rem;
@@ -79,10 +80,10 @@ const itemStyle = css`
 `
 const iconStyle = css`
   margin-right: 1rem;
-  margin-left: 2rem;
+  margin-left: 1.25rem;
 `
 const nameStyle = css`
-  margin-right: 2rem;
+  margin-right: 1.5rem;
   font-size: 1.25rem;
   font-weight: 600;
   max-width: 20rem;
@@ -97,13 +98,13 @@ const informStyle = css`
   color: ${palette.grey[400]};
 
   svg {
-    margin-right: 1rem;
-    color: black;
-    font-size: 1.25rem;
+    margin-right: 0.5rem;
+    color: ${brandColor};
+    font-size: 1rem;
   }
 
   span {
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.1rem;
     display: flex;
     align-items: center;
   }
@@ -125,4 +126,4 @@ const stateStyle = css`
   }
 `
 
-export default NetworkItem
+export default memo(NetworkItem)

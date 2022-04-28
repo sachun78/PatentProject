@@ -1,25 +1,36 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import IconControl from '../IconControl'
 import useMeetingQuery from 'hooks/query/useMeetingQuery'
 import { labelStyle, noScheduleStyle } from './styles'
-import { FormControlLabel, FormGroup, Switch } from '@mui/material'
+import { FormControlLabel, FormGroup, SelectChangeEvent, Switch } from '@mui/material'
 import ScheduleCalendar from './ScheduleCalendar'
 import { meetingSwitchState } from 'atoms/memberShipTabState'
 import { useRecoilState } from 'recoil'
 import { formatDistanceToNow } from 'date-fns'
 import ScheduleTable from './ScheduleTable'
-import { OptionContainer } from 'components/Events/styles'
+import { OptionContainer, SearchContainer } from 'components/Events/styles'
+import SearchBox from '../SearchBox'
 
 type ScheduleViewProps = {}
+export type searchSelect = 'email' | 'title'
 
 function Schedules({}: ScheduleViewProps) {
-  const { data, isLoading } = useMeetingQuery(1, {
+  const [checked, setChecked] = useRecoilState(meetingSwitchState)
+  const [meetingFilter, setMeetingFilter] = useState('')
+  const [type, setType] = useState<searchSelect>('title')
+
+  const { data, isLoading } = useMeetingQuery(meetingFilter, type, {
     staleTime: 2000,
   })
-  const [checked, setChecked] = useRecoilState(meetingSwitchState)
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked)
   }
+
+  const onTypeChange = useCallback((event: SelectChangeEvent) => {
+    console.log(event.target.value)
+    setType(event.target.value as searchSelect)
+  }, [])
 
   const meetings = useMemo(() => {
     if (!data) return []
@@ -32,7 +43,7 @@ function Schedules({}: ScheduleViewProps) {
   }, [data])
 
   if (isLoading) return <div>Loading...</div>
-  if (meetings?.length === 0)
+  if (meetings?.length === 0 && !meetingFilter)
     return (
       <div css={noScheduleStyle}>
         <IconControl name={'welcome'} />
@@ -43,7 +54,10 @@ function Schedules({}: ScheduleViewProps) {
 
   return (
     <>
-      <FormGroup row={true} style={{ marginBottom: '20px' }}>
+      <FormGroup row={true} style={{ marginBottom: '0.625rem', maxWidth: '80.3125rem' }}>
+        <SearchContainer style={{ marginRight: '1rem' }}>
+          <SearchBox filter={setMeetingFilter} onTypeChange={onTypeChange} type={type} />
+        </SearchContainer>
         <OptionContainer>
           <FormControlLabel
             control={

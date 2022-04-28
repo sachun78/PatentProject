@@ -3,6 +3,8 @@ import { Avatar, AvatarGroup } from '@mui/material'
 import { brandColor } from 'lib/palette'
 import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
+import { memo } from 'react'
+import useProfileImg from 'hooks/useProfileImg'
 
 export type EventDetailCardProps = {
   id: string
@@ -16,28 +18,29 @@ export type EventDetailCardProps = {
   title: string
 }
 
-function EventDetailCard({
-  title,
-  from,
-  to,
-  date,
-  time,
-  place,
-  state,
-  id,
-}: EventDetailCardProps) {
+function EventDetailCard({ title, from, to, date, time, place, state, id }: EventDetailCardProps) {
+  const { profileSrc } = useProfileImg()
   return (
     <Link css={wrapper} to={'/meeting/schedule/' + id}>
       <h1>{title}</h1>
       <AvatarGroup max={3} css={avatarGroupStyle}>
-        <Avatar alt={from} src="/assets/KimMinjun.png" />
-        <Avatar alt={to} src="/assets/ParkMina.png" />
+        <Avatar
+          alt={from}
+          src={profileSrc}
+          imgProps={{ crossOrigin: 'anonymous' }}
+          style={{ border: '0.1px solid lightgray' }}
+        />
+        <Avatar
+          alt={to}
+          src="/assets/ParkMina.png"
+          imgProps={{ crossOrigin: 'anonymous' }}
+          style={{ border: '0.1px solid lightgray' }}
+        />
       </AvatarGroup>
       <hr css={dividerStyle} />
       <ScheduleDetailContents>
         <p className={'schedule-td'}>
-          {' '}
-          {new Date(date).toLocaleDateString()}{' '}
+          {new Date(date).toLocaleDateString()}
           {new Date(time).toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit',
@@ -158,4 +161,4 @@ const stateStyle = (state: string) => css`
   `}
 `
 
-export default EventDetailCard
+export default memo(EventDetailCard)

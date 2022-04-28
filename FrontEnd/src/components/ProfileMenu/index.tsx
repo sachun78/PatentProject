@@ -4,13 +4,7 @@ import ProfileCard from './ProfileCard'
 import { useMutation, useQueryClient } from 'react-query'
 import { User } from 'lib/api/types'
 import useProfileQuery from 'hooks/query/useProfileQuery'
-import React, {
-  SyntheticEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { AutocompleteValue } from '@mui/material'
 import { CountryType } from '../CountrySelector/CountrySelector'
 import { css } from '@emotion/react'
@@ -37,22 +31,16 @@ function ProfileMenu({}: ProfileMenuProps) {
   const department_default = useMemo(() => data?.department, [data])
   const position_default = useMemo(() => data?.position, [data])
 
-  const difference = useMemo(
-    () => _.difference(data?.field, fields),
-    [data, fields]
-  )
+  const difference = useMemo(() => _.difference(data?.field, fields), [data, fields])
   const isSaveActive =
     company_default !== company ||
     department_default !== department ||
     position_default !== position ||
     difference.length > 0 ||
     country !== data?.country
-  const onChangeFieldText = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFieldText(e.target.value)
-    },
-    []
-  )
+  const onChangeFieldText = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setFieldText(e.target.value)
+  }, [])
 
   const saveMutation = useMutation(patchProfile, {
     onSuccess: () => {
@@ -86,36 +74,24 @@ function ProfileMenu({}: ProfileMenuProps) {
   }, [fieldText, fields])
 
   const handleCountry = useCallback(
-    (
-      e: SyntheticEvent,
-      v: AutocompleteValue<CountryType, undefined, undefined, undefined>
-    ) => {
+    (e: SyntheticEvent, v: AutocompleteValue<CountryType, undefined, undefined, undefined>) => {
       if (!v) return
       setCountry(v.code)
     },
     []
   )
 
-  const onCompanyChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setCompany(e.target.value)
-    },
-    []
-  )
+  const onCompanyChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setCompany(e.target.value)
+  }, [])
 
-  const onDepartmentChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setDepartment(e.target.value)
-    },
-    []
-  )
+  const onDepartmentChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setDepartment(e.target.value)
+  }, [])
 
-  const onPositionChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setPosition(e.target.value)
-    },
-    []
-  )
+  const onPositionChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setPosition(e.target.value)
+  }, [])
 
   const onSaveProfile = useCallback(() => {
     saveMutation.mutate({
@@ -135,38 +111,13 @@ function ProfileMenu({}: ProfileMenuProps) {
     <div css={wrapper}>
       <InfoViewSection title="Account">
         <InfoViewCard.Item title="Email" type={'email'} email={user?.email} />
-        <InfoViewCard.Item
-          title="Username"
-          type={'username'}
-          username={user?.username}
-        />
-        <InfoViewCard.Item
-          title="Photo"
-          type={'photo'}
-          email={user?.email}
-          photo={user?.photo_path}
-          isEditMode
-        />
+        <InfoViewCard.Item title="Username" type={'username'} username={user?.username} />
+        <InfoViewCard.Item title="Photo" type={'photo'} email={user?.email} isEditMode />
       </InfoViewSection>
-      <InfoViewSection
-        title="Belonging"
-        description={'Change identifying details for your connecting'}
-      >
-        <ProfileCard.Text
-          title="Firm"
-          text={company ?? ''}
-          onChange={onCompanyChange}
-        />
-        <ProfileCard.Text
-          title="Department"
-          text={department ?? ''}
-          onChange={onDepartmentChange}
-        />
-        <ProfileCard.Text
-          title="Position"
-          text={position ?? ''}
-          onChange={onPositionChange}
-        />
+      <InfoViewSection title="Belonging" description={'Change identifying details for your connecting'}>
+        <ProfileCard.Text title="Firm" text={company ?? ''} onChange={onCompanyChange} />
+        <ProfileCard.Text title="Department" text={department ?? ''} onChange={onDepartmentChange} />
+        <ProfileCard.Text title="Position" text={position ?? ''} onChange={onPositionChange} />
         <ProfileCard.Field
           title="Field"
           text={fieldText}
@@ -175,15 +126,8 @@ function ProfileMenu({}: ProfileMenuProps) {
           fields={fields}
           onRemove={onFieldRemove}
         />
-        <ProfileCard.Country
-          title="Country"
-          onChange={handleCountry}
-          country={country ?? 'AD'}
-        />
-        <ProfileCard.Save
-          onSave={onSaveProfile}
-          loading={!isSaveActive || saveMutation.isLoading}
-        />
+        <ProfileCard.Country title="Country" onChange={handleCountry} country={country ?? 'AD'} />
+        <ProfileCard.Save onSave={onSaveProfile} loading={!isSaveActive || saveMutation.isLoading} />
       </InfoViewSection>
       <InfoViewSection title="Additional">
         <InfoViewCard.Item title="About" type={'career'} />

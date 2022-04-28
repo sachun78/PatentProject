@@ -70,11 +70,17 @@ export type IPost = {
 }
 
 export type IComment = {
-  id: string,
-  owner_id: string,
-  owner_thumb: string,
-  text: string,
-  contents: string,
-  created_at?: Date,
-  updated_at?: Date,  
+  id: string
+  owner_id: string
+  owner_thumb: string
+  text: string
+  contents: string
+  created_at?: Date
+  updated_at?: Date
+}
+
+export type IBuddy = {
+  _id: string
+  email: string
+  profile: IProfile
 }

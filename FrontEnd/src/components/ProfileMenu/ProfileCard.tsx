@@ -34,12 +34,11 @@ export type ProfileCardItemProps = {
   type: cardItemType
   email?: string
   username?: string
-  photo?: string
   isEditMode?: boolean
   fields?: string[]
 }
 
-function ProfileCardItem({ title, type, email, username, photo }: ProfileCardItemProps) {
+function ProfileCardItem({ title, type, email, username }: ProfileCardItemProps) {
   const queryClient = useQueryClient()
   const fileRef = useRef<HTMLInputElement>(null)
   const { profileSrc } = useProfileImg()
