@@ -134,11 +134,14 @@ export async function createComment(req: IRequest, res: Response) {
     }
 
     let postComment = [...findPost.comment, comment];
-    console.log(postComment);
+    postComment.sort(function(a, b) { 
+      a = new Date(a.createdAt);
+      b = new Date(b.createdAt);
+      return a > b ? 1 : a < b ? -1 : 0
+    });
 
     const update = await postRepo.editPost(postId, {comment: postComment});
-    console.log(update?.comment[0]);
-    res.status(200).json(update?.comment[0]);
+    res.status(200).json(comment);
   }
   catch(e) {
     console.error(`[Post][createComment] ${e}`);
@@ -166,6 +169,11 @@ export async function editComment(req: IRequest, res: Response) {
       }
       const oricomment = comments.filter(comment => comment.id !== commentId);
       let postComment = [...oricomment, result];
+      postComment.sort(function(a: any, b: any) { 
+        a = new Date(a.createdAt);
+        b = new Date(b.createdAt);
+        return a > b ? 1 : a < b ? -1 : 0
+      });
 
       console.log('after', postComment);
       const update = await postRepo.editPost(postId, {comment: postComment});
