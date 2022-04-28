@@ -28,5 +28,5 @@ export async function createMhistory(_history: IMhistory) {
 }
 
 export async function updateMhistory(id: string, data: any) {
-  return mhistory.findByIdAndUpdate(id, data, { new: true});
+  return mhistory.findByIdAndUpdate(id, data, { new: true}).lean();
 }

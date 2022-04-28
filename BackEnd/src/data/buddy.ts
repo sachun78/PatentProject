@@ -31,15 +31,15 @@ export async function createBuddy(userId: string, buddy: any) {
 }
 
 export async function findById(buddyId: string) {
-  return Buddy.findById(buddyId);
+  return Buddy.findById(buddyId).lean();
 }
 
 export async function updateBuddy(buddyId: string, arrBuddy: string[]) {
-  return Buddy.findByIdAndUpdate(buddyId, {buddy: arrBuddy}, {new: true});
+  return Buddy.findByIdAndUpdate(buddyId, {buddy: arrBuddy}, {new: true}).lean();
 }
 
 export async function getBuddy(userId: string) {
-  return Buddy.findOne({owner_id: userId}).populate({path: 'buddy.profile', model: 'Profile'});
+  return Buddy.findOne({owner_id: userId}).lean().populate({path: 'buddy.profile', model: 'Profile'});
 }
 
 export async function deleteBuddy(userId: string, _email: string) {
