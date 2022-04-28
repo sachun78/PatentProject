@@ -47,15 +47,15 @@ useVirtualId(postSchema);
 const Post = mongoose.model('post', postSchema);
 
 export async function findById(postId: string): Promise<PostType | null> {
-  return Post.findById(postId);
+  return Post.findById(postId).lean();
 }
 
 export async function getPostAll(): Promise<PostType[] | null> {
-  return Post.find().sort({createdAt: -1});
+  return Post.find().lean().sort({createdAt: -1});
 }
 
 export async function getPostIndex(curPos: number, count: number): Promise<PostType[] | null> {
-  return Post.find().skip(curPos).limit(count);
+  return Post.find().lean().skip(curPos).limit(count);
 }
 
 export async function createPost(postData: PostType): Promise<PostType> {
@@ -63,7 +63,7 @@ export async function createPost(postData: PostType): Promise<PostType> {
 }
 
 export async function editPost(postId: string, editData: any): Promise<PostType | null> {
-  return Post.findByIdAndUpdate(postId, editData, { new: true});
+  return Post.findByIdAndUpdate(postId, editData, { new: true}).lean();
 }
 
 export async function deletePost(postId: string) {

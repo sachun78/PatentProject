@@ -24,13 +24,13 @@ export async function saveAuthMaiil(_mailInfo: { code: string; logged: boolean; 
 }
 
 export async function updateAuthMail(_code: string, data: any) {
-  return EmailAuth.findOneAndUpdate({ code: _code }, data, { new: true })
+  return EmailAuth.findOneAndUpdate({ code: _code }, data, { new: true }).lean();
 }
 
 export async function findAuthMail(_code: string) {
-  return EmailAuth.findOne({ code: _code }, { _id: false })
+  return EmailAuth.findOne({ code: _code }, { _id: false }).lean();
 }
 
 export async function findByEmail(_email: string) {
-  return EmailAuth.findOne({ email: _email}, { _id: false })
+  return EmailAuth.findOne({ email: _email}, { _id: false }).lean();
 }

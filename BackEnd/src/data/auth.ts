@@ -24,7 +24,6 @@ export const userSchema = new mongoose.Schema<IUser>({
   timestamps: true,
   versionKey: false, 
 })
-
 useVirtualId(userSchema);
 
 const User = mongoose.model('User', userSchema);
@@ -49,6 +48,6 @@ export async function createUser(user: IUser) {
 }
 
 export async function updateUser(id: string, data: any) {
-  return User.findByIdAndUpdate(id, data, {new: true});
+  return User.findByIdAndUpdate(id, data, {new: true}).lean();
 }
 

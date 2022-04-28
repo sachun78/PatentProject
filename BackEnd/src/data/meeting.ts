@@ -46,14 +46,14 @@ const meeting = mongoose.model('meetings', meetingSchema);
 
 export async function getAll(userId: string, filter?: string) {
   if (!filter) {
-    return meeting.find({ownerId: userId}).sort({date: -1});
+    return meeting.find({ownerId: userId}).lean().sort({date: -1});
   }
 
-  return meeting.find({ownerId: userId, toEmail: filter}).sort({date: -1});
+  return meeting.find({ownerId: userId, toEmail: filter}).lean().sort({date: -1});
 }
 
 export async function getAllByIndex(userId: string, curPos: number, cnt: number) {
-  return meeting.find({ownerId: userId}).sort({date: -1}).skip(curPos).limit(cnt);
+  return meeting.find({ownerId: userId}).lean().sort({date: -1}).skip(curPos).limit(cnt);
 }
 
 export async function getById(meetingId: string) {
@@ -95,7 +95,7 @@ export async function createMeeting(meetingData: any) {
 }
 
 export async function updateMeeting(meetingId: string, data: any) {
-  return meeting.findByIdAndUpdate(meetingId, data, {new: true});
+  return meeting.findByIdAndUpdate(meetingId, data, {new: true}).lean();
 }
 
 export async function deleteMeeting(meetingId: string) {

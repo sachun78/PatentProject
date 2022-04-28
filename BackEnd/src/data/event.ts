@@ -26,7 +26,7 @@ useVirtualId(eventSchema);
 const Event = mongoose.model("Event", eventSchema);
 
 export async function getAll(userId: string) {
-  return Event.find({user_id: userId}).sort({createAt: -1});
+  return Event.find({user_id: userId}).lean().sort({createAt: -1});
 }
 
 export async function getAllByMonth(userId: string, month: string) {
@@ -44,7 +44,7 @@ export async function getAllByMonth(userId: string, month: string) {
 export async function getById(eventId: string) {
   return Event.findById(eventId).then((value) => {
     if (value?.meeting_list) {
-      return Event.findById(eventId).populate('meeting_list');
+      return Event.findById(eventId).lean().populate('meeting_list');
     }
     else {
       return value;
@@ -53,7 +53,7 @@ export async function getById(eventId: string) {
 }
 
 export async function findByData(eventData: IEvent) {
-  return Event.findOne(eventData);
+  return Event.findOne(eventData).lean();
 }
 
 export async function createEvent(eventData: IEvent, userId: string) {
@@ -66,7 +66,7 @@ export async function createEvent(eventData: IEvent, userId: string) {
 }
 
 export async function updateEvent(eventId: string, data: any) {
-  return Event.findByIdAndUpdate(eventId, data, {new: true});
+  return Event.findByIdAndUpdate(eventId, data, {new: true}).lean();
 }
 
 export async function deleteEvent(eventId: string) {
