@@ -188,7 +188,7 @@ export default function RequestForm({}: RequestViewProps) {
             style={{ backgroundColor: '#fff' }}
           />
         </RequestSection>
-        <button css={buttonStyle} disabled={createScheduleMut.isLoading} type={'submit'}>
+        <button css={buttonStyle} disabled={createScheduleMut.isLoading || createScheduleMut.data} type={'submit'}>
           PROPOSE MEETING
         </button>
       </form>

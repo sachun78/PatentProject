@@ -54,6 +54,10 @@ export async function getPostAll(): Promise<PostType[] | null> {
   return Post.find().sort({createdAt: -1});
 }
 
+export async function getPostIndex(curPos: number, count: number): Promise<PostType[] | null> {
+  return Post.find().skip(curPos).limit(count);
+}
+
 export async function createPost(postData: PostType): Promise<PostType> {
   return new Post(postData).save();
 }

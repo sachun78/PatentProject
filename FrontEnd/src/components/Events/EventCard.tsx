@@ -4,12 +4,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useCurrentEventState } from 'atoms/eventState'
 import { useEventModal } from 'hooks/useEventTitle'
 import useDateRangeHook from 'hooks/useDateRangeHook'
-import { useCallback } from 'react'
-import { useQueryClient } from 'react-query'
+import { memo, useCallback } from 'react'
 import media from 'lib/styles/media'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
 import { FiEdit } from 'react-icons/fi'
-import { periodString } from '../../lib/stringParser'
+import { periodString } from 'lib/stringParser'
 
 export type EventCardProps = {
   id: string
@@ -22,7 +21,6 @@ export type EventCardProps = {
 }
 
 function EventCard({ title, startDate, endDate, id, count, cardView = false, disabled = false }: EventCardProps) {
-  const qc = useQueryClient()
   const navigate = useNavigate()
   const { setOpen, setEdit } = useEventModal()
   const { setStartDate, setEndDate } = useDateRangeHook()
@@ -190,4 +188,4 @@ const contentStyle = css`
     margin-bottom: 0.5rem;
   }
 `
-export default EventCard
+export default memo(EventCard)

@@ -41,9 +41,20 @@ export async function getMeetings(req: IRequest, res: Response, next: NextFuncti
   const user_id = req.userId;
   const toEmail = req.query.toEmail;
   const title = req.query.title;
+  const curPos = req.query.curPos as string;
+  const cnt = req.query.cnt as string;
   let retData;
 
   try {
+    if (curPos && cnt) {
+      let _curPos: number = parseInt(curPos);
+      let _cnt: number = parseInt(cnt);
+  
+      const indexData = await meetingRepo.getAllByIndex(user_id, _curPos, _cnt);
+      console.log(indexData);
+      return res.status(200).json(indexData);
+    }
+
     const data = await meetingRepo.getAll(user_id);
 
     if (toEmail) {
@@ -246,11 +257,18 @@ async function createMeeting(userId: string, body: any) {
     throw new Error('message: User is not found');
   }
 
+  let toUserImage;
+  const toUser = await authRepo.findByEmail(body.toEmail);
+  if (toUser) {
+    toUserImage = toUser.photo_path;
+  }
+
   let revMeeting = {
     ownerId: user.id,
     ownerEmail: user.email,
     ownerName: user.username,
     toEmail: body.toEmail,
+    toImage: toUserImage,
     eventId: body.eventId, 
     title: body.title,
     date: body.date, 

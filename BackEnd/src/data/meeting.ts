@@ -7,6 +7,7 @@ export interface IMeeting {
   ownerName: string,
   ownerEmail: string,
   toEmail: string,
+  toImage: string,
   eventId: string,
   title: string,
   date: Date,
@@ -24,6 +25,7 @@ export const meetingSchema = new mongoose.Schema<IMeeting>({
   ownerName: { type: String, required: true },
   ownerEmail: { type: String, required: true },
   toEmail: { type: String, required: true },
+  toImage: { type: String, default: '' },
   eventId: { type: String, requierd: true },
   title: { type: String, defalut: ""},
   date: { type: Date, required: true },
@@ -50,6 +52,10 @@ export async function getAll(userId: string, filter?: string) {
   return meeting.find({ownerId: userId, toEmail: filter}).sort({date: -1});
 }
 
+export async function getAllByIndex(userId: string, curPos: number, cnt: number) {
+  return meeting.find({ownerId: userId}).sort({date: -1}).skip(curPos).limit(cnt);
+}
+
 export async function getById(meetingId: string) {
   return meeting.findById(meetingId).then((value) => {
     console.log(value);
@@ -74,6 +80,7 @@ export async function createMeeting(meetingData: any) {
       ownerName: data.ownerName,
       ownerEmail: data.ownerEmail,
       toEmail: data.toEmail,
+      toImage: data.toImage,
       eventId: data.eventId,
       title: data.title,
       date: data.date,

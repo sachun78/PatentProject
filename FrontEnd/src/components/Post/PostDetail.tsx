@@ -1,6 +1,5 @@
 import { css } from '@emotion/react'
 import { Avatar, Box, ImageList, ImageListItem, Modal, OutlinedInput } from '@mui/material'
-import gravatar from 'gravatar'
 import useInput from 'hooks/useInput'
 import useToggle from 'hooks/useToggle'
 import { createComments } from 'lib/api/post/createComment'
@@ -15,6 +14,7 @@ import { toast } from 'react-toastify'
 import { IComment, IPost, User } from '../../lib/api/types'
 import PostActionButtons from './PostActionButtons'
 import PostComment from './PostComment'
+import useProfileImg from '../../hooks/useProfileImg'
 
 type postDetailProps = {
   isLike?: boolean
@@ -36,7 +36,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
   const [likeClick, onToggleLike] = useToggle(isLike)
   const user = qc.getQueryData<User>('user') as User
   const [owner, setOwner] = useState(false)
-
+  const { profileSrc } = useProfileImg(44)
   // 이미지 처리
   const [open, setOpen] = useState(false)
   const [imgSrc, setImgSrc] = useState('')
@@ -150,11 +150,9 @@ function PostDetail({ isLike = false }: postDetailProps) {
               startAdornment={
                 <Avatar
                   alt="post-user-avatar"
-                  src={gravatar.url(user.email, {
-                    s: '44px',
-                    d: 'retro',
-                  })}
+                  src={profileSrc}
                   sx={{ width: 44, height: 44, mr: '25px' }}
+                  imgProps={{ crossOrigin: 'anonymous' }}
                 />
               }
             />
