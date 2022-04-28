@@ -246,11 +246,18 @@ async function createMeeting(userId: string, body: any) {
     throw new Error('message: User is not found');
   }
 
+  let toUserImage;
+  const toUser = await authRepo.findByEmail(body.toEmail);
+  if (toUser) {
+    toUserImage = toUser.photo_path;
+  }
+
   let revMeeting = {
     ownerId: user.id,
     ownerEmail: user.email,
     ownerName: user.username,
     toEmail: body.toEmail,
+    toImage: toUserImage,
     eventId: body.eventId, 
     title: body.title,
     date: body.date, 
