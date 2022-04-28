@@ -1,14 +1,12 @@
 import { css } from '@emotion/react'
-import { ImageList, ImageListItem } from '@mui/material'
-import { getPost } from 'lib/api/post/getPost'
+import { Box, ImageList, ImageListItem } from '@mui/material'
 import { IComment } from 'lib/api/types'
 import media from 'lib/styles/media'
 import React from 'react'
-import { useQuery } from 'react-query'
 import { Link } from 'react-router-dom'
+import { API_PATH } from '../../lib/api/client'
 import PostFooter from './PostFooter'
 import PostHeader from './PostHeader'
-import { API_PATH } from '../../lib/api/client'
 
 type PostProps = {
   _id: string
@@ -35,44 +33,36 @@ function Post({
   createdAt,
   contents,
 }: PostProps) {
-  const { data: post, isLoading } = useQuery(['post', _id], getPost, {
-    retry: false,
-  })
-
+  
   return (
     <div css={postStyle}>
       <PostHeader owner_username={owner_username} owner_thumb={owner_thumb} createdAt={createdAt} />
-      <Link
-        to={`/postDetail/${_id}`}
-        state={{
-          _id: _id,
-          images: images,
-          owner_username: owner_username,
-          owner_thumb: owner_thumb,
-          like_cnt: like_cnt,
-          comment: comment,
-          createdAt: createdAt,
-          contents: contents,
-          owner_id: owner_id,
-        }}
-      >
+      <Link to={`/postDetail/${_id}`}>
         <figure>
-          <ImageList variant="masonry" cols={3} gap={8}>
-            {images?.map((image: any) => (
-              <ImageListItem key={image}>
-                <img
-                  width="100%"
-                  height="100%"
-                  src={`${API_PATH}static/` + image}
-                  loading="lazy"
-                  style={{
-                    borderRadius: '1rem',
-                  }}
-                  crossOrigin="anonymous"
-                />
-              </ImageListItem>
-            ))}
-          </ImageList>
+          {images.length === 0 ? (<></>) : (
+            <Box sx={{ width: 690, height: 300, overflowY: 'scroll' }}>
+            <ImageList variant="masonry" cols={3} gap={1} >
+              {images?.map((image: any) => (              
+                <ImageListItem                
+                  key={image}
+                  sx={{ width: "100%" }}                  
+                  >
+                  <img                 
+                    src={`${API_PATH}static/${image}`}
+                    loading="lazy"
+                    style={{
+                      borderRadius: '1rem',
+                    }}
+                    crossOrigin="anonymous"
+                    
+                  />
+                </ImageListItem>
+                
+              ))}
+            </ImageList>
+          </Box>  
+          )}
+                             
         </figure>
         <div css={bodyStyle}>{contents}</div>
       </Link>
@@ -114,7 +104,7 @@ const postStyle = css`
     justify-content: center;
     margin: 1.25rem 1.875rem;
     border-radius: 1rem;
-    overflow: hidden;
+    overflow: hidden; 
   }
 
   ${media.small} {
