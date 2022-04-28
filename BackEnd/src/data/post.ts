@@ -7,7 +7,7 @@ type PostType = {
   owner_thumb: string;
   contents: string;
   images: string[];
-  like_cnt: number;
+  like_cnt: string[];
   comment: CommentType[];
 }
 
@@ -26,7 +26,7 @@ const postSchema = new mongoose.Schema<PostType>({
   owner_thumb: { type: String, default: '' },
   contents: { type: String, required: true },
   images: { type: [String], default: [] },
-  like_cnt: { type: Number, default: 0},
+  like_cnt: { type: [String], default: []},
   comment: {
     type: [{
       id: { type: String, required: true},
