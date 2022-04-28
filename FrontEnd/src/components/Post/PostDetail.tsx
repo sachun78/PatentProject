@@ -152,7 +152,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
             {like_cnt}
           </div>
           <div className={'item'} onClick={onToggleComment}>
-            <BsChatLeftDots /> {comment.length}
+            <BsChatLeftDots /> {post.comment.length}
           </div>
           {owner && <PostActionButtons _id={_id} />}
         </div>
