@@ -41,9 +41,20 @@ export async function getMeetings(req: IRequest, res: Response, next: NextFuncti
   const user_id = req.userId;
   const toEmail = req.query.toEmail;
   const title = req.query.title;
+  const curPos = req.query.curPos as string;
+  const cnt = req.query.cnt as string;
   let retData;
 
   try {
+    if (curPos && cnt) {
+      let _curPos: number = parseInt(curPos);
+      let _cnt: number = parseInt(cnt);
+  
+      const indexData = await meetingRepo.getAllByIndex(user_id, _curPos, _cnt);
+      console.log(indexData);
+      return res.status(200).json(indexData);
+    }
+
     const data = await meetingRepo.getAll(user_id);
 
     if (toEmail) {

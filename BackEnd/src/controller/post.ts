@@ -39,7 +39,19 @@ export function postImgUpload(req: IRequest, res: Response, next: NextFunction) 
 
 export async function getPosts(req: IRequest, res: Response) {
   try {
+    const curPos = req.query.curPos as string;
+    const cnt = req.query.cnt as string;
     const postId = req.params.id;
+
+    if (curPos && cnt) {
+      let _curPos: number = parseInt(curPos);
+      let _cnt: number = parseInt(cnt);
+
+      const indexData = await postRepo.getPostIndex(_curPos, _cnt);
+      console.log(indexData);
+      return res.status(200).json(indexData);
+    }
+
     const posts = await (postId ? postRepo.findById(postId) : postRepo.getPostAll());
     res.status(200).json(posts);
   }
