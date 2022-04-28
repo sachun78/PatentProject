@@ -35,9 +35,8 @@ function PostFooter({
   const [likeClick, onToggleLike] = useToggle(isLike)
   const user = qc.getQueryData<User>('user') as User
   // 임시 true 처리
-  const [owner, setOwner] = useState(true)
-  const [editComment, setEditComment] = useState('')
-
+  const [owner, setOwner] = useState(true)  
+  
   const viewComments = comment.filter(
     (comments: IComment) => comment.indexOf(comments) < 2
   )

@@ -1,5 +1,6 @@
 import { css } from '@emotion/react'
 import { Avatar } from '@mui/material'
+import { API_PATH } from 'lib/api/client'
 import React from 'react'
 import { MdMoreHoriz } from 'react-icons/md'
 import palette, { brandColor } from '../../lib/palette'
@@ -19,10 +20,11 @@ function PostHeader({
     <div css={headerStyle}>
       <div css={iconStyle}>
         <Avatar
-          alt="user-avatar"
-          src={owner_thumb}
+          alt={owner_username}
+          src={`${API_PATH}static/` + owner_thumb}
           sx={{ width: 60, height: 60 }}
-        />
+          imgProps={{ crossOrigin: 'anonymous'}}
+        />          
       </div>
       <div css={titleStyle}>
         <h4>

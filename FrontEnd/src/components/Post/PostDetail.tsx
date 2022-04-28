@@ -10,7 +10,7 @@ import media from 'lib/styles/media'
 import React, { useCallback, useEffect, useState } from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { IComment, IPost, User } from '../../lib/api/types'
 import PostActionButtons from './PostActionButtons'
@@ -24,12 +24,10 @@ const API_PATH = process.env.REACT_APP_API_PATH
 
 function PostDetail({ isLike = false }: postDetailProps) {
   const qc = useQueryClient()
-  const location: any = useLocation()
+  const { id } = useParams()
 
-  const { _id, images, owner_username, owner_thumb, owner_id, like_cnt, comment, createdAt, contents } =
-    location.state as IPost
-
-  const { data: post, isLoading } = useQuery(['post', _id], getPost, {
+  const { data: post, isLoading } = useQuery(['post', id], getPost, {
+    enabled: !!id,
     retry: false,
   })
 
@@ -52,7 +50,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
     (e: any) => {
       if (e.key === 'Enter') {
         e.preventDefault()
-        createCommentMut.mutate([{ contents: comments }, _id])
+        createCommentMut.mutate([{ contents: comments, createdAt: new Date() }, post._id])
 
         setComments('')
         setCommentVisible(!commentVisible)
@@ -60,12 +58,6 @@ function PostDetail({ isLike = false }: postDetailProps) {
     },
     [comments]
   )
-
-  useEffect(() => {
-    if (owner_id === user.id) {
-      setOwner(true)
-    }
-  }, [commentVisible])
 
   const onLike = () => {
     onToggleLike()
@@ -78,7 +70,7 @@ function PostDetail({ isLike = false }: postDetailProps) {
 
   const createCommentMut = useMutation(createComments, {
     onSuccess: () => {
-      qc.invalidateQueries(['post', _id])
+      qc.invalidateQueries(['post', post._id])
     },
     onError: () => {
       toast.error('Something went wrong', {
@@ -90,26 +82,35 @@ function PostDetail({ isLike = false }: postDetailProps) {
     },
   })
 
+  if (!post) {
+    return <div>로딩중</div>
+  }
+
   return (
     <>
       <div css={wrapStyle}>
         <div css={detailStyle}>
           <div css={iconStyle}>
-            <Avatar alt="user-avatar" src={owner_thumb} sx={{ width: 60, height: 60 }} />
+            <Avatar 
+              alt={post.owner_username} 
+              src={`${API_PATH}static/` + post.owner_thumb} 
+              sx={{ width: 60, height: 60 }}
+              imgProps={{ crossOrigin: 'anonymous'}} 
+            />
           </div>
           <div css={titleStyle}>
             <h4>
-              <span>{owner_username}/ etc ..</span>
+              <span>{post.owner_username}/ etc ..</span>
             </h4>
-            <div className={'time-date'}>{createdAt}</div>
+            <div className={'time-date'}>{post.createdAt}</div>
           </div>
         </div>
         <figure>
           <ImageList variant="masonry" cols={3} gap={8}>
-            {images?.map((image: any) => (
+            {post.images?.map((image: any) => (
               <ImageListItem key={image}>
                 <img
-                  src={`${API_PATH}static` + image}
+                  src={`${API_PATH}static/` + image}
                   loading="lazy"
                   style={{
                     borderRadius: '1rem',
@@ -127,16 +128,16 @@ function PostDetail({ isLike = false }: postDetailProps) {
             ))}
           </ImageList>
         </figure>
-        <div css={bodyStyle}>{contents}</div>
+        <div css={bodyStyle}>{post.contents}</div>
         <div css={buttonWrapper}>
           <div className={'item'} onClick={onLike}>
             {likeClick ? <BsHeartFill className={'filled'} /> : <BsHeart />}
-            {like_cnt}
+            {post.like_cnt}
           </div>
           <div className={'item'} onClick={onToggleComment}>
             <BsChatLeftDots /> {post.comment.length}
           </div>
-          {owner && <PostActionButtons _id={_id} />}
+          {post.owner_id === user.id && <PostActionButtons _id={post._id} />}
         </div>
         {commentVisible && (
           <div style={{ textAlign: 'center' }}>
@@ -159,12 +160,12 @@ function PostDetail({ isLike = false }: postDetailProps) {
             />
           </div>
         )}
-        {comment.length === 0 ? (
+        {post.comment.length === 0 ? (
           <div></div>
         ) : (
           <div css={commentStyle} style={{ margin: '10px' }}>
             {post.comment.map((viewComment: IComment) => (
-              <PostComment key={viewComment.id} viewComment={viewComment} _id={_id} />
+              <PostComment key={viewComment.id} viewComment={viewComment} _id={post._id} />
             ))}
           </div>
         )}

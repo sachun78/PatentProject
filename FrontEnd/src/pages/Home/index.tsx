@@ -1,10 +1,10 @@
 import { css } from '@emotion/react'
 import { Stack } from '@mui/material'
-import InitialInputModal from 'components/InitialInputModal'
 import Post from 'components/Post/'
 import usePostQuery from 'hooks/query/usePostQuery'
+import { API_PATH } from 'lib/api/client'
 import { IPost } from 'lib/api/types'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import PostForm from './form/PostForm'
 
@@ -22,7 +22,7 @@ function Home({}: HomeProps) {
           <PostForm />
         </Link>
         <div css={postViewStyle}>
-          {posts?.map((post: IPost) => (
+          {posts?.map((post: IPost) => (            
             <Post
               key={post._id}
               _id={post._id}
@@ -34,13 +34,10 @@ function Home({}: HomeProps) {
               comment={post.comment}
               images={post.images}
               createdAt={post.createdAt}
-
-            />
+            />            
           ))}
         </div>
       </Stack>
-      {/* 임시 주석처리 */}
-      {/* <InitialInputModal /> */}
     </>
   )
 }

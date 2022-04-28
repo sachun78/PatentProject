@@ -1,5 +1,6 @@
 import { Avatar, OutlinedInput } from '@mui/material'
 import gravatar from 'gravatar'
+import { API_PATH } from 'lib/api/client'
 import { editComment } from 'lib/api/post/editComment'
 import { IComment, User } from 'lib/api/types'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -31,8 +32,9 @@ const PostComment = ({ viewComment, _id }: postCommentProps) => {
 
   const editCommentMut = useMutation(editComment, {
     onSuccess: () => {
-      qc.invalidateQueries(['posts'])
       qc.invalidateQueries(['post', _id])
+      qc.invalidateQueries(['posts'])
+      
     },
     onError: () => {
       toast.error('Something went wrong', {
@@ -48,7 +50,7 @@ const PostComment = ({ viewComment, _id }: postCommentProps) => {
     (e: any) => {
       if (e.key === 'Enter') {
         e.preventDefault()
-        editCommentMut.mutate([{ contents: editValue }, _id, e.target.name])
+        editCommentMut.mutate([{ contents: editValue, createdAt: viewComment.createdAt }, _id, e.target.name])
         setEdit(false)
       }
     },
@@ -56,8 +58,8 @@ const PostComment = ({ viewComment, _id }: postCommentProps) => {
   )
 
   const getEdit = (a: boolean) => {
-    setEdit(a)
-    inputRef.current.focus()
+    setEdit(a)    
+    if(!edit) inputRef.current.focus()
   }
 
   if (edit) {
@@ -74,12 +76,10 @@ const PostComment = ({ viewComment, _id }: postCommentProps) => {
           sx={{ borderRadius: '1rem', paddingLeft: '1.25rem' }}
           startAdornment={
             <Avatar
-              alt="post-user-avatar"
-              src={gravatar.url('temp.email' + viewComment.owner_id, {
-                s: '44px',
-                d: 'retro',
-              })}
-              sx={{ width: 22, height: 22, mr: '25px' }}
+              alt={viewComment.owner_username}
+              src={`${API_PATH}static/` + viewComment.owner_thumb}
+              sx={{ width: 44, height: 44, mr: '25px' }}
+              imgProps={{ crossOrigin: 'anonymous'}}
             />
           }
           endAdornment={
@@ -112,13 +112,11 @@ const PostComment = ({ viewComment, _id }: postCommentProps) => {
         sx={{ borderRadius: '1rem', paddingLeft: '1.25rem' }}
         startAdornment={
           <Avatar
-            alt="post-user-avatar"
-            src={gravatar.url('temp.email' + viewComment.owner_id, {
-              s: '44px',
-              d: 'retro',
-            })}
-            sx={{ width: 22, height: 22, mr: '25px' }}
-          />
+              alt={viewComment.owner_username}
+              src={`${API_PATH}static/` + viewComment.owner_thumb}
+              sx={{ width: 44, height: 44, mr: '25px' }}
+              imgProps={{ crossOrigin: 'anonymous'}}
+          />           
         }
         endAdornment={
           owner && (
