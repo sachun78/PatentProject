@@ -73,21 +73,17 @@ export const dividerStyle = css`
 
 export const underBlockStyle = css`
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   width: 100%;
 
-  div {
-    flex: 1;
+  h4 {
+    text-align: center;
+    color: #6c6c6c;
+    font: normal normal bold 15px/17px 'NanumSquareOTF';
+    margin: 0;
 
-    h4 {
-      text-align: center;
-      color: #6c6c6c;
-      font: normal normal bold 15px/17px 'NanumSquareOTF';
-      margin: 0;
-
-      &:hover {
-        text-decoration: underline;
-      }
+    &:hover {
+      text-decoration: underline;
     }
   }
 `

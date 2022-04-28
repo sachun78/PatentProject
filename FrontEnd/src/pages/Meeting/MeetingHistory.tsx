@@ -36,7 +36,7 @@ function MeetingHistory({}: MeetingHistoryProps) {
   if (isLoading) return <div css={tableStyle}>Loading...</div>
   return (
     <>
-      <SearchContainer style={{ marginBottom: '0.625rem' }}>
+      <SearchContainer style={{ marginBottom: '0.625rem', maxWidth: '60rem' }}>
         <SearchBox filter={setMeetingFilter} onTypeChange={onTypeChange} type={type} />
       </SearchContainer>
       <ScheduleTable meetings={meetings} />

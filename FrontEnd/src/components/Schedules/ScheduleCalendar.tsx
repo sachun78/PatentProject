@@ -13,7 +13,7 @@ import { brandColor } from '../../lib/palette'
 export type ScheduleCalendarProps = {}
 
 function ScheduleCalendar({}: ScheduleCalendarProps) {
-  const { data } = useMeetingQuery('', 'email', { enabled: false })
+  const { data } = useMeetingQuery('', 'title', { enabled: false })
   const navigate = useNavigate()
 
   const scheduleEvents = useMemo(() => {

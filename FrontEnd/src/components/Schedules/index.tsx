@@ -54,10 +54,12 @@ function Schedules({}: ScheduleViewProps) {
 
   return (
     <>
-      <FormGroup row={true} style={{ marginBottom: '0.625rem', maxWidth: '80.3125rem' }}>
-        <SearchContainer style={{ marginRight: '1rem' }}>
-          <SearchBox filter={setMeetingFilter} onTypeChange={onTypeChange} type={type} />
-        </SearchContainer>
+      <FormGroup row={true} style={{ marginBottom: '0.625rem', maxWidth: '60rem' }}>
+        {!checked && (
+          <SearchContainer style={{ marginRight: '1rem' }}>
+            <SearchBox filter={setMeetingFilter} onTypeChange={onTypeChange} type={type} />
+          </SearchContainer>
+        )}
         <OptionContainer>
           <FormControlLabel
             control={

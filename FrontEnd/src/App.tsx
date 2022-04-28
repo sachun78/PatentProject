@@ -6,10 +6,8 @@ import palette from 'lib/palette'
 import useCsrfQuery from 'hooks/query/useCsrfQuery'
 import loadable from '@loadable/component'
 import { ReactQueryDevtools } from 'react-query/devtools'
-import useUserQuery from 'hooks/query/useUserQuery'
 import 'react-toastify/dist/ReactToastify.min.css'
 import { ToastContainer } from 'react-toastify'
-import usePostQuery from 'hooks/query/usePostQuery'
 import InitialInputModal from './components/InitialInputModal'
 
 const Login = loadable(() => import('pages/Login'))
@@ -17,16 +15,17 @@ const SignUp = loadable(() => import('pages/Signup'))
 const MailCheck = loadable(() => import('pages/MailCheck'))
 const MeetingBook = loadable(() => import('pages/Meeting/MeetingBook'))
 const AppLayout = loadable(() => import('layouts/AppLayout'))
+const Landing = loadable(() => import('pages/Landing'))
 
 function App() {
   useCsrfQuery({ retry: true, staleTime: 1000 * 60 * 30 })
-  useUserQuery()
 
   return (
     <>
       <DebugObserver />
       <ReactQueryDevtools initialIsOpen={false} />
       <Routes>
+        <Route path="about" element={<Landing />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<SignUp />} />
         <Route path="email/check" element={<MailCheck />} />
@@ -58,6 +57,7 @@ const globalStyle = css`
       box-sizing: inherit;
       margin: 0;
       padding: 0;
+
       ::selection {
         background: ${palette.purple[50]};
       }

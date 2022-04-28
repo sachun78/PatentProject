@@ -6,8 +6,8 @@ import useAuth from 'hooks/useAuth'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Avatar } from '@mui/material'
 import { dividerStyle, logoStyle, menuStyle, sidebarStyle, userStyle } from './styles'
-import { MdOutlineLogout } from 'react-icons/md'
-import useProfileImg from '../../hooks/useProfileImg'
+import useProfileImg from 'hooks/useProfileImg'
+import { BiLogOut } from 'react-icons/bi'
 
 type SidebarProps = {}
 
@@ -40,7 +40,7 @@ function Sidebar({}: SidebarProps) {
           imgProps={{ crossOrigin: 'anonymous' }}
         />
         <span>{user.username}</span>
-        <MdOutlineLogout onClick={() => logout()} />
+        <BiLogOut onClick={() => logout()} />
       </div>
     </div>
   )

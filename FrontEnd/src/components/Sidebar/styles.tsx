@@ -3,7 +3,7 @@ import media from 'lib/styles/media'
 import { brandColor } from '../../lib/palette'
 
 export const sidebarStyle = css`
-    // ${media.xlarge} {
+  // ${media.xlarge} {
   //   display: none;
   // }
 
@@ -35,7 +35,7 @@ export const logoStyle = css`
 `
 
 export const dividerStyle = css`
-  border-top: 1px solid #9C9C9C;
+  border-top: 1px solid #9c9c9c;
   width: 6.8125rem;
   margin-right: -7px;
 `
@@ -59,7 +59,7 @@ export const userStyle = css`
 
   svg {
     width: 1.25rem;
-    height: 17px;
+    height: 1.25rem;
 
     &:hover {
       fill: ${brandColor};

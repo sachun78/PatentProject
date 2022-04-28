@@ -24,17 +24,14 @@ export default function AppLayout({}: AppLayoutProps) {
 
   if (isLoading) {
     return (
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={isLoading}
-      >
+      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
     )
   }
 
   if (!data) {
-    return <Navigate replace to={'/login'} />
+    return <Navigate replace to={'/about'} />
   }
 
   return (

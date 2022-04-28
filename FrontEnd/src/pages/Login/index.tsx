@@ -28,14 +28,12 @@ function Login({}: LoginProps) {
           <Divider css={dividerStyle}>OR</Divider>
           <section>
             <div css={underBlockStyle}>
-              <div>
-                <NavLink to={'/email/check'}>
-                  <h4>Sign Up</h4>
-                </NavLink>
-              </div>
-              <div>
-                <h4>Forget Password</h4>
-              </div>
+              <NavLink to={'/email/check'} style={{ marginLeft: '3.0625rem' }}>
+                <h4>Sign Up</h4>
+              </NavLink>
+              <NavLink to={'/email/check'} style={{ marginRight: '1rem' }}>
+                <h4>Forgot Password</h4>
+              </NavLink>
             </div>
           </section>
         </div>
@@ -43,6 +41,5 @@ function Login({}: LoginProps) {
     </Auth>
   )
 }
-
 
 export default Login
