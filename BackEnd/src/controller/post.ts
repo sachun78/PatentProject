@@ -51,9 +51,10 @@ export function postImgUpload(req: IRequest, res: Response, next: NextFunction) 
               next(err);
             }
           })
+          res.json({success: true, fileName: resizefile});
         })
 
-    res.json({success: true, fileName: resizefile});
+    
   })
 }
 
