@@ -19,7 +19,7 @@ const config = {
     salt_rouunds: parseInt(required('BCRYPT_SALT_ROUNDS', 10)),
   },
   host: {
-    port: parseInt(required('PORT', 8080)),
+    port: parseInt(required('PORT', 5500)),
     url: required('HOST_URL', 'http://localhost:5500'),
     client_url: required('CLIENT_HOST_URL', 'http://localhost:3000'),
   },

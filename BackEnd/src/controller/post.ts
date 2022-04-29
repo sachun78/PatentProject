@@ -1,8 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import shortid from 'shortid';
+import multer from 'multer';
+import sharp from 'sharp';
+import fs from 'fs';
+
 import * as postRepo from "data/post";
 import * as userRepo from 'data/auth';
-import multer from 'multer';
+
 
 interface IRequest extends Request {
   [key: string]: any
@@ -12,28 +16,44 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/')
   },
-  filename: (req, files, cb) => {
-    cb(null, `${Date.now()}_${files.originalname}`)
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}_${file.originalname}`)
   }
 })
 
 const upload = multer({
   storage: storage
-}).array('post_img', 2);
+}).single('post_img');
 
 export function postImgUpload(req: IRequest, res: Response, next: NextFunction) {
+  let resizefile = '';
   upload(req, res, (err) => {
     if (err) {
       console.error(err)
       return res.status(409).json({ success: false, error: `${err.code}`})
     }
     
-    const files = req.files as Express.Multer.File[];
-    if (!files) {
+    const file = req.file;
+    if (!file) {
       return res.status(409).json("files are not found");
     }
+    resizefile = `${Date.now()}_${req.file?.originalname}`;
+      sharp(req.file?.path)
+        .resize({width: 640})
+        .withMetadata()
+        .toFile(req.file?.destination + resizefile, (err, info) => {
+          if (err) {
+            next(err);
+          }
+          console.log(`info: ${info}`);
+          fs.unlink(req.file?.path!, (err) => {
+            if (err) {
+              next(err);
+            }
+          })
+        })
 
-    res.json({success: true, files: req.files});
+    res.json({success: true, fileName: resizefile});
   })
 }
 

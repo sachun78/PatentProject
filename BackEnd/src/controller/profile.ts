@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
+import multer from 'multer';
+import sharp from 'sharp';
+import fs from 'fs';
+
 import * as ProfileRepo from 'data/profile';
 import * as userRepo from 'data/auth';
-import multer from 'multer';
+import { fstat } from 'fs';
 
 interface IRequest extends Request {
   [key: string]: any
@@ -21,15 +25,49 @@ const upload = multer({
 }).single('profile_img')
 
 export function profileImage(req: IRequest, res: Response, next: NextFunction) {
+
+  userRepo.findById(req.userId)
+    .then(value => {
+      if (value?.photo_path) {
+        fs.unlink('uploads\\' + value?.photo_path , (err) => {
+          if (err) {
+            next(err);
+          }
+        })
+      }
+    })
+    .catch(err => next(err));
+
+  let resizefile = '';
   upload(req, res, (err) => {
     if (err) {
       console.error(err)
       return res.status(409).json({ success: false, error: `${err.code}` })
     }
-    userRepo.updateUser(req.userId, { photo_path: req.file?.filename });
+
+    if (req.file) {
+      resizefile = `${Date.now()}_${req.file?.originalname}`;
+      sharp(req.file?.path)
+        .resize({width: 640})
+        .withMetadata()
+        .toFile(req.file?.destination + resizefile, (err, info) => {
+          if (err) {
+            next(err);
+          }
+          console.log(`info: ${info}`);
+          fs.unlink(req.file?.path!, (err) => {
+            if (err) {
+              next(err);
+            }
+          })
+        })
+    }
+    
+    console.log(resizefile);
+    userRepo.updateUser(req.userId, { photo_path: resizefile });
     return res.json({
       success: true,
-      fileName: req.file?.filename
+      fileName: resizefile
     })
   })
 }
