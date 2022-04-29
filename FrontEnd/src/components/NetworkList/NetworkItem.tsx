@@ -9,6 +9,7 @@ import { MdOutlineSafetyDivider, MdOutlineWork } from 'react-icons/md'
 import { GrUserManager } from 'react-icons/gr'
 import { FieldItem } from 'pages/User/styles'
 import getCountryName from 'lib/countryName'
+import randomColor from 'randomcolor'
 
 export type NetworkItemProps = {
   data: { email: string; profile: IProfile }
@@ -38,7 +39,16 @@ function NetworkItem({ data }: NetworkItemProps) {
             <GrUserManager />
             <Grid container>
               {data.profile.field?.map((elem: string) => (
-                <FieldItem key={elem}>{elem}</FieldItem>
+                <FieldItem
+                  key={elem}
+                  color={randomColor({
+                    luminosity: 'light',
+                    format: 'rgb', // e.g. 'rgb(225,200,20)'
+                    seed: elem,
+                  })}
+                >
+                  {elem}
+                </FieldItem>
               ))}
             </Grid>
           </span>

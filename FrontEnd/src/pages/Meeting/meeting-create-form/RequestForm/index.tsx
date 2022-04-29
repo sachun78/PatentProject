@@ -11,7 +11,7 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
 import { useMutation, useQuery } from 'react-query'
-import { OutlinedInput } from '@mui/material'
+import { Button, OutlinedInput } from '@mui/material'
 import { ContainerBlock } from 'pages/Meeting/styles'
 import { getEvent } from 'lib/api/event/getEvent'
 import TimeGridInput from 'components/DatePickerInput/TimeGridInput'
@@ -188,9 +188,14 @@ export default function RequestForm({}: RequestViewProps) {
             style={{ backgroundColor: '#fff' }}
           />
         </RequestSection>
-        <button css={buttonStyle} disabled={createScheduleMut.isLoading || createScheduleMut.data} type={'submit'}>
+        <Button
+          css={buttonStyle}
+          variant={'contained'}
+          disabled={createScheduleMut.isLoading || createScheduleMut.data}
+          type={'submit'}
+        >
           PROPOSE MEETING
-        </button>
+        </Button>
       </form>
     </ContainerBlock>
   )

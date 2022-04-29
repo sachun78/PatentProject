@@ -3,39 +3,36 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
-import useMeetingQuery from 'hooks/query/useMeetingQuery'
 import { useCallback, useMemo } from 'react'
 import { calendarStyle } from './styles'
 import { useNavigate } from 'react-router-dom'
 import { formatDistanceToNow } from 'date-fns'
 import { brandColor } from '../../lib/palette'
+import { IMeeting } from '../../lib/api/types'
 
-export type ScheduleCalendarProps = {}
+export type ScheduleCalendarProps = {
+  meetings: IMeeting[]
+}
 
-function ScheduleCalendar({}: ScheduleCalendarProps) {
-  const { data } = useMeetingQuery('', 'title', { enabled: false })
+function ScheduleCalendar({ meetings }: ScheduleCalendarProps) {
   const navigate = useNavigate()
 
   const scheduleEvents = useMemo(() => {
-    const ret = []
-    if (data) {
-      for (const meeting of data) {
-        const ed = new Date(meeting.date)
-        const dist = formatDistanceToNow(ed, {
-          addSuffix: true,
-        })
-        const eventObj = {
-          id: meeting._id,
-          title: meeting.title,
-          start: meeting.date,
-          end: meeting.date,
-          backgroundColor: dist.includes('ago') ? '#9c9c9c' : brandColor,
-        }
-        ret.push(eventObj)
+    if (!meetings) return []
+    return meetings.map((met) => {
+      const ed = new Date(met.date)
+      const dist = formatDistanceToNow(ed, {
+        addSuffix: true,
+      })
+      return {
+        id: met._id,
+        title: met.title,
+        start: met.date,
+        end: met.date,
+        backgroundColor: dist.includes('ago') ? '#9c9c9c' : brandColor,
       }
-      return ret
-    }
-  }, [data])
+    })
+  }, [meetings])
 
   const onScheduleClick = useCallback(
     (clickInfo: EventClickArg) => {
@@ -53,7 +50,7 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
           left: 'prev next',
           right: 'today',
         }}
-        initialEvents={scheduleEvents}
+        events={scheduleEvents}
         showNonCurrentDates={false}
         fixedWeekCount={false}
         eventClick={onScheduleClick}

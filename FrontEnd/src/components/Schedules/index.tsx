@@ -1,8 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import IconControl from '../IconControl'
-import useMeetingQuery from 'hooks/query/useMeetingQuery'
 import { labelStyle, noScheduleStyle } from './styles'
-import { FormControlLabel, FormGroup, SelectChangeEvent, Switch } from '@mui/material'
+import { Button, FormControlLabel, FormGroup, SelectChangeEvent, Switch } from '@mui/material'
 import ScheduleCalendar from './ScheduleCalendar'
 import { meetingSwitchState } from 'atoms/memberShipTabState'
 import { useRecoilState } from 'recoil'
@@ -10,6 +9,8 @@ import { formatDistanceToNow } from 'date-fns'
 import ScheduleTable from './ScheduleTable'
 import { OptionContainer, SearchContainer } from 'components/Events/styles'
 import SearchBox from '../SearchBox'
+import { useInfiniteQuery } from 'react-query'
+import { getMeetingsCursor } from 'lib/api/meeting/getMeetings'
 
 type ScheduleViewProps = {}
 export type searchSelect = 'email' | 'title'
@@ -19,9 +20,18 @@ function Schedules({}: ScheduleViewProps) {
   const [meetingFilter, setMeetingFilter] = useState('')
   const [type, setType] = useState<searchSelect>('title')
 
-  const { data, isLoading } = useMeetingQuery(meetingFilter, type, {
-    staleTime: 2000,
-  })
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
+    ['meetings', meetingFilter, type],
+    ({ pageParam = 0 }) => getMeetingsCursor(meetingFilter, type, pageParam),
+    {
+      getNextPageParam: (lastPage, pages) => {
+        // page 길이 5이면
+        const morePagesExist = lastPage?.length === 3
+        if (!morePagesExist) return false
+        return pages.flat().length
+      },
+    }
+  )
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked)
@@ -34,8 +44,8 @@ function Schedules({}: ScheduleViewProps) {
 
   const meetings = useMemo(() => {
     if (!data) return []
-    return data.filter((meeting) => {
-      const dist = formatDistanceToNow(new Date(meeting.date), {
+    return data.pages.flat().filter((meeting) => {
+      const dist = formatDistanceToNow(new Date(meeting.startTime), {
         addSuffix: true,
       })
       return !dist.includes('ago') && !meeting.history
@@ -55,11 +65,6 @@ function Schedules({}: ScheduleViewProps) {
   return (
     <>
       <FormGroup row={true} style={{ marginBottom: '0.625rem', maxWidth: '60rem' }}>
-        {!checked && (
-          <SearchContainer style={{ marginRight: '1rem' }}>
-            <SearchBox filter={setMeetingFilter} onTypeChange={onTypeChange} type={type} />
-          </SearchContainer>
-        )}
         <OptionContainer>
           <FormControlLabel
             control={
@@ -75,8 +80,18 @@ function Schedules({}: ScheduleViewProps) {
             css={labelStyle}
           />
         </OptionContainer>
+        {!checked && (
+          <SearchContainer style={{ marginLeft: '0.5rem' }}>
+            <SearchBox filter={setMeetingFilter} onTypeChange={onTypeChange} type={type} />
+          </SearchContainer>
+        )}
       </FormGroup>
-      {checked ? <ScheduleCalendar /> : <ScheduleTable meetings={meetings} />}
+      {checked ? <ScheduleCalendar meetings={meetings} /> : <ScheduleTable meetings={meetings} />}
+      {!checked && hasNextPage && (
+        <Button variant={'contained'} onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+          View more...
+        </Button>
+      )}
     </>
   )
 }
