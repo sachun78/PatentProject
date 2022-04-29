@@ -38,22 +38,21 @@ export function postImgUpload(req: IRequest, res: Response, next: NextFunction) 
       return res.status(409).json("files are not found");
     }
     resizefile = `${Date.now()}_${req.file?.originalname}`;
-      sharp(req.file?.path)
-        .resize({width: 640})
-        .withMetadata()
-        .toFile(req.file?.destination + resizefile, (err, info) => {
+    sharp(req.file?.path)
+      .resize({width: 640})
+      .withMetadata()
+      .toFile(req.file?.destination + resizefile, (err, info) => {
+        if (err) {
+          next(err);
+        }
+        console.log(`info: ${info}`);
+        fs.unlink(req.file?.path!, (err) => {
           if (err) {
             next(err);
           }
-          console.log(`info: ${info}`);
-          fs.unlink(req.file?.path!, (err) => {
-            if (err) {
-              next(err);
-            }
-          })
         })
-
-    res.json({success: true, fileName: resizefile});
+        res.json({success: true, fileName: resizefile});
+      })
   })
 }
 
