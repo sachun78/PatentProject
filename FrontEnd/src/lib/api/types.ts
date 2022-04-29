@@ -69,22 +69,17 @@ export type IPost = {
   like_cnt: number
   writer: string
   createdAt: Date
-  updated_at?: Date
+  updatedAt?: Date
   images: string[]
 }
 
 export type IComment = {
-  id: string
-  owner_id: string
-  owner_thumb: string
-  text: string
-  contents: string
-  created_at?: Date
-  updated_at?: Date
-}
-
-export type IBuddy = {
-  _id: string
-  email: string
-  profile: IProfile
+  id: string,
+  owner_id: string,
+  owner_thumb: string,
+  owner_username: string,
+  text: string,
+  contents: string,
+  createdAt: Date,
+  updatedAt?: Date,  
 }

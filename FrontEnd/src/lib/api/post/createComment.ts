@@ -9,4 +9,5 @@ export async function createComments([input, id]: [commentInput, string]) {
 
 type commentInput = {
   contents: string
+  createdAt: Date
 }

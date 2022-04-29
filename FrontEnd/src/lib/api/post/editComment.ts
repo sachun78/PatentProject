@@ -16,4 +16,5 @@ export async function editComment([input, postId, commentId]: [
 
 type editCommentInput = {
   contents: string
+  createdAt: Date
 }

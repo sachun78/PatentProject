@@ -9,7 +9,8 @@ export default function useProfileImg(size: number = 60) {
   const user = queryClient.getQueryData<User>('user')
 
   const profileSrc = user?.photo_path
-    ? `${API_PATH}static/${user.photo_path}`
+    // ? `http://localhost:4000/static/${user.photo_path}`
+    ? `http://localhost:8080/static/${user.photo_path}`
     : url(user?.email ?? '', {
         s: `${size}px`,
         d: 'retro',
