@@ -98,8 +98,8 @@ function Events({}: EventsProps) {
             }
             return (
               <EventCard
-                key={event.id}
-                id={event.id}
+                key={event._id}
+                id={event._id}
                 title={event.title}
                 startDate={event.start_date}
                 endDate={event.end_date}

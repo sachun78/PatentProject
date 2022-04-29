@@ -1,11 +1,4 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
 import { useRecoilState } from 'recoil'
 import { eventSelectModalState, useCurrentEventState } from 'atoms/eventState'
 import { css, keyframes } from '@emotion/react'
@@ -48,9 +41,9 @@ function EventSelectDialog({}: EventSelectModalProps) {
     if (!events) {
       return
     }
-    const { id, title, start_date, end_date } = events[index]
+    const { _id, title, start_date, end_date } = events[index]
 
-    setEvent({ id, title })
+    setEvent({ id: _id, title })
     setStartDate(new Date(start_date))
     setEndDate(new Date(end_date))
     navigate('/meeting/schedule/request')
@@ -81,15 +74,14 @@ function EventSelectDialog({}: EventSelectModalProps) {
       <DialogTitle>Event Select</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          To scheduling to this people, please select your event here. and click
-          the next button.
+          To scheduling to this people, please select your event here. and click the next button.
         </DialogContentText>
         <SelectBody>
           <div onClick={onPrevClick}>{'<'}</div>
           <div css={animationStyle(animationState)}>
             <EventCard
               title={events[index].title}
-              id={events[index].id}
+              id={events[index]._id}
               count={events[index].meeting_list.length}
               endDate={events[index].end_date}
               startDate={events[index].start_date}

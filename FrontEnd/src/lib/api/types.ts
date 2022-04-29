@@ -20,7 +20,7 @@ export type IProfileDetail = {
 } & IProfile
 
 export type IEvent = {
-  id: string
+  _id: string
   title: string
   start_date: string
   end_date: string
@@ -39,7 +39,7 @@ export type IReplan = {
   }
 }
 export type IMeeting = {
-  id: string
+  _id: string
   title: string
   date: Date
   startTime: Date

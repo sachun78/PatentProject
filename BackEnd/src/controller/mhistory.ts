@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
+import multer from 'multer';
+import sharp from 'sharp';
+import fs from 'fs';
+
 import * as MhisRepo from 'data/mhistory';
 import * as meetingRepo from 'data/meeting';
-import multer from 'multer';
+
 
 interface IRequest extends Request {
   [key: string]: any
@@ -21,6 +25,8 @@ const upload = multer({
 }).single('mhistory_img')
 
 export function mhistoryImage(req: IRequest, res: Response, next: NextFunction) {
+  let resizefile = '';
+
   upload(req, res, (err) => {
     if (err) {
       console.error(err)
@@ -32,7 +38,23 @@ export function mhistoryImage(req: IRequest, res: Response, next: NextFunction) 
       return res.status(409).json("files are not found");
     }
 
-    res.json({success: true, files: req.file});
+    resizefile = `${Date.now()}_${req.file?.originalname}`;
+      sharp(req.file?.path)
+        .resize({width: 640})
+        .withMetadata()
+        .toFile(req.file?.destination + resizefile, (err, info) => {
+          if (err) {
+            next(err);
+          }
+          console.log(`info: ${info}`);
+          fs.unlink(req.file?.path!, (err) => {
+            if (err) {
+              next(err);
+            }
+          })
+        })
+
+    res.json({success: true, fileName: resizefile});
   })
 }
 

@@ -1,12 +1,13 @@
 import { tableStyle } from 'components/Schedules/styles'
 import { formatDistanceToNow } from 'date-fns'
 import React, { useCallback, useMemo, useState } from 'react'
-import useMeetingQuery from 'hooks/query/useMeetingQuery'
 import ScheduleTable from 'components/Schedules/ScheduleTable'
-import SearchBox from '../../components/SearchBox'
-import { SearchContainer } from '../../components/Events/styles'
-import { searchSelect } from '../../components/Schedules'
-import { SelectChangeEvent } from '@mui/material'
+import SearchBox from 'components/SearchBox'
+import { SearchContainer } from 'components/Events/styles'
+import { searchSelect } from 'components/Schedules'
+import { Button, SelectChangeEvent } from '@mui/material'
+import { useInfiniteQuery } from 'react-query'
+import { getMeetingsCursor } from 'lib/api/meeting/getMeetings'
 
 export type MeetingHistoryProps = {}
 
@@ -15,17 +16,26 @@ function MeetingHistory({}: MeetingHistoryProps) {
   const [type, setType] = useState<searchSelect>('title')
 
   const onTypeChange = useCallback((event: SelectChangeEvent) => {
-    console.log(event.target.value)
     setType(event.target.value as searchSelect)
   }, [])
 
-  const { data, isLoading } = useMeetingQuery(meetingFilter, type, {
-    staleTime: 2000,
-  })
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
+    ['meetings', meetingFilter, type],
+    ({ pageParam = 0 }) => getMeetingsCursor(meetingFilter, type, pageParam),
+    {
+      getNextPageParam: (lastPage, pages) => {
+        // page 길이 5이면
+        const morePagesExist = lastPage?.length === 3
+        if (!morePagesExist) return false
+        return pages.flat().length
+      },
+    }
+  )
 
   const meetings = useMemo(() => {
     if (!data) return []
-    return data.filter((meeting) => {
+    console.log(data)
+    return data.pages.flat().filter((meeting) => {
       const dist = formatDistanceToNow(new Date(meeting.date), {
         addSuffix: true,
       })
@@ -40,6 +50,11 @@ function MeetingHistory({}: MeetingHistoryProps) {
         <SearchBox filter={setMeetingFilter} onTypeChange={onTypeChange} type={type} />
       </SearchContainer>
       <ScheduleTable meetings={meetings} />
+      {hasNextPage && (
+        <Button variant={'contained'} onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+          More Loading
+        </Button>
+      )}
     </>
   )
 }

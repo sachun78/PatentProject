@@ -23,7 +23,7 @@ function EventCalendar({}: ScheduleCalendarProps) {
         addSuffix: true,
       })
       return {
-        id: event.id,
+        id: event._id,
         title: event.title,
         start: event.start_date,
         end: event.end_date,
