@@ -39,7 +39,7 @@ export async function updateBuddy(buddyId: string, arrBuddy: string[]) {
 }
 
 export async function getBuddy(userId: string) {
-  return Buddy.findOne({owner_id: userId}).lean().populate({path: 'buddy.profile', model: 'Profile'});
+  return Buddy.findOne({owner_id: userId}).populate({path: 'buddy.profile', model: 'Profile'});
 }
 
 export async function deleteBuddy(userId: string, _email: string) {

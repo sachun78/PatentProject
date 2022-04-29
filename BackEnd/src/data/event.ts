@@ -44,7 +44,7 @@ export async function getAllByMonth(userId: string, month: string) {
 export async function getById(eventId: string) {
   return Event.findById(eventId).then((value) => {
     if (value?.meeting_list) {
-      return Event.findById(eventId).lean().populate('meeting_list');
+      return Event.findById(eventId).populate('meeting_list');
     }
     else {
       return value;
