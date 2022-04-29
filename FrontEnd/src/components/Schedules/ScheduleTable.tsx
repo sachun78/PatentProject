@@ -1,8 +1,8 @@
 import { Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material'
-import { StyledTableCell, StyledTableRow } from '../../pages/Meeting/styles'
+import { StyledTableCell, StyledTableRow } from 'pages/Meeting/styles'
 import { format, formatDistanceToNow } from 'date-fns'
 import React from 'react'
-import { IMeeting } from '../../lib/api/types'
+import { IMeeting } from 'lib/api/types'
 import { useNavigate } from 'react-router-dom'
 
 export type ScheduleTableProps = {
@@ -36,7 +36,7 @@ function ScheduleTable({ meetings }: ScheduleTableProps) {
               }
             }
             return (
-              <StyledTableRow key={row.title + row.id} hover onClick={() => navi('/meeting/schedule/' + row.id)}>
+              <StyledTableRow key={row.title + row._id} hover onClick={() => navi('/meeting/schedule/' + row._id)}>
                 <StyledTableCell align="center">{row.title}</StyledTableCell>
                 <StyledTableCell align="center">{row.toEmail}</StyledTableCell>
                 <StyledTableCell align="center">

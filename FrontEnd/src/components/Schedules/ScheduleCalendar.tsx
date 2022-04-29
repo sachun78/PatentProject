@@ -25,7 +25,7 @@ function ScheduleCalendar({}: ScheduleCalendarProps) {
           addSuffix: true,
         })
         const eventObj = {
-          id: meeting.id,
+          id: meeting._id,
           title: meeting.title,
           start: meeting.date,
           end: meeting.date,
