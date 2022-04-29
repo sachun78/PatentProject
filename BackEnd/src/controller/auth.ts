@@ -11,6 +11,25 @@ interface IRequest extends Request {
   [key: string]: any
 }
 
+export async function getAll(req: IRequest, res: Response, next: NextFunction) {
+  const filter = req.query.filter as string;
+
+  try {
+    const filterUser = await UserRepo.getUserAll();
+    let sendData: any = [];
+
+    for (let i = 0; i < filterUser.length; i++) {
+      const {password, certified, ...rest} = filterUser[i];
+      sendData.push(rest);
+    }
+    res.status(200).json(sendData);
+  }
+  catch(e) {
+    console.error(`[authCtrl][getAll] ${e}`);
+    next(e);
+  }
+}
+
 export async function signup(req: IRequest, res: Response, next: NextFunction) {
   const { email, username, password } = req.body
 
@@ -32,8 +51,8 @@ export async function signup(req: IRequest, res: Response, next: NextFunction) {
     }
 
     const token = createJwtToken(user.id)
-    console.log('signup', user.id)
-    setToken(res, token)
+    console.log('signup', user.id);
+    setToken(res, token);
     res.status(201).json({
       token,
       user: {
@@ -41,10 +60,10 @@ export async function signup(req: IRequest, res: Response, next: NextFunction) {
         email: user.email,
         username: user.username,
       }
-    })
+    });
   } catch (e) {
-    console.error(e)
-    next(e)
+    console.error(`[authCtrl][signup] ${e}`);
+    next(e);
   }
 }
 
@@ -75,21 +94,27 @@ export async function signin(req: IRequest, res: Response, next: NextFunction) {
       }
     })
   } catch (e) {
-    console.error(e)
-    next(e)
+    console.error(`[authCtrl][signin] ${e}`);
+    next(e);
   }
 }
 
 export async function logout(req: IRequest, res: Response, next: NextFunction) {
   const user_id = req.userId;
 
-  const user = await UserRepo.findById(user_id);
-  if (!user) {
-    return res.status(401).json({ message: 'Invalid user or password' })
+  try {
+    const user = await UserRepo.findById(user_id);
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid user or password' });
+    }
+  
+    clearToken(res);
+    res.status(200).json({ message: `${user.username} is logout`});
   }
-
-  clearToken(res);
-  res.status(200).json({ message: `${user.username} is logout`});
+  catch (e) {
+    console.error(`[authCtrl][logout] ${e}`);
+    next(e);
+  }
 }
 
 export async function me(req: IRequest, res: Response, next: NextFunction) {
@@ -100,33 +125,33 @@ export async function me(req: IRequest, res: Response, next: NextFunction) {
   try {
     const user = await UserRepo.findById(req.userId)
     if (!user) {
-      return res.status(404).json({ message: 'User not found' })
+      return res.status(404).json({ message: 'User not found' });
     }
-    console.log('me', user.id)
+    console.log('me', user.id);
     res.status(200).json({
       id: user.id,
       email: user.email,
       username: user.username,
       photo_path: user.photo_path,
       certified: user.certified
-    })
+    });
   } catch (e) {
-    console.error(e)
-    next(e)
+    console.error(`[authCtrl][me] ${e}`);
+    next(e);
   }
 }
 
 export async function csrfToken(req: IRequest, res: Response) {
-  const csrfToken = await generateCSRFToken()
-  res.status(200).json({ csrfToken })
+  const csrfToken = await generateCSRFToken();
+  res.status(200).json({ csrfToken });
 }
 
 async function generateCSRFToken() {
-  return bcrypt.hash(envConfig.csrf.plainToken, 1)
+  return bcrypt.hash(envConfig.csrf.plainToken, 1);
 }
 
 function createJwtToken(id: String) {
-  return jwt.sign({ id }, envConfig.jwt.secure_key, { expiresIn: envConfig.jwt.expiresInSec })
+  return jwt.sign({ id }, envConfig.jwt.secure_key, { expiresIn: envConfig.jwt.expiresInSec });
 }
 
 function setToken(res: Response, token: String) {
@@ -135,9 +160,9 @@ function setToken(res: Response, token: String) {
     httpOnly: true,
     sameSite: 'none',
     secure: true
-  }
+  };
 
-  res.cookie('token', token, options)
+  res.cookie('token', token, options);
 }
 
 function clearToken(res: Response) {
@@ -145,7 +170,7 @@ function clearToken(res: Response) {
     httpOnly: true,
     sameSite: 'none',
     secure: true
-  }
+  };
 
   res.clearCookie('token', options);
 }

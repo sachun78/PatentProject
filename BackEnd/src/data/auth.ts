@@ -28,6 +28,10 @@ useVirtualId(userSchema);
 
 const User = mongoose.model('User', userSchema);
 
+export async function getUserAll() {
+  return User.find().lean().populate('profile');
+}
+
 export async function findByEmail(email: string) {
   return User.findOne({ email: email });
 }
