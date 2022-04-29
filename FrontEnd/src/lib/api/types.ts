@@ -66,7 +66,7 @@ export type IPost = {
   owner_id: string
   owner_thumb: string
   owner_username: string
-  like_cnt: number
+  like_cnt: string[]
   writer: string
   createdAt: Date
   updatedAt?: Date
