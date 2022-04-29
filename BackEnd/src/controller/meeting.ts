@@ -238,7 +238,7 @@ export async function sendInvitMail(req: IRequest, res: Response) {
     }
 
     sendmail(meetingData, EMAILTYPE.INVI)
-      .then( value => res.status(200).json({ message: `Success send email: ${meetingData.toEmail}`}))
+      .then( value => res.status(200).json({ message: `Success send email: ${meetingData.toEmail}, code(${meetingData.code})`}))
       .catch( reason => res.status(500).json({ message: `Failed email send ${reason}`}));
   }
   catch(e) {

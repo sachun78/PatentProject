@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import { brandColor } from '../../lib/palette'
+import { brandColor } from 'lib/palette'
 
 export type NetworkHeadProps = {}
 

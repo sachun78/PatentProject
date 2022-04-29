@@ -7,7 +7,7 @@ import gravatar from 'gravatar'
 import React, { memo } from 'react'
 import { MdOutlineSafetyDivider, MdOutlineWork } from 'react-icons/md'
 import { GrUserManager } from 'react-icons/gr'
-import { FieldItem } from '../../pages/User/styles'
+import { FieldItem } from 'pages/User/styles'
 import getCountryName from 'lib/countryName'
 
 export type NetworkItemProps = {

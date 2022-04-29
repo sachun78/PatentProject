@@ -7,9 +7,10 @@ import { OutlinedInput } from '@mui/material'
 
 export type BookingSideProps = {
   meeting: IMeeting
+  profile?: { company: string }
 }
 
-function BookingSide({ meeting }: BookingSideProps) {
+function BookingSide({ meeting, profile }: BookingSideProps) {
   return (
     <div css={sideStyle}>
       <section css={sectionStyle}>
@@ -18,17 +19,16 @@ function BookingSide({ meeting }: BookingSideProps) {
       </section>
       <section css={sectionStyle}>
         <div>
-          <BsCalendarDate />{' '}
-          <h3>{new Date(meeting.date).toLocaleDateString()}</h3>
+          <BsCalendarDate /> <h3>{new Date(meeting.date).toLocaleDateString()}</h3>
         </div>
         <div>
-          <BsClock />{' '}
+          <BsClock />
           <h3>
             {new Date(meeting.startTime).toLocaleTimeString([], {
               hour: '2-digit',
               minute: '2-digit',
-            })}{' '}
-            ~{' '}
+            })}
+            ~
             {new Date(meeting.endTime).toLocaleTimeString([], {
               hour: '2-digit',
               minute: '2-digit',
@@ -42,13 +42,14 @@ function BookingSide({ meeting }: BookingSideProps) {
       <section css={sectionStyle}>
         <h3>Offer from</h3>
         <div>
-          <MdEmail />{' '}
-          <h3>
-            {meeting.ownerName}/{meeting.ownerEmail}
-          </h3>
+          <MdEmail />
+          <h3>{meeting.ownerEmail}</h3>
         </div>
         <div>
-          <MdSimCard /> <h3>company</h3>
+          <h3>{meeting.ownerName}</h3>
+        </div>
+        <div>
+          <MdSimCard /> <h3>{profile?.company}</h3>
         </div>
       </section>
       <CommentSection>
@@ -90,16 +91,16 @@ const sectionStyle = css`
   > div {
     display: flex;
     align-items: center;
-
+    margin-bottom: 0.4rem;
     h3 {
-      font-size: 1.2rem;
-      font-weight: 700;
-      line-height: 1.2;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1;
     }
 
     svg {
-      font-size: 2rem;
-      margin-right: 1rem;
+      font-size: 1.5rem;
+      margin-right: 0.8rem;
     }
   }
 `

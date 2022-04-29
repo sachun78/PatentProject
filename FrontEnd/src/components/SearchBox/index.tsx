@@ -37,7 +37,7 @@ function SearchBox({ filter, type, onTypeChange }: SearchBoxProps) {
     >
       <InputBase
         sx={{ ml: 1, flex: 1 }}
-        placeholder="Search Schedules"
+        placeholder="Search Schedules..."
         value={value}
         onChange={onChange}
         inputProps={{ 'aria-label': 'search schedule' }}

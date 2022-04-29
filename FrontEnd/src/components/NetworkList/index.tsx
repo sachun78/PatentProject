@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 import useBuddyQuery from 'hooks/query/useBuddyQuery'
 import NetworkItem from './NetworkItem'
-import { IBuddy } from '../../lib/api/types'
+import { IBuddy } from 'lib/api/types'
 
 export type NetworkListProps = {}
 

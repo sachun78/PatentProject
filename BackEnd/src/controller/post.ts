@@ -87,6 +87,10 @@ export async function editPost(req: IRequest, res: Response) {
     const findPost = await postRepo.findById(req.params.id);
     if (findPost) {
       if (req.userId === findPost.owner_id) {
+        const {like_cnt} = req.body;
+        const likeList = [...findPost.like_cnt, like_cnt];
+        req.body['like_cnt'] = likeList;
+
         const editPost = await postRepo.editPost(req.params.id, req.body);
         res.status(200).json({message: `contents: (${editPost?.contents}), images: (${editPost?.images})`});
       }

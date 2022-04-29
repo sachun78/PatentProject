@@ -27,5 +27,5 @@ export const wrapper = css`
   min-height: 550px;
   transition: all 0.22s ease-out;
   position: relative;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.8);
 `

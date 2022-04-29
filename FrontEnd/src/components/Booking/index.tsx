@@ -11,14 +11,10 @@ export type BookingProps = {}
 function Booking({}: BookingProps) {
   const [param] = useSearchParams()
   const code = useMemo(() => param.get('code'), [param])
-  const { data: bookingData, isLoading } = useQuery(
-    ['booking', code],
-    getMeetingInfoByCode,
-    {
-      enabled: !!code,
-      refetchOnWindowFocus: false,
-    }
-  )
+  const { data: bookingData, isLoading } = useQuery(['booking', code], getMeetingInfoByCode, {
+    enabled: !!code,
+    refetchOnWindowFocus: false,
+  })
 
   if (code === '') {
     return <Navigate to={'/'} />
@@ -28,7 +24,7 @@ function Booking({}: BookingProps) {
   }
   return (
     <div css={wrapper}>
-      <BookingSide meeting={bookingData.data} />
+      <BookingSide meeting={bookingData.data} profile={bookingData.sendProfile} />
       <BookingMain code={code} status={bookingData.data.status} />
     </div>
   )

@@ -33,6 +33,10 @@ export type IReplan = {
     event_endDate: Date
     meeting_timeList: { startTime: string; endTime: string; date: string }[]
   }
+  sendProfile: {
+    company: string
+    country: string
+  }
 }
 export type IMeeting = {
   id: string

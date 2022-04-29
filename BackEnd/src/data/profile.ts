@@ -49,13 +49,13 @@ export async function createProfile(_profile: IProfile, userId: string) {
 }
 
 export async function updateProfile(userid: string, data: IProfile) {
-  return Profile.findOneAndUpdate({userid}, data, {new: true});
+  return Profile.findOneAndUpdate({userid}, data, {new: true}).lean();
 }
 
 export async function getProfile(userId: string) {
-  return Profile.findOne({userid: userId},{_id: false});
+  return Profile.findOne({userid: userId},{_id: false}).lean();
 }
 
 export async function findById(id: string) {
-  return Profile.findById(id);
+  return Profile.findById(id).lean();
 }
