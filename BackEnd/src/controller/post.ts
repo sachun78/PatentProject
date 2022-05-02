@@ -38,23 +38,21 @@ export function postImgUpload(req: IRequest, res: Response, next: NextFunction) 
       return res.status(409).json("files are not found");
     }
     resizefile = `${Date.now()}_${req.file?.originalname}`;
-      sharp(req.file?.path)
-        .resize({width: 640})
-        .withMetadata()
-        .toFile(req.file?.destination + resizefile, (err, info) => {
+    sharp(req.file?.path)
+      .resize({width: 640})
+      .withMetadata()
+      .toFile(req.file?.destination + resizefile, (err, info) => {
+        if (err) {
+          next(err);
+        }
+        console.log(`info: ${info}`);
+        fs.unlink(req.file?.path!, (err) => {
           if (err) {
             next(err);
           }
-          console.log(`info: ${info}`);
-          fs.unlink(req.file?.path!, (err) => {
-            if (err) {
-              next(err);
-            }
-          })
-          res.json({success: true, fileName: resizefile});
         })
-
-    
+        res.json({success: true, fileName: resizefile});
+      })
   })
 }
 
@@ -108,10 +106,6 @@ export async function editPost(req: IRequest, res: Response) {
     const findPost = await postRepo.findById(req.params.id);
     if (findPost) {
       if (req.userId === findPost.owner_id) {
-        const {like_cnt} = req.body;
-        const likeList = [...findPost.like_cnt, like_cnt];
-        req.body['like_cnt'] = likeList;
-
         const editPost = await postRepo.editPost(req.params.id, req.body);
         res.status(200).json({message: `contents: (${editPost?.contents}), images: (${editPost?.images})`});
       }
@@ -126,6 +120,33 @@ export async function editPost(req: IRequest, res: Response) {
   catch(e) {
     console.error(`[Post][editPost] ${e}`);
     throw new Error(`[Post][editPost] ${e}`);
+  }
+}
+
+export async function updateLike(req: IRequest, res: Response, next: NextFunction) {
+  try {
+    const user = await userRepo.findById(req.userId);
+    if (!user) {
+      return res.status(409).json({message: `user not found`});
+    }
+    const postId = req.query.postId as string;
+    const status = req.query.status as string;
+
+    const post = await postRepo.findById(postId);
+    let likeList = post?.like_cnt;
+    if (status === 'checked') {
+      likeList?.push(user.email);
+    }
+    else if (status === 'unchecked') {
+      likeList = likeList?.filter(value => value !== user.email);
+    }
+    console.log(likeList);
+    const editPost = await postRepo.editPost(postId, {like_cnt: likeList});
+    res.status(200).json(editPost);
+  }
+  catch(e) {
+    console.error(`[postCtrl][updateLike] ${e}`);
+    next(e);
   }
 }
 

@@ -25,7 +25,6 @@ const upload = multer({
 }).single('profile_img')
 
 export function profileImage(req: IRequest, res: Response, next: NextFunction) {
-
   userRepo.findById(req.userId)
     .then(value => {
       if (value?.photo_path) {
