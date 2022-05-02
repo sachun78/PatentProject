@@ -4,27 +4,28 @@ import useInput from 'hooks/useInput'
 import useToggle from 'hooks/useToggle'
 import { createComments } from 'lib/api/post/createComment'
 import { getPost } from 'lib/api/post/getPost'
+import { updateLike } from 'lib/api/post/updateLike'
 import { brandColor } from 'lib/palette'
 import media from 'lib/styles/media'
 import React, { useCallback, useEffect, useState } from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { useLocation, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { IComment, IPost, User } from '../../lib/api/types'
+import useProfileImg from '../../hooks/useProfileImg'
+import { IComment, User } from '../../lib/api/types'
 import PostActionButtons from './PostActionButtons'
 import PostComment from './PostComment'
-import useProfileImg from '../../hooks/useProfileImg'
 
 type postDetailProps = {
-  isLike?: boolean
+  
 }
 
 const API_PATH = process.env.REACT_APP_API_PATH
 
-function PostDetail({ isLike = false }: postDetailProps) {
+function PostDetail({}: postDetailProps) {
   const qc = useQueryClient()
-  const { id } = useParams()
+  const { id } = useParams() 
 
   const { data: post, isLoading } = useQuery(['post', id], getPost, {
     enabled: !!id,
@@ -33,13 +34,52 @@ function PostDetail({ isLike = false }: postDetailProps) {
 
   const [commentVisible, onToggleComment, setCommentVisible] = useToggle(false)
   const [comments, onChangeComments, setComments] = useInput('')
-  const [likeClick, onToggleLike] = useToggle(isLike)
+  const [likeClick, onToggleLike, setLikeClick] = useToggle(false)
   const user = qc.getQueryData<User>('user') as User
   const [owner, setOwner] = useState(false)
   const { profileSrc } = useProfileImg(44)
-  // 이미지 처리
+  
   const [open, setOpen] = useState(false)
   const [imgSrc, setImgSrc] = useState('')
+
+  useEffect(() => {    
+
+    for(const email in post.like_cnt) {
+      if(user.email === post.like_cnt[email]) {
+        setLikeClick(true)
+      }
+    }
+    
+  }, [])
+
+  const likeCountMut = useMutation(updateLike, {
+    onSuccess: () => {
+      qc.invalidateQueries(['posts'])
+      
+    },
+    onError: () => {
+      toast.error('Something went wrong', {
+        position: toast.POSITION.TOP_CENTER,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000,
+      })
+    },
+  })  
+
+  const onLike = () => {
+    console.log(likeClick, user.email)    
+    likeCountMut.mutate([
+      {
+        email: user.email,
+        userId: user.id
+      },
+      id as string, likeClick ? "unchecked" : "checked"         
+    ])
+    
+    onToggleLike()
+  }
+
   const handleOpen = (e: any) => {
     setImgSrc(e.target.src)
     setOpen(true)
@@ -58,15 +98,6 @@ function PostDetail({ isLike = false }: postDetailProps) {
     },
     [comments]
   )
-
-  const onLike = () => {
-    onToggleLike()
-    if (!likeClick) {
-      // like_cnt = like_cnt + 1
-    } else {
-      // like_cnt = like_cnt - 1
-    }
-  }
 
   const createCommentMut = useMutation(createComments, {
     onSuccess: () => {
@@ -91,11 +122,11 @@ function PostDetail({ isLike = false }: postDetailProps) {
       <div css={wrapStyle}>
         <div css={detailStyle}>
           <div css={iconStyle}>
-            <Avatar 
-              alt={post.owner_username} 
-              src={`${API_PATH}static/` + post.owner_thumb} 
+            <Avatar
+              alt={post.owner_username}
+              src={`${API_PATH}static/` + post.owner_thumb}
               sx={{ width: 60, height: 60 }}
-              imgProps={{ crossOrigin: 'anonymous'}} 
+              imgProps={{ crossOrigin: 'anonymous' }}
             />
           </div>
           <div css={titleStyle}>
@@ -106,33 +137,105 @@ function PostDetail({ isLike = false }: postDetailProps) {
           </div>
         </div>
         <figure>
-          <ImageList variant="masonry" cols={3} gap={8}>
-            {post.images?.map((image: any) => (
-              <ImageListItem key={image}>
-                <img
-                  src={`${API_PATH}static/` + image}
-                  loading="lazy"
-                  style={{
-                    borderRadius: '1rem',
-                    cursor: 'zoom-in',
-                  }}
-                  onClick={handleOpen}
-                  crossOrigin="anonymous"
-                />
-                <Modal open={open} onClose={handleClose} css={modalStyle}>
-                  <Box css={boxWrapper}>
-                    <img src={imgSrc} css={imageStyle} crossOrigin="anonymous" />
-                  </Box>
-                </Modal>
-              </ImageListItem>
-            ))}
-          </ImageList>
+          {post.images.length === 0 ? (
+            <></>
+          ) : post.images.length === 1 ? (
+            <>
+              <ImageList
+                variant="masonry"
+                cols={1}
+                gap={10}
+                sx={{ width: `640px`, height: `340px`, borderRadius: '1rem', overflow: 'hidden' }}
+              >
+                {post.images?.map((image: any) => (
+                  <div key={image} style={{ width: `640px`, height: `340px`, objectFit: 'cover' }}>
+                    <ImageListItem key={image} sx={{ width: '100%', height: '100%' }}>
+                      <img
+                        src={`${API_PATH}static/${image}`}
+                        loading="lazy"
+                        style={{
+                          borderRadius: '1rem',
+                          cursor: 'zoom-in',
+                        }}
+                        onClick={handleOpen}
+                        crossOrigin="anonymous"
+                      />
+                      <Modal open={open} onClose={handleClose} css={modalStyle}>
+                        <Box css={boxWrapper}>
+                          <img src={imgSrc} css={imageStyle} crossOrigin="anonymous" />
+                        </Box>
+                      </Modal>
+                    </ImageListItem>
+                  </div>
+                ))}
+              </ImageList>
+            </>
+          ) : post.images.length === 2 ? (
+            <ImageList
+              variant="masonry"
+              cols={2}
+              gap={10}
+              sx={{ width: `640px`, height: `340px`, borderRadius: '1rem', position: 'relative', overflow: 'hidden' }}
+            >
+              {post.images?.map((image: any) => (
+                <ImageListItem key={image} sx={{ width: '310px', height: '340px' }}>
+                  <img
+                    src={`${API_PATH}static/${image}`}
+                    loading="lazy"
+                    style={{
+                      borderRadius: '1rem',
+                      width: '310px',
+                      height: '340px',
+                      overflow: 'hidden',
+                      cursor: 'zoom-in',
+                    }}
+                    onClick={handleOpen}
+                    crossOrigin="anonymous"
+                  />
+                  <Modal open={open} onClose={handleClose} css={modalStyle}>
+                    <Box css={boxWrapper}>
+                      <img src={imgSrc} css={imageStyle} crossOrigin="anonymous" />
+                    </Box>
+                  </Modal>
+                </ImageListItem>
+              ))}
+            </ImageList>
+          ) : (
+            <ImageList
+              variant="masonry"
+              cols={2}
+              gap={10}
+              sx={{ width: `640px`, borderRadius: '1rem', position: 'relative', overflow: 'hidden' }}
+            >
+              {post.images?.map((image: any) => (
+                <div key={image} style={{ width: '320px' }}>
+                  <ImageListItem key={image} sx={{ width: '100%' }}>
+                    <img
+                      src={`${API_PATH}static/${image}`}
+                      loading="lazy"
+                      style={{
+                        borderRadius: '1rem',
+                        cursor: 'zoom-in',
+                      }}
+                      onClick={handleOpen}
+                      crossOrigin="anonymous"
+                    />
+                    <Modal open={open} onClose={handleClose} css={modalStyle}>
+                      <Box css={boxWrapper}>
+                        <img src={imgSrc} css={imageStyle} crossOrigin="anonymous" />
+                      </Box>
+                    </Modal>
+                  </ImageListItem>
+                </div>
+              ))}
+            </ImageList>
+          )}
         </figure>
         <div css={bodyStyle}>{post.contents}</div>
         <div css={buttonWrapper}>
           <div className={'item'} onClick={onLike}>
             {likeClick ? <BsHeartFill className={'filled'} /> : <BsHeart />}
-            {post.like_cnt}
+            {post.like_cnt.length}
           </div>
           <div className={'item'} onClick={onToggleComment}>
             <BsChatLeftDots /> {post.comment.length}

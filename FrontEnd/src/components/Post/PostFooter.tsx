@@ -1,58 +1,77 @@
 import { css } from '@emotion/react'
 import useToggle from 'hooks/useToggle'
+import { updateLike } from 'lib/api/post/updateLike'
 import { IComment, User } from 'lib/api/types'
 import { brandColor } from 'lib/palette'
 import React, { useEffect, useState } from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
-import { useQueryClient } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import PostComment from './PostComment'
 
 export type PostFooterProps = {
   _id: string
-  contents: string
-  isLike?: boolean
+  contents: string  
   owner_thumb: string
   owner_username: string
   comment: IComment[]
-  like_cnt: number
+  like_cnt: string []
   images: string[]
   createdAt: Date
 }
 
 function PostFooter({
-  _id,
-  contents,
-  isLike = false,
+  _id,    
   like_cnt,
-  comment,
-  images,
-  owner_thumb,
-  owner_username,
-  createdAt,
+  comment,  
 }: PostFooterProps) {
   const qc = useQueryClient()
-  const [likeClick, onToggleLike] = useToggle(isLike)
-  const user = qc.getQueryData<User>('user') as User
-  // 임시 true 처리
-  const [owner, setOwner] = useState(true)  
   
-  const viewComments = comment.filter(
-    (comments: IComment) => comment.indexOf(comments) < 2
-  )
+  const [likeClick, onToggleLike, setLikeClick] = useToggle(false)
+  const user = qc.getQueryData<User>('user') as User  
+  const [owner, setOwner] = useState(false)
+
+  const viewComments = comment.filter((comments: IComment) => comment.indexOf(comments) < 2)
 
   useEffect(() => {
     if (_id === user.id) {
       setOwner(true)
     }
+
+    for(const email in like_cnt) {
+      if(user.email === like_cnt[email]) {
+        setLikeClick(true)
+      }
+    }
+    
   }, [])
 
+  const likeCountMut = useMutation(updateLike, {
+    onSuccess: () => {
+      qc.invalidateQueries(['posts'])
+      
+    },
+    onError: () => {
+      toast.error('Something went wrong', {
+        position: toast.POSITION.TOP_CENTER,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000,
+      })
+    },
+  })  
+
   const onLike = () => {
-    if (!likeClick) {
-      // like = like + 1
-    } else {
-      // like = like
-    }
+    console.log(likeClick, user.email)    
+    likeCountMut.mutate([
+      {
+        email: user.email,
+        userId: user.id
+      },
+      _id, likeClick ? "unchecked" : "checked"         
+    ])
+    
     onToggleLike()
   }
 
@@ -61,21 +80,9 @@ function PostFooter({
       <div css={buttonWrapper}>
         <div className={'item'} onClick={onLike}>
           {likeClick ? <BsHeartFill className={'filled'} /> : <BsHeart />}
-          {/* {like + Number(likeClick)} */}
+          {like_cnt.length}
         </div>
-        <Link
-          to={`/postDetail/${_id}`}
-          state={{
-            _id: _id,
-            images: images,
-            owner_username: owner_username,
-            owner_thumb: owner_thumb,
-            like_cnt: like_cnt,
-            comment: comment,
-            createdAt: createdAt,
-            contents: contents,
-          }}
-        >
+        <Link to={`/postDetail/${_id}`}>
           <div className={'item'}>
             <BsChatLeftDots /> {comment.length}
           </div>
@@ -86,11 +93,7 @@ function PostFooter({
       ) : (
         <div css={commentStyle}>
           {viewComments.map((viewComment: IComment) => (
-            <PostComment
-              key={viewComment.id}
-              viewComment={viewComment}
-              _id={_id}
-            />
+            <PostComment key={viewComment.id} viewComment={viewComment} _id={_id} />
           ))}
         </div>
       )}
