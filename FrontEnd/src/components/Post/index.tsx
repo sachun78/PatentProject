@@ -1,69 +1,39 @@
 import { css } from '@emotion/react'
-import { Box, ImageList, ImageListItem } from '@mui/material'
 import { IComment } from 'lib/api/types'
 import media from 'lib/styles/media'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { API_PATH } from '../../lib/api/client'
 import PostFooter from './PostFooter'
 import PostHeader from './PostHeader'
+import PostImageContainer from './PostImageContainer'
 
 type PostProps = {
   _id: string
   owner_username: string
   owner_thumb: string
   owner_id: string
-  like_cnt: number
+  like_cnt: string []
   contents: string
   comment: IComment[]
   images: string[]
-  createdAt: Date
-  isLike?: boolean
+  createdAt: Date  
 }
 
 function Post({
-  _id,
-  isLike = false,
+  _id,  
   owner_username,
-  owner_thumb,
-  owner_id,
+  owner_thumb,  
   like_cnt,
   comment,
   images,
   createdAt,
   contents,
 }: PostProps) {
-  
   return (
     <div css={postStyle}>
       <PostHeader owner_username={owner_username} owner_thumb={owner_thumb} createdAt={createdAt} />
       <Link to={`/postDetail/${_id}`}>
-        <figure>
-          {images.length === 0 ? (<></>) : (
-            <Box sx={{ width: 690, height: 300, overflowY: 'scroll' }}>
-            <ImageList variant="masonry" cols={3} gap={1} >
-              {images?.map((image: any) => (              
-                <ImageListItem                
-                  key={image}
-                  sx={{ width: "100%" }}                  
-                  >
-                  <img                 
-                    src={`${API_PATH}static/${image}`}
-                    loading="lazy"
-                    style={{
-                      borderRadius: '1rem',
-                    }}
-                    crossOrigin="anonymous"
-                    
-                  />
-                </ImageListItem>
-                
-              ))}
-            </ImageList>
-          </Box>  
-          )}
-                             
-        </figure>
+        <PostImageContainer images={images} />
         <div css={bodyStyle}>{contents}</div>
       </Link>
       <PostFooter
@@ -72,8 +42,7 @@ function Post({
         owner_thumb={owner_thumb}
         owner_username={owner_username}
         comment={comment}
-        like_cnt={like_cnt}
-        isLike={isLike}
+        like_cnt={like_cnt}        
         images={images}
         createdAt={createdAt}
       />
@@ -96,15 +65,6 @@ const postStyle = css`
   a:hover {
     text-decoration: none;
     cursor: pointer;
-  }
-
-  figure {
-    max-height: 40rem;
-    display: flex;
-    justify-content: center;
-    margin: 1.25rem 1.875rem;
-    border-radius: 1rem;
-    overflow: hidden; 
   }
 
   ${media.small} {
