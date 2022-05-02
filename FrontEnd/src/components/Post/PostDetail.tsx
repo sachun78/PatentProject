@@ -44,11 +44,14 @@ function PostDetail({}: postDetailProps) {
 
   useEffect(() => {    
 
-    for(const email in post.like_cnt) {
-      if(user.email === post.like_cnt[email]) {
-        setLikeClick(true)
+    if(post) {
+      for(const email in post.like_cnt) {
+        if(user.email === post.like_cnt[email]) {
+          setLikeClick(true)
+        }
       }
     }
+    
     
   }, [])
 

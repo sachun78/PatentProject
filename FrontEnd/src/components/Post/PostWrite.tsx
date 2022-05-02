@@ -23,7 +23,7 @@ function PostWrite() {
   
   const createPostMut = useMutation(createPost, {
     onSuccess: () => {
-      
+      qc.invalidateQueries(['posts'])      
       toast.success('Posting Successful', {
         position: toast.POSITION.TOP_CENTER,
         pauseOnHover: false,
