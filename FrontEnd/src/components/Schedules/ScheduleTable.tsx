@@ -1,5 +1,5 @@
 import { Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material'
-import { StyledTableCell, StyledTableRow } from 'pages/Meeting/styles'
+import { StatusBlock, StyledTableCell, StyledTableRow } from 'pages/Meeting/styles'
 import { format, formatDistanceToNow } from 'date-fns'
 import React from 'react'
 import { IMeeting } from 'lib/api/types'
@@ -33,10 +33,12 @@ function ScheduleTable({ meetings }: ScheduleTableProps) {
               })
               if (dist.includes('ago')) {
                 status = 'expired'
+              } else {
+                status = 'pending'
               }
             }
             return (
-              <StyledTableRow key={row.title + row._id} hover onClick={() => navi('/meeting/schedule/' + row._id)}>
+              <StyledTableRow key={row._id + row.date} hover onClick={() => navi('/meeting/schedule/' + row._id)}>
                 <StyledTableCell align="center">{row.title}</StyledTableCell>
                 <StyledTableCell align="center">{row.toEmail}</StyledTableCell>
                 <StyledTableCell align="center">
@@ -45,7 +47,9 @@ function ScheduleTable({ meetings }: ScheduleTableProps) {
                   {format(new Date(row.endTime), 'HH:mm')}
                 </StyledTableCell>
                 <StyledTableCell align="left">{row.location}</StyledTableCell>
-                <StyledTableCell align="center">{status}</StyledTableCell>
+                <StyledTableCell align="center">
+                  <StatusBlock state={status}>{status}</StatusBlock>
+                </StyledTableCell>
               </StyledTableRow>
             )
           })}

@@ -13,7 +13,7 @@ export async function getMeetings(id: string, type: searchSelect) {
 }
 
 export async function getMeetingsCursor(id: string, type: searchSelect, pageParam: number) {
-  const prefix = type === 'email' ? 'toEmail' : 'title'
+  const prefix = !id ? 'title' : type === 'email' ? 'toEmail' : 'title'
   const response = await client.get('/api/meeting', {
     params: {
       curPos: pageParam,

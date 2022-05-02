@@ -27,19 +27,18 @@ function MeetingHistory({}: MeetingHistoryProps) {
         // page 길이 5이면
         const morePagesExist = lastPage?.length === 3
         if (!morePagesExist) return false
-        return pages.flat().length
+        return pages.flat().length - 1
       },
     }
   )
 
   const meetings = useMemo(() => {
     if (!data) return []
-    console.log(data)
     return data.pages.flat().filter((meeting) => {
       const dist = formatDistanceToNow(new Date(meeting.date), {
         addSuffix: true,
       })
-      return !(!dist.includes('ago') && !meeting.history)
+      return dist.includes('ago') || meeting.history
     })
   }, [data])
 
@@ -52,7 +51,7 @@ function MeetingHistory({}: MeetingHistoryProps) {
       <ScheduleTable meetings={meetings} />
       {hasNextPage && (
         <Button variant={'contained'} onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
-          More Loading
+          View more...
         </Button>
       )}
     </>

@@ -23,6 +23,9 @@ export const UserHeader = styled.div`
   img {
     margin-right: 2rem;
     border-radius: 999px;
+    width: 100px;
+    height: 100px;
+    border: 1px solid #ddd;
   }
 
   button {
@@ -78,16 +81,21 @@ export const Field = styled.div`
   flex: 1;
 `
 
+const FieldStyle = ({ color }: { color: string }) => css`
+  background: ${color};
+`
+
 export const FieldItem = styled.div`
   display: flex;
   align-items: center;
   margin-right: 0.5rem;
   margin-bottom: 0.25rem;
-  background: ${palette.lightBlue[50]};
+  // background: ${palette.lightBlue[50]};
   color: ${palette.blueGrey[600]};
   padding: 0.25rem 0.5rem;
   border-radius: 0.4rem;
   font-size: 0.875rem;
+  ${FieldStyle}
 `
 
 export const NameMailContainer = styled.div`

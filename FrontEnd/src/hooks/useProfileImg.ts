@@ -4,7 +4,7 @@ import { url } from 'gravatar'
 
 const API_PATH = process.env.REACT_APP_API_PATH
 
-export default function useProfileImg(size: number = 60) {
+export default function useProfileImg(size = 60) {
   const queryClient = useQueryClient()
   const user = queryClient.getQueryData<User>('user')
 
@@ -13,6 +13,16 @@ export default function useProfileImg(size: number = 60) {
       `${API_PATH}static/${user.photo_path}`
     : url(user?.email ?? '', {
         s: `${size}px`,
+        d: 'retro',
+      })
+  return { profileSrc }
+}
+
+export function useImg(path?: string, email?: string) {
+  const profileSrc = path
+    ? `${API_PATH}static/${path}`
+    : url(email ?? '', {
+        s: `60px`,
         d: 'retro',
       })
   return { profileSrc }

@@ -10,7 +10,6 @@ import {
   UserBody,
   UserHeader,
 } from './styles'
-import gravatar from 'gravatar'
 import React, { useCallback } from 'react'
 import { Button, ButtonGroup, Grid, Tooltip } from '@mui/material'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
@@ -30,6 +29,8 @@ import EventSelectDialog from 'components/Events/EventSelectDialog'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
 import getCountryName from '../../lib/countryName'
 import { BiWorld } from 'react-icons/bi'
+import { useImg } from '../../hooks/useProfileImg'
+import randomColor from 'randomcolor'
 
 export type UserProps = {}
 
@@ -67,7 +68,7 @@ function User({}: UserProps) {
       toast.error(err.response?.data.message)
     },
   })
-
+  const image_src = useImg(profileData?.photo_path, email)
   const onAddNetwork = useCallback(() => {
     if (!email) return
     addBuddyMutation.mutate(email)
@@ -101,7 +102,7 @@ function User({}: UserProps) {
   return (
     <Container>
       <UserHeader>
-        <img src={gravatar.url(email, { s: '100px', d: 'retro' })} alt={email} />
+        <img src={image_src.profileSrc} alt={email} crossOrigin={'anonymous'} />
         <NameMailContainer>
           <h1>
             {email} {user.email === email && '(나)'}
@@ -178,9 +179,18 @@ function User({}: UserProps) {
         <Field>
           <h3>Fields</h3>
           <Grid container>
-            {profileData.field?.map((elem: string) => (
-              <FieldItem key={elem}>{elem}</FieldItem>
-            ))}
+            {profileData.field?.map((elem: string) => {
+              const color = randomColor({
+                luminosity: 'light',
+                format: 'rgb', // e.g. 'rgb(225,200,20)'
+                seed: elem,
+              })
+              return (
+                <FieldItem key={elem} color={color}>
+                  {elem}
+                </FieldItem>
+              )
+            })}
           </Grid>
         </Field>
       </UserBody>

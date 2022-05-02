@@ -39,7 +39,7 @@ function EventDetailContainer({ id }: EventDetailLeftProps) {
             {event.meeting_list.map((meeting: any) => {
               return (
                 <EventDetailCard
-                  key={meeting.id}
+                  key={meeting._id}
                   from={meeting.ownerEmail}
                   to={meeting.toEmail}
                   comment={meeting.comment}
@@ -48,7 +48,7 @@ function EventDetailContainer({ id }: EventDetailLeftProps) {
                   time={meeting.startTime}
                   title={meeting.title}
                   state={meeting.status}
-                  id={meeting.id}
+                  id={meeting._id}
                 />
               )
             })}

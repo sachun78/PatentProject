@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { TableCell, tableCellClasses, TableRow } from '@mui/material'
 import palette, { brandColor } from '../../lib/palette'
+import { css } from '@emotion/react'
 
 export const ContainerBlock = styled.div`
   position: relative;
@@ -55,6 +56,21 @@ export const MeetingSection = styled.section`
     margin-top: 0.625rem;
   }
 `
+const statusColor = ({ state }: { state: string }) => css`
+  background: ${state === 'replan' && brandColor};
+  background: ${state === 'confirm' && palette.green[400]};
+`
+
+export const StatusBlock = styled.div`
+  padding: 0.5rem 0.75rem;
+  background: #ddd;
+  color: white;
+  font-weight: 600;
+  line-height: 1.5;
+  border-radius: 0.5rem;
+  display: inline-block;
+  ${statusColor}
+`
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -62,15 +78,9 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
     color: '#fff',
     fontWeight: 'bold',
   },
-  [`&.${tableCellClasses.body}`]: {
-    // fontSize: 14,
-  },
 }))
 
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    // backgroundColor: 'grey',
-  },
   // hide last border
   '&:last-child td, &:last-child th': {
     border: 0,

@@ -1,26 +1,30 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useQuery } from 'react-query'
 import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
 import { toast } from 'react-toastify'
 import { Button, Stack } from '@mui/material'
-import { ContainerBlock, MeetingSection } from './styles'
+import { ContainerBlock, MeetingSection, StatusBlock } from './styles'
 import MeetingResult from 'components/Schedules/MeetingResult'
+import { IMeeting } from 'lib/api/types'
+import { formatDistanceToNow } from 'date-fns'
 
 export type MeetingDetailProps = {}
 
 function MeetingDetail({}: MeetingDetailProps) {
   const { id } = useParams()
-  const { data, isLoading, error } = useQuery(
-    ['meeting', id],
-    () => getMeetingOne(id!),
-    {
-      retry: false,
-      enabled: !!id,
-      refetchOnWindowFocus: false,
-      staleTime: 5000,
-    }
-  )
+  const { data, isLoading, error } = useQuery<IMeeting>(['meeting', id], () => getMeetingOne(id!), {
+    retry: false,
+    enabled: !!id,
+    refetchOnWindowFocus: false,
+    staleTime: 5000,
+  })
+
+  const isResult = useMemo(() => {
+    if (!data) return false
+    const dist = formatDistanceToNow(new Date(data?.startTime), { addSuffix: true })
+    return dist.includes('ago') && (data.status === 'confirm' || data.status === 'replan')
+  }, [data])
 
   if (!id) {
     return <Navigate replace to={'/'} />
@@ -39,6 +43,10 @@ function MeetingDetail({}: MeetingDetailProps) {
 
   if (isLoading) {
     return <div>Loading...</div>
+  }
+
+  if (!data) {
+    return <Navigate replace to={'/'} />
   }
 
   return (
@@ -64,7 +72,7 @@ function MeetingDetail({}: MeetingDetailProps) {
           <h2>Schedule Information</h2>
           <p>{data.location}</p>
           <p>
-            {data.date.replace(/T.*$/, '') + ' '}
+            {data.date + ' '}
             {new Date(data.startTime).toLocaleTimeString([], {
               hour: '2-digit',
               minute: '2-digit',
@@ -79,10 +87,12 @@ function MeetingDetail({}: MeetingDetailProps) {
         <MeetingSection>
           <h2>Request Message</h2>
           <div className={'multiline'}>{data.comment} </div>
-          <p>{data.status}</p>
+          <div>
+            <StatusBlock state={data.status}>{data.status}</StatusBlock>
+          </div>
         </MeetingSection>
       </ContainerBlock>
-      {data.status === 'confirm' && <MeetingResult />}
+      {isResult && <MeetingResult />}
     </Stack>
   )
 }

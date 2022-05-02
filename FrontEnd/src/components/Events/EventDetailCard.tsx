@@ -3,8 +3,9 @@ import { Avatar, AvatarGroup } from '@mui/material'
 import { brandColor } from 'lib/palette'
 import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import useProfileImg from 'hooks/useProfileImg'
+import { formatDistanceToNow } from 'date-fns'
 
 export type EventDetailCardProps = {
   id: string
@@ -19,6 +20,12 @@ export type EventDetailCardProps = {
 }
 
 function EventDetailCard({ title, from, to, date, time, place, state, id }: EventDetailCardProps) {
+  const isExpired = useMemo(() => {
+    const dist = formatDistanceToNow(new Date(time), {
+      addSuffix: true,
+    })
+    return dist.includes('ago')
+  }, [])
   const { profileSrc } = useProfileImg()
   return (
     <Link css={wrapper} to={'/meeting/schedule/' + id}>
@@ -48,7 +55,7 @@ function EventDetailCard({ title, from, to, date, time, place, state, id }: Even
         </p>
         <p className={'schedule-place'}>{place}</p>
         <div className={'schedule-state'} css={stateStyle(state)}>
-          {state === 'none' ? 'pending' : state}
+          {state !== 'none' ? state : isExpired ? 'expire' : 'pending'}
         </div>
       </ScheduleDetailContents>
     </Link>
