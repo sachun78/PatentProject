@@ -18,11 +18,12 @@ function PostWrite() {
   const quillInstance = useRef<any>(null)
   const navigate = useNavigate()
   const user = qc.getQueryData<User>('user') as User
-  const [image, setImage] = useState<string[]>()
-  const images = [] as any
-
+  const [image, setImage] = useState<string[]>([])
+  
+  
   const createPostMut = useMutation(createPost, {
     onSuccess: () => {
+      
       toast.success('Posting Successful', {
         position: toast.POSITION.TOP_CENTER,
         pauseOnHover: false,
@@ -41,34 +42,60 @@ function PostWrite() {
     },
   })
 
-  const onSubmit = useCallback(
-    (e) => {
-      e.preventDefault()
-      if (!body.trim()) {
-        toast.error('Please enter the contents', {
-          position: toast.POSITION.TOP_CENTER,
-          pauseOnHover: false,
-          pauseOnFocusLoss: false,
-          autoClose: 3000,
-        })
-        return
-      }
+  const onImageSetting = () => {
+    console.log(quillInstance.current.getContents().ops)
+    // const ops = quillInstance.current.getContents().ops
+    const innerImage = quillInstance.current.getContents().ops.filter((insert: any) => (insert.insert['image'] !== undefined))
+    innerImage.map((insert: any) => {      
+      image.push(insert.insert['image'].slice(29))      
+    })    
+  }
 
-      createPostMut.mutate({
-        contents: body,
-        images: image as string[],
+  const onSubmit = useCallback((e) => {
+    onImageSetting()
+    e.preventDefault()
+    if (!body.trim()) {
+      toast.error('Please enter the contents', {
+        position: toast.POSITION.TOP_CENTER,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 3000,
       })
-    },
-    [body, image]
-  )
+      return
+    }
+
+    createPostMut.mutate({
+      contents: body,
+      images: image as string[],
+    })
+  },[body, image])
 
   const onCancle = () => {
     navigate(-1)
   }
 
-  const imageHandler = () => {
-    console.log('에디터에서 이미지 버튼을 클릭하면 이 핸들러가 시작됩니다!')
+  const makeUUID = (fileName: string) => {
+    function s4() {
+      return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+    }
+    
+    return s4() + s4() + s4() + s4() + s4() + s4() + s4() + s4() + fileName.substring(fileName.indexOf("."), fileName.length + 1);
+  }
 
+  const imageHandler = () => {    
+
+    const ops = quillInstance.current.getContents().ops    
+    const innerImage = ops.filter((insert: any) => (insert.insert['image'] !== undefined))
+    // console.log(innerImage)
+    if(innerImage.length > 3) {
+      toast.success('There are up to four image attachments.', {
+        position: toast.POSITION.TOP_CENTER,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 2000,
+      })
+      return;
+    }
     // 1. 이미지를 저장할 input type=file DOM을 만든다.
     const input: any = document.createElement('input')
     // 속성 써주기
@@ -78,22 +105,21 @@ function PostWrite() {
 
     // input에 변화가 생긴다면 = 이미지를 선택
     input.addEventListener('change', async () => {
-      const file = input.files[0]
-
+      const file = input.files[0]           
       const formData = new FormData()
-      formData.append('post_img', file)
+
+      formData.append('post_img', file, makeUUID(file.name))
+      
 
       postImgUpload(formData).then((res) => {
-        res.files.map((file: any) => {
+        
           quillInstance.current.root.innerHTML =
             quillInstance.current.root.innerHTML +
-            `<img src='${API_PATH}static/${file.filename}' crossorigin='anonymous'>`
-
-          images.push(file.filename)
-        })
-      })
-      console.log(images)
-      setImage(images)
+            `<img src='${API_PATH}static/${res.fileName}' crossorigin='anonymous'>`        
+          
+        
+      })      
+      
     })
   }
 

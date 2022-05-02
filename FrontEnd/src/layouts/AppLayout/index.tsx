@@ -50,7 +50,7 @@ export default function AppLayout({}: AppLayoutProps) {
           <Route path="/u/:email" element={<User />} />
           <Route path="/*" element={<div>404 NOT FOUND</div>} />
           <Route path="/postWrite/" element={<PostWrite />} />
-          <Route path="/postEdit/" element={<PostEdit />} />
+          <Route path="/postEdit/:id" element={<PostEdit />} />
         </Routes>
       </AppLayout.Main>
       <AppLayout.Footer>

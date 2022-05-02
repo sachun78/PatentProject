@@ -34,7 +34,7 @@ const PostActionButtons = ({ _id }: postActionButtonsProps) => {
   }, [deletePostlMut, _id])
 
   const onEdit = () => {
-    navigate('/PostEdit/', { state: _id })
+    navigate(`/PostEdit/${_id}`)
   }
 
   return (
