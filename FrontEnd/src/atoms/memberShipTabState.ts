@@ -7,5 +7,5 @@ export const eventSwitchState = atom({
 
 export const meetingSwitchState = atom({
   key: 'meetingSwitchState',
-  default: true,
+  default: false,
 })

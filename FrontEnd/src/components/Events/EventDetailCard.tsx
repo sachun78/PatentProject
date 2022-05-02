@@ -25,8 +25,9 @@ function EventDetailCard({ title, from, to, date, time, place, state, id }: Even
       addSuffix: true,
     })
     return dist.includes('ago')
-  }, [])
+  }, [time])
   const { profileSrc } = useProfileImg()
+
   return (
     <Link css={wrapper} to={'/meeting/schedule/' + id}>
       <h1>{title}</h1>
@@ -55,7 +56,7 @@ function EventDetailCard({ title, from, to, date, time, place, state, id }: Even
         </p>
         <p className={'schedule-place'}>{place}</p>
         <div className={'schedule-state'} css={stateStyle(state)}>
-          {state !== 'none' ? state : isExpired ? 'expire' : 'pending'}
+          {state !== 'none' ? state : isExpired ? 'expired' : 'pending'}
         </div>
       </ScheduleDetailContents>
     </Link>
@@ -134,6 +135,7 @@ const ScheduleDetailContents = styled.section`
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    margin-bottom: 4px;
   }
 
   .schedule-state {

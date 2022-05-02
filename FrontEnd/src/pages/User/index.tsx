@@ -17,7 +17,6 @@ import { User as UserType } from 'lib/api/types'
 import useBuddyQuery from 'hooks/query/useBuddyQuery'
 import { IoMdMail } from 'react-icons/io'
 import { MdOutlineSafetyDivider, MdOutlineWork, MdPersonAdd, MdPersonRemove } from 'react-icons/md'
-import { GrUserManager } from 'react-icons/gr'
 import { getProfilebyEmail } from 'lib/api/me/getProfile'
 import { toast } from 'react-toastify'
 import { addBuddy } from 'lib/api/buddy/addBuddy'
@@ -27,10 +26,12 @@ import { useRecoilState } from 'recoil'
 import { eventSelectModalState } from 'atoms/eventState'
 import EventSelectDialog from 'components/Events/EventSelectDialog'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
-import getCountryName from '../../lib/countryName'
+import getCountryName from 'lib/countryName'
 import { BiWorld } from 'react-icons/bi'
-import { useImg } from '../../hooks/useProfileImg'
+import { useImg } from 'hooks/useProfileImg'
 import randomColor from 'randomcolor'
+import { brandColor } from 'lib/palette'
+import { BsFilePerson } from 'react-icons/bs'
 
 export type UserProps = {}
 
@@ -122,7 +123,7 @@ function User({}: UserProps) {
           )}
           {user.email !== email && (
             <Button onClick={onRequestMeeting} variant={'contained'}>
-              Request Meeting
+              Request
             </Button>
           )}
         </ButtonGroup>
@@ -150,7 +151,7 @@ function User({}: UserProps) {
           </Tooltip>
           <Tooltip title="Position" placement={'left'}>
             <span>
-              <GrUserManager /> {profileData.position}
+              <BsFilePerson /> {profileData.position}
             </span>
           </Tooltip>
           <Tooltip title="Department" placement={'left'}>
@@ -181,7 +182,7 @@ function User({}: UserProps) {
           <Grid container>
             {profileData.field?.map((elem: string) => {
               const color = randomColor({
-                luminosity: 'light',
+                hue: brandColor,
                 format: 'rgb', // e.g. 'rgb(225,200,20)'
                 seed: elem,
               })

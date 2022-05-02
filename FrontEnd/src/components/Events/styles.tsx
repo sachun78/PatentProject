@@ -43,8 +43,8 @@ export const OptionContainer = styled.div`
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.4);
-  padding: 0.5rem 1rem;
-  border-radius: 1rem;
+  padding: 0.25rem 0 0 1rem;
+  border-radius: 0.5rem;
 `
 export const SearchContainer = styled.div`
   display: flex;

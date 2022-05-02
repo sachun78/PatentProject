@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import palette from 'lib/palette'
+import palette, { brandColor } from 'lib/palette'
 
 export const Container = styled.div`
   max-width: 90rem;
@@ -59,7 +59,7 @@ export const Summary = styled.div`
     display: flex;
     align-items: center;
     margin-bottom: 1rem;
-    color: ${palette.blueGrey[600]};
+    color: ${brandColor};
   }
 `
 
@@ -91,7 +91,7 @@ export const FieldItem = styled.div`
   margin-right: 0.5rem;
   margin-bottom: 0.25rem;
   // background: ${palette.lightBlue[50]};
-  color: ${palette.blueGrey[600]};
+  color: white;
   padding: 0.25rem 0.5rem;
   border-radius: 0.4rem;
   font-size: 0.875rem;

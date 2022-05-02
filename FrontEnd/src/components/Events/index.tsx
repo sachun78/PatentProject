@@ -41,6 +41,14 @@ function Events({}: EventsProps) {
       </div>
     )
 
+  if (!data)
+    return (
+      <div css={noScheduleStyle}>
+        <IconControl name={'welcome'} />
+        <div>No Schedule</div>
+      </div>
+    )
+
   if (data && data.length === 0) {
     return (
       <>
@@ -89,7 +97,7 @@ function Events({}: EventsProps) {
         <EventCalendar />
       ) : (
         <div css={wrapper}>
-          {data?.map((event) => {
+          {[...data].reverse().map((event) => {
             const dist = formatDistanceToNow(new Date(event.end_date), {
               addSuffix: true,
             })

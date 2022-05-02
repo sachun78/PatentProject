@@ -6,15 +6,19 @@ import { createMeeting } from 'lib/api/meeting/createMeeting'
 import LocationInput from 'components/LocationMap/LocationInput'
 import RequestSection from './RequestSection'
 import { toast } from 'react-toastify'
-import { buttonStyle, sectionStyle } from './styles'
+import { buttonStyle, FlexRow, sectionStyle } from './styles'
 import { Navigate, useNavigate } from 'react-router-dom'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
 import { useMutation, useQuery } from 'react-query'
-import { Button, OutlinedInput } from '@mui/material'
+import { Avatar, Box, Button, OutlinedInput } from '@mui/material'
 import { ContainerBlock } from 'pages/Meeting/styles'
 import { getEvent } from 'lib/api/event/getEvent'
 import TimeGridInput from 'components/DatePickerInput/TimeGridInput'
+import { getProfilebyEmail } from '../../../../lib/api/me/getProfile'
+import { brandColor } from '../../../../lib/palette'
+import { API_PATH } from '../../../../lib/api/client'
+import getCountryName from '../../../../lib/countryName'
 
 type RequestViewProps = {}
 
@@ -35,6 +39,16 @@ export default function RequestForm({}: RequestViewProps) {
   const { data: event, isLoading } = useQuery(['event', curEvent.id], getEvent, {
     enabled: !!curEvent.id,
     retry: false,
+  })
+
+  const {
+    data: profileData,
+    isLoading: isLoadingProfile,
+    refetch,
+  } = useQuery(['profile', form.to], getProfilebyEmail, {
+    enabled: false,
+    retry: false,
+    staleTime: 5000,
   })
 
   const createScheduleMut = useMutation(createMeeting, {
@@ -78,6 +92,13 @@ export default function RequestForm({}: RequestViewProps) {
   const onChangeLocation = useCallback((change: string) => {
     setLoaction(change)
   }, [])
+
+  const onBlur = useCallback(() => {
+    if (!form.to.trim()) {
+      return
+    }
+    refetch()
+  }, [form.to, profileData, refetch])
 
   const onSubmit = useCallback(
     (e) => {
@@ -151,12 +172,37 @@ export default function RequestForm({}: RequestViewProps) {
               type={'email'}
               value={form.to}
               onChange={onChange}
+              onBlur={onBlur}
               placeholder={'Meeting Email'}
               fullWidth
               style={{ height: '38px', backgroundColor: '#fff' }}
             />
           )}
         </RequestSection>
+        {profileData && (
+          <Box style={{ background: brandColor, color: '#fff', padding: '4px', borderRadius: '8px', margin: '4px' }}>
+            <h3>Member</h3>
+            <FlexRow>
+              {profileData.photo_path && (
+                <Avatar
+                  alt={'photo'}
+                  src={`${API_PATH}static/${profileData.photo_path}`}
+                  sx={{ width: 44, height: 44, marginRight: 1, marginLeft: 1 }}
+                  imgProps={{ crossOrigin: 'anonymous' }}
+                />
+              )}
+              <div>
+                <p>{profileData.username}</p>
+                <p>
+                  {profileData.company + ' ' + getCountryName(profileData.country ?? 'KR')}
+                  {profileData.field?.map((item) => (
+                    <span key={item}>{' ' + item} </span>
+                  ))}
+                </p>
+              </div>
+            </FlexRow>
+          </Box>
+        )}
         <RequestSection title={'Select Date'}>
           <TimeGridInput
             startTime={time}
@@ -165,7 +211,6 @@ export default function RequestForm({}: RequestViewProps) {
             startDate={startDate}
             endDate={endDate}
             timeChange={(sDate: Date, eDate: Date) => {
-              console.log(sDate, eDate)
               onChangeTime(sDate)
               onChangeEndTime(eDate)
             }}

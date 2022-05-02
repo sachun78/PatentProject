@@ -50,7 +50,7 @@ function MeetingResult({}: MeetingResultProps) {
   const imgUplaodMut = useMutation(upload, {
     onSuccess: (res) => {
       console.log(res)
-      setFilePath(res.files.filename)
+      setFilePath(res.fileName)
     },
   })
   const onImgUpload = useCallback(
@@ -159,7 +159,14 @@ function MeetingResult({}: MeetingResultProps) {
             {metData.history.photopath && (
               <MeetingSection>
                 <h2>Photo</h2>
-                <Box component="span" sx={{ p: 1 }}>
+                <Box
+                  component="span"
+                  sx={{ p: 1 }}
+                  onClick={(e: React.MouseEvent) => {
+                    fileRef?.current?.click()
+                    e.preventDefault()
+                  }}
+                >
                   <img
                     src={`${API_PATH}static/${metData.history.photopath}`}
                     alt={'result_photo'}

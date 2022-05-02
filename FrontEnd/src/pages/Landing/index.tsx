@@ -10,7 +10,9 @@ function Landing({}: LandingProps) {
   return (
     <>
       <Header>
-        <div>logo- Wemet</div>
+        <div className={'logo'}>
+          <img src={'/assets/wemet_logo.png'} alt={'logo'} />
+        </div>
         <ul>
           <li>
             <Link to={'/login'}>Login</Link>

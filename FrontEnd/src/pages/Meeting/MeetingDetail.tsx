@@ -7,7 +7,7 @@ import { Button, Stack } from '@mui/material'
 import { ContainerBlock, MeetingSection, StatusBlock } from './styles'
 import MeetingResult from 'components/Schedules/MeetingResult'
 import { IMeeting } from 'lib/api/types'
-import { formatDistanceToNow } from 'date-fns'
+import { format, formatDistanceToNow } from 'date-fns'
 
 export type MeetingDetailProps = {}
 
@@ -19,6 +19,14 @@ function MeetingDetail({}: MeetingDetailProps) {
     refetchOnWindowFocus: false,
     staleTime: 5000,
   })
+
+  const isExpired = useMemo(() => {
+    if (!data) return false
+    const dist = formatDistanceToNow(new Date(data.startTime), {
+      addSuffix: true,
+    })
+    return dist.includes('ago')
+  }, [data])
 
   const isResult = useMemo(() => {
     if (!data) return false
@@ -46,7 +54,7 @@ function MeetingDetail({}: MeetingDetailProps) {
   }
 
   if (!data) {
-    return <Navigate replace to={'/'} />
+    return <div>Meeting not valid</div>
   }
 
   return (
@@ -72,7 +80,7 @@ function MeetingDetail({}: MeetingDetailProps) {
           <h2>Schedule Information</h2>
           <p>{data.location}</p>
           <p>
-            {data.date + ' '}
+            {format(new Date(data?.date), 'yyyy-MM-dd') + ' '}
             {new Date(data.startTime).toLocaleTimeString([], {
               hour: '2-digit',
               minute: '2-digit',
@@ -85,10 +93,15 @@ function MeetingDetail({}: MeetingDetailProps) {
           </p>
         </MeetingSection>
         <MeetingSection>
-          <h2>Request Message</h2>
+          <h2>Message</h2>
           <div className={'multiline'}>{data.comment} </div>
+        </MeetingSection>
+        <MeetingSection>
+          <h2>Status</h2>
           <div>
-            <StatusBlock state={data.status}>{data.status}</StatusBlock>
+            <StatusBlock state={data.status}>
+              {data.status !== 'none' ? data.status : isExpired ? 'expired' : 'pending'}
+            </StatusBlock>
           </div>
         </MeetingSection>
       </ContainerBlock>

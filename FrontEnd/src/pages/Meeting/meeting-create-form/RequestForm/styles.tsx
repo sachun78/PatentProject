@@ -1,4 +1,5 @@
 import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 
 export const wrapper = css`
   margin-right: 2rem;
@@ -17,4 +18,10 @@ export const buttonStyle = css`
   width: 100%;
 
   border-radius: 0.5rem;
+`
+
+export const FlexRow = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
 `

@@ -2,7 +2,6 @@ import { mainStyle } from './styles'
 import { IReplan } from '../../lib/api/types'
 import useInput from 'hooks/useInput'
 import RequestSection from 'pages/Meeting/meeting-create-form/RequestForm/RequestSection'
-import LocationInput from '../LocationMap/LocationInput'
 import { Button, OutlinedInput, Typography } from '@mui/material'
 import React, { useCallback, useMemo } from 'react'
 import { replanMeeting } from '../../lib/api/meeting/replanMeeting'
@@ -15,19 +14,13 @@ export type BookingRepalnMainProps = {
 }
 
 export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
-  const [location, , onChangeLocation] = useInput(meeting.data.location)
+  const [location] = useInput(meeting.data.location)
   const [date, , setDate] = useInput(new Date(meeting.data.date))
   const [startTime, , setStartTime] = useInput(new Date(meeting.data.startTime))
   const [endTime, , setEndTime] = useInput(new Date(meeting.data.endTime))
   const [comment, onChangeComment] = useInput('')
-  const eventStart = useMemo(
-    () => new Date(meeting.sendData.event_startDate),
-    [meeting.sendData.event_startDate]
-  )
-  const eventEnd = useMemo(
-    () => new Date(meeting.sendData.event_endDate),
-    [meeting.sendData.event_endDate]
-  )
+  const eventStart = useMemo(() => new Date(meeting.sendData.event_startDate), [meeting.sendData.event_startDate])
+  const eventEnd = useMemo(() => new Date(meeting.sendData.event_endDate), [meeting.sendData.event_endDate])
 
   const qc = useQueryClient()
   const replanMut = useMutation(replanMeeting, {
@@ -75,10 +68,11 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
   )
 
   if (meeting.data.status !== 'none') {
+    const isReplan = meeting.data.status === 'replan'
     return (
       <div css={mainStyle}>
         <Typography variant="h5">
-          Confirmation or Rescheduling has been completed.
+          {isReplan ? 'Rescheduling has been completed.' : 'Already Confirm or Cancel!!'}
         </Typography>
         <Link to={'/'} style={{ textAlign: 'center', marginTop: '1rem' }}>
           Back
@@ -105,14 +99,7 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
             dateChange={onDateChange}
           />
         </RequestSection>
-        <RequestSection title={'Location'}>
-          <LocationInput
-            onChange={(value: any) => {
-              onChangeLocation(value)
-            }}
-            value={location}
-          />
-        </RequestSection>
+        <RequestSection title={'Location'}>{location}</RequestSection>
         <RequestSection title={'Comment'}>
           <OutlinedInput
             placeholder="Leave a comment"

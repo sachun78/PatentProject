@@ -1,14 +1,14 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import IconControl from '../IconControl'
 import { labelStyle, noScheduleStyle } from './styles'
 import { Button, FormControlLabel, FormGroup, SelectChangeEvent, Switch } from '@mui/material'
 import ScheduleCalendar from './ScheduleCalendar'
 import { meetingSwitchState } from 'atoms/memberShipTabState'
 import { useRecoilState } from 'recoil'
-import { formatDistanceToNow } from 'date-fns'
 import ScheduleTable from './ScheduleTable'
 import { OptionContainer, SearchContainer } from 'components/Events/styles'
 import SearchBox from '../SearchBox'
+import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
 import { getMeetingsCursor } from 'lib/api/meeting/getMeetings'
 
@@ -19,6 +19,7 @@ function Schedules({}: ScheduleViewProps) {
   const [checked, setChecked] = useRecoilState(meetingSwitchState)
   const [meetingFilter, setMeetingFilter] = useState('')
   const [type, setType] = useState<searchSelect>('title')
+  const { ref, inView } = useInView()
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
     ['meetings', meetingFilter, type],
@@ -33,6 +34,12 @@ function Schedules({}: ScheduleViewProps) {
     }
   )
 
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage()
+    }
+  }, [inView])
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked)
   }
@@ -45,10 +52,7 @@ function Schedules({}: ScheduleViewProps) {
   const meetings = useMemo(() => {
     if (!data) return []
     return data.pages.flat().filter((meeting) => {
-      const dist = formatDistanceToNow(new Date(meeting.startTime), {
-        addSuffix: true,
-      })
-      return !dist.includes('ago') && !meeting.history
+      return !meeting.history
     })
   }, [data])
 
@@ -87,8 +91,13 @@ function Schedules({}: ScheduleViewProps) {
         )}
       </FormGroup>
       {checked ? <ScheduleCalendar meetings={meetings} /> : <ScheduleTable meetings={meetings} />}
-      {!checked && hasNextPage && (
-        <Button variant={'contained'} onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+      {!meetingFilter && !checked && hasNextPage && (
+        <Button
+          ref={ref}
+          variant={'contained'}
+          onClick={() => fetchNextPage()}
+          disabled={isFetchingNextPage || !hasNextPage}
+        >
           View more...
         </Button>
       )}
