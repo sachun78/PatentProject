@@ -10,6 +10,7 @@ import { FieldItem } from 'pages/User/styles'
 import getCountryName from 'lib/countryName'
 import randomColor from 'randomcolor'
 import { BsFilePerson } from 'react-icons/bs'
+import { API_PATH } from '../../lib/api/client'
 
 export type NetworkItemProps = {
   data: { email: string; profile: IProfile }
@@ -22,9 +23,13 @@ function NetworkItem({ data }: NetworkItemProps) {
       <div css={iconStyle}>
         <Avatar
           alt="user-avatar"
-          src={gravatar.url(data.email, { s: '60px', d: 'retro' })}
+          src={API_PATH + 'static/' + data.email}
           sx={{ width: 60, height: 60 }}
-        />
+          style={{ border: '0.1px solid lightgray' }}
+          imgProps={{ crossOrigin: 'anonymous' }}
+        >
+          <img src={gravatar.url(data.email, { s: '60px', d: 'retro' })} alt={'fallback-img'} />
+        </Avatar>
       </div>
       <div css={nameStyle}>{data.email}</div>
       <div css={informStyle}>

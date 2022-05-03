@@ -21,6 +21,7 @@ function MeetingHistory({}: MeetingHistoryProps) {
         if (!morePagesExist) return false
         return pages.flat().length - 1
       },
+      enabled: false,
     }
   )
 

@@ -13,7 +13,7 @@ export type EventSelectModalProps = {}
 
 function EventSelectDialog({}: EventSelectModalProps) {
   const [open, setOpen] = useRecoilState(eventSelectModalState)
-  const { data: events, isLoading } = useEventQuery(1)
+  const { data: events, isLoading } = useEventQuery()
   const [index, setIndex] = useState(0)
   const [animationState, setAnimationState] = useState(false)
   const { setStartDate, setEndDate } = useDateRangeHook()
@@ -59,7 +59,7 @@ function EventSelectDialog({}: EventSelectModalProps) {
     }
   }, [])
 
-  if (!events) {
+  if (!events || events.length === 0) {
     return null
   }
 

@@ -12,7 +12,7 @@ import { formatDistanceToNow } from 'date-fns'
 export type ScheduleCalendarProps = {}
 
 function EventCalendar({}: ScheduleCalendarProps) {
-  const { data } = useEventQuery(1, { enabled: false })
+  const { data } = useEventQuery({ enabled: false })
   const navigate = useNavigate()
   const calendarRef = useRef<FullCalendar | null>(null)
   const calendarEvents = useMemo(() => {

@@ -9,8 +9,7 @@ import ProfileCardField from './ProfileCardField'
 import ProfileCardEmail from './ProfileCardEmail'
 import ProfileCardCountry from './ProfileCardCountry'
 import ProfileCardSave from './ProfileCardSave'
-import { useQueryClient } from 'react-query'
-import useProfileImg from '../../hooks/useProfileImg'
+import useProfileImg from 'hooks/useProfileImg'
 
 export type ProfileCardProps = {
   children: React.ReactNode
@@ -39,16 +38,17 @@ export type ProfileCardItemProps = {
 }
 
 function ProfileCardItem({ title, type, email, username }: ProfileCardItemProps) {
-  const queryClient = useQueryClient()
   const fileRef = useRef<HTMLInputElement>(null)
   const { profileSrc } = useProfileImg()
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
     const file = e.target.files?.[0]
     if (file) {
       const formData = new FormData()
       formData.append('profile_img', file)
-      upload(formData).then(() => queryClient.invalidateQueries('user'))
+      upload(formData).then(() => {
+        window.location.reload()
+      })
     }
   }
 

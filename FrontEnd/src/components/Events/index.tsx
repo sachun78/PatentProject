@@ -18,7 +18,7 @@ import { useCurrentEventState } from '../../atoms/eventState'
 type EventsProps = {}
 
 function Events({}: EventsProps) {
-  const { data, isLoading } = useEventQuery(1, { staleTime: 2000 })
+  const { data, isLoading } = useEventQuery({ staleTime: 2000 })
   const { setOpen, setEdit } = useEventModal()
   const { setStartDate, setEndDate } = useDateRangeHook()
   const [checked, setChecked] = useRecoilState(eventSwitchState)
