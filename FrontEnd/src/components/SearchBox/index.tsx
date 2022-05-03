@@ -7,10 +7,11 @@ import { searchSelect } from '../Schedules'
 export type SearchBoxProps = {
   filter: Dispatch<string>
   type: searchSelect
+  setType: Dispatch<searchSelect>
   onTypeChange: (e: SelectChangeEvent) => void
 }
 
-function SearchBox({ filter, type, onTypeChange }: SearchBoxProps) {
+function SearchBox({ filter, type, onTypeChange, setType }: SearchBoxProps) {
   const [value, setValue] = useSearchInputState()
 
   const onChange = useCallback(
@@ -25,9 +26,10 @@ function SearchBox({ filter, type, onTypeChange }: SearchBoxProps) {
       e.preventDefault()
       // value 가 이메일 타입이 아닌경우
       filter(value)
+      setType(type)
       setValue('')
     },
-    [filter, setValue, value]
+    [filter, setType, setValue, type, value]
   )
   return (
     <Paper

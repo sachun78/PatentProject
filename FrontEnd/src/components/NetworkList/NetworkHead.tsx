@@ -34,6 +34,7 @@ const HeadStyle = css`
   }
 
   max-width: 60rem;
+  margin-right: 1rem;
   display: flex;
   justify-content: space-between;
 `

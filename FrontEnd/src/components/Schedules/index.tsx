@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import IconControl from '../IconControl'
-import { labelStyle, noScheduleStyle } from './styles'
-import { Button, FormControlLabel, FormGroup, SelectChangeEvent, Switch } from '@mui/material'
+import { noScheduleStyle } from './styles'
+import { Button, FormGroup, SelectChangeEvent, Switch } from '@mui/material'
 import ScheduleCalendar from './ScheduleCalendar'
 import { meetingSwitchState } from 'atoms/memberShipTabState'
 import { useRecoilState } from 'recoil'
 import ScheduleTable from './ScheduleTable'
-import { OptionContainer, SearchContainer } from 'components/Events/styles'
+import { SearchContainer } from 'components/Events/styles'
 import SearchBox from '../SearchBox'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
@@ -19,11 +19,12 @@ function Schedules({}: ScheduleViewProps) {
   const [checked, setChecked] = useRecoilState(meetingSwitchState)
   const [meetingFilter, setMeetingFilter] = useState('')
   const [type, setType] = useState<searchSelect>('title')
+  const [searchType, setSearchType] = useState<searchSelect>('title')
   const { ref, inView } = useInView()
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
-    ['meetings', meetingFilter, type],
-    ({ pageParam = 0 }) => getMeetingsCursor(meetingFilter, type, pageParam),
+    ['meetings', meetingFilter, searchType],
+    ({ pageParam = 0 }) => getMeetingsCursor(meetingFilter, searchType, pageParam),
     {
       getNextPageParam: (lastPage, pages) => {
         // page 길이 5이면
@@ -38,11 +39,11 @@ function Schedules({}: ScheduleViewProps) {
     if (inView) {
       fetchNextPage()
     }
-  }, [inView])
+  }, [fetchNextPage, inView])
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked)
-  }
+  }, [])
 
   const onTypeChange = useCallback((event: SelectChangeEvent) => {
     console.log(event.target.value)
@@ -68,27 +69,22 @@ function Schedules({}: ScheduleViewProps) {
 
   return (
     <>
-      <FormGroup row={true} style={{ marginBottom: '0.625rem', maxWidth: '60rem' }}>
-        <OptionContainer>
-          <FormControlLabel
-            control={
-              <Switch
-                edge={'end'}
-                checked={checked}
-                onChange={handleChange}
-                name={'checked'}
-                inputProps={{ 'aria-label': 'schedule-calendar' }}
-              />
-            }
-            label={checked ? 'CALENDAR' : 'CARD'}
-            css={labelStyle}
-          />
-        </OptionContainer>
+      <FormGroup
+        row={true}
+        style={{ marginBottom: '0.625rem', maxWidth: '80.3125rem', display: 'flex', justifyContent: 'flex-end' }}
+      >
         {!checked && (
-          <SearchContainer style={{ marginLeft: '0.5rem' }}>
-            <SearchBox filter={setMeetingFilter} onTypeChange={onTypeChange} type={type} />
+          <SearchContainer>
+            <SearchBox filter={setMeetingFilter} onTypeChange={onTypeChange} type={type} setType={setSearchType} />
           </SearchContainer>
         )}
+        <Switch
+          edge={'end'}
+          checked={checked}
+          onChange={handleChange}
+          name={'checked'}
+          inputProps={{ 'aria-label': 'schedule-calendar' }}
+        />
       </FormGroup>
       {checked ? <ScheduleCalendar meetings={meetings} /> : <ScheduleTable meetings={meetings} />}
       {!meetingFilter && !checked && hasNextPage && (

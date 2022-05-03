@@ -8,7 +8,6 @@ import loadable from '@loadable/component'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import 'react-toastify/dist/ReactToastify.min.css'
 import { ToastContainer } from 'react-toastify'
-import InitialInputModal from './components/InitialInputModal'
 
 const Login = loadable(() => import('pages/Login'))
 const SignUp = loadable(() => import('pages/Signup'))
@@ -35,7 +34,6 @@ function App() {
       </Routes>
       <Global styles={globalStyle} />
       <ToastContainer />
-      <InitialInputModal />
     </>
   )
 }

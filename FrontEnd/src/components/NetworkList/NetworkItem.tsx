@@ -108,6 +108,7 @@ const nameStyle = css`
 
 const informStyle = css`
   display: flex;
+  flex: 1;
   flex-direction: column;
   font-size: 0.875rem;
   color: ${palette.grey[400]};
@@ -128,7 +129,6 @@ const stateStyle = css`
   margin-right: 1rem;
   font-size: 1.2rem;
   font-weight: 600;
-  flex-grow: 1;
   text-align: right;
   justify-content: flex-end;
 

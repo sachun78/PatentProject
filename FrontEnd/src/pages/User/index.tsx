@@ -31,7 +31,7 @@ import { useImg } from 'hooks/useProfileImg'
 import randomColor from 'randomcolor'
 import { brandColor } from 'lib/palette'
 import { BsFilePerson } from 'react-icons/bs'
-import EventSelectDialog from '../../components/Events/EventSelectDialog'
+import EventSelectDialog from 'components/Events/EventSelectDialog'
 
 export type UserProps = {}
 
@@ -123,7 +123,7 @@ function User({}: UserProps) {
           )}
           {user.email !== email && (
             <Button onClick={onRequestMeeting} variant={'contained'}>
-              Request
+              Invite
             </Button>
           )}
         </ButtonGroup>

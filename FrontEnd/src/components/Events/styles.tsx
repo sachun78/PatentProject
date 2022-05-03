@@ -42,7 +42,8 @@ export const OptionContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.4);
+  height: 2.5rem;
+  background: rgba(255, 255, 255, 0.8);
   padding: 0.25rem 0 0 1rem;
   border-radius: 0.5rem;
 `

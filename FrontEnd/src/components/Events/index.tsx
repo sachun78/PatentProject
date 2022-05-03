@@ -4,16 +4,15 @@ import IconControl from 'components/IconControl/IconControl'
 import useEventQuery from 'hooks/query/useEventQuery'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import { useEventModal } from 'hooks/useEventTitle'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { eventSwitchState } from 'atoms/memberShipTabState'
 import EventCalendar from './EventCalendar'
 import EventCard from './EventCard'
 import EventModal from './EventModal'
-import { noScheduleStyle, OptionContainer, wrapper } from './styles'
-import { labelStyle } from '../Schedules/styles'
+import { noScheduleStyle, wrapper } from './styles'
 import { formatDistanceToNow } from 'date-fns'
-import { useCurrentEventState } from '../../atoms/eventState'
+import { useCurrentEventState } from 'atoms/eventState'
 
 type EventsProps = {}
 
@@ -25,12 +24,15 @@ function Events({}: EventsProps) {
   const [outdateChecked, setOutdateChecked] = useState(false)
   const [, setEvent] = useCurrentEventState()
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked)
-  }
-  const onOutdateChange = () => {
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setChecked(event.target.checked)
+    },
+    [setChecked]
+  )
+  const onOutdateChange = useCallback(() => {
     setOutdateChecked((prev) => !prev)
-  }
+  }, [])
 
   if (isLoading)
     return (
@@ -41,15 +43,7 @@ function Events({}: EventsProps) {
       </div>
     )
 
-  if (!data)
-    return (
-      <div css={noScheduleStyle}>
-        <IconControl name={'welcome'} />
-        <div>No Schedule</div>
-      </div>
-    )
-
-  if (data && data.length === 0) {
+  if (!data || data.length === 0) {
     return (
       <>
         <div css={noScheduleStyle}>
@@ -78,20 +72,14 @@ function Events({}: EventsProps) {
 
   return (
     <>
-      <FormGroup row={true} style={{ marginBottom: '20px' }}>
-        <OptionContainer>
+      <FormGroup row={true} style={{ marginBottom: '20px', display: 'flex', justifyContent: 'flex-start' }}>
+        <Switch checked={checked} onChange={handleChange} name={'checked'} centerRipple={true} />
+        {!checked && (
           <FormControlLabel
-            control={<Switch checked={checked} onChange={handleChange} name={'checked'} centerRipple={true} />}
-            label={checked ? 'CALENDAR' : 'CARD'}
-            css={labelStyle}
+            control={<Checkbox checked={outdateChecked} onChange={onOutdateChange} />}
+            label="Outdated"
           />
-          {!checked && (
-            <FormControlLabel
-              control={<Checkbox checked={outdateChecked} onChange={onOutdateChange} />}
-              label="Outdated"
-            />
-          )}
-        </OptionContainer>
+        )}
       </FormGroup>
       {checked ? (
         <EventCalendar />
@@ -120,7 +108,7 @@ function Events({}: EventsProps) {
       )}
 
       <Fab
-        sx={{ position: 'fixed', bottom: 103, right: 32, zIndex: 10 }}
+        sx={{ position: 'fixed', bottom: 103, right: '2rem', zIndex: 10 }}
         color="primary"
         onClick={() => {
           setOpen(true)

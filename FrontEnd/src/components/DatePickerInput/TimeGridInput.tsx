@@ -112,6 +112,7 @@ function TimeGridInput({
                 info.view.calendar.unselect()
                 setOpen(false)
               }}
+              nowIndicator={true}
               events={reserve_event}
               selectAllow={(selectInfo) => {
                 let startDate = selectInfo.start
@@ -248,6 +249,10 @@ const CalendarContainer = styled.div`
     opacity: 0.65 !important;
     margin-left: 12px !important;
     padding: 5px !important;
+  }
+
+  .fc-day-today {
+    background: #fff !important;
   }
 `
 
