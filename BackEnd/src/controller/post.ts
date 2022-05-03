@@ -87,7 +87,7 @@ export async function createPost(req: IRequest, res: Response) {
     if (userData) {
       postData['owner_id'] = userData.id;
       postData['owner_username'] = userData.username;
-      postData['owner_thumb'] = userData.photo_path;
+      postData['owner_email'] = userData.email;
     }
     else {
       return res.status(409).json({ message: 'user is not found'});
