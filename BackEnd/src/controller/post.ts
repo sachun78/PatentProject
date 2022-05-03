@@ -184,7 +184,7 @@ export async function createComment(req: IRequest, res: Response) {
     comment['id'] = shortid.generate();
     comment['owner_id'] = user.id;
     comment['owner_username'] = user.username;
-    comment['owner_thumb'] = user.photo_path;
+    comment['owner_email'] = user.email;
 
     const findPost = await postRepo.findById(postId);
     if (!findPost) {
