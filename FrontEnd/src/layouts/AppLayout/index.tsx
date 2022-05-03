@@ -1,18 +1,18 @@
-import React from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
-import Sponsor from 'components/Sponsor'
-import Sidebar from 'components/Sidebar'
-import { footerStyle, mainStyle, sidebarStyle } from './styles'
-import useUserQuery from 'hooks/query/useUserQuery'
 import loadable from '@loadable/component'
 import { Backdrop, CircularProgress } from '@mui/material'
+import Sidebar from 'components/Sidebar'
+import Sponsor from 'components/Sponsor'
+import useUserQuery from 'hooks/query/useUserQuery'
+import React from 'react'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import User from '../../pages/User'
+import { footerStyle, mainStyle, sidebarStyle } from './styles'
 
 const Home = loadable(() => import('pages/Home'))
 const Profile = loadable(() => import('pages/Profile'))
 const Member = loadable(() => import('pages/Member'))
 const Network = loadable(() => import('pages/Network'))
-const Conference = loadable(() => import('pages/Conference'))
+const Conference = loadable(() => import('pages/Conference/Conference'))
 const PostDetail = loadable(() => import('components/Post/PostDetail'))
 const PostWrite = loadable(() => import('components/Post/PostWrite'))
 const PostEdit = loadable(() => import('components/Post/PostEdit'))
