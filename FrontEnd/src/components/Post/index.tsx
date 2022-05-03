@@ -10,7 +10,7 @@ import PostImageContainer from './PostImageContainer'
 type PostProps = {
   _id: string
   owner_username: string
-  owner_thumb: string
+  owner_email: string
   owner_id: string
   like_cnt: string[]
   contents: string
@@ -19,10 +19,10 @@ type PostProps = {
   createdAt: Date
 }
 
-function Post({ _id, owner_username, owner_thumb, like_cnt, comment, images, createdAt, contents }: PostProps) {
+function Post({ _id, owner_username, owner_email, like_cnt, comment, images, createdAt, contents }: PostProps) {
   return (
     <div css={postStyle}>
-      <PostHeader owner_username={owner_username} owner_thumb={owner_thumb} createdAt={createdAt} />
+      <PostHeader owner_username={owner_username} owner_email={owner_email} createdAt={createdAt} />
       <Link to={`/postDetail/${_id}`}>
         <PostImageContainer images={images} />
         <div css={bodyStyle}>{contents}</div>
@@ -30,7 +30,7 @@ function Post({ _id, owner_username, owner_thumb, like_cnt, comment, images, cre
       <PostFooter
         _id={_id}
         contents={contents}
-        owner_thumb={owner_thumb}
+        owner_thumb={owner_email}
         owner_username={owner_username}
         comment={comment}
         like_cnt={like_cnt}

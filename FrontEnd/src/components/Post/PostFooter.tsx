@@ -12,24 +12,20 @@ import PostComment from './PostComment'
 
 export type PostFooterProps = {
   _id: string
-  contents: string  
+  contents: string
   owner_thumb: string
   owner_username: string
   comment: IComment[]
-  like_cnt: string []
+  like_cnt: string[]
   images: string[]
   createdAt: Date
 }
 
-function PostFooter({
-  _id,    
-  like_cnt,
-  comment,  
-}: PostFooterProps) {
+function PostFooter({ _id, like_cnt, comment }: PostFooterProps) {
   const qc = useQueryClient()
-  
+
   const [likeClick, onToggleLike, setLikeClick] = useToggle(false)
-  const user = qc.getQueryData<User>('user') as User  
+  const user = qc.getQueryData<User>('user') as User
   const [owner, setOwner] = useState(false)
 
   const viewComments = comment.filter((comments: IComment) => comment.indexOf(comments) < 2)
@@ -39,18 +35,16 @@ function PostFooter({
       setOwner(true)
     }
 
-    for(const email in like_cnt) {
-      if(user.email === like_cnt[email]) {
+    for (const email in like_cnt) {
+      if (user.email === like_cnt[email]) {
         setLikeClick(true)
       }
     }
-    
   }, [])
 
   const likeCountMut = useMutation(updateLike, {
     onSuccess: () => {
       qc.invalidateQueries(['posts'])
-      
     },
     onError: () => {
       toast.error('Something went wrong', {
@@ -60,17 +54,18 @@ function PostFooter({
         autoClose: 3000,
       })
     },
-  })  
+  })
 
-  const onLike = () => {        
+  const onLike = () => {
     likeCountMut.mutate([
       {
         email: user.email,
-        userId: user.id
+        userId: user.id,
       },
-      _id, likeClick ? "unchecked" : "checked"         
+      _id,
+      likeClick ? 'unchecked' : 'checked',
     ])
-    
+
     onToggleLike()
   }
 
@@ -101,7 +96,6 @@ function PostFooter({
 }
 
 const commentStyle = css`
-  font-weight: 400;
   font-size: 0.5rem;
   letter-spacing: 0.00938em;
   border: thick solid #dddddd;
@@ -110,6 +104,7 @@ const commentStyle = css`
   border-radius: 1rem;
   margin-bottom: 1.5625rem;
   font: normal normal bold 14px/16px NanumBarunGothic;
+  font-weight: 400;
   background: #fff;
 `
 const footerStyle = css`

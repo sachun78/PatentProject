@@ -26,25 +26,25 @@ function Home({}: HomeProps) {
       <Stack>
         <FilterCard onFilter={onFilter} />
         {filter && <FilterArea />}
-        
+
         <Link css={linkStyle} to={'/postWrite/'} state={{}}>
           <PostForm />
-        </Link>      
-        
+        </Link>
+
         <div css={postViewStyle}>
-          {posts?.map((post: IPost) => (            
+          {posts?.map((post: IPost) => (
             <Post
               key={post._id}
               _id={post._id}
               owner_username={post.owner_username}
-              owner_thumb={post.owner_thumb}
+              owner_email={post.owner_email}
               owner_id={post.owner_id}
               like_cnt={post.like_cnt}
               contents={post.contents}
               comment={post.comment}
               images={post.images}
               createdAt={post.createdAt}
-            />            
+            />
           ))}
         </div>
       </Stack>

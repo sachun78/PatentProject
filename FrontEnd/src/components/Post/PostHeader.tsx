@@ -9,13 +9,13 @@ import gravatar from 'gravatar'
 
 export type PostHeaderProps = {
   owner_username: string
-  owner_thumb: string
+  owner_email: string
   createdAt: Date
 }
 
-function PostHeader({ owner_username, owner_thumb, createdAt }: PostHeaderProps) {
+function PostHeader({ owner_username, owner_email, createdAt }: PostHeaderProps) {
   const date = useMemo(() => new Date(createdAt), [])
-  const [url] = useState(`${API_PATH}static/${owner_thumb}`)
+  const [url] = useState(`${API_PATH}static/${owner_email}`)
 
   return (
     <div css={headerStyle}>
