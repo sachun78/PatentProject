@@ -62,8 +62,7 @@ function PostFooter({
     },
   })  
 
-  const onLike = () => {
-    console.log(likeClick, user.email)    
+  const onLike = () => {        
     likeCountMut.mutate([
       {
         email: user.email,

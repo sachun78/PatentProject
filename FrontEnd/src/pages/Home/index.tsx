@@ -2,25 +2,35 @@ import { css } from '@emotion/react'
 import { Stack } from '@mui/material'
 import Post from 'components/Post/'
 import usePostQuery from 'hooks/query/usePostQuery'
-import { API_PATH } from 'lib/api/client'
 import { IPost } from 'lib/api/types'
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import FilterArea from './filter/FilterArea'
+import FilterCard from './filter/FilterCard'
 import PostForm from './form/PostForm'
 
 type HomeProps = {}
 
 function Home({}: HomeProps) {
   const { data: posts, isLoading } = usePostQuery()
+  const [filter, setFilter] = useState(false)
 
   if (isLoading) return <div>로딩중!!</div>
+
+  const onFilter = (value: boolean) => {
+    setFilter(!filter)
+  }
 
   return (
     <>
       <Stack>
+        <FilterCard onFilter={onFilter} />
+        {filter && <FilterArea />}
+        
         <Link css={linkStyle} to={'/postWrite/'} state={{}}>
           <PostForm />
-        </Link>
+        </Link>      
+        
         <div css={postViewStyle}>
           {posts?.map((post: IPost) => (            
             <Post
