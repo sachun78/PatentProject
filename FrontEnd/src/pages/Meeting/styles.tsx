@@ -48,7 +48,7 @@ export const MeetingSection = styled.section`
     border-radius: 0.5rem;
 
     &:hover {
-      background: ${palette.grey[200]};
+      font-weight: bold;
     }
   }
 
@@ -69,6 +69,7 @@ export const StatusBlock = styled.div`
   line-height: 1.5;
   border-radius: 0.5rem;
   display: inline-block;
+  box-shadow: 0 0 0.25rem 0 rgba(0, 0, 0, 0.1);
   ${statusColor}
 `
 

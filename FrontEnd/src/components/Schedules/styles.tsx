@@ -8,6 +8,7 @@ export const noScheduleStyle = css`
   justify-content: center;
   text-align: center;
   width: 60%;
+
   svg {
     width: 33%;
     height: 33%;
@@ -34,6 +35,9 @@ export const tableStyle = css`
 
 export const calendarStyle = css`
   .fc-today-button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     width: 73px !important;
     border-radius: 12px !important;
     height: 24px !important;
@@ -45,7 +49,7 @@ export const calendarStyle = css`
     color: #fff !important;
 
     &:disabled {
-      background-color: ${palette.grey[900]} !important;
+      background-color: ${palette.grey[700]} !important;
       color: ${palette.grey[400]} !important;
     }
   }
@@ -85,6 +89,16 @@ export const calendarStyle = css`
       color: #6c6c6c !important;
       margin-bottom: 0.3rem;
     }
+  }
+
+  .fc-icon-chevron-left:before {
+    position: relative;
+    bottom: 1px;
+    right: 1px;
+  }
+  .fc-icon-chevron-right:before {
+    position: relative;
+    bottom: 1px;
   }
 
   .fc .fc-toolbar-title {

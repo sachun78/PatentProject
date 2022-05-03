@@ -11,11 +11,7 @@ export type PostHeaderProps = {
   createdAt: Date
 }
 
-function PostHeader({
-  owner_username,
-  owner_thumb,
-  createdAt,
-}: PostHeaderProps) {
+function PostHeader({ owner_username, owner_thumb, createdAt }: PostHeaderProps) {
   return (
     <div css={headerStyle}>
       <div css={iconStyle}>
@@ -23,8 +19,9 @@ function PostHeader({
           alt={owner_username}
           src={`${API_PATH}static/` + owner_thumb}
           sx={{ width: 60, height: 60 }}
-          imgProps={{ crossOrigin: 'anonymous'}}
-        />          
+          style={{ border: '0.1px solid lightgray' }}
+          imgProps={{ crossOrigin: 'anonymous' }}
+        />
       </div>
       <div css={titleStyle}>
         <h4>

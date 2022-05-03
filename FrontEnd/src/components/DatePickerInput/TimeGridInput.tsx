@@ -8,7 +8,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import { differenceInCalendarDays, formatDistanceToNow } from 'date-fns'
 
 import styled from '@emotion/styled'
-import palette, { brandColor } from '../../lib/palette'
+import { brandColor } from '../../lib/palette'
 import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
 
 export type TimeGridInputProps = {
@@ -53,7 +53,7 @@ function TimeGridInput({
       end.setDate(date.getDate())
 
       return {
-        title: 'reserved',
+        title: 'MET',
         start: start.toISOString(),
         end: end.toISOString(),
         allDay: false,
@@ -134,7 +134,6 @@ function TimeGridInput({
               dayHeaderFormat={{
                 month: 'numeric',
                 day: 'numeric',
-                weekday: 'short',
               }}
               views={{
                 timeGridFourDay: {
@@ -160,7 +159,7 @@ const CalendarContainer = styled.div`
 
   .fc-view > table {
     min-width: 100%;
-    width: 1000px;
+    width: 1440px;
     border-radius: 1rem;
     position: relative;
   }
@@ -175,13 +174,80 @@ const CalendarContainer = styled.div`
   }
 
   .fc-axis {
-    position: sticky;
-    left: 0;
-    background: white;
+    position: sticky !important;
+    left: 0 !important;
   }
 
   .fc-timegrid-col.fc-day.fc-day-past {
-    background-color: ${palette.grey[300]};
+    border: 1px solid #999999;
+    background-color: #cccccc;
+  }
+
+  // theme start
+  /* Styling for each event from Schedule */
+
+  .fc-time-grid-event.fc-v-event.fc-event {
+    border-radius: 4px;
+    border: none;
+    padding: 5px;
+    opacity: 0.65;
+    left: 5% !important;
+    right: 5% !important;
+  }
+
+  /* Bolds the name of the event and inherits the font size */
+
+  .fc-event {
+    font-size: inherit !important;
+    font-weight: bold !important;
+  }
+
+  .fc-event-time,
+  .fc-event-title {
+    padding: 0 1px !important;
+    white-space: normal !important;
+  }
+
+  /* Remove the header border from Schedule */
+
+  .fc td,
+  .fc th {
+    border-style: none !important;
+    border-width: 1px !important;
+    padding: 0 !important;
+    vertical-align: top !important;
+    border-radius: 4px !important;
+  }
+
+  /* Inherits background for each event from Schedule. */
+
+  .fc-event .fc-bg {
+    z-index: 1 !important;
+    background: inherit !important;
+    opacity: 0.25 !important;
+  }
+
+  /* Normal font weight for the time in each event */
+
+  .fc-time-grid-event .fc-time {
+    font-weight: normal !important;
+  }
+
+  /* Apply same opacity to all day events */
+
+  .fc-ltr .fc-h-event.fc-not-end,
+  .fc-rtl .fc-h-event.fc-not-start {
+    opacity: 0.65 !important;
+    margin-left: 12px !important;
+    padding: 5px !important;
+  }
+
+  /* Apply same opacity to all day events */
+
+  .fc-day-grid-event.fc-h-event.fc-event.fc-not-start.fc-end {
+    opacity: 0.65 !important;
+    margin-left: 12px !important;
+    padding: 5px !important;
   }
 `
 

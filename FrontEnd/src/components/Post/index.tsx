@@ -12,23 +12,14 @@ type PostProps = {
   owner_username: string
   owner_thumb: string
   owner_id: string
-  like_cnt: string []
+  like_cnt: string[]
   contents: string
   comment: IComment[]
   images: string[]
-  createdAt: Date  
+  createdAt: Date
 }
 
-function Post({
-  _id,  
-  owner_username,
-  owner_thumb,  
-  like_cnt,
-  comment,
-  images,
-  createdAt,
-  contents,
-}: PostProps) {
+function Post({ _id, owner_username, owner_thumb, like_cnt, comment, images, createdAt, contents }: PostProps) {
   return (
     <div css={postStyle}>
       <PostHeader owner_username={owner_username} owner_thumb={owner_thumb} createdAt={createdAt} />
@@ -42,7 +33,7 @@ function Post({
         owner_thumb={owner_thumb}
         owner_username={owner_username}
         comment={comment}
-        like_cnt={like_cnt}        
+        like_cnt={like_cnt}
         images={images}
         createdAt={createdAt}
       />
@@ -60,6 +51,7 @@ const postStyle = css`
   position: relative;
   opacity: 0.8;
   width: 100%;
+
   a:link,
   a:visited,
   a:hover {

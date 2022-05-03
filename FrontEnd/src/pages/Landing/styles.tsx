@@ -63,7 +63,10 @@ export const Header = styled.nav`
   padding-right: 40px;
   background: rgba(255, 255, 255, 0.6);
   box-shadow: rgb(0 0 0 / 4%) 0px 4px 4px;
-
+  img {
+    width: 5rem;
+    height: 5rem;
+  }
   ul {
     display: flex;
     align-items: center;

@@ -18,6 +18,7 @@ function LocationInput({ value, onChange }: locationInputProps) {
   const getLocation = (newLoc: any) => {
     setAddress(newLoc)
     onChange(newLoc)
+    setOpen(false)
   }
 
   const onClose: Parameters<typeof useOnClickOutside>[1] = (e) => {
@@ -32,28 +33,32 @@ function LocationInput({ value, onChange }: locationInputProps) {
   }
   useOnClickOutside(ref, onClose)
 
-  return <InputBase css={wrapper} ref={ref}>
-    <div
-      css={textStyle}
-      tabIndex={0}
-      onClick={handleOpen}
-      onKeyDown={(e) => {
-        if (['Enter', 'Space'].includes(e.key)) {
-          handleOpen()
-        }
-      }}>
-      {address}
-    </div>
+  return (
+    <InputBase css={wrapper} ref={ref}>
+      <div
+        css={textStyle}
+        tabIndex={0}
+        onClick={handleOpen}
+        onKeyDown={(e) => {
+          if (['Enter', 'Space'].includes(e.key)) {
+            handleOpen()
+          }
+        }}
+      >
+        {address}
+      </div>
 
-    {open &&
-      <div css={calendarStyle}>
-        <LocationMap location={address} getLocation={getLocation} />
-      </div>}
-  </InputBase>
+      {open && (
+        <div css={calendarStyle}>
+          <LocationMap location={address} getLocation={getLocation} />
+        </div>
+      )}
+    </InputBase>
+  )
 }
 
 const wrapper = css`
-  position: relative;  
+  position: relative;
   width: 100%;
   max-width: 90rem;
 `
@@ -76,7 +81,7 @@ const calendarStyle = css`
   position: absolute;
   background: white;
   z-index: 10;
-  top: 0.1rem;  
+  top: 0.1rem;
   transform: translate3d(0, -100%, 0);
   height: 35rem;
 `

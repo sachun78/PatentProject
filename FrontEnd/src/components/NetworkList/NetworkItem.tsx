@@ -6,10 +6,10 @@ import { Avatar, Grid, Tooltip } from '@mui/material'
 import gravatar from 'gravatar'
 import React, { memo } from 'react'
 import { MdOutlineSafetyDivider, MdOutlineWork } from 'react-icons/md'
-import { GrUserManager } from 'react-icons/gr'
 import { FieldItem } from 'pages/User/styles'
 import getCountryName from 'lib/countryName'
 import randomColor from 'randomcolor'
+import { BsFilePerson } from 'react-icons/bs'
 
 export type NetworkItemProps = {
   data: { email: string; profile: IProfile }
@@ -36,13 +36,13 @@ function NetworkItem({ data }: NetworkItemProps) {
         </Tooltip>
         <Tooltip title="Field" placement={'left'}>
           <span>
-            <GrUserManager />
+            <BsFilePerson />
             <Grid container>
               {data.profile.field?.map((elem: string) => (
                 <FieldItem
                   key={elem}
                   color={randomColor({
-                    luminosity: 'light',
+                    hue: brandColor,
                     format: 'rgb', // e.g. 'rgb(225,200,20)'
                     seed: elem,
                   })}
@@ -61,7 +61,7 @@ function NetworkItem({ data }: NetworkItemProps) {
         </Tooltip>
       </div>
       <div css={stateStyle}>
-        <span>Meet Count</span>
+        <span>WEMET(count)</span>
       </div>
     </div>
   )
@@ -70,12 +70,12 @@ function NetworkItem({ data }: NetworkItemProps) {
 const itemStyle = css`
   display: flex;
   width: 100%;
-  max-height: 5rem;
-  height: 5rem;
+  max-height: 5.625rem;
+  height: 5.625rem;
   align-items: center;
   background: rgba(255, 255, 255, 0.7);
   border-radius: 0.5rem;
-  padding: 1rem;
+  padding: 0.75rem;
 
   &:hover {
     color: ${brandColor};
@@ -90,7 +90,7 @@ const itemStyle = css`
 `
 const iconStyle = css`
   margin-right: 1rem;
-  margin-left: 1.25rem;
+  margin-left: 0.5rem;
 `
 const nameStyle = css`
   margin-right: 1.5rem;
