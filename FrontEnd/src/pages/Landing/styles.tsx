@@ -61,7 +61,7 @@ export const Header = styled.nav`
   height: 104px;
   padding-left: 40px;
   padding-right: 40px;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 1);
   box-shadow: rgb(0 0 0 / 4%) 0px 4px 4px;
   img {
     width: 5rem;

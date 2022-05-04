@@ -64,7 +64,7 @@ export type IPost = {
   contents: string
   comment: IComment[]
   owner_id: string
-  owner_thumb: string
+  owner_email: string
   owner_username: string
   like_cnt: string[]
   writer: string
@@ -76,7 +76,7 @@ export type IPost = {
 export type IComment = {
   id: string
   owner_id: string
-  owner_thumb: string
+  owner_email: string
   owner_username: string
   text: string
   contents: string

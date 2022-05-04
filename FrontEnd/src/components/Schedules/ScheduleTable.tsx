@@ -13,7 +13,7 @@ function ScheduleTable({ meetings }: ScheduleTableProps) {
   const navi = useNavigate()
 
   return (
-    <TableContainer component={Paper} style={{ borderRadius: '1rem', maxWidth: '60rem', marginBottom: '1rem' }}>
+    <TableContainer component={Paper} style={{ borderRadius: '1rem', maxWidth: '80.3125rem', marginBottom: '1rem' }}>
       <Table sx={{ minWidth: 700 }} aria-label="history schedule table">
         <TableHead>
           <TableRow>

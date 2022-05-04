@@ -34,12 +34,18 @@ function Landing({}: LandingProps) {
           nurture relationships all in one meeting lifecycle platform.
         </p>
       </Section1>
-      <section>
+      <Section1>
         <h2>We're the #1 scheduling platform</h2>
-      </section>
-      <section>
+      </Section1>
+      <Section1>
         <h2>We're the #1 scheduling platform</h2>
-      </section>
+      </Section1>
+      <Section1>
+        <h2>We're the #1 scheduling platform</h2>
+      </Section1>
+      <Section1>
+        <h2>We're the #1 scheduling platform</h2>
+      </Section1>
     </>
   )
 }

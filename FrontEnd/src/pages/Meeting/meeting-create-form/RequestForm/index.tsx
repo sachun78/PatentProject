@@ -15,10 +15,10 @@ import { Avatar, Box, Button, OutlinedInput } from '@mui/material'
 import { ContainerBlock } from 'pages/Meeting/styles'
 import { getEvent } from 'lib/api/event/getEvent'
 import TimeGridInput from 'components/DatePickerInput/TimeGridInput'
-import { getProfilebyEmail } from '../../../../lib/api/me/getProfile'
-import { brandColor } from '../../../../lib/palette'
-import { API_PATH } from '../../../../lib/api/client'
-import getCountryName from '../../../../lib/countryName'
+import { getProfilebyEmail } from 'lib/api/me/getProfile'
+import { brandColor } from 'lib/palette'
+import { API_PATH } from 'lib/api/client'
+import getCountryName from 'lib/countryName'
 
 type RequestViewProps = {}
 

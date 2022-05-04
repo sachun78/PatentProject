@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import palette from 'lib/palette'
+import palette, { brandColor } from 'lib/palette'
 
 export const noScheduleStyle = css`
   display: flex;
@@ -102,8 +102,9 @@ export const calendarStyle = css`
   }
 
   .fc .fc-toolbar-title {
-    color: #6c6c6c;
+    color: ${brandColor};
     font: normal normal normal 20px NanumSquareOTF;
+    font-weight: 900 !important;
     line-height: 1.15;
   }
 
@@ -113,11 +114,4 @@ export const calendarStyle = css`
   border-radius: 1rem;
   box-shadow: 0 3px 6px #00000029;
   background: rgba(255, 255, 255, 0.7);
-`
-
-export const labelStyle = css`
-  .MuiTypography-root {
-    color: #6c6c6c;
-    font: normal normal normal 17px/19px NanumSquareOTF !important;
-  }
 `

@@ -4,6 +4,8 @@ import InputBase from '../InputBase'
 import { css } from '@emotion/react'
 import { useRef, useState } from 'react'
 import useOnClickOutside from 'use-onclickoutside'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import { brandColor } from '../../lib/palette'
 
 export type DatePickerProps = {
   value: Date
@@ -12,12 +14,7 @@ export type DatePickerProps = {
   onChange(value: Date): void
 }
 
-function DatePickerInput({
-  value,
-  maximum,
-  minimum,
-  onChange,
-}: DatePickerProps) {
+function DatePickerInput({ value, maximum, minimum, onChange }: DatePickerProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -53,6 +50,7 @@ function DatePickerInput({
         }}
       >
         {value?.toDateString()}
+        <ArrowDropDownIcon style={{ position: 'absolute', right: '0.875rem', color: brandColor }} />
       </div>
       {open && (
         <LocalizationProvider dateAdapter={AdapterDateFns}>

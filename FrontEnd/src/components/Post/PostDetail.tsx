@@ -17,15 +17,13 @@ import { IComment, User } from '../../lib/api/types'
 import PostActionButtons from './PostActionButtons'
 import PostComment from './PostComment'
 
-type postDetailProps = {
-  
-}
+type postDetailProps = {}
 
 const API_PATH = process.env.REACT_APP_API_PATH
 
 function PostDetail({}: postDetailProps) {
   const qc = useQueryClient()
-  const { id } = useParams() 
+  const { id } = useParams()
 
   const { data: post, isLoading } = useQuery(['post', id], getPost, {
     enabled: !!id,
@@ -38,28 +36,24 @@ function PostDetail({}: postDetailProps) {
   const user = qc.getQueryData<User>('user') as User
   const [owner, setOwner] = useState(false)
   const { profileSrc } = useProfileImg(44)
-  
+
   const [open, setOpen] = useState(false)
   const [imgSrc, setImgSrc] = useState('')  
 
-  useEffect(() => {    
-
-    if(post) {
-      for(const email in post.like_cnt) {
-        if(user.email === post.like_cnt[email]) {
+  useEffect(() => {
+    if (post) {
+      for (const email in post.like_cnt) {
+        if (user.email === post.like_cnt[email]) {
           setLikeClick(true)
         }
       }         
       
     }
-    
-    
   }, [])
 
   const likeCountMut = useMutation(updateLike, {
     onSuccess: () => {
       qc.invalidateQueries(['posts'])
-      
     },
     onError: () => {
       toast.error('Something went wrong', {
@@ -69,18 +63,19 @@ function PostDetail({}: postDetailProps) {
         autoClose: 3000,
       })
     },
-  })  
+  })
 
   const onLike = () => {
-    console.log(likeClick, user.email)    
+    console.log(likeClick, user.email)
     likeCountMut.mutate([
       {
         email: user.email,
-        userId: user.id
+        userId: user.id,
       },
-      id as string, likeClick ? "unchecked" : "checked"         
+      id as string,
+      likeClick ? 'unchecked' : 'checked',
     ])
-    
+
     onToggleLike()
   }
 
@@ -128,8 +123,9 @@ function PostDetail({}: postDetailProps) {
           <div css={iconStyle}>
             <Avatar
               alt={post.owner_username}
-              src={`${API_PATH}static/` + post.owner_thumb}
+              src={`${API_PATH}static/` + post.owner_email}
               sx={{ width: 60, height: 60 }}
+              style={{ border: '0.1px solid lightgray' }}
               imgProps={{ crossOrigin: 'anonymous' }}
             />
           </div>
@@ -260,14 +256,12 @@ function PostDetail({}: postDetailProps) {
                   src={profileSrc}
                   sx={{ width: 44, height: 44, mr: '25px' }}
                   imgProps={{ crossOrigin: 'anonymous' }}
-                />
+                ></Avatar>
               }
             />
           </div>
         )}
-        {post.comment.length === 0 ? (
-          <div></div>
-        ) : (
+        {post.comment.length !== 0 && (
           <div css={commentStyle} style={{ margin: '10px' }}>
             {post.comment.map((viewComment: IComment) => (
               <PostComment key={viewComment.id} viewComment={viewComment} _id={post._id} />

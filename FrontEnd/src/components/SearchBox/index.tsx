@@ -7,10 +7,11 @@ import { searchSelect } from '../Schedules'
 export type SearchBoxProps = {
   filter: Dispatch<string>
   type: searchSelect
+  setType: Dispatch<searchSelect>
   onTypeChange: (e: SelectChangeEvent) => void
 }
 
-function SearchBox({ filter, type, onTypeChange }: SearchBoxProps) {
+function SearchBox({ filter, type, onTypeChange, setType }: SearchBoxProps) {
   const [value, setValue] = useSearchInputState()
 
   const onChange = useCallback(
@@ -25,9 +26,10 @@ function SearchBox({ filter, type, onTypeChange }: SearchBoxProps) {
       e.preventDefault()
       // value 가 이메일 타입이 아닌경우
       filter(value)
+      setType(type)
       setValue('')
     },
-    [filter, setValue, value]
+    [filter, setType, setValue, type, value]
   )
   return (
     <Paper
@@ -47,9 +49,9 @@ function SearchBox({ filter, type, onTypeChange }: SearchBoxProps) {
       </IconButton>
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
       <FormControl sx={{ p: '4px' }}>
-        <Select value={type} onChange={onTypeChange} style={{ borderRadius: '0.5rem' }}>
-          <MenuItem value={'title'}>TITLE & COMMENT</MenuItem>
-          <MenuItem value={'email'}>EMAIL</MenuItem>
+        <Select value={type} onChange={onTypeChange} style={{ borderRadius: '0.5rem', border: '1px solid #A1045A' }}>
+          <MenuItem value={'title'}>Title & Comment</MenuItem>
+          <MenuItem value={'email'}>Email</MenuItem>
         </Select>
       </FormControl>
     </Paper>

@@ -1,33 +1,39 @@
 import { css } from '@emotion/react'
 import { Avatar } from '@mui/material'
 import { API_PATH } from 'lib/api/client'
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import { MdMoreHoriz } from 'react-icons/md'
 import palette, { brandColor } from '../../lib/palette'
+import { formatDistanceToNow } from 'date-fns'
+import gravatar from 'gravatar'
 
 export type PostHeaderProps = {
   owner_username: string
-  owner_thumb: string
+  owner_email: string
   createdAt: Date
 }
 
-function PostHeader({ owner_username, owner_thumb, createdAt }: PostHeaderProps) {
+function PostHeader({ owner_username, owner_email, createdAt }: PostHeaderProps) {
+  const date = useMemo(() => new Date(createdAt), [])
+  const [url] = useState(`${API_PATH}static/${owner_email}`)
+
   return (
     <div css={headerStyle}>
       <div css={iconStyle}>
         <Avatar
-          alt={owner_username}
-          src={`${API_PATH}static/` + owner_thumb}
+          src={url}
           sx={{ width: 60, height: 60 }}
           style={{ border: '0.1px solid lightgray' }}
           imgProps={{ crossOrigin: 'anonymous' }}
-        />
+        >
+          <img className={'fallback'} src={gravatar.url(owner_username, { s: '60px', d: 'retro' })} alt={'user-img'} />
+        </Avatar>
       </div>
       <div css={titleStyle}>
         <h4>
-          <span>{owner_username}/ etc ..</span>
+          <span>{owner_username}</span>
         </h4>
-        <div className={'time-date'}>{createdAt}</div>
+        <div className={'time-date'}>{formatDistanceToNow(date, { addSuffix: true })}</div>
       </div>
       <div css={moreStyle} onClick={() => {}}>
         <MdMoreHoriz />

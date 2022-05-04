@@ -4,7 +4,7 @@ import { useVirtualId } from 'database/database'
 type PostType = {
   owner_id: string;
   owner_username: string;
-  owner_thumb: string;
+  owner_email: string;
   contents: string;
   images: string[];
   like_cnt: string[];
@@ -23,7 +23,7 @@ type CommentType = {
 const postSchema = new mongoose.Schema<PostType>({
   owner_id: { type: String, required: true },
   owner_username: { type: String, required: true },
-  owner_thumb: { type: String, default: '' },
+  owner_email: { type: String, default: '' },
   contents: { type: String, required: true },
   images: { type: [String], default: [] },
   like_cnt: { type: [String], default: []},
@@ -32,7 +32,7 @@ const postSchema = new mongoose.Schema<PostType>({
       id: { type: String, required: true},
       owner_id: { type: String, required: true},
       owner_username: { type: String, required: true },
-      owner_thumb: { type: String, default: ''},
+      owner_email: { type: String, default: ''},
       contents: { type: String, required: true},
       createdAt: { type: Date, required: true}
     }], default: []

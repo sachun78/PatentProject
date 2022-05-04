@@ -21,6 +21,7 @@ function MeetingHistory({}: MeetingHistoryProps) {
         if (!morePagesExist) return false
         return pages.flat().length - 1
       },
+      enabled: false,
     }
   )
 
@@ -32,6 +33,7 @@ function MeetingHistory({}: MeetingHistoryProps) {
   }, [data])
 
   if (isLoading) return <div css={tableStyle}>Loading...</div>
+  if (!meetings.length) return <div css={tableStyle}>No meeting history</div>
   return (
     <>
       <ScheduleTable meetings={meetings} />

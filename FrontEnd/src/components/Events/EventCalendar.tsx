@@ -8,11 +8,12 @@ import { useNavigate } from 'react-router-dom'
 import listPlugin from '@fullcalendar/list'
 import { calendarStyle } from '../Schedules/styles'
 import { formatDistanceToNow } from 'date-fns'
+import randomColor from 'randomcolor'
 
 export type ScheduleCalendarProps = {}
 
 function EventCalendar({}: ScheduleCalendarProps) {
-  const { data } = useEventQuery(1, { enabled: false })
+  const { data } = useEventQuery({ enabled: false })
   const navigate = useNavigate()
   const calendarRef = useRef<FullCalendar | null>(null)
   const calendarEvents = useMemo(() => {
@@ -27,7 +28,13 @@ function EventCalendar({}: ScheduleCalendarProps) {
         title: event.title,
         start: event.start_date,
         end: event.end_date,
-        backgroundColor: dist.includes('ago') ? '#9c9c9c' : brandColor,
+        backgroundColor: dist.includes('ago')
+          ? '#9c9c9c'
+          : randomColor({
+              hue: brandColor,
+              format: 'rgb', // e.g. 'rgb(225,200,20)'
+              seed: event._id,
+            }),
         allDay: true,
       }
     })

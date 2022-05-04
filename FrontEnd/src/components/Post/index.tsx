@@ -18,7 +18,7 @@ import 'quill/dist/quill.bubble.css'
 type PostProps = {
   _id: string
   owner_username: string
-  owner_thumb: string
+  owner_email: string
   owner_id: string
   like_cnt: string[]
   contents: string
@@ -27,31 +27,10 @@ type PostProps = {
   createdAt: Date
 }
 
-function Post({ _id, owner_username, owner_thumb, like_cnt, comment, images, createdAt, contents }: PostProps) {
-  const quillElement = useRef<any>(null)
-  const quillInstance = useRef<any>(null)
-
-  useEffect(() => {
-    quillInstance.current = new Quill(quillElement.current, {
-      theme: 'bubble',
-      readOnly: true,            
-      modules: {
-        toolbar: {          
-        },
-      },
-    })
-
-    const quill = quillInstance.current
-    
-    quill.root.innerHTML = `${contents}`
-
-    
-  }, [])
-  // const ReactMarkdown = require("react-markdown/with-html");
-  console.log(contents)
+function Post({ _id, owner_username, owner_email, like_cnt, comment, images, createdAt, contents }: PostProps) {
   return (
     <div css={postStyle}>
-      <PostHeader owner_username={owner_username} owner_thumb={owner_thumb} createdAt={createdAt} />
+      <PostHeader owner_username={owner_username} owner_email={owner_email} createdAt={createdAt} />
       <Link to={`/postDetail/${_id}`}>
         {/* <ImageContainer /> */}
         <PostImageContainer images={images} />
@@ -66,7 +45,7 @@ function Post({ _id, owner_username, owner_thumb, like_cnt, comment, images, cre
       <PostFooter
         _id={_id}
         contents={contents}
-        owner_thumb={owner_thumb}
+        owner_thumb={owner_email}
         owner_username={owner_username}
         comment={comment}
         like_cnt={like_cnt}

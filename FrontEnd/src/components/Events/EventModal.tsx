@@ -7,7 +7,7 @@ import { brandColor } from 'lib/palette'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import { createEvent } from 'lib/api/event/createEvent'
 import { toast } from 'react-toastify'
-import React, { ChangeEvent } from 'react'
+import React, { ChangeEvent, useCallback } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 import { AxiosError } from 'axios'
 import { useCurrentEventState } from 'atoms/eventState'
@@ -23,14 +23,14 @@ function EventModal({}: CreateEventModalProps) {
   const qc = useQueryClient()
 
   const onMutSuccess = () => {
-    onClose()
     toast.success('Update event success', {
       position: 'top-center',
       pauseOnHover: false,
       pauseOnFocusLoss: false,
       autoClose: 3000,
     })
-    qc.invalidateQueries(['events', 1])
+    qc.invalidateQueries('events')
+    onClose()
   }
   const onMutError = (e: AxiosError) => {
     const { message } = e.response?.data
@@ -51,14 +51,17 @@ function EventModal({}: CreateEventModalProps) {
     onError: onMutError,
   })
 
-  const onChangeEventTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    setEvent((prev) => ({ ...prev, title: e.target.value }))
-  }
+  const onChangeEventTitle = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setEvent((prev) => ({ ...prev, title: e.target.value }))
+    },
+    [setEvent]
+  )
 
-  const onClose = () => {
+  const onClose = useCallback(() => {
     setEvent({ title: '', id: '' })
     setOpen(false)
-  }
+  }, [])
 
   const onCreate = () => {
     // 제목이 입력되지 않은 경우
@@ -74,6 +77,7 @@ function EventModal({}: CreateEventModalProps) {
     }
 
     // 설정된 종료일이 현재 날짜보다 앞에 있는 경우
+    console.log(endDate)
     const ed = new Date(endDate)
     const dist = formatDistanceToNow(ed, {
       addSuffix: true,
