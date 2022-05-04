@@ -34,23 +34,19 @@ export const tableStyle = css`
 `
 
 export const calendarStyle = css`
+  @import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+
   .fc-today-button {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
     width: 73px !important;
-    border-radius: 12px !important;
-    height: 24px !important;
     padding: 4px 0 !important;
     font: normal normal 800 15px 'NanumSquare' !important;
-    line-height: 1.133333333 !important;
 
     background-color: #a1045a !important;
     color: #fff !important;
 
-    &:disabled {
-      background-color: ${palette.grey[700]} !important;
-      color: ${palette.grey[400]} !important;
+    &:not(:disabled):hover {
+      background-color: #fff !important;
+      color: ${brandColor} !important;
     }
   }
 
@@ -62,10 +58,14 @@ export const calendarStyle = css`
   }
 
   .fc-col-header {
-    background: #d9d9d9;
+    background: #fff;
     color: #6c6c6c;
     font: normal normal normal 17px NanumSquareOTF;
     line-height: 1.117647059;
+  }
+
+  .fc-col-header-cell {
+    padding: 0.5rem;
   }
 
   .fc .fc-toolbar.fc-header-toolbar {
@@ -79,16 +79,63 @@ export const calendarStyle = css`
 
   .fc-prev-button,
   .fc-next-button {
-    background: transparent !important;
     width: 24px !important;
     height: 24px !important;
     padding: 0 !important;
-    border-radius: 1rem !important;
+    border-color: ${brandColor} !important;
+    background-color: ${brandColor} !important;
 
     span {
-      color: #6c6c6c !important;
+      color: #fff !important;
       margin-bottom: 0.3rem;
     }
+
+    &:hover {
+      background-color: #fff !important;
+
+      span {
+        color: ${brandColor} !important;
+      }
+    }
+  }
+
+  .fc .fc-daygrid-event {
+    padding-left: 0.625rem !important;
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+    margin-top: 6px !important;
+    border-collapse: collapse !important;
+    font-size: 0.6875rem !important;
+    font-weight: 400 !important;
+    font-family: Rubik, sans-serif !important;
+    -webkit-font-smoothing: antialiased !important;
+    line-height: 1.25rem !important;
+
+    &:hover {
+      cursor: pointer !important;
+    }
+  }
+
+  .fc-day-today {
+    .fc-daygrid-day-number {
+      color: #fff !important;
+      background: ${brandColor} !important;
+      border-radius: 100% !important;
+      padding-top: 4px !important;
+      margin-top: 4px !important;
+    }
+  }
+
+  .fc-direction-ltr .fc-daygrid-event.fc-event-end {
+    margin-right: 1rem !important;
+    border-top-right-radius: 0.625rem !important;
+    border-bottom-right-radius: 0.625rem !important;
+  }
+
+  .fc-event-start {
+    margin-left: 1rem !important;
+    border-top-left-radius: 0.625rem !important;
+    border-bottom-left-radius: 0.625rem !important;
   }
 
   .fc-icon-chevron-left:before {
@@ -96,6 +143,7 @@ export const calendarStyle = css`
     bottom: 1px;
     right: 1px;
   }
+
   .fc-icon-chevron-right:before {
     position: relative;
     bottom: 1px;

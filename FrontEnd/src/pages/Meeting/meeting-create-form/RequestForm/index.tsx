@@ -20,6 +20,7 @@ import { brandColor } from 'lib/palette'
 import { API_PATH } from 'lib/api/client'
 import getCountryName from 'lib/countryName'
 import gravatar from 'gravatar'
+import { useRemoveOutlineHover } from '../../../../lib/styles/muiStyles'
 
 type RequestViewProps = {}
 
@@ -137,6 +138,8 @@ export default function RequestForm({}: RequestViewProps) {
     }
   }, [])
 
+  const classes = useRemoveOutlineHover()
+
   if (curEvent.id === '') {
     return <Navigate to={'/meeting'} />
   }
@@ -160,8 +163,9 @@ export default function RequestForm({}: RequestViewProps) {
             value={form.title}
             onChange={onChange}
             placeholder={'Enter the title that will used as meeting name'}
+            classes={classes}
+            sx={{ height: 38 }}
             fullWidth
-            style={{ height: '38px', backgroundColor: '#fff' }}
           />
         </RequestSection>
         <RequestSection title={'Email'}>
@@ -176,7 +180,8 @@ export default function RequestForm({}: RequestViewProps) {
               onBlur={onBlur}
               placeholder={'Meeting Email'}
               fullWidth
-              style={{ height: '38px', backgroundColor: '#fff' }}
+              sx={{ height: 38 }}
+              classes={classes}
             />
           )}
         </RequestSection>
@@ -231,7 +236,7 @@ export default function RequestForm({}: RequestViewProps) {
             multiline
             fullWidth
             minRows={3}
-            style={{ backgroundColor: '#fff' }}
+            classes={classes}
           />
         </RequestSection>
         <Button
