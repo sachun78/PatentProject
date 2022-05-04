@@ -1,11 +1,19 @@
 import { css } from '@emotion/react'
 import { IComment } from 'lib/api/types'
 import media from 'lib/styles/media'
-import React from 'react'
+import Quill from 'quill'
+import React, { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import ImageContainer from './ImageContainer'
 import PostFooter from './PostFooter'
 import PostHeader from './PostHeader'
 import PostImageContainer from './PostImageContainer'
+import 'quill/dist/quill.bubble.css'
+// import Parser from 'html-react-parser';
+// import ReactQuill from 'react-quill';
+
+
+
 
 type PostProps = {
   _id: string
@@ -20,12 +28,40 @@ type PostProps = {
 }
 
 function Post({ _id, owner_username, owner_thumb, like_cnt, comment, images, createdAt, contents }: PostProps) {
+  const quillElement = useRef<any>(null)
+  const quillInstance = useRef<any>(null)
+
+  useEffect(() => {
+    quillInstance.current = new Quill(quillElement.current, {
+      theme: 'bubble',
+      readOnly: true,            
+      modules: {
+        toolbar: {          
+        },
+      },
+    })
+
+    const quill = quillInstance.current
+    
+    quill.root.innerHTML = `${contents}`
+
+    
+  }, [])
+  // const ReactMarkdown = require("react-markdown/with-html");
+  console.log(contents)
   return (
     <div css={postStyle}>
       <PostHeader owner_username={owner_username} owner_thumb={owner_thumb} createdAt={createdAt} />
       <Link to={`/postDetail/${_id}`}>
+        {/* <ImageContainer /> */}
         <PostImageContainer images={images} />
-        <div css={bodyStyle}>{contents}</div>
+        <div ref={quillElement} style={{ color: "black" }} css={bodyStyle}></div>
+        {/* <div css={bodyStyle} dangerouslySetInnerHTML={{ __html: `${contents}`}}></div> */}
+        {/* <div css={bodyStyle}>{contents}</div> */}
+        {/* <div css={bodyStyle}>{Parser(`${contents}`)}</div> */}
+        {/* <ReactQuill value={contents} readOnly={true}/> */}
+        {/* <ReactMarkdown scapeHtml={false} source={contents} /> */}
+         
       </Link>
       <PostFooter
         _id={_id}
@@ -68,6 +104,7 @@ const bodyStyle = css`
   font: normal normal 800 14px 'NanumSquare';
   line-height: 1.142857143;
   color: #333333;
-`
+  /* white-space: pre-wrap */
+  `
 
 export default Post

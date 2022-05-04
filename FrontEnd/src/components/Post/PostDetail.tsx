@@ -7,7 +7,7 @@ import { getPost } from 'lib/api/post/getPost'
 import { updateLike } from 'lib/api/post/updateLike'
 import { brandColor } from 'lib/palette'
 import media from 'lib/styles/media'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useParams } from 'react-router-dom'
@@ -40,7 +40,7 @@ function PostDetail({}: postDetailProps) {
   const { profileSrc } = useProfileImg(44)
   
   const [open, setOpen] = useState(false)
-  const [imgSrc, setImgSrc] = useState('')
+  const [imgSrc, setImgSrc] = useState('')  
 
   useEffect(() => {    
 
@@ -49,7 +49,8 @@ function PostDetail({}: postDetailProps) {
         if(user.email === post.like_cnt[email]) {
           setLikeClick(true)
         }
-      }
+      }         
+      
     }
     
     
@@ -234,7 +235,7 @@ function PostDetail({}: postDetailProps) {
             </ImageList>
           )}
         </figure>
-        <div css={bodyStyle}>{post.contents}</div>
+        <div css={bodyStyle} dangerouslySetInnerHTML={{ __html: `${post.contents}`}}></div>
         <div css={buttonWrapper}>
           <div className={'item'} onClick={onLike}>
             {likeClick ? <BsHeartFill className={'filled'} /> : <BsHeart />}
