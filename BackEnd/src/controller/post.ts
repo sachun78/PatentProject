@@ -36,13 +36,13 @@ export async function postImgUpload(
     return res.status(409).json("files are not found");
   }
   try {
-    resizefile = `${Date.now()}_${req.file?.originalname}_s`;
+    resizefile = `${Date.now()}_${req.file?.originalname}`;
     const sharp_res = await sharp(req.file?.path)
       .resize({ width: 640 })
       .withMetadata()
       .toFile(req.file?.destination + resizefile);
 
-    if (!sharp_res) {
+    if (sharp_res) {
       return res.status(409).json("sharp Error");
     }
 
