@@ -4,10 +4,11 @@ import { eventSelectModalState, useCurrentEventState } from 'atoms/eventState'
 import { css, keyframes } from '@emotion/react'
 import styled from '@emotion/styled'
 import EventCard from './EventCard'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import useEventQuery from 'hooks/query/useEventQuery'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import { useNavigate } from 'react-router-dom'
+import { isBefore } from 'date-fns'
 
 export type EventSelectModalProps = {}
 
@@ -20,34 +21,42 @@ function EventSelectDialog({}: EventSelectModalProps) {
   const [, setEvent] = useCurrentEventState()
   const navigate = useNavigate()
 
+  const eventParsed = useMemo(() => {
+    if (!events) return []
+    return events.filter((event) => {
+      const end_date = new Date(event.end_date)
+      return !isBefore(end_date, new Date())
+    })
+  }, [events])
+
   const onNextClick = useCallback(() => {
-    if (!events) {
+    if (!eventParsed) {
       return
     }
-    if (events.length > index + 1) setIndex(index + 1)
+    if (eventParsed.length > index + 1) setIndex(index + 1)
     else setIndex(0)
     setAnimationState(true)
-  }, [events, index])
+  }, [eventParsed, index])
 
   const onPrevClick = useCallback(() => {
-    if (!events) return
+    if (!eventParsed) return
 
     if (1 <= index) setIndex(index - 1)
-    else setIndex(events.length - 1)
+    else setIndex(eventParsed.length - 1)
     setAnimationState(true)
-  }, [events, index])
+  }, [eventParsed, index])
 
   const onSelectEvent = useCallback(() => {
-    if (!events) {
+    if (!eventParsed) {
       return
     }
-    const { _id, title, start_date, end_date } = events[index]
+    const { _id, title, start_date, end_date } = eventParsed[index]
 
     setEvent({ id: _id, title })
     setStartDate(new Date(start_date))
     setEndDate(new Date(end_date))
     navigate('/meeting/schedule/request')
-  }, [events, index, setEndDate, setEvent, setStartDate])
+  }, [eventParsed, index, setEndDate, setEvent, setStartDate])
 
   useEffect(() => {
     setAnimationState(false)
@@ -59,8 +68,18 @@ function EventSelectDialog({}: EventSelectModalProps) {
     }
   }, [])
 
-  if (!events || events.length === 0) {
-    return null
+  if (!eventParsed || eventParsed.length === 0) {
+    return (
+      <Dialog
+        open={open}
+        onClose={() => {
+          setOpen((prev) => !prev)
+        }}
+        maxWidth={'xl'}
+      >
+        <DialogTitle>No Available Events</DialogTitle>
+      </Dialog>
+    )
   }
 
   return (
@@ -80,11 +99,11 @@ function EventSelectDialog({}: EventSelectModalProps) {
           <div onClick={onPrevClick}>{'<'}</div>
           <div css={animationStyle(animationState)}>
             <EventCard
-              title={events[index].title}
-              id={events[index]._id}
-              count={events[index].meeting_list.length}
-              endDate={events[index].end_date}
-              startDate={events[index].start_date}
+              title={eventParsed[index].title}
+              id={eventParsed[index]._id}
+              count={eventParsed[index].meeting_list.length}
+              endDate={eventParsed[index].end_date}
+              startDate={eventParsed[index].start_date}
               cardView
             />
           </div>
@@ -92,7 +111,9 @@ function EventSelectDialog({}: EventSelectModalProps) {
         </SelectBody>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onSelectEvent}>Next</Button>
+        <Button variant={'contained'} onClick={onSelectEvent}>
+          Next
+        </Button>
       </DialogActions>
     </Dialog>
   )

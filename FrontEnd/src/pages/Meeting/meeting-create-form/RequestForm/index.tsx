@@ -19,6 +19,7 @@ import { getProfilebyEmail } from 'lib/api/me/getProfile'
 import { brandColor } from 'lib/palette'
 import { API_PATH } from 'lib/api/client'
 import getCountryName from 'lib/countryName'
+import gravatar from 'gravatar'
 
 type RequestViewProps = {}
 
@@ -45,7 +46,7 @@ export default function RequestForm({}: RequestViewProps) {
     data: profileData,
     isLoading: isLoadingProfile,
     refetch,
-  } = useQuery(['profile', form.to], getProfilebyEmail, {
+  } = useQuery(['profile', meetuser || form.to], getProfilebyEmail, {
     enabled: false,
     retry: false,
     staleTime: 5000,
@@ -183,14 +184,14 @@ export default function RequestForm({}: RequestViewProps) {
           <Box style={{ background: brandColor, color: '#fff', padding: '4px', borderRadius: '8px', margin: '4px' }}>
             <h3>Member</h3>
             <FlexRow>
-              {profileData.photo_path && (
-                <Avatar
-                  alt={'photo'}
-                  src={`${API_PATH}static/${profileData.photo_path}`}
-                  sx={{ width: 44, height: 44, marginRight: 1, marginLeft: 1 }}
-                  imgProps={{ crossOrigin: 'anonymous' }}
-                />
-              )}
+              <Avatar
+                alt={'photo'}
+                src={`${API_PATH}static/${profileData.photo_path}`}
+                sx={{ width: 44, height: 44, marginRight: 1, marginLeft: 1 }}
+                imgProps={{ crossOrigin: 'anonymous' }}
+              >
+                <img src={gravatar.url(profileData.email ?? '', { s: '44px', d: 'retro' })} alt={'fallback-img'} />
+              </Avatar>
               <div>
                 <p>{profileData.username}</p>
                 <p>

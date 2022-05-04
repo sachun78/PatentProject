@@ -1,5 +1,5 @@
 import AddIcon from '@mui/icons-material/Add'
-import { Button, Checkbox, CircularProgress, Fab, FormControlLabel, FormGroup, Switch } from '@mui/material'
+import { Button, CircularProgress, Fab, FormGroup, ToggleButton } from '@mui/material'
 import IconControl from 'components/IconControl/IconControl'
 import useEventQuery from 'hooks/query/useEventQuery'
 import useDateRangeHook from 'hooks/useDateRangeHook'
@@ -13,6 +13,8 @@ import EventModal from './EventModal'
 import { noScheduleStyle, wrapper } from './styles'
 import { formatDistanceToNow } from 'date-fns'
 import { useCurrentEventState } from 'atoms/eventState'
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
+import ContrastIcon from '@mui/icons-material/Contrast'
 
 type EventsProps = {}
 
@@ -24,12 +26,9 @@ function Events({}: EventsProps) {
   const [outdateChecked, setOutdateChecked] = useState(false)
   const [, setEvent] = useCurrentEventState()
 
-  const handleChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setChecked(event.target.checked)
-    },
-    [setChecked]
-  )
+  const handleChange = useCallback(() => {
+    setChecked((prev) => !prev)
+  }, [setChecked])
   const onOutdateChange = useCallback(() => {
     setOutdateChecked((prev) => !prev)
   }, [])
@@ -73,12 +72,13 @@ function Events({}: EventsProps) {
   return (
     <>
       <FormGroup row={true} style={{ marginBottom: '20px', display: 'flex', justifyContent: 'flex-start' }}>
-        <Switch checked={checked} onChange={handleChange} name={'checked'} centerRipple={true} />
+        <ToggleButton value="check" selected={checked} onChange={handleChange} color={'primary'}>
+          <CalendarTodayIcon />
+        </ToggleButton>
         {!checked && (
-          <FormControlLabel
-            control={<Checkbox checked={outdateChecked} onChange={onOutdateChange} />}
-            label="Outdated"
-          />
+          <ToggleButton value="check" selected={outdateChecked} onChange={onOutdateChange} color={'primary'}>
+            <ContrastIcon />
+          </ToggleButton>
         )}
       </FormGroup>
       {checked ? (
