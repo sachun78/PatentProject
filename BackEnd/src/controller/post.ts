@@ -42,7 +42,7 @@ export async function postImgUpload(
       .withMetadata()
       .toFile(req.file?.destination + resizefile);
 
-    if (sharp_res) {
+    if (!sharp_res) {
       return res.status(409).json("sharp Error");
     }
 
