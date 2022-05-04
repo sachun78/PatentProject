@@ -95,14 +95,13 @@ function PostFooter({ _id, like_cnt, comment }: PostFooterProps) {
   )
 }
 
-const commentStyle = css`
+export const commentStyle = css`
   font-size: 0.5rem;
   letter-spacing: 0.00938em;
-  border: thick solid #dddddd;
+  border: 1px solid #c9c9c9;
   position: relative;
-  padding: 1rem;
   border-radius: 1rem;
-  margin-bottom: 1.5625rem;
+  margin-bottom: 1.875rem;
   font: normal normal bold 14px/16px NanumBarunGothic;
   font-weight: 400;
   background: #fff;

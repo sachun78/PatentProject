@@ -15,6 +15,7 @@ const MailCheck = loadable(() => import('pages/MailCheck'))
 const MeetingBook = loadable(() => import('pages/Meeting/MeetingBook'))
 const AppLayout = loadable(() => import('layouts/AppLayout'))
 const Landing = loadable(() => import('pages/Landing'))
+const Policy = loadable(() => import('pages/Policy'))
 
 function App() {
   useCsrfQuery({ retry: true, staleTime: 1000 * 60 * 30 })
@@ -25,6 +26,8 @@ function App() {
       <ReactQueryDevtools initialIsOpen={false} />
       <Routes>
         <Route path="about" element={<Landing />} />
+        <Route path="policy" element={<Policy />} />
+        <Route path="policy/:type" element={<Policy />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<SignUp />} />
         <Route path="email/check" element={<MailCheck />} />

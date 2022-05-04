@@ -31,7 +31,6 @@ function PostDetail({}: postDetailProps) {
     retry: false,
   })
 
-  const [commentVisible, onToggleComment, setCommentVisible] = useToggle(false)
   const [comments, onChangeComments, setComments] = useInput('')
   const [likeClick, onToggleLike, setLikeClick] = useToggle(false)
   const user = qc.getQueryData<User>('user') as User
@@ -83,7 +82,6 @@ function PostDetail({}: postDetailProps) {
         createCommentMut.mutate([{ contents: comments, createdAt: new Date() }, post._id])
 
         setComments('')
-        setCommentVisible(!commentVisible)
       }
     },
     [comments]
@@ -242,32 +240,33 @@ function PostDetail({}: postDetailProps) {
             {likeClick ? <BsHeartFill className={'filled'} /> : <BsHeart />}
             {post.like_cnt.length}
           </div>
-          <div className={'item'} onClick={onToggleComment}>
+          <div className={'item'}>
             <BsChatLeftDots /> {post.comment.length}
           </div>
           {post.owner_id === user.id && <PostActionButtons _id={post._id} />}
         </div>
-        {commentVisible && (
-          <div style={{ textAlign: 'center' }}>
-            <OutlinedInput
-              placeholder={'Write your comment'}
-              value={comments}
-              onChange={onChangeComments}
-              onKeyDown={onKeyDown}
-              sx={{ borderRadius: '1rem', margin: '0 0.5rem', width: '95%' }}
-              startAdornment={
-                <Avatar
-                  alt="post-user-avatar"
-                  src={profileSrc}
-                  sx={{ width: 44, height: 44, mr: '25px' }}
-                  imgProps={{ crossOrigin: 'anonymous' }}
-                ></Avatar>
-              }
-            />
-          </div>
-        )}
+        <div style={{ textAlign: 'center' }}>
+          <OutlinedInput
+            placeholder={'Write your comment'}
+            value={comments}
+            onChange={onChangeComments}
+            onKeyDown={onKeyDown}
+            sx={{ borderRadius: '1rem', margin: '0 0.5rem', width: '95%' }}
+            startAdornment={
+              <Avatar
+                alt="post-user-avatar"
+                src={profileSrc}
+                sx={{ width: 35, height: 35, mr: '25px' }}
+                imgProps={{ crossOrigin: 'anonymous' }}
+              ></Avatar>
+            }
+          />
+        </div>
         {post.comment.length !== 0 && (
-          <div css={commentStyle} style={{ margin: '10px' }}>
+          <div
+            css={commentStyle}
+            style={{ margin: '1.25rem 1.875rem 1.875rem', border: '1px solid #C9C9C9', borderRadius: '1rem' }}
+          >
             {post.comment.map((viewComment: IComment) => (
               <PostComment key={viewComment.id} viewComment={viewComment} _id={post._id} />
             ))}
@@ -302,17 +301,6 @@ export const boxWrapper = css`
 const imageStyle = css`
   width: 100%;
   border-radius: 1rem;
-`
-const commentStyle = css`
-  font-size: 0.5rem;
-  letter-spacing: 0.00938em;
-  border: thick solid #dddddd;
-  position: relative;
-  padding: 0.5rem;
-  border-radius: 1rem;
-  margin: 1.5625rem 1rem;
-  font: normal 14px/16px NanumBarunGothic;
-  background: #fff;
 `
 
 const wrapStyle = css`

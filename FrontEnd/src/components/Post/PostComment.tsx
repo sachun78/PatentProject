@@ -1,4 +1,5 @@
 import { Avatar, OutlinedInput } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { API_PATH } from 'lib/api/client'
 import { editComment } from 'lib/api/post/editComment'
 import { IComment, User } from 'lib/api/types'
@@ -11,6 +12,27 @@ type postCommentProps = {
   viewComment: IComment
   _id: string
 }
+
+const useStyles = makeStyles(() => ({
+  root: {
+    '& $notchedOutline': {
+      borderWidth: 0,
+    },
+    '&:hover $notchedOutline': {
+      borderWidth: 0,
+    },
+    '&$focused $notchedOutline': {
+      borderWidth: 0,
+    },
+    paddingLeft: '1.25rem',
+    '&:not(:last-child)': {
+      borderBottom: '1px solid #d9d9d9',
+    },
+    height: '4.0625rem',
+  },
+  focused: {},
+  notchedOutline: {},
+}))
 
 const PostComment = ({ viewComment, _id }: postCommentProps) => {
   const qc = useQueryClient()
@@ -59,6 +81,7 @@ const PostComment = ({ viewComment, _id }: postCommentProps) => {
     setEdit(a)
     if (!edit) inputRef.current.focus()
   }
+  const classes = useStyles()
 
   if (edit) {
     return (
@@ -71,12 +94,12 @@ const PostComment = ({ viewComment, _id }: postCommentProps) => {
           onKeyDown={onKeyDown}
           fullWidth
           multiline
-          sx={{ borderRadius: '1rem', paddingLeft: '1.25rem' }}
+          classes={classes}
           startAdornment={
             <Avatar
               alt={viewComment.owner_username}
               src={`${API_PATH}static/` + viewComment.owner_email}
-              sx={{ width: 44, height: 44, mr: '25px' }}
+              sx={{ width: 35, height: 35, mr: '25px' }}
               imgProps={{ crossOrigin: 'anonymous' }}
             />
           }
@@ -107,12 +130,12 @@ const PostComment = ({ viewComment, _id }: postCommentProps) => {
         inputRef={inputRef}
         fullWidth
         multiline
-        sx={{ borderRadius: '1rem', paddingLeft: '1.25rem' }}
+        classes={classes}
         startAdornment={
           <Avatar
             alt={viewComment.owner_username}
             src={`${API_PATH}static/` + viewComment.owner_email}
-            sx={{ width: 44, height: 44, mr: '25px' }}
+            sx={{ width: 35, height: 35, mr: '34px' }}
             style={{ border: '0.1px solid lightgray' }}
             imgProps={{ crossOrigin: 'anonymous' }}
           />
