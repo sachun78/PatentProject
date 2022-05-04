@@ -16,6 +16,7 @@ import useProfileImg from '../../hooks/useProfileImg'
 import { IComment, User } from '../../lib/api/types'
 import PostActionButtons from './PostActionButtons'
 import PostComment from './PostComment'
+import PostTextContainer from './PostTextContainer'
 
 type postDetailProps = {}
 
@@ -38,22 +39,12 @@ function PostDetail({}: postDetailProps) {
   const { profileSrc } = useProfileImg(44)
 
   const [open, setOpen] = useState(false)
-  const [imgSrc, setImgSrc] = useState('')  
-
-  useEffect(() => {
-    if (post) {
-      for (const email in post.like_cnt) {
-        if (user.email === post.like_cnt[email]) {
-          setLikeClick(true)
-        }
-      }         
-      
-    }
-  }, [])
+  const [imgSrc, setImgSrc] = useState('')    
 
   const likeCountMut = useMutation(updateLike, {
     onSuccess: () => {
       qc.invalidateQueries(['posts'])
+      qc.invalidateQueries(['post', post._id])
     },
     onError: () => {
       toast.error('Something went wrong', {
@@ -66,7 +57,7 @@ function PostDetail({}: postDetailProps) {
   })
 
   const onLike = () => {
-    console.log(likeClick, user.email)
+    
     likeCountMut.mutate([
       {
         email: user.email,
@@ -100,7 +91,7 @@ function PostDetail({}: postDetailProps) {
 
   const createCommentMut = useMutation(createComments, {
     onSuccess: () => {
-      qc.invalidateQueries(['post', post._id])
+      qc.invalidateQueries(['post', post._id])      
     },
     onError: () => {
       toast.error('Something went wrong', {
@@ -112,9 +103,22 @@ function PostDetail({}: postDetailProps) {
     },
   })
 
+  useEffect(() => {
+    if (post) {
+      for (const email in post.like_cnt) {
+        if (user.email === post.like_cnt[email]) {
+          console.log(user.email, post.like_cnt[email])
+          setLikeClick(true)
+        }
+      }         
+      
+    }
+  }, [post])
+
+
   if (!post) {
     return <div>로딩중</div>
-  }
+  }  
 
   return (
     <>
@@ -231,9 +235,10 @@ function PostDetail({}: postDetailProps) {
             </ImageList>
           )}
         </figure>
-        <div css={bodyStyle} dangerouslySetInnerHTML={{ __html: `${post.contents}`}}></div>
-        <div css={buttonWrapper}>
+        <PostTextContainer contents={post.contents} />        
+        <div css={buttonWrapper}>        
           <div className={'item'} onClick={onLike}>
+            
             {likeClick ? <BsHeartFill className={'filled'} /> : <BsHeart />}
             {post.like_cnt.length}
           </div>
