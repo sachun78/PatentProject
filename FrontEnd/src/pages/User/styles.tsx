@@ -53,13 +53,15 @@ export const Summary = styled.div`
   svg {
     margin-right: 1rem;
     font-size: 1.5rem;
+    color: ${brandColor};
   }
 
   span {
     display: flex;
     align-items: center;
     margin-bottom: 1rem;
-    color: ${brandColor};
+
+    color: #111;
   }
 `
 

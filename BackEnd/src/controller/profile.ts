@@ -48,7 +48,7 @@ export async function profileImage(
 
     const resizefile = user.email; //+ "." + fileExtension;
     const sharpresult = await sharp(req.file.path)
-      .resize({ width: 128, height: 128 })
+      .resize({ width: 128 })
       .withMetadata()
       .toFile(req.file?.destination + resizefile);
 

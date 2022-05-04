@@ -49,9 +49,9 @@ function SearchBox({ filter, type, onTypeChange, setType }: SearchBoxProps) {
       </IconButton>
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
       <FormControl sx={{ p: '4px' }}>
-        <Select value={type} onChange={onTypeChange} style={{ borderRadius: '0.5rem' }}>
-          <MenuItem value={'title'}>TITLE & COMMENT</MenuItem>
-          <MenuItem value={'email'}>EMAIL</MenuItem>
+        <Select value={type} onChange={onTypeChange} style={{ borderRadius: '0.5rem', border: '1px solid #A1045A' }}>
+          <MenuItem value={'title'}>Title & Comment</MenuItem>
+          <MenuItem value={'email'}>Email</MenuItem>
         </Select>
       </FormControl>
     </Paper>
