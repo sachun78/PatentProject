@@ -1,22 +1,11 @@
 import { css } from '@emotion/react'
 import palette from 'lib/palette'
-import {
-  Navigate,
-  NavLink,
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom'
+import { Navigate, NavLink, useNavigate, useSearchParams } from 'react-router-dom'
 import React, { useCallback, useState } from 'react'
 import { inputStyle, privacyStyle, undoStyle } from './styles'
 import Auth from 'layouts/Auth'
 import useUserQuery from 'hooks/query/useUserQuery'
-import {
-  Button,
-  CircularProgress,
-  FormHelperText,
-  InputAdornment,
-  TextField,
-} from '@mui/material'
+import { Button, CircularProgress, FormHelperText, InputAdornment, TextField } from '@mui/material'
 import useInputs from 'hooks/useInputs'
 import Joi from 'joi'
 import { useMutation, useQuery } from 'react-query'
@@ -52,20 +41,16 @@ export default function Signup({}: RegisterProps) {
     retry: false,
   })
 
-  const mutation = useMutation(
-    'signUp',
-    () => signup({ ...form, email: data?.email || '' }),
-    {
-      onSuccess: () => {
-        // Global Toast 표시, 로그인 페이지로 이동
-        toast.success('register success', { position: 'top-center' })
-        navigate('/login')
-      },
-      onError(err: AxiosError) {
-        setError(err.response?.data.message)
-      },
-    }
-  )
+  const mutation = useMutation('signUp', () => signup({ ...form, email: data?.email || '' }), {
+    onSuccess: () => {
+      // Global Toast 표시, 로그인 페이지로 이동
+      toast.success('register success', { position: 'top-center' })
+      navigate('/login')
+    },
+    onError(err: AxiosError) {
+      setError(err.response?.data.message)
+    },
+  })
 
   const onSubmit = useCallback(
     (e: React.FormEvent) => {
@@ -81,14 +66,11 @@ export default function Signup({}: RegisterProps) {
           'string.empty': 'name is required',
           'string.base': 'name is required',
         }),
-        password: Joi.string()
-          .pattern(new RegExp('^[a-zA-Z0-9]{8,20}$'))
-          .required()
-          .messages({
-            'string.pattern.base': 'password must be 8-20 characters',
-            'string.empty': 'password is required',
-            'string.base': 'password is required',
-          }),
+        password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{8,20}$')).required().messages({
+          'string.pattern.base': 'password must be 8-20 characters',
+          'string.empty': 'password is required',
+          'string.base': 'password is required',
+        }),
         password_confirm: Joi.ref('password'),
       })
       schema
@@ -191,8 +173,8 @@ export default function Signup({}: RegisterProps) {
                 By clicking Sign Up, you are indicating that you have read and
                 <br />
                 acknowledge the
-                <NavLink to={'/login'}> Terms of Service</NavLink> and{' '}
-                <NavLink to={'/'}>Privacy Notice</NavLink>.
+                <NavLink to={'/policy/terms'}> Terms of Service</NavLink> and{' '}
+                <NavLink to={'/policy/privacy'}>Privacy Notice</NavLink>.
               </p>
             </div>
             {error && (
@@ -201,12 +183,7 @@ export default function Signup({}: RegisterProps) {
               </FormHelperText>
             )}
             <div className="button-div">
-              <Button
-                variant="contained"
-                disabled={mutation.isLoading}
-                type="submit"
-                fullWidth
-              >
+              <Button variant="contained" disabled={mutation.isLoading} type="submit" fullWidth>
                 Sign Up
               </Button>
             </div>

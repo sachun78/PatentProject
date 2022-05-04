@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import { memo, useMemo } from 'react'
 import useProfileImg from 'hooks/useProfileImg'
 import { formatDistanceToNow } from 'date-fns'
+import { API_PATH } from '../../lib/api/client'
 
 export type EventDetailCardProps = {
   id: string
@@ -40,7 +41,7 @@ function EventDetailCard({ title, from, to, date, time, place, state, id }: Even
         />
         <Avatar
           alt={to}
-          src="/assets/ParkMina.png"
+          src={API_PATH + 'static/' + to}
           imgProps={{ crossOrigin: 'anonymous' }}
           style={{ border: '0.1px solid lightgray' }}
         />
