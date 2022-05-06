@@ -102,6 +102,7 @@ export const commentStyle = css`
   position: relative;
   border-radius: 1rem;
   margin-bottom: 1.875rem;
+  text-align: center;  
   font: normal normal bold 14px/16px NanumBarunGothic;
   font-weight: 400;
   background: #fff;

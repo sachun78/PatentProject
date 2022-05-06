@@ -14,8 +14,10 @@ import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import useProfileImg from '../../hooks/useProfileImg'
 import { IComment, User } from '../../lib/api/types'
+import ImageContainer from './ImageContainer'
 import PostActionButtons from './PostActionButtons'
 import PostComment from './PostComment'
+import { commentStyle } from './PostFooter'
 import PostTextContainer from './PostTextContainer'
 
 type postDetailProps = {}
@@ -35,10 +37,7 @@ function PostDetail({}: postDetailProps) {
   const [likeClick, onToggleLike, setLikeClick] = useToggle(false)
   const user = qc.getQueryData<User>('user') as User
   const [owner, setOwner] = useState(false)
-  const { profileSrc } = useProfileImg(44)
-
-  const [open, setOpen] = useState(false)
-  const [imgSrc, setImgSrc] = useState('')    
+  const { profileSrc } = useProfileImg(44)  
 
   const likeCountMut = useMutation(updateLike, {
     onSuccess: () => {
@@ -68,12 +67,6 @@ function PostDetail({}: postDetailProps) {
 
     onToggleLike()
   }
-
-  const handleOpen = (e: any) => {
-    setImgSrc(e.target.src)
-    setOpen(true)
-  }
-  const handleClose = () => setOpen(false)
 
   const onKeyDown = useCallback(
     (e: any) => {
@@ -137,102 +130,8 @@ function PostDetail({}: postDetailProps) {
             </h4>
             <div className={'time-date'}>{post.createdAt}</div>
           </div>
-        </div>
-        <figure>
-          {post.images.length === 0 ? (
-            <></>
-          ) : post.images.length === 1 ? (
-            <>
-              <ImageList
-                variant="masonry"
-                cols={1}
-                gap={10}
-                sx={{ width: `640px`, height: `340px`, borderRadius: '1rem', overflow: 'hidden' }}
-              >
-                {post.images?.map((image: any) => (
-                  <div key={image} style={{ width: `640px`, height: `340px`, objectFit: 'cover' }}>
-                    <ImageListItem key={image} sx={{ width: '100%', height: '100%' }}>
-                      <img
-                        src={`${API_PATH}static/${image}`}
-                        loading="lazy"
-                        style={{
-                          borderRadius: '1rem',
-                          cursor: 'zoom-in',
-                        }}
-                        onClick={handleOpen}
-                        crossOrigin="anonymous"
-                      />
-                      <Modal open={open} onClose={handleClose} css={modalStyle}>
-                        <Box css={boxWrapper}>
-                          <img src={imgSrc} css={imageStyle} crossOrigin="anonymous" />
-                        </Box>
-                      </Modal>
-                    </ImageListItem>
-                  </div>
-                ))}
-              </ImageList>
-            </>
-          ) : post.images.length === 2 ? (
-            <ImageList
-              variant="masonry"
-              cols={2}
-              gap={10}
-              sx={{ width: `640px`, height: `340px`, borderRadius: '1rem', position: 'relative', overflow: 'hidden' }}
-            >
-              {post.images?.map((image: any) => (
-                <ImageListItem key={image} sx={{ width: '310px', height: '340px' }}>
-                  <img
-                    src={`${API_PATH}static/${image}`}
-                    loading="lazy"
-                    style={{
-                      borderRadius: '1rem',
-                      width: '310px',
-                      height: '340px',
-                      overflow: 'hidden',
-                      cursor: 'zoom-in',
-                    }}
-                    onClick={handleOpen}
-                    crossOrigin="anonymous"
-                  />
-                  <Modal open={open} onClose={handleClose} css={modalStyle}>
-                    <Box css={boxWrapper}>
-                      <img src={imgSrc} css={imageStyle} crossOrigin="anonymous" />
-                    </Box>
-                  </Modal>
-                </ImageListItem>
-              ))}
-            </ImageList>
-          ) : (
-            <ImageList
-              variant="masonry"
-              cols={2}
-              gap={10}
-              sx={{ width: `640px`, borderRadius: '1rem', position: 'relative', overflow: 'hidden' }}
-            >
-              {post.images?.map((image: any) => (
-                <div key={image} style={{ width: '320px' }}>
-                  <ImageListItem key={image} sx={{ width: '100%' }}>
-                    <img
-                      src={`${API_PATH}static/${image}`}
-                      loading="lazy"
-                      style={{
-                        borderRadius: '1rem',
-                        cursor: 'zoom-in',
-                      }}
-                      onClick={handleOpen}
-                      crossOrigin="anonymous"
-                    />
-                    <Modal open={open} onClose={handleClose} css={modalStyle}>
-                      <Box css={boxWrapper}>
-                        <img src={imgSrc} css={imageStyle} crossOrigin="anonymous" />
-                      </Box>
-                    </Modal>
-                  </ImageListItem>
-                </div>
-              ))}
-            </ImageList>
-          )}
-        </figure>
+        </div>        
+        <ImageContainer images={post.images} isDetail={true} />
         <PostTextContainer contents={post.contents} />        
         <div css={buttonWrapper}>        
           <div className={'item'} onClick={onLike}>
@@ -245,13 +144,14 @@ function PostDetail({}: postDetailProps) {
           </div>
           {post.owner_id === user.id && <PostActionButtons _id={post._id} />}
         </div>
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center', width: '100%' }}>
           <OutlinedInput
+            // fullWith
             placeholder={'Write your comment'}
-            value={comments}
+            value={comments}            
             onChange={onChangeComments}
-            onKeyDown={onKeyDown}
-            sx={{ borderRadius: '1rem', margin: '0 0.5rem', width: '95%' }}
+            onKeyDown={onKeyDown}            
+            sx={{ borderRadius: '1rem', margin: '1.25rem 1.875rem 1.875rem 1.25rem', position: 'relative', width: '95%'}}
             startAdornment={
               <Avatar
                 alt="post-user-avatar"
@@ -262,16 +162,17 @@ function PostDetail({}: postDetailProps) {
             }
           />
         </div>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', margin: '0 1.45rem 0 1.25rem', textAlign: 'center'}}            > 
         {post.comment.length !== 0 && (
-          <div
-            css={commentStyle}
-            style={{ margin: '1.25rem 1.875rem 1.875rem', border: '1px solid #C9C9C9', borderRadius: '1rem' }}
+          <div css={commentStyle}                        
           >
             {post.comment.map((viewComment: IComment) => (
               <PostComment key={viewComment.id} viewComment={viewComment} _id={post._id} />
             ))}
           </div>
         )}
+        </div>
       </div>
     </>
   )
@@ -285,28 +186,10 @@ const modalStyle = css`
   }
 `
 
-export const boxWrapper = css`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  min-width: 700px;
-  min-height: 250px;
-  display: flex;
-  align-items: center;
-  border: none;
-  border-radius: 1rem;
-  background: rgba(0, 0, 0, -1);
-`
-const imageStyle = css`
-  width: 100%;
-  border-radius: 1rem;
-`
-
 const wrapStyle = css`
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.6rem;
+  margin-bottom: 1.6rem;  
   background: #fff;
   box-shadow: 0 3px 6px #00000029;
   border-radius: 1rem;
@@ -368,7 +251,8 @@ const titleStyle = css`
 `
 const buttonWrapper = css`
   display: flex;
-  margin: 1.25rem;
+  margin: 1.25rem 1.875rem 1.875rem 1.25rem;
+  /* margin: 1.25rem; */  
   user-select: none;
   /* justify-content: center; */
 
@@ -397,10 +281,4 @@ const buttonWrapper = css`
       fill: ${brandColor};
     }
   }
-`
-const bodyStyle = css`
-  padding: 0 1.875rem;
-  font: normal normal 800 14px 'NanumSquare';
-  line-height: 1.142857143;
-  color: #333333;
 `
