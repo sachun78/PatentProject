@@ -3,6 +3,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import { Dispatch, useCallback } from 'react'
 import { useSearchInputState } from 'atoms/searchInputState'
 import { searchSelect } from '../Schedules'
+import { useNonOutlineStyle } from '../../lib/styles/muiStyles'
 
 export type SearchBoxProps = {
   filter: Dispatch<string>
@@ -31,6 +32,8 @@ function SearchBox({ filter, type, onTypeChange, setType }: SearchBoxProps) {
     },
     [filter, setType, setValue, type, value]
   )
+
+  const classes = useNonOutlineStyle()
   return (
     <Paper
       component="form"
@@ -49,7 +52,7 @@ function SearchBox({ filter, type, onTypeChange, setType }: SearchBoxProps) {
       </IconButton>
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
       <FormControl sx={{ p: '4px' }}>
-        <Select value={type} onChange={onTypeChange} style={{ borderRadius: '0.5rem', border: '1px solid #A1045A' }}>
+        <Select value={type} onChange={onTypeChange} variant="standard" disableUnderline classes={classes} fullWidth>
           <MenuItem value={'title'}>Title & Comment</MenuItem>
           <MenuItem value={'email'}>Email</MenuItem>
         </Select>

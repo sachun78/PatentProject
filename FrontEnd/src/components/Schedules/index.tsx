@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import IconControl from '../IconControl'
 import { noScheduleStyle } from './styles'
-import { Button, FormGroup, SelectChangeEvent, Switch } from '@mui/material'
+import { Button, FormGroup, SelectChangeEvent, ToggleButton } from '@mui/material'
 import ScheduleCalendar from './ScheduleCalendar'
 import { meetingSwitchState } from 'atoms/memberShipTabState'
 import { useRecoilState } from 'recoil'
@@ -11,6 +11,7 @@ import SearchBox from '../SearchBox'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
 import { getMeetingsCursor } from 'lib/api/meeting/getMeetings'
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 
 type ScheduleViewProps = {}
 export type searchSelect = 'email' | 'title'
@@ -41,9 +42,9 @@ function Schedules({}: ScheduleViewProps) {
     }
   }, [fetchNextPage, inView])
 
-  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked)
-  }, [])
+  const handleChange = useCallback(() => {
+    setChecked((prev) => !prev)
+  }, [setChecked])
 
   const onTypeChange = useCallback((event: SelectChangeEvent) => {
     console.log(event.target.value)
@@ -78,13 +79,9 @@ function Schedules({}: ScheduleViewProps) {
             <SearchBox filter={setMeetingFilter} onTypeChange={onTypeChange} type={type} setType={setSearchType} />
           </SearchContainer>
         )}
-        <Switch
-          edge={'end'}
-          checked={checked}
-          onChange={handleChange}
-          name={'checked'}
-          inputProps={{ 'aria-label': 'schedule-calendar' }}
-        />
+        <ToggleButton value="check" selected={checked} onChange={handleChange} color={'primary'}>
+          <CalendarTodayIcon />
+        </ToggleButton>
       </FormGroup>
       {checked ? <ScheduleCalendar meetings={meetings} /> : <ScheduleTable meetings={meetings} />}
       {!meetingFilter && !checked && hasNextPage && (

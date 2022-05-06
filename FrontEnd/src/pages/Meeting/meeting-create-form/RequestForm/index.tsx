@@ -19,6 +19,8 @@ import { getProfilebyEmail } from 'lib/api/me/getProfile'
 import { brandColor } from 'lib/palette'
 import { API_PATH } from 'lib/api/client'
 import getCountryName from 'lib/countryName'
+import gravatar from 'gravatar'
+import { useRemoveOutlineHover } from '../../../../lib/styles/muiStyles'
 
 type RequestViewProps = {}
 
@@ -45,7 +47,7 @@ export default function RequestForm({}: RequestViewProps) {
     data: profileData,
     isLoading: isLoadingProfile,
     refetch,
-  } = useQuery(['profile', form.to], getProfilebyEmail, {
+  } = useQuery(['profile', meetuser || form.to], getProfilebyEmail, {
     enabled: false,
     retry: false,
     staleTime: 5000,
@@ -136,6 +138,8 @@ export default function RequestForm({}: RequestViewProps) {
     }
   }, [])
 
+  const classes = useRemoveOutlineHover()
+
   if (curEvent.id === '') {
     return <Navigate to={'/meeting'} />
   }
@@ -159,8 +163,9 @@ export default function RequestForm({}: RequestViewProps) {
             value={form.title}
             onChange={onChange}
             placeholder={'Enter the title that will used as meeting name'}
+            classes={classes}
+            sx={{ height: 38 }}
             fullWidth
-            style={{ height: '38px', backgroundColor: '#fff' }}
           />
         </RequestSection>
         <RequestSection title={'Email'}>
@@ -175,7 +180,8 @@ export default function RequestForm({}: RequestViewProps) {
               onBlur={onBlur}
               placeholder={'Meeting Email'}
               fullWidth
-              style={{ height: '38px', backgroundColor: '#fff' }}
+              sx={{ height: 38 }}
+              classes={classes}
             />
           )}
         </RequestSection>
@@ -183,14 +189,14 @@ export default function RequestForm({}: RequestViewProps) {
           <Box style={{ background: brandColor, color: '#fff', padding: '4px', borderRadius: '8px', margin: '4px' }}>
             <h3>Member</h3>
             <FlexRow>
-              {profileData.photo_path && (
-                <Avatar
-                  alt={'photo'}
-                  src={`${API_PATH}static/${profileData.photo_path}`}
-                  sx={{ width: 44, height: 44, marginRight: 1, marginLeft: 1 }}
-                  imgProps={{ crossOrigin: 'anonymous' }}
-                />
-              )}
+              <Avatar
+                alt={'photo'}
+                src={`${API_PATH}static/${profileData.photo_path}`}
+                sx={{ width: 44, height: 44, marginRight: 1, marginLeft: 1 }}
+                imgProps={{ crossOrigin: 'anonymous' }}
+              >
+                <img src={gravatar.url(profileData.email ?? '', { s: '44px', d: 'retro' })} alt={'fallback-img'} />
+              </Avatar>
               <div>
                 <p>{profileData.username}</p>
                 <p>
@@ -230,7 +236,7 @@ export default function RequestForm({}: RequestViewProps) {
             multiline
             fullWidth
             minRows={3}
-            style={{ backgroundColor: '#fff' }}
+            classes={classes}
           />
         </RequestSection>
         <Button

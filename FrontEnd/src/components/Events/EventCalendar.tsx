@@ -50,13 +50,12 @@ function EventCalendar({}: ScheduleCalendarProps) {
         ref={calendarRef}
         plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
         headerToolbar={{
-          left: 'prev next',
-          center: 'title',
-          right: 'today',
+          left: 'title',
+          center: '',
+          right: 'prev today next',
         }}
         initialView="dayGridMonth"
         editable={false}
-        selectable={true}
         selectMirror={true}
         dayMaxEvents={true}
         weekends={true}

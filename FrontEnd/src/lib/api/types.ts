@@ -17,6 +17,7 @@ export type IProfile = {
 export type IProfileDetail = {
   username?: string
   photo_path?: string
+  email?: string
 } & IProfile
 
 export type IEvent = {
