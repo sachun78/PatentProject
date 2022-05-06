@@ -9,11 +9,9 @@ import PostFooter from './PostFooter'
 import PostHeader from './PostHeader'
 import PostImageContainer from './PostImageContainer'
 import 'quill/dist/quill.bubble.css'
-// import Parser from 'html-react-parser';
-// import ReactQuill from 'react-quill';
-
-
-
+import PostTextContainer from './PostTextContainer'
+import { useQuery } from 'react-query'
+import { getPost } from 'lib/api/post/getPost'
 
 type PostProps = {
   _id: string
@@ -27,19 +25,21 @@ type PostProps = {
   createdAt: Date
 }
 
-function Post({ _id, owner_username, owner_email, like_cnt, comment, images, createdAt, contents }: PostProps) {
+function Post({ _id, owner_username, owner_email, like_cnt, comment, images, createdAt, contents }: PostProps) {  
+  
+  const { data: post, isLoading } = useQuery(['post', _id], getPost, {
+    enabled: !!_id,
+    retry: false,
+  })
+
+
   return (
     <div css={postStyle}>
       <PostHeader owner_username={owner_username} owner_email={owner_email} createdAt={createdAt} />
       <Link to={`/postDetail/${_id}`}>
-        {/* <ImageContainer /> */}
-        <PostImageContainer images={images} />
-        <div ref={quillElement} style={{ color: "black" }} css={bodyStyle}></div>
-        {/* <div css={bodyStyle} dangerouslySetInnerHTML={{ __html: `${contents}`}}></div> */}
-        {/* <div css={bodyStyle}>{contents}</div> */}
-        {/* <div css={bodyStyle}>{Parser(`${contents}`)}</div> */}
-        {/* <ReactQuill value={contents} readOnly={true}/> */}
-        {/* <ReactMarkdown scapeHtml={false} source={contents} /> */}
+        <ImageContainer images={images} isDetail={false} />
+        {/* <PostImageContainer images={images} /> */}
+        <PostTextContainer contents={contents} />      
          
       </Link>
       <PostFooter
@@ -78,12 +78,4 @@ const postStyle = css`
     margin-right: 1rem;
   }
 `
-const bodyStyle = css`
-  padding: 0 1.875rem;
-  font: normal normal 800 14px 'NanumSquare';
-  line-height: 1.142857143;
-  color: #333333;
-  /* white-space: pre-wrap */
-  `
-
 export default Post
