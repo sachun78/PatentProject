@@ -18,8 +18,31 @@ function PostWrite() {
   const quillInstance = useRef<any>(null)
   const navigate = useNavigate()
   const user = qc.getQueryData<User>('user') as User
-  const [image, setImage] = useState<string[]>([])
+  const [image, setImage] = useState<string[]>([])  
   
+  const BlockEmbed = Quill.import('blots/block/embed');
+
+  // class ImageBlot extends BlockEmbed {
+  //   static create(data: any) {
+      
+  //     const node = super.create(data);
+  //     node.setAttribute('data-src', data.src);
+  //     node.setAttribute('src', data.src);
+  //     node.setAttribute('crossorigin', data.custom);
+  //     return node;
+  //   }
+
+  //   static value(domNode: any ) {
+  //     const { src, crossorigin } = domNode.dataSet;
+  //     return { src, crossorigin };
+  //   }
+  // }
+
+  // ImageBlot.blotName = 'imageBlot';
+  // ImageBlot.className = 'image-blot';
+  // ImageBlot.tagName = 'img';
+
+  // Quill.register('formats/imageBlot', ImageBlot)
   
   const createPostMut = useMutation(createPost, {
     onSuccess: () => {
@@ -42,16 +65,18 @@ function PostWrite() {
     },
   })
 
-  const onImageSetting = () => {
-    console.log(quillInstance.current.getContents().ops)
-    // const ops = quillInstance.current.getContents().ops
+  const onImageSetting = () => {    
+    
     const innerImage = quillInstance.current.getContents().ops.filter((insert: any) => (insert.insert['image'] !== undefined))
+    
     innerImage.map((insert: any) => {      
-      image.push(insert.insert['image'].slice(29))      
-    })    
+      image.push(insert.insert['image'].slice(29))            
+    })      
+    
   }
 
   const onSubmit = useCallback((e) => {
+    const imgRegex = /<p><img[^>]*src=[\"']?([^>\"']+)[\"']?[^</p>]*>/gi
     onImageSetting()
     e.preventDefault()
     if (!body.trim()) {
@@ -65,7 +90,7 @@ function PostWrite() {
     }
 
     createPostMut.mutate({
-      contents: body,
+      contents: body.replace(imgRegex, ""),
       images: image as string[],
     })
   },[body, image])
@@ -85,8 +110,8 @@ function PostWrite() {
   const imageHandler = () => {    
 
     const ops = quillInstance.current.getContents().ops    
-    const innerImage = ops.filter((insert: any) => (insert.insert['image'] !== undefined))
-    // console.log(innerImage)
+    const innerImage = ops.filter((insert: any) => (insert.insert['image'] !== undefined))       
+    
     if(innerImage.length > 3) {
       toast.success('There are up to four image attachments.', {
         position: toast.POSITION.TOP_CENTER,
@@ -108,32 +133,39 @@ function PostWrite() {
       const file = input.files[0]           
       const formData = new FormData()
 
-      formData.append('post_img', file, makeUUID(file.name))
-      
+      formData.append('post_img', file, makeUUID(file.name))      
 
       postImgUpload(formData).then((res) => {
+        const range = quillInstance.current.getSelection(true);
+        quillInstance.current.root.innerHTML = 
+          quillInstance.current.root.innerHTML + `<img src='${API_PATH}static/${res.fileName}' crossorigin='anonymous'>` 
+
+        // quillInstance.current.insertEmbed(
+        //   range.index,
+        //   'imageBlot',
+        //   {
+        //     src: `${API_PATH}static/${res.fileName}`,
+        //     crossorigin: 'anonymous'
+        //   }
+        // )
         
-          quillInstance.current.root.innerHTML =
-            quillInstance.current.root.innerHTML +
-            `<img src='${API_PATH}static/${res.fileName}' crossorigin='anonymous'>`        
-          
-        
+        // // quillInstance.current.setSelection(range.index + 1)        
       })      
       
     })
   }
 
   useEffect(() => {
+    
     quillInstance.current = new Quill(quillElement.current, {
-      theme: 'snow',
-      placeholder: '   Please enter the contents...',
+      theme: 'snow',      
       modules: {
         toolbar: {
           container: [
             [{ size: ['small', false, 'large', 'huge'] }],
             ['bold', 'italic', 'underline', 'strike'],
             [{ list: 'ordered' }, { list: 'bullet' }],
-            ['blockquote', 'code-block', 'link', 'image'],
+            ['blockquote', 'code-block', 'image'],
           ],
           handlers: {
             image: imageHandler,
@@ -141,13 +173,12 @@ function PostWrite() {
         },
       },
     })
-
+    
     const quill = quillInstance.current
 
-    quill.root.innerText = body
+    quill.root.innerHTML = body
     quill.on('text-change', () => {
-      setbody(quill.root.innerText)
-    })
+      setbody(quill.root.innerHTML)})
   }, [])
 
   return (
@@ -251,7 +282,3 @@ const buttonStyle = css`
     background: ${palette.cyan[600]};
   }
 `
-
-function e(e: any) {
-  throw new Error('Function not implemented.')
-}
