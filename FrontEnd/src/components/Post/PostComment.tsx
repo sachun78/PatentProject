@@ -91,9 +91,8 @@ const PostComment = ({ viewComment, _id }: postCommentProps) => {
           name={viewComment.id}
           placeholder={viewComment.contents}
           onChange={onChange}
-          onKeyDown={onKeyDown}
-          fullWidth
-          multiline
+          onKeyDown={onKeyDown}          
+          sx={{ width:'95%' }}          
           classes={classes}
           startAdornment={
             <Avatar
@@ -126,16 +125,15 @@ const PostComment = ({ viewComment, _id }: postCommentProps) => {
         key={viewComment.id}
         name={viewComment.id}
         value={viewComment.contents}
-        readOnly
+        readOnly        
         inputRef={inputRef}
-        fullWidth
-        multiline
+        sx={{ width:'95%' }}               
         classes={classes}
         startAdornment={
           <Avatar
             alt={viewComment.owner_username}
             src={`${API_PATH}static/` + viewComment.owner_email}
-            sx={{ width: 35, height: 35, mr: '34px' }}
+            sx={{ width: 35, height: 35, mr: '34px'}}
             style={{ border: '0.1px solid lightgray' }}
             imgProps={{ crossOrigin: 'anonymous' }}
           />

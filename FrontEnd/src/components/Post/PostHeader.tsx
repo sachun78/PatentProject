@@ -47,6 +47,7 @@ const headerStyle = css`
   padding-top: 1.875rem;
   padding-left: 1.875rem;
   padding-right: 1.875rem;
+  padding-bottom: 1rem;
   align-items: flex-start;
 `
 const moreStyle = css`
