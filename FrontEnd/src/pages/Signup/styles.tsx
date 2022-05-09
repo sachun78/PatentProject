@@ -16,11 +16,9 @@ export const undoStyle = css`
   justify-content: flex-end;
   font-size: 1.2rem;
   align-self: self-end;
-
-  a {
-    text-decoration: none;
-  }
-
+  position: absolute;
+  text-decoration: none;
+  margin-right: 1rem;
   &:hover {
     color: ${palette.grey[600]};
   }

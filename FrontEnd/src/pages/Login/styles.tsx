@@ -17,6 +17,7 @@ export const loginFormStyle = css`
   .button-div {
     display: flex;
     height: 2.5rem;
+    margin-top: 1.5625rem;
 
     button {
       flex: 1;
@@ -30,7 +31,10 @@ export const loginFormStyle = css`
   }
 `
 export const inputStyle = css`
-  margin-bottom: 1.5625rem;
+  &:not(:first-child) {
+    margin-top: 1.5625rem;
+  }
+  width: 22.230625rem;
   background: #fff;
 
   &:hover {
