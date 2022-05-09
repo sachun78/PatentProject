@@ -27,6 +27,7 @@ route.get('/', isAuth, authCtrl.getAll);
 route.post('/signup', validateSignup, authCtrl.signup);
 route.post('/signin', validateCredential, authCtrl.signin);
 route.post('/logout', isAuth, authCtrl.logout);
+route.post('/changepw', authCtrl.changePasswd);
 route.get('/csrf-token', authCtrl.csrfToken);
 route.get('/me', isAuth, authCtrl.me);
 

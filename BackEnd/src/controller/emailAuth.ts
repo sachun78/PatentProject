@@ -49,6 +49,47 @@ export async function sendAuthEmail(
   }
 }
 
+export async function forgotPasswd(
+  req: IRequest,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const emailInfo = {
+      email: "",
+      code: "",
+      logged: false,
+    };
+
+    emailInfo.email = req.body.email;
+    emailInfo.code = shortid.generate();
+
+    const check = await EmaiAuthlRepo.findByEmail(emailInfo.email);
+    if (check) {
+      console.log(check)
+      if (check.logged === true) {
+        console.log('update mail', emailInfo)
+        await EmaiAuthlRepo.updateAuthMail(check.code, emailInfo);
+      }
+      else {
+        return res.status(409).json({message: `${emailInfo.email} is not signup-user`})
+      }
+    }
+    console.log("[forgotpw-emailInfo]", emailInfo);
+
+    sendmail(emailInfo, EMAILTYPE.FORGOT)
+      .then((value) =>
+        res.status(200).json({ message: `Success send email: ${emailInfo.email}` })
+      )
+      .catch((reason) =>
+        res.status(500).json({ message: `Failed email send ${emailInfo.email}` })
+      );
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+}
+
 export async function isVerifyMail(
   req: IRequest,
   res: Response,

@@ -13,5 +13,6 @@ const validateCredential = [
 
 route.get('/code/:code', emailAuth.isVerifyMail)
 route.post('/send-authemail', validateCredential, emailAuth.sendAuthEmail);
+route.post('/forget-passwd', validateCredential, emailAuth.forgotPasswd);
 
 export default route;

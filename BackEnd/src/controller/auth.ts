@@ -133,11 +133,11 @@ export async function logout(req: IRequest, res: Response, next: NextFunction) {
 
 export async function me(req: IRequest, res: Response, next: NextFunction) {
   if (!req.userId) {
-    return res.status(404).json({ message: 'User not found' })
+    return res.status(404).json({ message: 'User not found' });
   }
 
   try {
-    const user = await UserRepo.findById(req.userId)
+    const user = await UserRepo.findById(req.userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -151,6 +151,24 @@ export async function me(req: IRequest, res: Response, next: NextFunction) {
     });
   } catch (e) {
     console.error(`[authCtrl][me] ${e}`);
+    next(e);
+  }
+}
+
+export async function changePasswd(req: IRequest, res: Response, next: NextFunction) {
+  try {
+    const {email, password} = req.body;
+    const user = await UserRepo.findByEmail(email);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const hashed = await bcrypt.hash(password, envConfig.bcrypt.salt_rouunds);
+    const updated = await UserRepo.updateUser(user.id, {password: hashed});
+
+    res.status(200).json({ message: 'password updated!!!' });
+  } catch (e) {
+    console.error(`[authCtrl][changePasswd] ${e}`);
     next(e);
   }
 }

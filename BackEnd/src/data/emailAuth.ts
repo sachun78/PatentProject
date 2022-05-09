@@ -39,5 +39,4 @@ export async function findByEmail(_email: string) {
 
 export async function deleteAuthMail(email: string) {
   return EmailAuth.deleteMany({email: email});
-  //return EmailAuth.findByIdAndDelete(id);
 }
