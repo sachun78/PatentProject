@@ -93,7 +93,7 @@ function EventSelectDialog({}: EventSelectModalProps) {
       <DialogTitle>Event Select</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          To scheduling to this people, please select your event here. and click the next button.
+          To schedule a meeting with this person, please select an event and click the next button.
         </DialogContentText>
         <SelectBody>
           <div onClick={onPrevClick}>{'<'}</div>

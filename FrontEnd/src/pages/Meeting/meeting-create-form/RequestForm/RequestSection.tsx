@@ -18,12 +18,11 @@ function RequestSection({ title, children }: RequestSectionProps) {
 export default RequestSection
 
 const sectionStyle = css`
-
   margin-bottom: 1rem;
 
   h3 {
     color: ${palette.blueGrey[800]};
-    font-size: 1.25rem;
+    font-size: 1rem;
     line-height: 1.2;
     margin-top: 0;
     margin-bottom: 0.5rem;

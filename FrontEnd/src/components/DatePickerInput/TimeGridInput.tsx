@@ -119,7 +119,6 @@ function TimeGridInput({
                 let endDate = selectInfo.end
                 endDate.setSeconds(endDate.getSeconds() - 1) // allow full day selection
                 const diff = differenceInCalendarDays(startDate, new Date())
-                console.log(diff, startDate)
                 if (diff >= 0) {
                   return (
                     startDate.getDate() === endDate.getDate() &&
@@ -128,7 +127,6 @@ function TimeGridInput({
                 }
                 // return이 false 이면 disable select.
                 // return이 true 이면 enable select.
-
                 return false
               }}
               visibleRange={{ start: startDate }}

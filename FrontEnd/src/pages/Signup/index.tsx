@@ -2,7 +2,7 @@ import { css } from '@emotion/react'
 import palette from 'lib/palette'
 import { Navigate, NavLink, useNavigate, useSearchParams } from 'react-router-dom'
 import React, { useCallback, useState } from 'react'
-import { inputStyle, privacyStyle, undoStyle } from './styles'
+import { privacyStyle } from './styles'
 import Auth from 'layouts/Auth'
 import useUserQuery from 'hooks/query/useUserQuery'
 import { Button, CircularProgress, FormHelperText, InputAdornment, TextField } from '@mui/material'
@@ -14,7 +14,7 @@ import { AxiosError } from 'axios'
 import { MdLock } from 'react-icons/md'
 import { checkCode } from 'lib/api/auth/sendmail'
 import { toast } from 'react-toastify'
-import { containerStyle } from '../Login/styles'
+import { containerStyle, inputStyle } from '../Login/styles'
 
 type RegisterProps = {}
 
@@ -99,9 +99,15 @@ export default function Signup({}: RegisterProps) {
   }
 
   if (codeError) {
-    //TODO: 두번 표시되는 현상 수정
-    toast.error('code is not valid', { position: 'top-center' })
-    return <Navigate replace to={'/login'} />
+    if (!toast.isActive('auth-signup')) {
+      toast.error('Signup Error occurred, Please retry.', {
+        position: 'top-center',
+        pauseOnFocusLoss: false,
+        pauseOnHover: false,
+        toastId: 'auth-signup',
+      })
+      return <Navigate replace to={'/login'} />
+    }
   }
 
   if (!data) {
@@ -110,15 +116,13 @@ export default function Signup({}: RegisterProps) {
   }
   return (
     <Auth>
-      <div css={containerStyle} style={{ padding: '2rem' }}>
-        <div css={undoStyle}>
-          <NavLink to={'/login'} className="link">
-            <span>Back</span>
-          </NavLink>
-        </div>
+      <div css={containerStyle} style={{ padding: '3rem' }}>
         <h2 className="title">Sign Up</h2>
-        <section>
-          <form onSubmit={onSubmit}>
+        <form
+          onSubmit={onSubmit}
+          style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}
+        >
+          <section>
             <TextField
               label="Email"
               variant="outlined"
@@ -126,8 +130,10 @@ export default function Signup({}: RegisterProps) {
               name="email"
               value={data.email}
               css={inputStyle}
+              style={{ width: '100%' }}
+              disabled
               InputProps={{
-                style: { fontSize: 12 },
+                style: { fontSize: 12, backgroundColor: 'white' },
                 endAdornment: (
                   <InputAdornment position="end">
                     <MdLock />
@@ -144,6 +150,7 @@ export default function Signup({}: RegisterProps) {
               onChange={onChange}
               css={inputStyle}
               autoComplete="off"
+              style={{ width: '100%' }}
               InputProps={{ style: { fontSize: 12 } }}
             />
             <TextField
@@ -155,6 +162,7 @@ export default function Signup({}: RegisterProps) {
               onChange={onChange}
               css={inputStyle}
               autoComplete="password"
+              style={{ width: '100%' }}
               InputProps={{ style: { fontSize: 12 } }}
             />
             <TextField
@@ -166,8 +174,21 @@ export default function Signup({}: RegisterProps) {
               value={form.password_confirm}
               onChange={onChange}
               css={inputStyle}
+              style={{ width: '100%' }}
               InputProps={{ style: { fontSize: 12 } }}
             />
+            {error && (
+              <FormHelperText
+                error
+                id="helper-text-signup-error"
+                variant={'outlined'}
+                sx={{ fontSize: 14, textAlign: 'center' }}
+              >
+                {error}
+              </FormHelperText>
+            )}
+          </section>
+          <section>
             <div css={privacyStyle}>
               <p>
                 By clicking Sign Up, you are indicating that you have read and
@@ -177,18 +198,13 @@ export default function Signup({}: RegisterProps) {
                 <NavLink to={'/policy/privacy'}>Privacy Notice</NavLink>.
               </p>
             </div>
-            {error && (
-              <FormHelperText error id="helper-text-signup-error">
-                {error}
-              </FormHelperText>
-            )}
             <div className="button-div">
               <Button variant="contained" disabled={mutation.isLoading} type="submit" fullWidth>
                 Sign Up
               </Button>
             </div>
-          </form>
-        </section>
+          </section>
+        </form>
       </div>
     </Auth>
   )

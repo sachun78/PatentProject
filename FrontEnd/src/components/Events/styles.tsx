@@ -18,9 +18,9 @@ export const wrapper = css`
 export const noScheduleStyle = css`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-
+  max-width: 60rem;
   svg {
     width: 33%;
     height: 33%;

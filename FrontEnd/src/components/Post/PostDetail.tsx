@@ -1,13 +1,12 @@
 import { css } from '@emotion/react'
-import { Avatar, Box, ImageList, ImageListItem, Modal, OutlinedInput } from '@mui/material'
+import { Avatar, OutlinedInput } from '@mui/material'
 import useInput from 'hooks/useInput'
-import useToggle from 'hooks/useToggle'
 import { createComments } from 'lib/api/post/createComment'
 import { getPost } from 'lib/api/post/getPost'
 import { updateLike } from 'lib/api/post/updateLike'
 import { brandColor } from 'lib/palette'
 import media from 'lib/styles/media'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useParams } from 'react-router-dom'
@@ -19,6 +18,7 @@ import PostActionButtons from './PostActionButtons'
 import PostComment from './PostComment'
 import { commentStyle } from './PostFooter'
 import PostTextContainer from './PostTextContainer'
+import { url } from 'gravatar'
 
 type postDetailProps = {}
 
@@ -28,23 +28,26 @@ function PostDetail({}: postDetailProps) {
   const qc = useQueryClient()
   const { id } = useParams()
 
-  const { data: post, isLoading, isFetching } = useQuery(['post', id], getPost, {
+  const {
+    data: post,
+    isLoading,
+    isFetching,
+  } = useQuery(['post', id], getPost, {
     enabled: !!id,
     retry: false,
   })
 
-  const [comments, onChangeComments, setComments] = useInput('')  
-  const user = qc.getQueryData<User>('user') as User  
-  const { profileSrc } = useProfileImg(44)  
+  const [comments, onChangeComments, setComments] = useInput('')
+  const user = qc.getQueryData<User>('user') as User
+  const { profileSrc } = useProfileImg(44)
 
   const likeClicked = useMemo(() => {
-    if(post) return !!post.like_cnt.find((v: string) => v === user.email)
-  },[post, user])
+    if (post) return !!post.like_cnt.find((v: string) => v === user.email)
+  }, [post, user])
 
   const likeCountMut = useMutation(updateLike, {
     onSuccess: () => {
-      
-      qc.invalidateQueries(['posts'])      
+      qc.invalidateQueries(['posts'])
       qc.invalidateQueries(['post', post._id])
     },
     onError: () => {
@@ -58,7 +61,6 @@ function PostDetail({}: postDetailProps) {
   })
 
   const onLike = () => {
-    
     likeCountMut.mutate([
       {
         email: user.email,
@@ -67,7 +69,6 @@ function PostDetail({}: postDetailProps) {
       id as string,
       likeClicked ? 'unchecked' : 'checked',
     ])
-    
   }
 
   const onKeyDown = useCallback(
@@ -84,7 +85,7 @@ function PostDetail({}: postDetailProps) {
 
   const createCommentMut = useMutation(createComments, {
     onSuccess: () => {
-      qc.invalidateQueries(['post', post._id])      
+      qc.invalidateQueries(['post', post._id])
     },
     onError: () => {
       toast.error('Something went wrong', {
@@ -96,9 +97,9 @@ function PostDetail({}: postDetailProps) {
     },
   })
 
-  if (!post)  {
+  if (!post) {
     return <div>로딩중</div>
-  }  
+  }
 
   return (
     <>
@@ -111,7 +112,9 @@ function PostDetail({}: postDetailProps) {
               sx={{ width: 60, height: 60 }}
               style={{ border: '0.1px solid lightgray' }}
               imgProps={{ crossOrigin: 'anonymous' }}
-            />
+            >
+              <img src={url(post.owner_email, { s: '60px', d: 'retro' })} alt={'no-image'} />
+            </Avatar>
           </div>
           <div css={titleStyle}>
             <h4>
@@ -119,12 +122,11 @@ function PostDetail({}: postDetailProps) {
             </h4>
             <div className={'time-date'}>{post.createdAt}</div>
           </div>
-        </div>        
+        </div>
         <ImageContainer images={post.images} isDetail={true} />
-        <PostTextContainer contents={post.contents} />        
-        <div css={buttonWrapper}>        
+        <PostTextContainer contents={post.contents} />
+        <div css={buttonWrapper}>
           <div className={'item'} onClick={onLike}>
-            
             {likeClicked ? <BsHeartFill className={'filled'} /> : <BsHeart />}
             {post.like_cnt.length}
           </div>
@@ -137,10 +139,15 @@ function PostDetail({}: postDetailProps) {
           <OutlinedInput
             // fullWith
             placeholder={'Write your comment'}
-            value={comments}            
+            value={comments}
             onChange={onChangeComments}
-            onKeyDown={onKeyDown}            
-            sx={{ borderRadius: '1rem', margin: '1.25rem 1.875rem 1.875rem 1.25rem', position: 'relative', width: '95%'}}
+            onKeyDown={onKeyDown}
+            sx={{
+              borderRadius: '1rem',
+              margin: '1.25rem 1.875rem 1.875rem 1.25rem',
+              position: 'relative',
+              width: '95%',
+            }}
             startAdornment={
               <Avatar
                 alt="post-user-avatar"
@@ -151,16 +158,15 @@ function PostDetail({}: postDetailProps) {
             }
           />
         </div>
-        
-        <div style={{ display: 'flex', flexDirection: 'column', margin: '0 1.45rem 0 1.25rem', textAlign: 'center'}}            > 
-        {post.comment.length !== 0 && (
-          <div css={commentStyle}                        
-          >
-            {post.comment.map((viewComment: IComment) => (
-              <PostComment key={viewComment.id} viewComment={viewComment} _id={post._id} />
-            ))}
-          </div>
-        )}
+
+        <div style={{ display: 'flex', flexDirection: 'column', margin: '0 1.45rem 0 1.25rem', textAlign: 'center' }}>
+          {post.comment.length !== 0 && (
+            <div css={commentStyle}>
+              {post.comment.map((viewComment: IComment) => (
+                <PostComment key={viewComment.id} viewComment={viewComment} _id={post._id} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </>
@@ -172,7 +178,7 @@ export default PostDetail
 const wrapStyle = css`
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.6rem;  
+  margin-bottom: 1.6rem;
   background: #fff;
   box-shadow: 0 3px 6px #00000029;
   border-radius: 1rem;
@@ -235,7 +241,7 @@ const titleStyle = css`
 const buttonWrapper = css`
   display: flex;
   margin: 1.25rem 1.875rem 1.875rem 1.25rem;
-  /* margin: 1.25rem; */  
+  /* margin: 1.25rem; */
   user-select: none;
   /* justify-content: center; */
 

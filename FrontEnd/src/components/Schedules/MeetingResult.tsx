@@ -9,6 +9,7 @@ import useInput from 'hooks/useInput'
 import { createMeetingResult } from 'lib/api/meeting/createMeetingResult'
 import { upload } from 'lib/api/meeting/resultUpload'
 import styled from '@emotion/styled'
+import { useRemoveOutlineHover } from '../../lib/styles/muiStyles'
 
 export type MeetingResultProps = {}
 
@@ -93,6 +94,8 @@ function MeetingResult({}: MeetingResultProps) {
     [filePath, id, metResultMut, metValue, result]
   )
 
+  const removeHover = useRemoveOutlineHover()
+
   if (isLoading || isLoadingMet || !eventData) {
     return <div>Loading</div>
   }
@@ -104,7 +107,10 @@ function MeetingResult({}: MeetingResultProps) {
     <>
       <ContainerBlock>
         {!metData.history ? (
-          <form onSubmit={onSubmit}>
+          <form
+            onSubmit={onSubmit}
+            style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}
+          >
             <MeetingSection>
               <h2>Result</h2>
               <OutlinedInput minRows={4} multiline value={result} onChange={onChange} />
@@ -124,6 +130,8 @@ function MeetingResult({}: MeetingResultProps) {
                   <ImgView src={`${API_PATH}static/${filePath}`} alt={'result-img'} crossOrigin="anonymous" />
                 ) : (
                   <Button
+                    fullWidth
+                    variant={'outlined'}
                     onClick={(e) => {
                       fileRef?.current?.click()
                       e.preventDefault()
@@ -135,10 +143,10 @@ function MeetingResult({}: MeetingResultProps) {
               </Box>
             </MeetingSection>
             <MeetingSection>
-              <h2>Meeting status</h2>
+              <h2>Whether or not we met</h2>
               <RadioGroup row onChange={onMetChange} value={metValue}>
-                <FormControlLabel value="met" control={<Radio />} label="Met" />
-                <FormControlLabel value="fail" control={<Radio />} label="Failure to meet" />
+                <FormControlLabel value="met" control={<Radio />} label="We met" />
+                <FormControlLabel value="fail" control={<Radio />} label="Not" />
               </RadioGroup>
             </MeetingSection>
 
@@ -150,7 +158,7 @@ function MeetingResult({}: MeetingResultProps) {
           <>
             <MeetingSection>
               <h2>Result</h2>
-              <OutlinedInput minRows={4} multiline value={metData.history.result} />
+              <OutlinedInput minRows={4} multiline value={metData.history.result} classes={removeHover} />
             </MeetingSection>
             {metData.history.photopath && (
               <MeetingSection>
@@ -171,10 +179,10 @@ function MeetingResult({}: MeetingResultProps) {
               </MeetingSection>
             )}
             <MeetingSection>
-              <h2>Meeting status</h2>
+              <h2>Whether or not we met</h2>
               <RadioGroup row value={metData.status ? 'met' : 'fail'}>
-                {metData.status && <FormControlLabel value="met" control={<Radio />} label="Met" />}
-                {!metData.status && <FormControlLabel value="fail" control={<Radio />} label="Failure to meet" />}
+                {metData.status && <FormControlLabel value="met" control={<Radio />} label="We met" />}
+                {!metData.status && <FormControlLabel value="fail" control={<Radio />} label="Not" />}
               </RadioGroup>
             </MeetingSection>
           </>

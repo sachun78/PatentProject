@@ -32,6 +32,18 @@ function Events({}: EventsProps) {
   const onOutdateChange = useCallback(() => {
     setOutdateChecked((prev) => !prev)
   }, [])
+  const onClickNewEvent = useCallback(() => {
+    setOpen(true)
+    setEdit(false)
+    setEvent({ id: '', title: '' })
+
+    let temp_date = new Date()
+    temp_date.setHours(0, 0, 0, 0)
+    setStartDate(temp_date)
+    temp_date = new Date()
+    temp_date.setHours(23, 59, 0, 0)
+    setEndDate(temp_date)
+  }, [setEdit, setEndDate, setEvent, setOpen, setStartDate])
 
   if (isLoading)
     return (
@@ -48,21 +60,10 @@ function Events({}: EventsProps) {
         <div css={noScheduleStyle}>
           <IconControl name={'welcome'} />
           <div>No events were generated.</div>
-          <div>
-            Create your new event
-            <Button
-              variant={'contained'}
-              onClick={() => {
-                setOpen(true)
-                setEdit(false)
-                setStartDate(new Date())
-                setEndDate(new Date())
-              }}
-              style={{ marginLeft: '1rem' }}
-            >
-              +
-            </Button>
-          </div>
+          <br />
+          <Button variant={'contained'} onClick={onClickNewEvent} style={{ marginLeft: '1rem' }}>
+            + Create new event
+          </Button>
         </div>
         <EventModal />
       </>
@@ -107,22 +108,7 @@ function Events({}: EventsProps) {
         </div>
       )}
 
-      <Fab
-        sx={{ position: 'fixed', bottom: 103, right: '2rem', zIndex: 10 }}
-        color="primary"
-        onClick={() => {
-          setOpen(true)
-          setEdit(false)
-          setEvent({ id: '', title: '' })
-
-          let temp_date = new Date()
-          temp_date.setHours(0, 0, 0, 0)
-          setStartDate(temp_date)
-          temp_date = new Date()
-          temp_date.setHours(23, 59, 0, 0)
-          setEndDate(temp_date)
-        }}
-      >
+      <Fab sx={{ position: 'fixed', bottom: 103, right: '2rem', zIndex: 10 }} color="primary" onClick={onClickNewEvent}>
         <AddIcon />
       </Fab>
       <EventModal />

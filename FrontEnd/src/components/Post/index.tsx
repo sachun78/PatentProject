@@ -21,7 +21,7 @@ type PostProps = {
   createdAt: Date
 }
 
-function Post({ _id, owner_username, owner_email, like_cnt, comment, images, createdAt, contents }: PostProps) {  
+function Post({ _id, owner_username, owner_email, like_cnt, comment, images, createdAt, contents }: PostProps) {
   return (
     <div css={postStyle}>
       <PostHeader owner_username={owner_username} owner_email={owner_email} createdAt={createdAt} />

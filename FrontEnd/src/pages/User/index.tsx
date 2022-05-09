@@ -15,7 +15,6 @@ import { Button, ButtonGroup, Grid, Tooltip } from '@mui/material'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { User as UserType } from 'lib/api/types'
 import useBuddyQuery from 'hooks/query/useBuddyQuery'
-import { IoMdMail } from 'react-icons/io'
 import { MdOutlineSafetyDivider, MdOutlineWork, MdPersonAdd, MdPersonRemove } from 'react-icons/md'
 import { getProfilebyEmail } from 'lib/api/me/getProfile'
 import { toast } from 'react-toastify'
@@ -27,11 +26,13 @@ import { eventSelectModalState } from 'atoms/eventState'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
 import getCountryName from 'lib/countryName'
 import { BiWorld } from 'react-icons/bi'
-import { useImg } from 'hooks/useProfileImg'
 import randomColor from 'randomcolor'
 import { brandColor } from 'lib/palette'
 import { BsFilePerson } from 'react-icons/bs'
 import EventSelectDialog from 'components/Events/EventSelectDialog'
+import { url } from 'gravatar'
+import { API_PATH } from 'lib/api/client'
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
 
 export type UserProps = {}
 
@@ -69,7 +70,6 @@ function User({}: UserProps) {
       toast.error(err.response?.data.message)
     },
   })
-  const image_src = useImg(profileData?.photo_path, email)
   const onAddNetwork = useCallback(() => {
     if (!email) return
     addBuddyMutation.mutate(email)
@@ -103,7 +103,14 @@ function User({}: UserProps) {
   return (
     <Container>
       <UserHeader>
-        <img src={image_src.profileSrc} alt={email} crossOrigin={'anonymous'} />
+        <img
+          src={`${API_PATH}static/${email}`}
+          alt={email}
+          crossOrigin={'anonymous'}
+          onError={(e) => {
+            e.currentTarget.src = url(email ?? '', { s: `100px`, d: 'retro' })
+          }}
+        />
         <NameMailContainer>
           <h1>
             {email} {user.email === email && '(나)'}
@@ -136,7 +143,7 @@ function User({}: UserProps) {
               e.preventDefault()
             }}
           >
-            <IoMdMail />
+            <AlternateEmailIcon />
           </Link>
         )}
       </UserHeader>

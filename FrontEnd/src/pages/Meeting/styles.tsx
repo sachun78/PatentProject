@@ -33,6 +33,8 @@ export const MeetingSection = styled.section`
     white-space: pre-wrap;
     max-width: 100%;
     overflow-wrap: break-word;
+    font-size: 1rem;
+    color: #5e5c7f;
   }
 
   h2 {
@@ -44,7 +46,7 @@ export const MeetingSection = styled.section`
   p {
     margin: 0;
     font: normal normal normal 16px/18px NanumSquareOTF;
-    padding: 1rem 0;
+    padding: 0.5rem 0 1rem;
     border-radius: 0.5rem;
 
     &:hover {
@@ -62,15 +64,16 @@ const statusColor = ({ state }: { state: string }) => css`
 `
 
 export const StatusBlock = styled.div`
-  padding: 0.5rem 0.75rem;
+  padding: 0.2rem 0.75rem;
   background: #ddd;
   color: white;
   font-weight: 600;
   line-height: 1.5;
-  border-radius: 0.5rem;
+  border-radius: 0.9rem;
   display: inline-block;
   box-shadow: 0 0 0.25rem 0 rgba(0, 0, 0, 0.1);
-  ${statusColor}
+  text-align: center;
+  ${statusColor};
 `
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -87,3 +90,18 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }))
+
+export const ScheduleInfoBlock = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  color: #8b88b1;
+
+  svg {
+    margin-right: 1rem;
+  }
+
+  &:nth-last-of-type(2) {
+    margin-bottom: 1rem;
+  }
+`
