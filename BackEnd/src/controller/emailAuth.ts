@@ -24,25 +24,24 @@ export async function sendAuthEmail(
     emailInfo.code = shortid.generate();
 
     const check = await EmaiAuthlRepo.findByEmail(req.body.email);
-    if (check && check.logged === true) {
-      return res
-        .status(409)
-        .json({ message: `Email (${req.body.email}) is already in use.` });
+    if (check) {
+      if (check.logged === false) {
+        console.log(check.id)
+        await EmaiAuthlRepo.deleteAuthMail(check.email);
+      }
+      else if (check.logged === true) {
+        return res.status(409).json({ message: `Email (${req.body.email}) is already in use.` });
+      }
     }
-
     console.log("[emailInfo]", emailInfo);
 
     const savedMail = await EmaiAuthlRepo.saveAuthMaiil(emailInfo);
     sendmail(savedMail, EMAILTYPE.AUTH)
       .then((value) =>
-        res
-          .status(200)
-          .json({ message: `Success send email: ${emailInfo.email}` })
+        res.status(200).json({ message: `Success send email: ${emailInfo.email}` })
       )
       .catch((reason) =>
-        res
-          .status(500)
-          .json({ message: `Failed email send ${emailInfo.email}` })
+        res.status(500).json({ message: `Failed email send ${emailInfo.email}` })
       );
   } catch (e) {
     console.error(e);
@@ -65,6 +64,7 @@ export async function isVerifyMail(
 
     const diff = new Date().getTime() - new Date(mail.createdAt).getTime();
     if (diff > 1000 * 60 * 60 * 24 || mail.logged) {
+      await EmaiAuthlRepo.deleteAuthMail(mail.email);
       return res.status(410).json({ message: "Expired code" });
     }
 
@@ -75,9 +75,7 @@ export async function isVerifyMail(
       return res.status(404).json({ message: "Email info not found" });
     }
 
-    res
-      .status(200)
-      .json({ email: authmail.email, message: "verified success !!!" });
+    res.status(200).json({ email: authmail.email, message: "verified success !!!" });
   } catch (e) {
     console.error(e);
     next(e);
