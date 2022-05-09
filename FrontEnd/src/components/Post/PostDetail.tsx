@@ -1,13 +1,13 @@
 import { css } from '@emotion/react'
-import { Avatar, Box, ImageList, ImageListItem, Modal, OutlinedInput } from '@mui/material'
+import { Avatar, OutlinedInput } from '@mui/material'
+import { formatDistanceToNow } from 'date-fns'
 import useInput from 'hooks/useInput'
-import useToggle from 'hooks/useToggle'
 import { createComments } from 'lib/api/post/createComment'
 import { getPost } from 'lib/api/post/getPost'
 import { updateLike } from 'lib/api/post/updateLike'
 import { brandColor } from 'lib/palette'
 import media from 'lib/styles/media'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useParams } from 'react-router-dom'
@@ -28,12 +28,24 @@ function PostDetail({}: postDetailProps) {
   const qc = useQueryClient()
   const { id } = useParams()
 
-  const { data: post, isLoading, isFetching } = useQuery(['post', id], getPost, {
+  const { data: post, isLoading } = useQuery(['post', id], getPost, {
     enabled: !!id,
     retry: false,
   })
 
-  const [comments, onChangeComments, setComments] = useInput('')  
+  const date = useMemo(() => {
+    if(post) return new Date(post.createdAt)}
+    , []) as Date 
+  
+  const today = new Date();
+  const diff = useMemo(() => {
+    if(post) {
+      return (today.getTime() - date.getTime()) /1000
+    }
+  }, [])  
+
+  const [comments, onChangeComments, setComments] = useInput('')
+  
   const user = qc.getQueryData<User>('user') as User  
   const { profileSrc } = useProfileImg(44)  
 
@@ -96,7 +108,7 @@ function PostDetail({}: postDetailProps) {
     },
   })
 
-  if (!post)  {
+  if (!post || isLoading)  {
     return <div>로딩중</div>
   }  
 
@@ -117,7 +129,10 @@ function PostDetail({}: postDetailProps) {
             <h4>
               <span>{post.owner_username}/ etc ..</span>
             </h4>
-            <div className={'time-date'}>{post.createdAt}</div>
+            <div className={'time-date'}>
+                {diff as number > 86400 ? new Date(post.createdAt).toDateString() : formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
+                <div>{diff}</div>                           
+            </div>
           </div>
         </div>        
         <ImageContainer images={post.images} isDetail={true} />

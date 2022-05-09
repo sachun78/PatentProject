@@ -1,11 +1,11 @@
 import { css } from '@emotion/react'
 import { Avatar } from '@mui/material'
+import { formatDistanceToNow } from 'date-fns'
+import gravatar from 'gravatar'
 import { API_PATH } from 'lib/api/client'
 import React, { useMemo, useState } from 'react'
 import { MdMoreHoriz } from 'react-icons/md'
 import palette, { brandColor } from '../../lib/palette'
-import { formatDistanceToNow } from 'date-fns'
-import gravatar from 'gravatar'
 
 export type PostHeaderProps = {
   owner_username: string
@@ -14,8 +14,10 @@ export type PostHeaderProps = {
 }
 
 function PostHeader({ owner_username, owner_email, createdAt }: PostHeaderProps) {
-  const date = useMemo(() => new Date(createdAt), [])
+  const date = useMemo(() => new Date(createdAt), [])  
   const [url] = useState(`${API_PATH}static/${owner_email}`)
+  const today = new Date();
+  const diff = (today.getTime() - date.getTime()) / 1000
 
   return (
     <div css={headerStyle}>
@@ -33,7 +35,8 @@ function PostHeader({ owner_username, owner_email, createdAt }: PostHeaderProps)
         <h4>
           <span>{owner_username}</span>
         </h4>
-        <div className={'time-date'}>{formatDistanceToNow(date, { addSuffix: true })}</div>
+        <div className={'time-date'}>
+          {diff > 86400 ? date.toDateString() : formatDistanceToNow(date, { addSuffix: true })}</div>
       </div>
       <div css={moreStyle} onClick={() => {}}>
         <MdMoreHoriz />
