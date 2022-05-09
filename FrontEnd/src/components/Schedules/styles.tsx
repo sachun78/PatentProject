@@ -128,14 +128,14 @@ export const calendarStyle = css`
 
   .fc-direction-ltr .fc-daygrid-event.fc-event-end {
     margin-right: 1rem !important;
-    border-top-right-radius: 0.625rem !important;
-    border-bottom-right-radius: 0.625rem !important;
+    border-top-right-radius: 1rem !important;
+    border-bottom-right-radius: 1rem !important;
   }
 
   .fc-event-start {
     margin-left: 1rem !important;
-    border-top-left-radius: 0.625rem !important;
-    border-bottom-left-radius: 0.625rem !important;
+    border-top-left-radius: 1rem !important;
+    border-bottom-left-radius: 1rem !important;
   }
 
   .fc-icon-chevron-left:before {

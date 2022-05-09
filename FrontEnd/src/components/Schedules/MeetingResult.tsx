@@ -8,6 +8,7 @@ import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
 import useInput from 'hooks/useInput'
 import { createMeetingResult } from 'lib/api/meeting/createMeetingResult'
 import { upload } from 'lib/api/meeting/resultUpload'
+import styled from '@emotion/styled'
 
 export type MeetingResultProps = {}
 
@@ -120,12 +121,7 @@ function MeetingResult({}: MeetingResultProps) {
                   name="mhistory_img"
                 />
                 {filePath ? (
-                  <img
-                    src={`${API_PATH}static/${filePath}`}
-                    alt={'img_path'}
-                    crossOrigin="anonymous"
-                    style={{ width: '100%', height: '100%' }}
-                  />
+                  <ImgView src={`${API_PATH}static/${filePath}`} alt={'result-img'} crossOrigin="anonymous" />
                 ) : (
                   <Button
                     onClick={(e) => {
@@ -161,17 +157,15 @@ function MeetingResult({}: MeetingResultProps) {
                 <h2>Photo</h2>
                 <Box
                   component="span"
-                  sx={{ p: 1 }}
                   onClick={(e: React.MouseEvent) => {
                     fileRef?.current?.click()
                     e.preventDefault()
                   }}
                 >
-                  <img
+                  <ImgView
                     src={`${API_PATH}static/${metData.history.photopath}`}
                     alt={'result_photo'}
                     crossOrigin="anonymous"
-                    style={{ width: '100%', height: '100%' }}
                   />
                 </Box>
               </MeetingSection>
@@ -190,4 +184,9 @@ function MeetingResult({}: MeetingResultProps) {
   )
 }
 
+const ImgView = styled.img`
+  width: 100%;
+  height: 100%;
+  border: 1px solid #ddd;
+`
 export default MeetingResult
