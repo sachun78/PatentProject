@@ -12,10 +12,10 @@ import PostForm from './form/PostForm'
 type HomeProps = {}
 
 function Home({}: HomeProps) {
-  const { data: posts, isLoading } = usePostQuery()
+  const { data: posts, isLoading } = usePostQuery()  
   const [filter, setFilter] = useState(false)
 
-  if (isLoading) return <div>로딩중!!</div>
+  if (isLoading) return <div>로딩중!!</div>  
 
   const onFilter = (value: boolean) => {
     setFilter(!filter)

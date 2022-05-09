@@ -18,26 +18,28 @@ function PostEdit() {
   const quillElement = useRef<any>(null)
   const quillInstance = useRef<any>(null)
   const navigate = useNavigate()
-  const user = qc.getQueryData<User>('user') as User  
+  const user = qc.getQueryData<User>('user') as User
 
   const { id } = useParams()
   const { data: post, isLoading } = useQuery(['post', id], getPost, {
     retry: false,
-  })  
+  })
 
-  const [body, setBody] = useState("")
+  const [body, setBody] = useState('') 
 
   const onImageSetting = () => {
-    
-    const innerImage = quillInstance.current.getContents().ops.filter((insert: any) => (insert.insert['image'] !== undefined))
-    innerImage.map((insert: any) => {      
-      image.push(insert.insert['image'].slice(29))      
-    })    
+    const innerImage = quillInstance.current
+      .getContents()
+      .ops.filter((insert: any) => insert.insert['image'] !== undefined)
+    innerImage.map((insert: any) => {
+      image.push(insert.insert['image'].slice(29))
+    })
   }
 
   const postEditMut = useMutation(editPost, {
     onSuccess: () => {
       qc.invalidateQueries(['posts'])
+      qc.invalidateQueries(['post', id])
       toast.success('Editing Successful', {
         position: toast.POSITION.TOP_CENTER,
         pauseOnHover: false,
@@ -56,27 +58,31 @@ function PostEdit() {
     },
   })
 
-  const onSubmit = useCallback((e) => {
-    onImageSetting()
-    e.preventDefault()
-    if (!body.trim()) {
-      toast.error('Please enter the contents', {
-        position: toast.POSITION.TOP_CENTER,
-        pauseOnHover: false,
-        pauseOnFocusLoss: false,
-        autoClose: 3000,
-      })
-      return
-    }
+  const onSubmit = useCallback(
+    (e) => {
+      const imgRegex = /<p><img[^>]*src=[\"']?([^>\"']+)[\"']?[^</p>]*>/gi
+      onImageSetting()
+      e.preventDefault()
+      if (!body.trim()) {
+        toast.error('Please enter the contents', {
+          position: toast.POSITION.TOP_CENTER,
+          pauseOnHover: false,
+          pauseOnFocusLoss: false,
+          autoClose: 3000,
+        })
+        return
+      }
 
-    postEditMut.mutate([
-      {
-        contents: body,
-        images: image as string[],
-      },
-      id as string,
-    ])
-  },[body, image])
+      postEditMut.mutate([
+        {
+          contents: body.replace(imgRegex, ''),
+          images: image as string[],
+        },
+        id as string,
+      ])
+    },
+    [body, image]
+  )
 
   const onCancle = () => {
     navigate(-1)
@@ -84,20 +90,30 @@ function PostEdit() {
 
   const makeUUID = (fileName: string) => {
     function s4() {
-      return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+      return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
     }
-    
-    return s4() + s4() + s4() + s4() + s4() + s4() + s4() + s4() + fileName.substring(fileName.indexOf("."), fileName.length + 1);
+
+    return (
+      s4() +
+      s4() +
+      s4() +
+      s4() +
+      s4() +
+      s4() +
+      s4() +
+      s4() +
+      fileName.substring(fileName.indexOf('.'), fileName.length + 1)
+    )
   }
 
   // 이미지 처리를 하는 핸들러
   const imageHandler = () => {
-    const ops = quillInstance.current.getContents().ops    
-    const innerImage = ops.filter((insert: any) => (insert.insert['image'] !== undefined))
+    const ops = quillInstance.current.getContents().ops
+    const innerImage = ops.filter((insert: any) => insert.insert['image'] !== undefined)
     // console.log(innerImage)
-    if(innerImage.length > 3) {
-      alert("이미지는 4개까지")
-      return;
+    if (innerImage.length > 3) {
+      alert('이미지는 4개까지')
+      return
     }
 
     // 1. 이미지를 저장할 input type=file DOM을 만든다.
@@ -115,11 +131,9 @@ function PostEdit() {
       formData.append('post_img', file, makeUUID(file.name))
 
       postImgUpload(formData).then((res) => {
-
-        quillInstance.current.root.innerHTML = 
-          quillInstance.current.root.innerHTML + `<img src='${API_PATH}static/${res.fileName}' crossorigin='anonymous'>`               
-      })  
-      
+        quillInstance.current.root.innerHTML =
+          quillInstance.current.root.innerHTML + `<img src='${API_PATH}static/${res.fileName}' crossorigin='anonymous'>`
+      })
     })
   }
 
@@ -143,13 +157,15 @@ function PostEdit() {
     })
 
     const quill = quillInstance.current
-    const imageView = post.images.map((img: any) => (
-      `<img src='${API_PATH}static/${img}' crossOrigin='anonymous' />`
-    ));
-    quill.root.innerHTML = `${post.contents}${imageView}`
+
+    post.images.map(
+      (img: any) =>
+        (quill.root.innerHTML = quill.root.innerHTML + `<img src='${API_PATH}static/${img}' crossOrigin='anonymous' />`)
+    )
+    quill.root.innerHTML = quill.root.innerHTML + post.contents
 
     quill.on('text-change', () => {
-      setBody(quill.root.innerText)
+      setBody(quill.root.innerHTML)
     })
   }, [])
 

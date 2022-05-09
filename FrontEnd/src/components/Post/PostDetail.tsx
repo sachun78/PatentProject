@@ -7,7 +7,7 @@ import { getPost } from 'lib/api/post/getPost'
 import { updateLike } from 'lib/api/post/updateLike'
 import { brandColor } from 'lib/palette'
 import media from 'lib/styles/media'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useParams } from 'react-router-dom'
@@ -28,20 +28,23 @@ function PostDetail({}: postDetailProps) {
   const qc = useQueryClient()
   const { id } = useParams()
 
-  const { data: post, isLoading } = useQuery(['post', id], getPost, {
+  const { data: post, isLoading, isFetching } = useQuery(['post', id], getPost, {
     enabled: !!id,
     retry: false,
   })
 
-  const [comments, onChangeComments, setComments] = useInput('')
-  const [likeClick, onToggleLike, setLikeClick] = useToggle(false)
-  const user = qc.getQueryData<User>('user') as User
-  const [owner, setOwner] = useState(false)
+  const [comments, onChangeComments, setComments] = useInput('')  
+  const user = qc.getQueryData<User>('user') as User  
   const { profileSrc } = useProfileImg(44)  
+
+  const likeClicked = useMemo(() => {
+    if(post) return !!post.like_cnt.find((v: string) => v === user.email)
+  },[post, user])
 
   const likeCountMut = useMutation(updateLike, {
     onSuccess: () => {
-      qc.invalidateQueries(['posts'])
+      
+      qc.invalidateQueries(['posts'])      
       qc.invalidateQueries(['post', post._id])
     },
     onError: () => {
@@ -62,10 +65,9 @@ function PostDetail({}: postDetailProps) {
         userId: user.id,
       },
       id as string,
-      likeClick ? 'unchecked' : 'checked',
+      likeClicked ? 'unchecked' : 'checked',
     ])
-
-    onToggleLike()
+    
   }
 
   const onKeyDown = useCallback(
@@ -94,20 +96,7 @@ function PostDetail({}: postDetailProps) {
     },
   })
 
-  useEffect(() => {
-    if (post) {
-      for (const email in post.like_cnt) {
-        if (user.email === post.like_cnt[email]) {
-          console.log(user.email, post.like_cnt[email])
-          setLikeClick(true)
-        }
-      }         
-      
-    }
-  }, [post])
-
-
-  if (!post) {
+  if (!post)  {
     return <div>로딩중</div>
   }  
 
@@ -136,7 +125,7 @@ function PostDetail({}: postDetailProps) {
         <div css={buttonWrapper}>        
           <div className={'item'} onClick={onLike}>
             
-            {likeClick ? <BsHeartFill className={'filled'} /> : <BsHeart />}
+            {likeClicked ? <BsHeartFill className={'filled'} /> : <BsHeart />}
             {post.like_cnt.length}
           </div>
           <div className={'item'}>
@@ -179,12 +168,6 @@ function PostDetail({}: postDetailProps) {
 }
 
 export default PostDetail
-
-const modalStyle = css`
-  .MuiBackdrop-root {
-    background: rgba(0, 0, 0, -1);
-  }
-`
 
 const wrapStyle = css`
   display: flex;

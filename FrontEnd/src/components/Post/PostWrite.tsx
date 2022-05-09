@@ -11,7 +11,9 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { API_PATH } from '../../lib/api/client'
 
-function PostWrite() {
+type postWriteProps = {}
+
+function PostWrite({}: postWriteProps) {
   const qc = useQueryClient()
   const [body, setbody] = useState('')
   const quillElement = useRef<any>(null)
@@ -20,8 +22,7 @@ function PostWrite() {
   const user = qc.getQueryData<User>('user') as User
   const [image, setImage] = useState<string[]>([])  
   
-  const BlockEmbed = Quill.import('blots/block/embed');
-
+  // const BlockEmbed = Quill.import('blots/block/embed');
   // class ImageBlot extends BlockEmbed {
   //   static create(data: any) {
       

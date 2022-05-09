@@ -16,8 +16,7 @@ type IImage = {
   rows: number
 }
 
-const ImageContainer = ({ images, isDetail } : imageContainerProps) => {
-  console.log(isDetail)
+const ImageContainer = ({ images, isDetail } : imageContainerProps) => {  
   
   const [open, setOpen] = useState(false)
   const [imgSrc, setImgSrc] = useState('')    

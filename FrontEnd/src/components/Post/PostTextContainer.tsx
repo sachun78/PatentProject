@@ -1,14 +1,7 @@
 import { css } from '@emotion/react'
-import { IComment } from 'lib/api/types'
-import media from 'lib/styles/media'
 import Quill from 'quill'
-import React, { useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
-import ImageContainer from './ImageContainer'
-import PostFooter from './PostFooter'
-import PostHeader from './PostHeader'
-import PostImageContainer from './PostImageContainer'
 import 'quill/dist/quill.bubble.css'
+import React, { useEffect, useRef } from 'react'
 
 type postTextContainerProps = {
   contents: string
@@ -23,10 +16,13 @@ function PostTextContainer({ contents }: postTextContainerProps) {
       theme: 'bubble',
       readOnly: true
     })
-
     quillInstance.current.root.innerHTML = `${contents}`
   }, [])
   
+  useEffect(() => {
+    quillInstance.current.root.innerHTML = `${contents}`
+  },[contents])
+
   return (    
     <div ref={quillElement} css={bodyStyle}></div>       
       

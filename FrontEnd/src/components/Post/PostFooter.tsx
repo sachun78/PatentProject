@@ -3,7 +3,7 @@ import useToggle from 'hooks/useToggle'
 import { updateLike } from 'lib/api/post/updateLike'
 import { IComment, User } from 'lib/api/types'
 import { brandColor } from 'lib/palette'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
 import { useMutation, useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
@@ -12,7 +12,6 @@ import PostComment from './PostComment'
 
 export type PostFooterProps = {
   _id: string
-  contents: string
   owner_thumb: string
   owner_username: string
   comment: IComment[]
@@ -23,28 +22,25 @@ export type PostFooterProps = {
 
 function PostFooter({ _id, like_cnt, comment }: PostFooterProps) {
   const qc = useQueryClient()
-
-  const [likeClick, onToggleLike, setLikeClick] = useToggle(false)
+  // const [likeClick, onToggleLike, setLikeClick] = useToggle(false)
   const user = qc.getQueryData<User>('user') as User
   const [owner, setOwner] = useState(false)
-
+  const likeClicked = useMemo(() => {
+    return like_cnt.find((v: string) => v === user.email)
+  },[like_cnt, user.email])
   const viewComments = comment.filter((comments: IComment) => comment.indexOf(comments) < 2)
 
   useEffect(() => {
     if (_id === user.id) {
       setOwner(true)
-    }
-
-    for (const email in like_cnt) {
-      if (user.email === like_cnt[email]) {
-        setLikeClick(true)
-      }
-    }
+    } 
+    
   }, [])
 
   const likeCountMut = useMutation(updateLike, {
     onSuccess: () => {
       qc.invalidateQueries(['posts'])
+      qc.invalidateQueries(['post', _id])
     },
     onError: () => {
       toast.error('Something went wrong', {
@@ -63,17 +59,15 @@ function PostFooter({ _id, like_cnt, comment }: PostFooterProps) {
         userId: user.id,
       },
       _id,
-      likeClick ? 'unchecked' : 'checked',
-    ])
-
-    onToggleLike()
+      likeClicked ? 'unchecked' : 'checked',
+    ])    
   }
 
   return (
     <div css={footerStyle /*flex*/}>
       <div css={buttonWrapper}>
         <div className={'item'} onClick={onLike}>
-          {likeClick ? <BsHeartFill className={'filled'} /> : <BsHeart />}
+          {likeClicked ? <BsHeartFill className={'filled'} /> : <BsHeart />}
           {like_cnt.length}
         </div>
         <Link to={`/postDetail/${_id}`}>
@@ -102,7 +96,7 @@ export const commentStyle = css`
   position: relative;
   border-radius: 1rem;
   margin-bottom: 1.875rem;
-  text-align: center;  
+  text-align: center;
   font: normal normal bold 14px/16px NanumBarunGothic;
   font-weight: 400;
   background: #fff;

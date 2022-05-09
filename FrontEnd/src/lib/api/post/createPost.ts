@@ -8,6 +8,6 @@ export async function createPost(input: postInput) {
 }
 
 type postInput = {
-  contents: any
+  contents: string
   images: string[]
 }

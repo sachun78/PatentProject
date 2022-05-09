@@ -1,17 +1,13 @@
 import { css } from '@emotion/react'
 import { IComment } from 'lib/api/types'
 import media from 'lib/styles/media'
-import Quill from 'quill'
-import React, { useEffect, useRef } from 'react'
+import 'quill/dist/quill.bubble.css'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import ImageContainer from './ImageContainer'
 import PostFooter from './PostFooter'
 import PostHeader from './PostHeader'
-import PostImageContainer from './PostImageContainer'
-import 'quill/dist/quill.bubble.css'
 import PostTextContainer from './PostTextContainer'
-import { useQuery } from 'react-query'
-import { getPost } from 'lib/api/post/getPost'
 
 type PostProps = {
   _id: string
@@ -26,25 +22,15 @@ type PostProps = {
 }
 
 function Post({ _id, owner_username, owner_email, like_cnt, comment, images, createdAt, contents }: PostProps) {  
-  
-  const { data: post, isLoading } = useQuery(['post', _id], getPost, {
-    enabled: !!_id,
-    retry: false,
-  })
-
-
   return (
     <div css={postStyle}>
       <PostHeader owner_username={owner_username} owner_email={owner_email} createdAt={createdAt} />
       <Link to={`/postDetail/${_id}`}>
         <ImageContainer images={images} isDetail={false} />
-        {/* <PostImageContainer images={images} /> */}
-        <PostTextContainer contents={contents} />      
-         
+        <PostTextContainer contents={contents} />
       </Link>
       <PostFooter
         _id={_id}
-        contents={contents}
         owner_thumb={owner_email}
         owner_username={owner_username}
         comment={comment}
