@@ -12,9 +12,23 @@ interface IRequest extends Request {
 }
 
 export async function getAll(req: IRequest, res: Response, next: NextFunction) {
-  const filter = req.query.filter as string;
+
+  const curPos = req.query.curPos as string;
+  const cnt = req.query.cnt as string;
 
   try {
+    if (curPos && cnt) {
+      let _curPos: number = parseInt(curPos);
+      let _cnt: number = parseInt(cnt);
+      const indexUser = await UserRepo.getUserAllIndex(_curPos, _cnt);
+      let sendData: any = [];
+
+      for (let i = 0; i < indexUser.length; i++) {
+        const {password, certified, ...rest} = indexUser[i];
+        sendData.push(rest);
+      }
+      return res.status(200).json(sendData);
+    }
     const filterUser = await UserRepo.getUserAll();
     let sendData: any = [];
 

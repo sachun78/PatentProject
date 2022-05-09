@@ -23,7 +23,7 @@ const validateSignup = [
   validate
 ]
 
-//route.get('/', isAuth, authCtrl.getAll);
+route.get('/', isAuth, authCtrl.getAll);
 route.post('/signup', validateSignup, authCtrl.signup);
 route.post('/signin', validateCredential, authCtrl.signin);
 route.post('/logout', isAuth, authCtrl.logout);
