@@ -1,16 +1,11 @@
-import {
-  Button,
-  FormHelperText,
-  InputLabel,
-  OutlinedInput,
-  Stack,
-} from '@mui/material'
+import { Button, FormHelperText, OutlinedInput } from '@mui/material'
 import React, { FormEvent, useCallback, useState } from 'react'
 import useInput from 'hooks/useInput'
 import Joi from 'joi'
 import { sendmail } from 'lib/api/auth/sendmail'
 import { useMutation } from 'react-query'
 import { AxiosError } from 'axios'
+import { inputStyle } from '../../Login/styles'
 
 export type MailCheckFormProps = {}
 
@@ -35,8 +30,8 @@ function MailCheckForm({}: MailCheckFormProps) {
       const schema = Joi.object().keys({
         email: Joi.string().email({ tlds: false }).required().messages({
           'string.email': 'Check your email type',
-          'string.empty': 'Input your email',
-          'any.required': 'Input your email',
+          'string.empty': 'Input your email address',
+          'any.required': 'Input your email address',
         }),
       })
 
@@ -54,40 +49,40 @@ function MailCheckForm({}: MailCheckFormProps) {
         <div>
           <h2 className="title">Check Email</h2>
           <p>We sent a verification email</p>
-          <p>
-            Please check your email and click the link to verify your email
-            address.
-          </p>
+          <p>Please check your email and click the link to verify your email address.</p>
           <Button variant="contained" size="large">
             resend
           </Button>
         </div>
       ) : (
         <form onSubmit={onSubmit}>
-          <Stack spacing={2}>
-            <InputLabel htmlFor="mailcheck-signup">Check Email</InputLabel>
-            <div>
-              <OutlinedInput
-                value={email}
-                onChange={onChangeEmail}
-                placeholder="email"
-                type="email"
-                name="email"
-                id="email-check"
-                inputProps={{}}
-                error={Boolean(mailTypeError)}
-                fullWidth
-              />
-              {mailTypeError && (
-                <FormHelperText error id="helper-text-email-check">
-                  {mailTypeError}
-                </FormHelperText>
-              )}
-            </div>
+          <OutlinedInput
+            value={email}
+            onChange={onChangeEmail}
+            placeholder="email"
+            type="email"
+            name="email-check"
+            id="email-check"
+            css={inputStyle}
+            error={Boolean(mailTypeError)}
+            sx={{ borderRadius: '12px', height: '45px' }}
+          />
+          {mailTypeError ? (
+            <FormHelperText
+              error
+              id="helper-text-email-check"
+              // style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+            >
+              * {mailTypeError}
+            </FormHelperText>
+          ) : (
+            <FormHelperText>You'll need to verify that you own this email account.</FormHelperText>
+          )}
+          <div className="button-div">
             <Button variant="contained" type="submit" size="large">
-              send
+              mail check
             </Button>
-          </Stack>
+          </div>
         </form>
       )}
     </>
