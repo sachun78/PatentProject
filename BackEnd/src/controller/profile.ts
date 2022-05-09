@@ -5,6 +5,7 @@ import fsp from "fs/promises";
 
 import * as ProfileRepo from "data/profile";
 import * as userRepo from "data/auth";
+import * as fs from "fs";
 
 interface IRequest extends Request {
   [key: string]: any;
@@ -42,7 +43,7 @@ export async function profileImage(
         .json({ success: false, error: `No file selected` });
     }
 
-    if (user.photo_path) {
+    if (user.photo_path && fs.existsSync("uploads\\" + user.photo_path)) {
       await fsp.unlink("uploads\\" + user.photo_path);
     }
 

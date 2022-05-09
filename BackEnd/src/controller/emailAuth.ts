@@ -1,65 +1,85 @@
-import { NextFunction, Request, Response } from 'express';
-import shortid from 'shortid';
-import { EMAILTYPE, sendmail } from 'middleware/sendMailProc'
+import { NextFunction, Request, Response } from "express";
+import shortid from "shortid";
+import { EMAILTYPE, sendmail } from "middleware/sendMailProc";
 
-import * as EmaiAuthlRepo from 'data/emailAuth';
-import * as authRepo from 'data/auth';
+import * as EmaiAuthlRepo from "data/emailAuth";
 
 interface IRequest extends Request {
-  [key: string]: any
+  [key: string]: any;
 }
 
-export async function sendAuthEmail(req: IRequest, res: Response, next: NextFunction) {
+export async function sendAuthEmail(
+  req: IRequest,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const emailInfo = {
       email: "",
       code: "",
-      logged: false
-    }
+      logged: false,
+    };
 
     emailInfo.email = req.body.email;
     emailInfo.code = shortid.generate();
 
     const check = await EmaiAuthlRepo.findByEmail(req.body.email);
     if (check && check.logged === true) {
-      return res.status(409).json({ message: `email (${req.body.email}) is already` })
+      return res
+        .status(409)
+        .json({ message: `Email (${req.body.email}) is already in use.` });
     }
 
     console.log("[emailInfo]", emailInfo);
 
     const savedMail = await EmaiAuthlRepo.saveAuthMaiil(emailInfo);
     sendmail(savedMail, EMAILTYPE.AUTH)
-      .then( value => res.status(200).json({ message: `Success send email: ${emailInfo.email}`}))
-      .catch( reason => res.status(500).json({ message: `Failed email send ${emailInfo.email}`}));
-  }
-  catch(e) {
+      .then((value) =>
+        res
+          .status(200)
+          .json({ message: `Success send email: ${emailInfo.email}` })
+      )
+      .catch((reason) =>
+        res
+          .status(500)
+          .json({ message: `Failed email send ${emailInfo.email}` })
+      );
+  } catch (e) {
     console.error(e);
     next(e);
   }
 }
 
-export async function isVerifyMail(req: IRequest, res: Response, next: NextFunction) {
+export async function isVerifyMail(
+  req: IRequest,
+  res: Response,
+  next: NextFunction
+) {
   const reqCode: string = req.params.code;
-  
+
   try {
     const mail = await EmaiAuthlRepo.findAuthMail(reqCode);
     if (!mail) {
-      return res.status(404).json({ message: 'Email info not found' });
-    }
-  
-    const diff = new Date().getTime() - new Date(mail.createdAt).getTime();
-    if (diff > 1000 * 60 * 60 * 24 || mail.logged) {
-      return res.status(410).json({ message: 'Expired code'});
-    }
-  
-    const authmail = await EmaiAuthlRepo.updateAuthMail(reqCode, {logged: true});
-    if (!authmail) {
-      return res.status(404).json({ message: 'Email info not found' });
+      return res.status(404).json({ message: "Email info not found" });
     }
 
-    res.status(200).json({email: authmail.email, message: "verified success !!!"});
-  } catch(e) {
+    const diff = new Date().getTime() - new Date(mail.createdAt).getTime();
+    if (diff > 1000 * 60 * 60 * 24 || mail.logged) {
+      return res.status(410).json({ message: "Expired code" });
+    }
+
+    const authmail = await EmaiAuthlRepo.updateAuthMail(reqCode, {
+      logged: true,
+    });
+    if (!authmail) {
+      return res.status(404).json({ message: "Email info not found" });
+    }
+
+    res
+      .status(200)
+      .json({ email: authmail.email, message: "verified success !!!" });
+  } catch (e) {
     console.error(e);
     next(e);
-  }  
+  }
 }
