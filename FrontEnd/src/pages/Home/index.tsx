@@ -24,7 +24,7 @@ function Home({}: HomeProps) {
     {
       getNextPageParam: (lastPage, pages) => {
         
-        const morePagesExist = lastPage?.length === 5
+        const morePagesExist = lastPage.length === 5        
         if (!morePagesExist) return false
         return pages.flat().length
       },
@@ -32,7 +32,9 @@ function Home({}: HomeProps) {
   )
 
   useEffect(() => {
-    if (inView) {
+    if(!data) return;
+
+    if (hasNextPage && inView) {
       fetchNextPage()
     }
   }, [fetchNextPage, inView])
