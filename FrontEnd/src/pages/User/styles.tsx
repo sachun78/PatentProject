@@ -59,9 +59,9 @@ export const Summary = styled.div`
   span {
     display: flex;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 
-    color: #111;
+    color: #5e5c7f;
   }
 `
 

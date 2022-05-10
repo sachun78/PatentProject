@@ -1,6 +1,6 @@
-import { Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material'
+import { Badge, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material'
 import { StatusBlock, StyledTableCell, StyledTableRow } from 'pages/Meeting/styles'
-import { format, formatDistanceToNow } from 'date-fns'
+import { format, isAfter, isBefore } from 'date-fns'
 import React from 'react'
 import { IMeeting } from 'lib/api/types'
 import { useNavigate } from 'react-router-dom'
@@ -28,10 +28,7 @@ function ScheduleTable({ meetings }: ScheduleTableProps) {
           {meetings.map((row) => {
             let status = row.status
             if (status === 'none') {
-              const dist = formatDistanceToNow(new Date(row.startTime), {
-                addSuffix: true,
-              })
-              if (dist.includes('ago')) {
+              if (isBefore(new Date(row.startTime), new Date())) {
                 status = 'expired'
               } else {
                 status = 'pending'
@@ -42,13 +39,24 @@ function ScheduleTable({ meetings }: ScheduleTableProps) {
                 <StyledTableCell align="center">{row.title}</StyledTableCell>
                 <StyledTableCell align="center">{row.toEmail}</StyledTableCell>
                 <StyledTableCell align="center">
-                  {format(new Date(row.date), 'yyyy.MM.dd ')} <br />
-                  {format(new Date(row.startTime), 'HH:mm ~ ')}
-                  {format(new Date(row.endTime), 'HH:mm')}
+                  {format(new Date(row.date), 'EEEE, d MMM, yyyy')} <br />
+                  {format(new Date(row.startTime), 'HH:mm - ')} {format(new Date(row.endTime), 'HH:mm')}
                 </StyledTableCell>
                 <StyledTableCell align="left">{row.location}</StyledTableCell>
                 <StyledTableCell align="center">
-                  <StatusBlock state={status}>{status}</StatusBlock>
+                  <Badge
+                    color="error"
+                    variant="standard"
+                    badgeContent={'end'}
+                    invisible={
+                      status === 'cancel' ||
+                      status === 'expired' ||
+                      status === 'pending' ||
+                      isAfter(new Date(row.startTime), new Date())
+                    }
+                  >
+                    <StatusBlock state={status}>{status}</StatusBlock>
+                  </Badge>
                 </StyledTableCell>
               </StyledTableRow>
             )

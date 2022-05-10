@@ -4,10 +4,13 @@ import { useQuery } from 'react-query'
 import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
 import { toast } from 'react-toastify'
 import { Button, Stack } from '@mui/material'
-import { ContainerBlock, MeetingSection, StatusBlock } from './styles'
+import { ContainerBlock, MeetingSection, ScheduleInfoBlock, StatusBlock } from './styles'
 import MeetingResult from 'components/Schedules/MeetingResult'
 import { IMeeting } from 'lib/api/types'
 import { format, formatDistanceToNow } from 'date-fns'
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined'
 
 export type MeetingDetailProps = {}
 
@@ -40,7 +43,7 @@ function MeetingDetail({}: MeetingDetailProps) {
 
   if (error) {
     if (!toast.isActive('meeting-detail')) {
-      toast.error('오류가 발생했습니다.', {
+      toast.error('Error.', {
         toastId: 'meeting-detail',
         pauseOnFocusLoss: false,
         pauseOnHover: false,
@@ -78,31 +81,23 @@ function MeetingDetail({}: MeetingDetailProps) {
         </MeetingSection>
         <MeetingSection>
           <h2>Schedule Information</h2>
-          <p>{data.location}</p>
-          <p>
-            {format(new Date(data?.date), 'yyyy-MM-dd') + ' '}
-            {new Date(data.startTime).toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-            {' ~ '}
-            {new Date(data.endTime).toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-          </p>
+          <ScheduleInfoBlock>
+            <CalendarMonthOutlinedIcon /> {format(new Date(data?.date), 'EEEE, d MMM, yyyy')}
+          </ScheduleInfoBlock>
+          <ScheduleInfoBlock>
+            <AccessTimeIcon />
+            {format(new Date(data.startTime), 'HH:mm') + ' - ' + format(new Date(data.endTime), 'HH:mm')}
+          </ScheduleInfoBlock>
+          <ScheduleInfoBlock>
+            <PlaceOutlinedIcon /> {data.location}
+          </ScheduleInfoBlock>
+          <StatusBlock state={data.status}>
+            {data.status !== 'none' ? data.status : isExpired ? 'expired' : 'pending'}
+          </StatusBlock>
         </MeetingSection>
         <MeetingSection>
           <h2>Message</h2>
           <div className={'multiline'}>{data.comment} </div>
-        </MeetingSection>
-        <MeetingSection>
-          <h2>Status</h2>
-          <div>
-            <StatusBlock state={data.status}>
-              {data.status !== 'none' ? data.status : isExpired ? 'expired' : 'pending'}
-            </StatusBlock>
-          </div>
         </MeetingSection>
       </ContainerBlock>
       {isResult && <MeetingResult />}

@@ -6,8 +6,8 @@ import listPlugin from '@fullcalendar/list'
 import { useCallback, useMemo } from 'react'
 import { calendarStyle } from './styles'
 import { useNavigate } from 'react-router-dom'
-import { formatDistanceToNow } from 'date-fns'
-import { brandColor } from '../../lib/palette'
+import { isBefore } from 'date-fns'
+import palette, { brandColor } from '../../lib/palette'
 import { IMeeting } from '../../lib/api/types'
 
 export type ScheduleCalendarProps = {
@@ -21,15 +21,22 @@ function ScheduleCalendar({ meetings }: ScheduleCalendarProps) {
     if (!meetings) return []
     return meetings.map((met) => {
       const ed = new Date(met.date)
-      const dist = formatDistanceToNow(ed, {
-        addSuffix: true,
-      })
+      const backgroundColor =
+        met.status === 'confirm'
+          ? palette.green[400]
+          : met.status === 'replan'
+          ? brandColor
+          : met.status === 'cancel'
+          ? '#9c9c9c'
+          : !isBefore(ed, new Date())
+          ? palette.deepOrange[400]
+          : '#9c9c9c'
       return {
         id: met._id,
         title: met.title,
         start: met.date,
         end: met.date,
-        backgroundColor: dist.includes('ago') ? '#9c9c9c' : brandColor,
+        backgroundColor,
       }
     })
   }, [meetings])
@@ -59,22 +66,5 @@ function ScheduleCalendar({ meetings }: ScheduleCalendarProps) {
     </div>
   )
 }
-
-/*
-*    dayCellDidMount={(arg: DayCellMountArg) => {
-        if (data?.findIndex((meeting) => {
-          const meetingDate = new Date(meeting.date)
-          return meetingDate.getMonth() === arg.date.getMonth() && meetingDate.getDate() === arg.date.getDate() &&
-            meetingDate.getFullYear() === arg.date.getFullYear()
-        }) === -1 && !arg.isDisabled && !arg.isPast) {
-          let p = document.createElement('div')
-          p.textContent = '+'
-          p.style.position = 'absolute'
-          p.style.left = '50%'
-          p.style.bottom = '50%'
-          arg.el.firstChild?.appendChild(p)
-        }
-      }}
-* */
 
 export default ScheduleCalendar

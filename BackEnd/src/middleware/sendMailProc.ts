@@ -5,13 +5,14 @@ import envConfig from 'config';
 export const enum EMAILTYPE {
   AUTH, // authorization
   INVI,  // invitation
-  RESULT
+  RESULT,
+  FORGOT
 }
 
-const createAuthEmail = (code: string) => {
+let createAuthEmail = (code: string, strType: string, title: string) => {
   const keywords = {
-        type: 'signup',
-        text: 'Email verification'
+        type: strType,
+        text: title
   };
 
   const subject = `Wemet [${keywords.text}]`;
@@ -165,7 +166,11 @@ export let sendmail = (emailInfo: any, mailType: EMAILTYPE) =>
 
     if (mailType === EMAILTYPE.AUTH) {
       user_email = emailInfo.email;
-      emailTemplete = createAuthEmail(emailInfo.code);
+      emailTemplete = createAuthEmail(emailInfo.code, 'signup', 'Email verification');
+    }
+    else if (mailType === EMAILTYPE.FORGOT) {
+      user_email = emailInfo.email;
+      emailTemplete = createAuthEmail(emailInfo.code, 'forgotpw', 'find password');
     }
     else if (mailType === EMAILTYPE.INVI) {
       user_email = emailInfo.toEmail;

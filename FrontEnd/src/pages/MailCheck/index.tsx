@@ -17,7 +17,7 @@ export default function MailCheck({}: RegisterProps) {
 
   return (
     <Auth>
-      <div css={containerStyle} style={{ height: '28rem' }}>
+      <div css={containerStyle} style={{ height: '30rem' }}>
         <Link to={'/login'} className="link" css={undoStyle}>
           <span>Back</span>
         </Link>

@@ -15,18 +15,14 @@ export const loginFormStyle = css`
   }
 
   .button-div {
-    display: flex;
-    height: 2.5rem;
     margin-top: 1.5625rem;
 
     button {
-      flex: 1;
-      background: #a1045a;
+      width: 100%;
+      height: 2.5rem;
       mix-blend-mode: multiply;
-      border-radius: 7px;
       font: normal normal normal 12px/14px NanumBarunGothic;
       line-height: 1.166666667;
-      color: #fff;
     }
   }
 `

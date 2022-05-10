@@ -21,6 +21,8 @@ import { API_PATH } from 'lib/api/client'
 import getCountryName from 'lib/countryName'
 import gravatar from 'gravatar'
 import { useRemoveOutlineHover } from '../../../../lib/styles/muiStyles'
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined'
+import { format } from 'date-fns'
 
 type RequestViewProps = {}
 
@@ -152,17 +154,18 @@ export default function RequestForm({}: RequestViewProps) {
     <ContainerBlock>
       <form css={sectionStyle} onSubmit={onSubmit}>
         <RequestSection title={curEvent.title}>
+          <CalendarMonthOutlinedIcon style={{ marginRight: '0.5rem' }} />
           <span>
-            {startDate.toLocaleDateString()} ~ {endDate.toLocaleDateString()}{' '}
+            {format(new Date(startDate), 'EEEE, d MMM, yyyy') + ' - ' + format(new Date(endDate), 'EEEE, d MMM, yyyy')}
           </span>
         </RequestSection>
-        <RequestSection title={'Meeting Name'}>
+        <RequestSection title={'Display the Meeting'}>
           <OutlinedInput
             name="title"
             type={'text'}
             value={form.title}
             onChange={onChange}
-            placeholder={'Enter the title that will used as meeting name'}
+            placeholder={'Enter a title that will be used to represent the meeting'}
             classes={classes}
             sx={{ height: 38 }}
             fullWidth
@@ -209,7 +212,7 @@ export default function RequestForm({}: RequestViewProps) {
             </FlexRow>
           </Box>
         )}
-        <RequestSection title={'Select Date'}>
+        <RequestSection title={'Period'}>
           <TimeGridInput
             startTime={time}
             endTime={endTime}

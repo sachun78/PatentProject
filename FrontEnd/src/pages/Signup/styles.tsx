@@ -1,15 +1,6 @@
 import { css } from '@emotion/react'
 import palette from 'lib/palette'
 
-export const inputStyle = css`
-  width: 100%;
-  margin-bottom: 1.5rem;
-
-  label {
-    font-size: 100%;
-  }
-`
-
 export const undoStyle = css`
   display: flex;
   margin-top: 1rem;
@@ -25,10 +16,9 @@ export const undoStyle = css`
 `
 
 export const privacyStyle = css`
-  margin: 0 0 2rem;
+  margin: 1rem 0 2rem;
   text-align: center;
   padding: 0;
-  vertical-align: baseline;
 
   p {
     color: #53535f;

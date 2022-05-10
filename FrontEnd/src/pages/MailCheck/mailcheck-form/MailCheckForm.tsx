@@ -1,4 +1,4 @@
-import { Button, FormHelperText, OutlinedInput } from '@mui/material'
+import { Divider, FormHelperText, OutlinedInput } from '@mui/material'
 import React, { FormEvent, useCallback, useState } from 'react'
 import useInput from 'hooks/useInput'
 import Joi from 'joi'
@@ -6,6 +6,7 @@ import { sendmail } from 'lib/api/auth/sendmail'
 import { useMutation } from 'react-query'
 import { AxiosError } from 'axios'
 import { inputStyle } from '../../Login/styles'
+import LoadingButton from '@mui/lab/LoadingButton'
 
 export type MailCheckFormProps = {}
 
@@ -49,10 +50,19 @@ function MailCheckForm({}: MailCheckFormProps) {
         <div>
           <h2 className="title">Check Email</h2>
           <p>We sent a verification email</p>
-          <p>Please check your email and click the link to verify your email address.</p>
-          <Button variant="contained" size="large">
+          <br />
+          <p>Please check your email link and click to verify</p>
+          <br />
+          <Divider sx={{ marginBottom: '0.5rem' }}>OR</Divider>
+          <LoadingButton
+            variant="contained"
+            fullWidth
+            onClick={onSubmit}
+            loading={sendmailMut.isLoading}
+            loadingPosition={'start'}
+          >
             resend
-          </Button>
+          </LoadingButton>
         </div>
       ) : (
         <form onSubmit={onSubmit}>
@@ -68,20 +78,22 @@ function MailCheckForm({}: MailCheckFormProps) {
             sx={{ borderRadius: '12px', height: '45px' }}
           />
           {mailTypeError ? (
-            <FormHelperText
-              error
-              id="helper-text-email-check"
-              // style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-            >
+            <FormHelperText error id="helper-text-email-check">
               * {mailTypeError}
             </FormHelperText>
           ) : (
             <FormHelperText>You'll need to verify that you own this email account.</FormHelperText>
           )}
           <div className="button-div">
-            <Button variant="contained" type="submit" size="large">
+            <LoadingButton
+              variant="contained"
+              type="submit"
+              fullWidth
+              loading={sendmailMut.isLoading}
+              loadingPosition={'start'}
+            >
               mail check
-            </Button>
+            </LoadingButton>
           </div>
         </form>
       )}

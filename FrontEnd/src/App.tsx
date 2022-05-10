@@ -1,5 +1,5 @@
 import { css, Global } from '@emotion/react'
-import React from 'react'
+import React, { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import DebugObserver from 'components/DebugObserver'
 import palette from 'lib/palette'
@@ -24,17 +24,19 @@ function App() {
     <>
       <DebugObserver />
       <ReactQueryDevtools initialIsOpen={false} />
-      <Routes>
-        <Route path="about" element={<Landing />} />
-        <Route path="policy" element={<Policy />} />
-        <Route path="policy/:type" element={<Policy />} />
-        <Route path="login" element={<Login />} />
-        <Route path="signup" element={<SignUp />} />
-        <Route path="email/check" element={<MailCheck />} />
-        <Route path="invitation/*" element={<MeetingBook />} />
-        {/*with AUTH*/}
-        <Route path="*" element={<AppLayout />} />
-      </Routes>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="about" element={<Landing />} />
+          <Route path="policy" element={<Policy />} />
+          <Route path="policy/:type" element={<Policy />} />
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<SignUp />} />
+          <Route path="email/check" element={<MailCheck />} />
+          <Route path="invitation/*" element={<MeetingBook />} />
+          {/*with AUTH*/}
+          <Route path="*" element={<AppLayout />} />
+        </Routes>
+      </Suspense>
       <Global styles={globalStyle} />
       <ToastContainer />
     </>

@@ -32,6 +32,10 @@ export async function getUserAll() {
   return User.find().lean().populate('profile');
 }
 
+export async function getUserAllIndex(curPos: number, cnt: number) {
+  return User.find().lean().skip(curPos).limit(cnt).populate('profile');
+}
+
 export async function findByEmail(email: string) {
   return User.findOne({ email: email });
 }

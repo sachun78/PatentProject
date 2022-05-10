@@ -28,7 +28,7 @@ function PostHeader({ owner_username, owner_email, createdAt }: PostHeaderProps)
           style={{ border: '0.1px solid lightgray' }}
           imgProps={{ crossOrigin: 'anonymous' }}
         >
-          <img className={'fallback'} src={gravatar.url(owner_username, { s: '60px', d: 'retro' })} alt={'user-img'} />
+          <img className={'fallback'} src={gravatar.url(owner_email, { s: '60px', d: 'retro' })} alt={'user-img'} />
         </Avatar>
       </div>
       <div css={titleStyle}>
