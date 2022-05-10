@@ -43,7 +43,7 @@ export async function getMeetings(req: IRequest, res: Response, next: NextFuncti
   const title = req.query.title;
   const curPos = req.query.curPos as string;
   const cnt = req.query.cnt as string;
-  let retData;
+  //let retData;
 
   try {
     if (curPos && cnt) {
@@ -51,33 +51,45 @@ export async function getMeetings(req: IRequest, res: Response, next: NextFuncti
       let _cnt: number = parseInt(cnt);
   
       const indexData = await meetingRepo.getAllByIndex(user_id, _curPos, _cnt);
-      console.log(indexData);
-      return res.status(200).json(indexData);
+      let sendData: any = [];
+      sendData = JSON.parse(JSON.stringify(indexData));
+      for ( let i = 0; i < sendData.length; i++) {
+        const tmpPro = await profileRepo.getProfile(sendData[i].ownerId);
+        sendData[i]['company'] = tmpPro?.company;
+      }
+      return res.status(200).json(sendData);
     }
 
-    const data = await meetingRepo.getAll(user_id);
+    const allData = await meetingRepo.getAll(user_id);
+    let sendData: any = [];
+    sendData = JSON.parse(JSON.stringify(allData));
+    for ( let i = 0; i < sendData.length; i++) {
+      const tmpPro = await profileRepo.getProfile(sendData[i].ownerId);
+      sendData[i]['company'] = tmpPro?.company;
+    }
+    res.status(200).json(sendData);
 
-    if (toEmail) {
-      const fuse = new Fuse(data, {
-        includeScore: true,
-        useExtendedSearch: true,
-        keys: ['toEmail']
-      });
-      retData = fuse.search('=' + toEmail);
-    }
-    else if (title) {
-      const fuse = new Fuse(data, {
-        includeScore: true,
-        useExtendedSearch: true,
-        keys: ['title', 'comment']
-      });
-      retData = fuse.search("'" + title);
-    }
-    else {
-      return res.status(200).json(data);
-    }
-    retData = retData.map(value => value.item);
-    res.status(200).json(retData);
+    // if (toEmail) {
+    //   const fuse = new Fuse(data, {
+    //     includeScore: true,
+    //     useExtendedSearch: true,
+    //     keys: ['toEmail']
+    //   });
+    //   retData = fuse.search('=' + toEmail);
+    // }
+    // else if (title) {
+    //   const fuse = new Fuse(data, {
+    //     includeScore: true,
+    //     useExtendedSearch: true,
+    //     keys: ['title', 'comment']
+    //   });
+    //   retData = fuse.search("'" + title);
+    // }
+    // else {
+    //   return res.status(200).json(data);
+    // }
+    // retData = retData.map(value => value.item);
+    // res.status(200).json(retData);
   }
   catch(e) {
     console.error(`[meetingCtrl][getMeetings] Fail meeting get all`);
@@ -89,12 +101,22 @@ export async function getMeeting(req: IRequest, res: Response) {
   const user_id = req.userId;
   const id = req.params.id;
 
+  let sendProfile: any = {};
+
   const data = await meetingRepo.getById(id);
   if (data) {
     if (data.ownerId !== user_id) {
       return res.status(403).send('[getMeeting] forbidden');
     }
-    res.status(200).json(data);
+    let sendData: any = {};
+    const profile = await profileRepo.getProfile(data.ownerId);
+    if (profile) {
+      sendData = JSON.parse(JSON.stringify(data));
+      sendData['company'] = profile.company;
+      sendData['country'] = profile.country;
+      sendData['phone'] = profile.phone;
+    }
+    res.status(200).json(sendData);
   }
   else {
     res.status(404).json({ message: `meeting id(${id}) not found`});

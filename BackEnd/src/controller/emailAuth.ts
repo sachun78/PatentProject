@@ -66,9 +66,7 @@ export async function forgotPasswd(
 
     const check = await EmaiAuthlRepo.findByEmail(emailInfo.email);
     if (check) {
-      console.log(check)
       if (check.logged === true) {
-        console.log('update mail', emailInfo)
         await EmaiAuthlRepo.updateAuthMail(check.code, emailInfo);
       }
       else {

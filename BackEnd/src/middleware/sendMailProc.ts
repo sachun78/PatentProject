@@ -197,7 +197,10 @@ export let sendmail = (emailInfo: any, mailType: EMAILTYPE) =>
     }
     let transporter = nodemailer.createTransport(serviceContent);
     let info = transporter.sendMail({
-      from: envConfig.email.userid,
+      from: {
+        name: emailInfo.ownerName,
+        address: emailInfo.ownerEmail
+      },
       to: user_email,
       ...emailTemplete
     })
