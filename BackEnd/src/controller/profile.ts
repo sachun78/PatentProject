@@ -117,13 +117,15 @@ export async function getProfile(
         const findProfile = await ProfileRepo.findById(findUser.profile);
         console.log({ findProfile });
         return res.status(200).json({
-          country: findProfile?.country,
           company: findProfile?.company,
           department: findProfile?.department,
           position: findProfile?.position,
           history: findProfile?.history,
           field: findProfile?.field,
           status: findProfile?.status,
+          country: findProfile?.country,
+          phone: findProfile?.phone,
+          signature: findProfile?.signature,
           username: findUser.username,
           photo_path: findUser.photo_path,
           email: email,

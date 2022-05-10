@@ -116,8 +116,10 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
     if (profile) {
       sendProfile['company'] = profile.company;
       sendProfile['country'] = profile.country;
+      sendProfile['phone'] = profile.phone;
+      sendProfile['signature'] = profile.signature;
     }
-
+    console.log(sendProfile)
     if (status !== 'replan') {
       return res.status(200).json({data , sendProfile});
     }
