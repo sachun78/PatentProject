@@ -1,5 +1,6 @@
 import { css } from '@emotion/react'
 import { Avatar, OutlinedInput } from '@mui/material'
+import { formatDistanceToNow } from 'date-fns'
 import useInput from 'hooks/useInput'
 import { createComments } from 'lib/api/post/createComment'
 import { getPost } from 'lib/api/post/getPost'
@@ -28,18 +29,29 @@ function PostDetail({}: postDetailProps) {
   const qc = useQueryClient()
   const { id } = useParams()
 
-  const {
-    data: post,
-    isLoading,
-    isFetching,
-  } = useQuery(['post', id], getPost, {
+  const { data: post, isLoading } = useQuery(['post', id], getPost, {
     enabled: !!id,
     retry: false,
-  })
+  })  
+  
+  const today = new Date();
+  const diff = useMemo(() => {
+    
+    if(post) {
+        const date = new Date(post.createdAt) 
+        const temp = (today.getTime() - date.getTime()) / 1000
+        if(temp > 86400) {
+          return date.toDateString()
+        } else {
+          return formatDistanceToNow(date, { addSuffix: true})
+        }      
+    }
+  }, [post])    
 
   const [comments, onChangeComments, setComments] = useInput('')
-  const user = qc.getQueryData<User>('user') as User
-  const { profileSrc } = useProfileImg(44)
+  
+  const user = qc.getQueryData<User>('user') as User  
+  const { profileSrc } = useProfileImg(44)  
 
   const likeClicked = useMemo(() => {
     if (post) return !!post.like_cnt.find((v: string) => v === user.email)
@@ -97,7 +109,7 @@ function PostDetail({}: postDetailProps) {
     },
   })
 
-  if (!post) {
+  if (!post || isLoading)  {
     return <div>로딩중</div>
   }
 
@@ -120,7 +132,9 @@ function PostDetail({}: postDetailProps) {
             <h4>
               <span>{post.owner_username}/ etc ..</span>
             </h4>
-            <div className={'time-date'}>{post.createdAt}</div>
+            <div className={'time-date'}>                
+              {diff}
+            </div>
           </div>
         </div>
         <ImageContainer images={post.images} isDetail={true} />
