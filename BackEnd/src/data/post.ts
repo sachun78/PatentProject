@@ -55,7 +55,7 @@ export async function getPostAll(): Promise<PostType[] | null> {
 }
 
 export async function getPostIndex(curPos: number, count: number): Promise<PostType[] | null> {
-  return Post.find().lean().skip(curPos).limit(count);
+  return Post.find().lean().skip(curPos).limit(count).sort({createdAt: -1});
 }
 
 export async function createPost(postData: PostType): Promise<PostType> {
