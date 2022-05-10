@@ -51,23 +51,11 @@ export async function getMeetings(req: IRequest, res: Response, next: NextFuncti
       let _cnt: number = parseInt(cnt);
   
       const indexData = await meetingRepo.getAllByIndex(user_id, _curPos, _cnt);
-      let sendData: any = [];
-      sendData = JSON.parse(JSON.stringify(indexData));
-      for ( let i = 0; i < sendData.length; i++) {
-        const tmpPro = await profileRepo.getProfile(sendData[i].ownerId);
-        sendData[i]['company'] = tmpPro?.company;
-      }
-      return res.status(200).json(sendData);
+      return res.status(200).json(indexData);
     }
 
     const allData = await meetingRepo.getAll(user_id);
-    let sendData: any = [];
-    sendData = JSON.parse(JSON.stringify(allData));
-    for ( let i = 0; i < sendData.length; i++) {
-      const tmpPro = await profileRepo.getProfile(sendData[i].ownerId);
-      sendData[i]['company'] = tmpPro?.company;
-    }
-    res.status(200).json(sendData);
+    res.status(200).json(allData);
 
     // if (toEmail) {
     //   const fuse = new Fuse(data, {
@@ -108,15 +96,7 @@ export async function getMeeting(req: IRequest, res: Response) {
     if (data.ownerId !== user_id) {
       return res.status(403).send('[getMeeting] forbidden');
     }
-    let sendData: any = {};
-    const profile = await profileRepo.getProfile(data.ownerId);
-    if (profile) {
-      sendData = JSON.parse(JSON.stringify(data));
-      sendData['company'] = profile.company;
-      sendData['country'] = profile.country;
-      sendData['phone'] = profile.phone;
-    }
-    res.status(200).json(sendData);
+    res.status(200).json(data);
   }
   else {
     res.status(404).json({ message: `meeting id(${id}) not found`});
@@ -133,17 +113,8 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
       return res.status(409).json({ message: `meeting code:(${code}) not found`});
     }
 
-    let sendProfile: any = {};
-    const profile = await profileRepo.getProfile(data.ownerId);
-    if (profile) {
-      sendProfile['company'] = profile.company;
-      sendProfile['country'] = profile.country;
-      sendProfile['phone'] = profile.phone;
-      sendProfile['signature'] = profile.signature;
-    }
-    console.log(sendProfile)
     if (status !== 'replan') {
-      return res.status(200).json({data , sendProfile});
+      return res.status(200).json({data});
     }
 
     const eventId = data.eventId;
@@ -174,7 +145,7 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
     }
     sendData['meeting_timeList'] = meetTimeList;
     console.log(sendData);
-    res.status(200).json({data, sendProfile, sendData});
+    res.status(200).json({data, sendData});
   }
   catch(e) {
     console.error(`[meetingCtrl][getMeetingByCode] message (${e})`);
@@ -254,6 +225,7 @@ export async function sendResultMail(req: IRequest, res: Response) {
 export async function sendInvitMail(req: IRequest, res: Response) {
   const user_id = req.userId;
   const bodyData = req.body;
+  const meetId = req.query.meetId;
 
   try {
     const meetingData = await createMeeting(user_id, bodyData);
@@ -287,12 +259,23 @@ async function createMeeting(userId: string, body: any) {
     toUserImage = toUser.photo_path;
   }
 
+  let profilePhone;
+  let profileCompany;
+  const profile = await profileRepo.findById(user.profile);
+  if (profile) {
+    profilePhone = profile.phone;
+    profileCompany = profile.company;
+  }
+
   let revMeeting = {
     ownerId: user.id,
     ownerEmail: user.email,
     ownerName: user.username,
+    ownerPhone: profilePhone,
+    ownerCompnay: profileCompany,
     toEmail: body.toEmail,
     toImage: toUserImage,
+    toPhone: '',
     eventId: body.eventId, 
     title: body.title,
     date: body.date, 

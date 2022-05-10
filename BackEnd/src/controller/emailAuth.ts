@@ -8,11 +8,7 @@ interface IRequest extends Request {
   [key: string]: any;
 }
 
-export async function sendAuthEmail(
-  req: IRequest,
-  res: Response,
-  next: NextFunction
-) {
+export async function sendAuthEmail(req: IRequest, res: Response, next: NextFunction) {
   try {
     const emailInfo = {
       email: "",
