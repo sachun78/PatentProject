@@ -31,18 +31,21 @@ function PostDetail({}: postDetailProps) {
   const { data: post, isLoading } = useQuery(['post', id], getPost, {
     enabled: !!id,
     retry: false,
-  })
-
-  const date = useMemo(() => {
-    if(post) return new Date(post.createdAt)}
-    , []) as Date 
+  })  
   
   const today = new Date();
   const diff = useMemo(() => {
+    
     if(post) {
-      return (today.getTime() - date.getTime()) /1000
+        const date = new Date(post.createdAt) 
+        const temp = (today.getTime() - date.getTime()) / 1000
+        if(temp > 86400) {
+          return date.toDateString()
+        } else {
+          return formatDistanceToNow(date, { addSuffix: true})
+        }      
     }
-  }, [])  
+  }, [post])    
 
   const [comments, onChangeComments, setComments] = useInput('')
   
@@ -129,9 +132,8 @@ function PostDetail({}: postDetailProps) {
             <h4>
               <span>{post.owner_username}/ etc ..</span>
             </h4>
-            <div className={'time-date'}>
-                {diff as number > 86400 ? new Date(post.createdAt).toDateString() : formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
-                <div>{diff}</div>                           
+            <div className={'time-date'}>                
+              {diff}
             </div>
           </div>
         </div>        
