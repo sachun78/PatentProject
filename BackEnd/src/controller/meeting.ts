@@ -43,20 +43,25 @@ export async function getMeetings(req: IRequest, res: Response, next: NextFuncti
   const title = req.query.title;
   const curPos = req.query.curPos as string;
   const cnt = req.query.cnt as string;
-  //let retData;
 
   try {
     if (curPos && cnt) {
       let _curPos: number = parseInt(curPos);
       let _cnt: number = parseInt(cnt);
+
+      let filter = {
+        _toEmail: toEmail,
+        _title: title
+      }
   
-      const indexData = await meetingRepo.getAllByIndex(user_id, _curPos, _cnt);
+      const indexData = await meetingRepo.getAll(user_id, _curPos, _cnt, filter);
       return res.status(200).json(indexData);
     }
+    else {
+      return res.status(403).json({ message: `current position or count is not exist`});
+    }
 
-    const allData = await meetingRepo.getAll(user_id);
-    res.status(200).json(allData);
-
+    //let retData;
     // if (toEmail) {
     //   const fuse = new Fuse(data, {
     //     includeScore: true,
@@ -229,8 +234,19 @@ export async function sendInvitMail(req: IRequest, res: Response) {
 
   try {
     if (meetId) {
-      const modify = await meetingRepo.updateMeeting(meetId, {status: 'none', code: shortid.generate()});
+      const meetData = await meetingRepo.getById(meetId);
+      if (!meetData) {
+        return res.status(409).json({ message: `meeting is not found`});
+      }
+      const eventData = await eventRepo.getById(meetData.eventId);
+      if (!eventData) {
+        return res.status(409).json({ message: `event is not found, meeting data don't update`});
+      }
+      if (user_id !== eventData.user_id) {
+        return res.status(403).json({ message: 'event owner is different. meeting create fail'});
+      }
 
+      const modify = await meetingRepo.updateMeeting(meetId, {status: 'none', code: shortid.generate()});
       if (!modify) {
         return res.status(500).json({ message: `Failed save meeting ${bodyData.toEmail}`});
       }
@@ -266,18 +282,27 @@ async function createMeeting(userId: string, body: any) {
     throw new Error('message: User is not found');
   }
 
+  const event = await eventRepo.getById(body.eventId);
+  if (!event) {
+    throw new Error('Not found event');
+  }
+
+  if (userId !== event.user_id) {
+    throw new Error('event owner is different. meeting create fail');
+  }
+
   let toUserImage;
   const toUser = await authRepo.findByEmail(body.toEmail);
   if (toUser) {
     toUserImage = toUser.photo_path;
   }
 
-  let profilePhone = '';
-  let profileCompany = '';
+  let profilePhone;
+  let profileCompany;
   const profile = await profileRepo.findById(user.profile);
   if (profile) {
-    profilePhone = profile.phone!!;
-    profileCompany = profile.company!!;
+    profilePhone = profile.phone ? profile.phone : 'empty';
+    profileCompany = profile.company ? profile.company : 'empty';
   }
 
   let revMeeting = {
@@ -285,7 +310,7 @@ async function createMeeting(userId: string, body: any) {
     ownerEmail: user.email,
     ownerName: user.username,
     ownerPhone: profilePhone,
-    ownerCompnay: profileCompany,
+    ownerCompany: profileCompany,
     toEmail: body.toEmail,
     toImage: toUserImage,
     toPhone: '',
@@ -305,10 +330,6 @@ async function createMeeting(userId: string, body: any) {
     throw new Error('Failed create meeting');
   }
 
-  const event = await eventRepo.getById(meeting.eventId);
-  if (!event) {
-    throw new Error('Not found event');
-  }
   let meetingList: string[] = [meeting.id, ...event.meeting_list];
   const eventUpdate = await eventRepo.updateEvent(meeting.eventId, {meeting_list: meetingList});
   if (!eventUpdate) {

@@ -81,4 +81,3 @@ export async function deleteEvent(req: IRequest, res: Response) {
   await eventRepo.deleteEvent(id);
   res.status(204).json({ message: 'delete success'});
 }
-

@@ -7,7 +7,7 @@ export interface IMeeting {
   ownerName: string,
   ownerEmail: string,
   ownerPhone: string,
-  ownerCompnay: string,
+  ownerCompany: string,
   toEmail: string,
   toImage: string,
   toPhone: string,
@@ -28,7 +28,7 @@ export const meetingSchema = new mongoose.Schema<IMeeting>({
   ownerName: { type: String, required: true },
   ownerEmail: { type: String, required: true },
   ownerPhone: { type: String, required: true },
-  ownerCompnay: { type: String, required: true },
+  ownerCompany: { type: String, required: true },
   toEmail: { type: String, required: true },
   toImage: { type: String, default: '' },
   toPhone: { type: String, default: '' },
@@ -50,12 +50,28 @@ useVirtualId(meetingSchema);
 
 const meeting = mongoose.model('meetings', meetingSchema);
 
-export async function getAll(userId: string, filter?: string) {
+export async function getAll(userId: string, curPos: number, cnt: number, filter?: any) {
   if (!filter) {
     return meeting.find({ownerId: userId}).lean().sort({date: -1});
   }
 
-  return meeting.find({ownerId: userId, toEmail: filter}).lean().sort({date: -1});
+  if (filter._toEmail) {
+    return meeting.find({ownerId: userId})
+      .regex('toEmail', new RegExp(filter._toEmail))
+      .skip(curPos).limit(cnt)
+      .lean().sort({date: -1});
+  }
+  else if (filter._title) {
+    return meeting.find({ownerId: userId})
+      .regex('title', new RegExp(filter._title))
+      .skip(curPos).limit(cnt)
+      .lean().sort({date: -1});
+  }
+  else {
+    return meeting.find({ownerId: userId})
+      .skip(curPos).limit(cnt)
+      .lean().sort({date: -1});
+  }
 }
 
 export async function getAllByIndex(userId: string, curPos: number, cnt: number) {
@@ -85,8 +101,11 @@ export async function createMeeting(meetingData: any) {
       ownerId: data.ownerId,
       ownerName: data.ownerName,
       ownerEmail: data.ownerEmail,
+      ownerPhone: data.ownerPhone,
+      ownerCompany: data.ownerCompany,
       toEmail: data.toEmail,
       toImage: data.toImage,
+      toPhone: data.toPhone,
       eventId: data.eventId,
       title: data.title,
       date: data.date,
