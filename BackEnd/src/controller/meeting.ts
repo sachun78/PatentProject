@@ -228,14 +228,27 @@ export async function sendInvitMail(req: IRequest, res: Response) {
   const meetId = req.query.meetId;
 
   try {
-    const meetingData = await createMeeting(user_id, bodyData);
-    if (!meetingData) {
-      return res.status(500).json({ message: `Failed save meeting ${bodyData.toEmail}`});
-    }
+    if (meetId) {
+      const modify = await meetingRepo.updateMeeting(meetId, {status: 'none', code: shortid.generate()});
 
-    sendmail(meetingData, EMAILTYPE.INVI)
-      .then( value => res.status(200).json({ message: `Success send email: ${meetingData.toEmail}, code(${meetingData.code})`}))
-      .catch( reason => res.status(500).json({ message: `Failed email send ${reason}`}));
+      if (!modify) {
+        return res.status(500).json({ message: `Failed save meeting ${bodyData.toEmail}`});
+      }
+
+      sendmail(modify, EMAILTYPE.INVI)
+        .then( value => res.status(200).json({ message: `Success send email: ${modify.toEmail}, code(${modify.code})`}))
+        .catch( reason => res.status(500).json({ message: `Failed email send ${reason}`}));
+    }
+    else {
+      const meetingData = await createMeeting(user_id, bodyData);
+      if (!meetingData) {
+        return res.status(500).json({ message: `Failed save meeting ${bodyData.toEmail}`});
+      }
+
+      sendmail(meetingData, EMAILTYPE.INVI)
+        .then( value => res.status(200).json({ message: `Success send email: ${meetingData.toEmail}, code(${meetingData.code})`}))
+        .catch( reason => res.status(500).json({ message: `Failed email send ${reason}`}));
+    }
   }
   catch(e) {
     console.error(`[meetingCtrl][sendInvitMail] ${e}`);
@@ -259,12 +272,12 @@ async function createMeeting(userId: string, body: any) {
     toUserImage = toUser.photo_path;
   }
 
-  let profilePhone;
-  let profileCompany;
+  let profilePhone = '';
+  let profileCompany = '';
   const profile = await profileRepo.findById(user.profile);
   if (profile) {
-    profilePhone = profile.phone;
-    profileCompany = profile.company;
+    profilePhone = profile.phone!!;
+    profileCompany = profile.company!!;
   }
 
   let revMeeting = {
