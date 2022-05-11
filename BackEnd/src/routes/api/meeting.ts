@@ -5,6 +5,7 @@ import { isAuth } from 'middleware/authChecker';
 const route = express.Router()
 
 route.get('/', isAuth, meetingCtrl.getMeetings);
+route.get('/history', isAuth, meetingCtrl.getMeetingHistory);
 route.get('/:id', isAuth, meetingCtrl.getMeeting);
 route.get('/show/:code', meetingCtrl.getMeetingByCode);
 route.get('/cancel/:code', meetingCtrl.cancelMeeting);

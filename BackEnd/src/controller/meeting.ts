@@ -71,6 +71,13 @@ export async function getMeetings(req: IRequest, res: Response, next: NextFuncti
   }
 }
 
+export async function getMeetingHistory(req: IRequest, res: Response) {
+  const user_id = req.userId;
+
+  const data = await meetingRepo.getAllHistory(user_id);
+  res.status(200).json(data);
+}
+
 export async function getMeeting(req: IRequest, res: Response) {
   const user_id = req.userId;
   const id = req.params.id;
