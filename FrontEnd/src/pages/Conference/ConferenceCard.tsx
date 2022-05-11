@@ -18,12 +18,13 @@ function ConferenceCard({ img }: conferenceCardProps) {
         }}/>        
       </div>
       <div css={titleStyle}>
-      <h3>Card Title</h3>
+      <h3>Conference Title</h3>
       </div>        
       <div className='content' css={contentStyle}>                
         <p>
-        Lizards are a widespread group of squamate reptiles, with over 6,000
-        species, ranging across all continents except Antarctica          
+        May 16 ~ 20, 2023
+        Singapore <br />
+        Sample text Sample text Sample text Sample text Sample text
         </p>
       </div>
     </div>          
@@ -41,7 +42,7 @@ const titleStyle=css`
 const cardStyle = css`
   position: relative;
   max-width: 18rem;
-  height: 215px;
+  height: 270px;
   background: #fff;
   margin: 40px 10px;
   padding: 20px;
@@ -52,7 +53,7 @@ const cardStyle = css`
   border-radius: 1rem;  
 
   &:hover {
-    height: 320px;
+    height: 340px;
 
     .content {
       visibility: visible;
@@ -65,8 +66,8 @@ const cardStyle = css`
   .imgBx {
     position: relative;
     width: 16rem;
-    min-height: 210px;
-    height: 210px;
+    min-height: 260px;
+    height: 260px;
     top: -60px;
     margin: 0 auto;
     border-radius: 1rem;       
