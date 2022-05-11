@@ -18,7 +18,7 @@ function ConferenceCard({ img }: conferenceCardProps) {
         }}/>        
       </div>
       <div css={titleStyle}>
-      <h2>Card Title</h2>
+      <h3>Card Title</h3>
       </div>        
       <div className='content' css={contentStyle}>                
         <p>
@@ -40,7 +40,7 @@ const titleStyle=css`
 
 const cardStyle = css`
   position: relative;
-  max-width: 27rem;
+  max-width: 18rem;
   height: 215px;
   background: #fff;
   margin: 40px 10px;
@@ -64,9 +64,9 @@ const cardStyle = css`
   
   .imgBx {
     position: relative;
-    width: 21rem;
-    min-height: 200px;
-    height: 200px;
+    width: 16rem;
+    min-height: 210px;
+    height: 210px;
     top: -60px;
     margin: 0 auto;
     border-radius: 1rem;       

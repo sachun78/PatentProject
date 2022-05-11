@@ -15,7 +15,11 @@ function Conference({}: conferenceProps) {
         <ConferenceCard img={img1} />
         <ConferenceCard img={img2} />      
         <ConferenceCard img={img1} />
-        <ConferenceCard img={img2} />     
+        <ConferenceCard img={img2} />
+        <ConferenceCard img={img1} />
+        <ConferenceCard img={img2} />
+        <ConferenceCard img={img1} />
+        <ConferenceCard img={img2} />
               
       </div>    
   );
@@ -30,5 +34,5 @@ const containerStyle = css`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  padding: 30px; 
+  /* padding: 30px;  */
 `
