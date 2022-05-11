@@ -10,7 +10,7 @@ import media from 'lib/styles/media'
 import React, { useCallback, useMemo } from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import useProfileImg from '../../hooks/useProfileImg'
 import { IComment, User } from '../../lib/api/types'
@@ -129,9 +129,11 @@ function PostDetail({}: postDetailProps) {
             </Avatar>
           </div>
           <div css={titleStyle}>
+            <Link to={`/u/${post.owner_email}`}>    
             <h4>
               <span>{post.owner_username}/ etc ..</span>
             </h4>
+            </Link>
             <div className={'time-date'}>                
               {diff}
             </div>
@@ -230,6 +232,13 @@ const titleStyle = css`
   flex-direction: column;
   margin-top: -5px;
   margin-bottom: -5px;
+
+  a:link,
+  a:visited,
+  a:hover {
+    text-decoration: none;
+    cursor: pointer;
+  }
 
   h4 {
     margin: 0.5625rem 0 0.3125rem;
