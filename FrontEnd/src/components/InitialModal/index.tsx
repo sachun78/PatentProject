@@ -11,25 +11,24 @@ import useProfileQuery from 'hooks/query/useProfileQuery'
 import { useMutation, useQueryClient } from 'react-query'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
+import { useProfileFormState } from 'atoms/profileFormState'
 
-export type InitialInputModalProps = {}
+export type InitialModalProps = {}
 
-function InitialInputModal({}: InitialInputModalProps) {
+function InitialModal({}: InitialModalProps) {
   const { data } = useProfileQuery()
   const { open, setOpen, handleClose } = useModal(false)
+  const [phone] = useProfileFormState()
   const qc = useQueryClient()
-  const mutation = useMutation(
-    () => patchProfile({ ...form, field: fields, country }),
-    {
-      onSuccess: (data) => {
-        setOpen(false)
-        qc.setQueryData('profile', data)
-      },
-      onError: (err: AxiosError) => {
-        setError(err.message)
-      },
-    }
-  )
+  const mutation = useMutation(() => patchProfile({ ...form, field: fields, country, phone }), {
+    onSuccess: (data) => {
+      setOpen(false)
+      qc.setQueryData('profile', data)
+    },
+    onError: (err: AxiosError) => {
+      setError(err.message)
+    },
+  })
   const [error, setError] = useState<string | null>(null)
   const [form, onChange] = useInputs({
     company: '',
@@ -40,10 +39,7 @@ function InitialInputModal({}: InitialInputModalProps) {
 
   // COUNTRY CONTROL
   const [country, setCountry] = useState('AD')
-  const handleCountry = (
-    e: SyntheticEvent,
-    v: AutocompleteValue<CountryType, undefined, undefined, undefined>
-  ) => {
+  const handleCountry = (e: SyntheticEvent, v: AutocompleteValue<CountryType, undefined, undefined, undefined>) => {
     if (!v) return
     setCountry(v.code)
     console.log(v)
@@ -74,11 +70,7 @@ function InitialInputModal({}: InitialInputModalProps) {
     (e: React.FormEvent) => {
       e.preventDefault()
       setError(null)
-      if (
-        !form.company.trim() ||
-        !form.department.trim() ||
-        !form.position.trim()
-      ) {
+      if (!form.company.trim() || !form.department.trim() || !form.position.trim()) {
         setError('Please enter all items')
         return
       }
@@ -111,38 +103,15 @@ function InitialInputModal({}: InitialInputModalProps) {
   }, [error])
 
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      disableEscapeKeyDown
-      disableEnforceFocus
-    >
-      <Box css={boxWrapper}>
-        <img src={'/assets/wemet_logo.png'} alt={'logo'} />
+    <Modal open={open} onClose={handleClose} disableEscapeKeyDown disableEnforceFocus>
+      <Box css={boxWrapper} p={1}>
         <h1>Enter your profile</h1>
         <form css={formWrapper} onSubmit={handleSubmit}>
-          <ProfileSection
-            title="Profile"
-            description={'Please enter your default profile.'}
-          >
-            <ProfileCard.Text
-              title="company"
-              text={company}
-              editable
-              onChange={onChange}
-            />
-            <ProfileCard.Text
-              title="department"
-              text={department}
-              editable
-              onChange={onChange}
-            />
-            <ProfileCard.Text
-              title="position"
-              text={position}
-              editable
-              onChange={onChange}
-            />
+          <ProfileSection title="Profile" description={'Please enter your default profile.'}>
+            <ProfileCard.Text title="company" text={company} editable onChange={onChange} />
+            <ProfileCard.Phone title="Phone number" />
+            <ProfileCard.Text title="department" text={department} editable onChange={onChange} />
+            <ProfileCard.Text title="position" text={position} editable onChange={onChange} />
             <ProfileCard.Field
               title="field"
               text={fieldText}
@@ -152,19 +121,9 @@ function InitialInputModal({}: InitialInputModalProps) {
               onRemove={onFieldRemove}
               editable
             />
-            <ProfileCard.Country
-              title="country"
-              onChange={handleCountry}
-              country={country}
-              editable
-            />
+            <ProfileCard.Country title="country" onChange={handleCountry} country={country} editable />
           </ProfileSection>
-          <Button
-            className={'bot-button'}
-            type="submit"
-            color="primary"
-            variant="contained"
-          >
+          <Button className={'bot-button'} type="submit" color="primary" variant="contained">
             OK
           </Button>
         </form>
@@ -173,4 +132,4 @@ function InitialInputModal({}: InitialInputModalProps) {
   )
 }
 
-export default InitialInputModal
+export default InitialModal

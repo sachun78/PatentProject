@@ -14,10 +14,12 @@ function ScheduleTable({ meetings }: ScheduleTableProps) {
 
   return (
     <TableContainer component={Paper} style={{ borderRadius: '1rem', maxWidth: '80.3125rem', marginBottom: '1rem' }}>
-      <Table sx={{ minWidth: 700 }} aria-label="history schedule table">
+      <Table sx={{ minWidth: 700 }} aria-label="history schedule table" size={'small'}>
         <TableHead>
           <TableRow>
             <StyledTableCell align="center">Title</StyledTableCell>
+            <StyledTableCell align="center">Name</StyledTableCell>
+            <StyledTableCell align="center">Company</StyledTableCell>
             <StyledTableCell align="center">Email</StyledTableCell>
             <StyledTableCell align="center">Date</StyledTableCell>
             <StyledTableCell align="center">Location</StyledTableCell>
@@ -37,6 +39,8 @@ function ScheduleTable({ meetings }: ScheduleTableProps) {
             return (
               <StyledTableRow key={row._id + row.date} hover onClick={() => navi('/meeting/schedule/' + row._id)}>
                 <StyledTableCell align="center">{row.title}</StyledTableCell>
+                <StyledTableCell align="center">{row.ownerName}</StyledTableCell>
+                <StyledTableCell align="center">{row.company}</StyledTableCell>
                 <StyledTableCell align="center">{row.toEmail}</StyledTableCell>
                 <StyledTableCell align="center">
                   {format(new Date(row.date), 'EEEE, d MMM, yyyy')} <br />

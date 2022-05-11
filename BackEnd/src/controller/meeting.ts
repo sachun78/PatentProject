@@ -43,7 +43,7 @@ export async function getMeetings(req: IRequest, res: Response, next: NextFuncti
   const title = req.query.title;
   const curPos = req.query.curPos as string;
   const cnt = req.query.cnt as string;
-  let retData;
+  //let retData;
 
   try {
     if (curPos && cnt) {
@@ -51,33 +51,33 @@ export async function getMeetings(req: IRequest, res: Response, next: NextFuncti
       let _cnt: number = parseInt(cnt);
   
       const indexData = await meetingRepo.getAllByIndex(user_id, _curPos, _cnt);
-      console.log(indexData);
       return res.status(200).json(indexData);
     }
 
-    const data = await meetingRepo.getAll(user_id);
+    const allData = await meetingRepo.getAll(user_id);
+    res.status(200).json(allData);
 
-    if (toEmail) {
-      const fuse = new Fuse(data, {
-        includeScore: true,
-        useExtendedSearch: true,
-        keys: ['toEmail']
-      });
-      retData = fuse.search('=' + toEmail);
-    }
-    else if (title) {
-      const fuse = new Fuse(data, {
-        includeScore: true,
-        useExtendedSearch: true,
-        keys: ['title', 'comment']
-      });
-      retData = fuse.search("'" + title);
-    }
-    else {
-      return res.status(200).json(data);
-    }
-    retData = retData.map(value => value.item);
-    res.status(200).json(retData);
+    // if (toEmail) {
+    //   const fuse = new Fuse(data, {
+    //     includeScore: true,
+    //     useExtendedSearch: true,
+    //     keys: ['toEmail']
+    //   });
+    //   retData = fuse.search('=' + toEmail);
+    // }
+    // else if (title) {
+    //   const fuse = new Fuse(data, {
+    //     includeScore: true,
+    //     useExtendedSearch: true,
+    //     keys: ['title', 'comment']
+    //   });
+    //   retData = fuse.search("'" + title);
+    // }
+    // else {
+    //   return res.status(200).json(data);
+    // }
+    // retData = retData.map(value => value.item);
+    // res.status(200).json(retData);
   }
   catch(e) {
     console.error(`[meetingCtrl][getMeetings] Fail meeting get all`);
@@ -88,6 +88,8 @@ export async function getMeetings(req: IRequest, res: Response, next: NextFuncti
 export async function getMeeting(req: IRequest, res: Response) {
   const user_id = req.userId;
   const id = req.params.id;
+
+  let sendProfile: any = {};
 
   const data = await meetingRepo.getById(id);
   if (data) {
@@ -111,17 +113,8 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
       return res.status(409).json({ message: `meeting code:(${code}) not found`});
     }
 
-    let sendProfile: any = {};
-    const profile = await profileRepo.getProfile(data.ownerId);
-    if (profile) {
-      sendProfile['company'] = profile.company;
-      sendProfile['country'] = profile.country;
-      sendProfile['phone'] = profile.phone;
-      sendProfile['signature'] = profile.signature;
-    }
-    console.log(sendProfile)
     if (status !== 'replan') {
-      return res.status(200).json({data , sendProfile});
+      return res.status(200).json({data});
     }
 
     const eventId = data.eventId;
@@ -152,7 +145,7 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
     }
     sendData['meeting_timeList'] = meetTimeList;
     console.log(sendData);
-    res.status(200).json({data, sendProfile, sendData});
+    res.status(200).json({data, sendData});
   }
   catch(e) {
     console.error(`[meetingCtrl][getMeetingByCode] message (${e})`);
@@ -232,16 +225,30 @@ export async function sendResultMail(req: IRequest, res: Response) {
 export async function sendInvitMail(req: IRequest, res: Response) {
   const user_id = req.userId;
   const bodyData = req.body;
+  const meetId = req.query.meetId;
 
   try {
-    const meetingData = await createMeeting(user_id, bodyData);
-    if (!meetingData) {
-      return res.status(500).json({ message: `Failed save meeting ${bodyData.toEmail}`});
-    }
+    if (meetId) {
+      const modify = await meetingRepo.updateMeeting(meetId, {status: 'none', code: shortid.generate()});
 
-    sendmail(meetingData, EMAILTYPE.INVI)
-      .then( value => res.status(200).json({ message: `Success send email: ${meetingData.toEmail}, code(${meetingData.code})`}))
-      .catch( reason => res.status(500).json({ message: `Failed email send ${reason}`}));
+      if (!modify) {
+        return res.status(500).json({ message: `Failed save meeting ${bodyData.toEmail}`});
+      }
+
+      sendmail(modify, EMAILTYPE.INVI)
+        .then( value => res.status(200).json({ message: `Success send email: ${modify.toEmail}, code(${modify.code})`}))
+        .catch( reason => res.status(500).json({ message: `Failed email send ${reason}`}));
+    }
+    else {
+      const meetingData = await createMeeting(user_id, bodyData);
+      if (!meetingData) {
+        return res.status(500).json({ message: `Failed save meeting ${bodyData.toEmail}`});
+      }
+
+      sendmail(meetingData, EMAILTYPE.INVI)
+        .then( value => res.status(200).json({ message: `Success send email: ${meetingData.toEmail}, code(${meetingData.code})`}))
+        .catch( reason => res.status(500).json({ message: `Failed email send ${reason}`}));
+    }
   }
   catch(e) {
     console.error(`[meetingCtrl][sendInvitMail] ${e}`);
@@ -265,12 +272,23 @@ async function createMeeting(userId: string, body: any) {
     toUserImage = toUser.photo_path;
   }
 
+  let profilePhone = '';
+  let profileCompany = '';
+  const profile = await profileRepo.findById(user.profile);
+  if (profile) {
+    profilePhone = profile.phone!!;
+    profileCompany = profile.company!!;
+  }
+
   let revMeeting = {
     ownerId: user.id,
     ownerEmail: user.email,
     ownerName: user.username,
+    ownerPhone: profilePhone,
+    ownerCompnay: profileCompany,
     toEmail: body.toEmail,
     toImage: toUserImage,
+    toPhone: '',
     eventId: body.eventId, 
     title: body.title,
     date: body.date, 

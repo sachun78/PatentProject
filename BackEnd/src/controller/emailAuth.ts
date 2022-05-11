@@ -8,11 +8,7 @@ interface IRequest extends Request {
   [key: string]: any;
 }
 
-export async function sendAuthEmail(
-  req: IRequest,
-  res: Response,
-  next: NextFunction
-) {
+export async function sendAuthEmail(req: IRequest, res: Response, next: NextFunction) {
   try {
     const emailInfo = {
       email: "",
@@ -66,9 +62,7 @@ export async function forgotPasswd(
 
     const check = await EmaiAuthlRepo.findByEmail(emailInfo.email);
     if (check) {
-      console.log(check)
       if (check.logged === true) {
-        console.log('update mail', emailInfo)
         await EmaiAuthlRepo.updateAuthMail(check.code, emailInfo);
       }
       else {

@@ -12,6 +12,7 @@ export type IProfile = {
   position?: string
   field?: string[]
   country?: string
+  phone?: string
 }
 
 export type IProfileDetail = {
@@ -54,6 +55,7 @@ export type IMeeting = {
   status: string
   code: string
   history: any
+  company: string
 }
 
 export type IAuthCode = {
