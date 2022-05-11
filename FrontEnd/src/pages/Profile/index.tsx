@@ -7,10 +7,10 @@ function Profile({}: ProfileProps) {
   return (
     <div css={wrapper}>
       <div css={titleStyle}>
-        <div className="line">
-          <h2>Profile</h2>
-        </div>
+        <img src={'/assets/profile.png'} alt={'profile'} />
+        <h2>Profile</h2>
       </div>
+      <div />
       <ProfileMenu />
     </div>
   )

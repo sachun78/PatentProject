@@ -37,7 +37,6 @@ function ProfileCardPhone({ title, phone }: ProfileCardPhoneProps) {
             onChange={onChange}
             inputComponent={PhoneInput}
             ref={ref}
-            // defaultCountry={'KR'}
             onBlur={() => setEdit(false)}
             international
             style={{ width: '100%' }}
@@ -53,5 +52,8 @@ const HoverP = styled.p`
     cursor: pointer;
     color: ${brandColor};
   }
+
+  color: #333;
+  font: normal normal 800 16px/18px NanumSquareOTF;
 `
 export default ProfileCardPhone

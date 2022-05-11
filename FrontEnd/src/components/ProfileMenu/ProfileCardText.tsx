@@ -1,5 +1,4 @@
 import { inputStyle, itemStyle, textStyle } from './styles'
-import IconControl from '../IconControl/IconControl'
 import Input from '../Input/Input'
 import React, { memo, useCallback } from 'react'
 
@@ -25,7 +24,7 @@ function ProfileCardText({ editable = false, text, title, onChange }: ProfileCar
             <div className="text">
               <div>{text}</div>
               <button className={'btn'} onClick={toggle}>
-                <IconControl name={'edit'} />
+                <img src={'/assets/write.png'} alt={'edit-btn'} style={{ width: '17px', height: '17px' }} />
               </button>
             </div>
           )}

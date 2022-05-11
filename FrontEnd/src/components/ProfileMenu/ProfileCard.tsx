@@ -1,8 +1,7 @@
 import { css } from '@emotion/react'
-import { Avatar, TextField } from '@mui/material'
+import { Avatar, IconButton, TextField } from '@mui/material'
 import React, { useRef } from 'react'
 import { careerStyle, emailStyle, itemStyle, photoStyle } from './styles'
-import IconControl from '../IconControl'
 import { upload } from 'lib/api/me/upload'
 import ProfileCardText from './ProfileCardText'
 import ProfileCardField from './ProfileCardField'
@@ -20,11 +19,17 @@ function ProfileCard({ children }: ProfileCardProps) {
   return <div css={wrapper}>{children}</div>
 }
 
+ProfileCard.Item = ProfileCardItem
+ProfileCard.Text = ProfileCardText
+ProfileCard.Field = ProfileCardField
+ProfileCard.Email = ProfileCardEmail
+ProfileCard.Country = ProfileCardCountry
+ProfileCard.Save = ProfileCardSave
+ProfileCard.Phone = ProfileCardPhone
+
 const wrapper = css`
-  margin-bottom: 2.5rem;
-  border-radius: 0.25rem;
-  background-color: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.875rem;
+  border-radius: 1rem;
 `
 
 type cardItemType = 'email' | 'photo' | 'username' | 'career'
@@ -71,7 +76,7 @@ function ProfileCardItem({ title, type, email, username }: ProfileCardItemProps)
         {/*2. PHOTO TYPE*/}
         {type === 'photo' && email && (
           <div css={photoStyle}>
-            <div>
+            <div className={'img'}>
               <Avatar
                 sx={{ width: 100, height: 100 }}
                 style={{ border: '0.1px solid lightgray' }}
@@ -89,15 +94,17 @@ function ProfileCardItem({ title, type, email, username }: ProfileCardItemProps)
               accept="image/*"
               name="profile_img"
             />
-            <button
-              className={'btn'}
-              onClick={(e) => {
-                fileRef?.current?.click()
-                e.preventDefault()
-              }}
-            >
-              <IconControl name={'upload'} />
-            </button>
+            <div className={'upload-btn'}>
+              <IconButton
+                disableTouchRipple={true}
+                onClick={(e) => {
+                  fileRef?.current?.click()
+                  e.preventDefault()
+                }}
+              >
+                <img src={'/assets/upload.png'} style={{ width: 20, height: 20 }} />
+              </IconButton>
+            </div>
           </div>
         )}
         {/*3. Name TYPE*/}
@@ -116,13 +123,5 @@ function ProfileCardItem({ title, type, email, username }: ProfileCardItemProps)
     </div>
   )
 }
-
-ProfileCard.Item = ProfileCardItem
-ProfileCard.Text = ProfileCardText
-ProfileCard.Field = ProfileCardField
-ProfileCard.Email = ProfileCardEmail
-ProfileCard.Country = ProfileCardCountry
-ProfileCard.Save = ProfileCardSave
-ProfileCard.Phone = ProfileCardPhone
 
 export default ProfileCard

@@ -8,23 +8,23 @@ export const wrapper = css`
   width: 100%;
 `
 export const titleStyle = css`
-  padding-right: 1.875rem;
-
+  display: flex;
+  max-width: 54.375rem;
+  img {
+    width: 0.8125rem;
+    height: 0.875rem;
+    margin-right: 0.3125rem;
+  }
   h2 {
-    line-height: 1.2;
-    font-size: 2.25rem;
-    font-weight: 700;
-    padding-bottom: 1rem;
-    margin: 0;
+    color: #910457;
+    font: normal normal 800 18px/21px NanumSquareOTF;
   }
-
-  .line {
-    box-shadow: inset 0 calc(-1 * 1px) 0 rgba(0, 0, 0, 0.1);
-    margin-bottom: 1rem;
-  }
+  padding-bottom: 1.5625rem;
+  border-bottom: 1px solid #9c9c9c;
+  margin-bottom: 1.5625rem;
 `
 export const InfoStyleDiv = styled.div`
-  padding-right: 3rem;
   display: flex;
   flex-flow: column;
+  max-width: 54.375rem;
 `

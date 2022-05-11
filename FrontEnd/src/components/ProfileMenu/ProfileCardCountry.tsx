@@ -4,6 +4,7 @@ import { css } from '@emotion/react'
 import CountrySelector, { countries, CountryType } from '../CountrySelector/CountrySelector'
 import { AutocompleteValue, Button } from '@mui/material'
 import getCountryName from '../../lib/countryName'
+import styled from '@emotion/styled'
 
 export type ProfileCardCountryProps = {
   title: string
@@ -22,13 +23,7 @@ function ProfileCardCountry({ title, editable, country, onChange }: ProfileCardC
           <label>{title}</label>
         </div>
         <div css={countryWrapper}>
-          <div
-            css={css`
-              display: flex;
-              justify-content: space-between;
-              width: 100%;
-            `}
-          >
+          <CountryInner>
             {edit && (
               <CountrySelector
                 onChange={onChange}
@@ -49,7 +44,7 @@ function ProfileCardCountry({ title, editable, country, onChange }: ProfileCardC
                 </Button>
               </div>
             )}
-          </div>
+          </CountryInner>
         </div>
       </div>
     </div>
@@ -59,6 +54,13 @@ function ProfileCardCountry({ title, editable, country, onChange }: ProfileCardC
 const countryNormalStyle = css`
   display: flex;
   align-items: center;
+  color: #333333;
+  font: normal normal 800 16px/18px NanumSquareOTF;
 `
 
+const CountryInner = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`
 export default memo(ProfileCardCountry)

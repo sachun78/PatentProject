@@ -7,7 +7,6 @@ import useProfileQuery from 'hooks/query/useProfileQuery'
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { AutocompleteValue } from '@mui/material'
 import { CountryType } from '../CountrySelector/CountrySelector'
-import { css } from '@emotion/react'
 import _ from 'lodash'
 import { patchProfile } from 'lib/api/me/getProfile'
 import { InfoStyleDiv } from 'pages/Profile/styles'
@@ -127,39 +126,32 @@ function ProfileMenu({}: ProfileMenuProps) {
 
   return (
     <InfoStyleDiv>
-      <div css={wrapper}>
-        <InfoViewSection title="Account">
-          <InfoViewCard.Item title="Email" type={'email'} email={user?.email} />
-          <InfoViewCard.Item title="Username" type={'username'} username={user?.username} />
-          <InfoViewCard.Item title="Photo" type={'photo'} email={user?.email} isEditMode />
-        </InfoViewSection>
-        <InfoViewSection title="Belonging" description={'Change identifying details for your connecting'}>
-          <ProfileCard.Text title="Firm" text={company ?? ''} onChange={onCompanyChange} />
-          <ProfileCard.Text title="Department" text={department ?? ''} onChange={onDepartmentChange} />
-          <ProfileCard.Text title="Position" text={position ?? ''} onChange={onPositionChange} />
-          <ProfileCard.Phone title="Phone number" phone={phone} />
-          <ProfileCard.Field
-            title="Field"
-            text={fieldText}
-            onChange={onChangeFieldText}
-            onAdd={onFieldAdd}
-            fields={fields}
-            onRemove={onFieldRemove}
-          />
-          <ProfileCard.Country title="Country" onChange={handleCountry} country={country ?? 'AD'} />
-          <ProfileCard.Save onSave={onSaveProfile} loading={!isSaveActive || saveMutation.isLoading} />
-        </InfoViewSection>
-        <InfoViewSection title="Additional">
-          <InfoViewCard.Item title="About" type={'career'} />
-        </InfoViewSection>
-      </div>
+      <InfoViewSection title="Account">
+        <InfoViewCard.Item title="Email" type={'email'} email={user?.email} />
+        <InfoViewCard.Item title="Username" type={'username'} username={user?.username} />
+        <InfoViewCard.Item title="Photo" type={'photo'} email={user?.email} isEditMode />
+        <ProfileCard.Phone title="Phone number" phone={phone} />
+      </InfoViewSection>
+      <InfoViewSection title="Belonging" description={'Change identifying details for your connecting'}>
+        <ProfileCard.Text title="Firm" text={company ?? ''} onChange={onCompanyChange} />
+        <ProfileCard.Text title="Department" text={department ?? ''} onChange={onDepartmentChange} />
+        <ProfileCard.Text title="Position" text={position ?? ''} onChange={onPositionChange} />
+        <ProfileCard.Field
+          title="Field"
+          text={fieldText}
+          onChange={onChangeFieldText}
+          onAdd={onFieldAdd}
+          fields={fields}
+          onRemove={onFieldRemove}
+        />
+        <ProfileCard.Country title="Country" onChange={handleCountry} country={country ?? 'AD'} />
+        <ProfileCard.Save onSave={onSaveProfile} loading={!isSaveActive || saveMutation.isLoading} />
+      </InfoViewSection>
+      <InfoViewSection title="Additional">
+        <InfoViewCard.Item title="About" type={'career'} />
+      </InfoViewSection>
     </InfoStyleDiv>
   )
 }
-
-const wrapper = css`
-  max-width: 90rem;
-  padding-bottom: 2rem;
-`
 
 export default ProfileMenu

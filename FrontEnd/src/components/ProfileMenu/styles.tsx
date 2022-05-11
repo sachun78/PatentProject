@@ -1,45 +1,40 @@
 import { css } from '@emotion/react'
 import palette, { brandColor } from 'lib/palette'
-import { resetButton } from '../../lib/styles/resetButton'
+import { resetButton } from 'lib/styles/resetButton'
 
 export const emailStyle = css`
   flex-grow: 1;
+  height: 100%;
   display: flex;
+  justify-content: center;
   flex-direction: column;
 
   .email-block {
-    line-height: 1.5;
-    font-size: 1.125rem;
-    font-weight: 600;
+    color: #333333;
+    font: normal normal 800 16px/18px NanumSquareOTF;
   }
 
   p {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
+    color: #9c9c9c;
+    font: normal normal normal 12px/13px NanumSquareOTF;
   }
 `
 
 export const photoStyle = css`
-  flex-grow: 1;
   display: flex;
+  flex: 1;
+  width: 100%;
 
-  div {
+  > div.img {
     flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
   }
 
-  svg {
-    width: 1.25rem;
-    height: 1.25rem;
-    padding: 0.75rem;
-    border-radius: 1rem;
-    color: ${brandColor};
-
-    &:hover {
-      background: ${palette.grey[50]};
-      border: 1px solid ${brandColor};
-      color: ${brandColor};
-    }
-
-    cursor: pointer;
+  > div.upload-btn {
+    align-self: center;
   }
 `
 export const countryWrapper = css`
@@ -73,6 +68,8 @@ export const textStyle = css`
 
   .text {
     display: flex;
+    color: #333333;
+    font: normal normal 800 16px/18px NanumSquareOTF;
 
     svg {
       &:hover {
@@ -136,33 +133,33 @@ export const careerStyle = css`
 `
 // PROFILECARD STYLES
 export const itemStyle = css`
-  padding: 1.25rem;
+  padding: 0.9375rem 1.875rem;
 
-  &:not(:first-of-type) {
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  & + & {
+    margin-top: 0.625rem;
   }
+
+  background: #fff;
+  border-radius: 1rem;
+  min-height: 4.3125rem;
+  display: flex;
+  flex: 1;
 
   .inner {
     display: flex;
     flex-wrap: nowrap;
-    position: relative;
-    flex-grow: 1;
-    font-size: 0.8125rem;
+    align-items: center;
+    width: 100%;
   }
 
   .title {
-    width: 11.25rem;
+    width: 7.5rem;
     flex-shrink: 0;
-    padding-right: 1.25rem;
 
     label {
-      font-weight: 700;
+      color: #6c6c6c;
+      font: normal normal normal 16px/26px NanumSquareOTF;
     }
-  }
-
-  .btn {
-    all: unset;
-    display: inline-block;
   }
 `
 export const inputStyle = css`
@@ -174,9 +171,4 @@ export const inputStyle = css`
 export const tagStyle = css`
   display: block;
   flex-direction: column;
-  margin-top: 0.5rem;
-
-  .tag + .tag {
-    margin-left: 0.5rem;
-  }
 `
