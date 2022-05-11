@@ -39,8 +39,7 @@ const checkInviteCode = async (code: string, data: any): Promise<any> => {
 
 export async function getMeetings(req: IRequest, res: Response, next: NextFunction) {
   const user_id = req.userId;
-  const toEmail = req.query.toEmail;
-  const title = req.query.title;
+  const searchData = req.query.search;
   const curPos = req.query.curPos as string;
   const cnt = req.query.cnt as string;
 
@@ -48,41 +47,23 @@ export async function getMeetings(req: IRequest, res: Response, next: NextFuncti
     if (curPos && cnt) {
       let _curPos: number = parseInt(curPos);
       let _cnt: number = parseInt(cnt);
-
-      let filter = {
-        _toEmail: toEmail,
-        _title: title
-      }
   
-      const indexData = await meetingRepo.getAll(user_id, _curPos, _cnt, filter);
+      const indexData = await meetingRepo.getAllByIndex(user_id, _curPos, _cnt);
       return res.status(200).json(indexData);
     }
-    else {
-      return res.status(403).json({ message: `current position or count is not exist`});
-    }
 
-    //let retData;
-    // if (toEmail) {
-    //   const fuse = new Fuse(data, {
-    //     includeScore: true,
-    //     useExtendedSearch: true,
-    //     keys: ['toEmail']
-    //   });
-    //   retData = fuse.search('=' + toEmail);
-    // }
-    // else if (title) {
-    //   const fuse = new Fuse(data, {
-    //     includeScore: true,
-    //     useExtendedSearch: true,
-    //     keys: ['title', 'comment']
-    //   });
-    //   retData = fuse.search("'" + title);
-    // }
-    // else {
-    //   return res.status(200).json(data);
-    // }
-    // retData = retData.map(value => value.item);
-    // res.status(200).json(retData);
+    const data = await meetingRepo.getAll(user_id);
+    let retData;
+    
+    const fuse = new Fuse(data, {
+      includeScore: true,
+      useExtendedSearch: true,
+      keys: ['ownerCompnay', 'toEmail', 'title', 'ownerName']
+    });
+    retData = fuse.search("'" + searchData);
+    retData = retData.map(value => value.item);
+    console.log(retData);
+    res.status(200).json(retData);
   }
   catch(e) {
     console.error(`[meetingCtrl][getMeetings] Fail meeting get all`);

@@ -50,28 +50,26 @@ useVirtualId(meetingSchema);
 
 const meeting = mongoose.model('meetings', meetingSchema);
 
-export async function getAll(userId: string, curPos: number, cnt: number, filter?: any) {
-  if (!filter) {
+export async function getAll(userId: string) {
     return meeting.find({ownerId: userId}).lean().sort({date: -1});
-  }
 
-  if (filter._toEmail) {
-    return meeting.find({ownerId: userId})
-      .regex('toEmail', new RegExp(filter._toEmail))
-      .skip(curPos).limit(cnt)
-      .lean().sort({date: -1});
-  }
-  else if (filter._title) {
-    return meeting.find({ownerId: userId})
-      .regex('title', new RegExp(filter._title))
-      .skip(curPos).limit(cnt)
-      .lean().sort({date: -1});
-  }
-  else {
-    return meeting.find({ownerId: userId})
-      .skip(curPos).limit(cnt)
-      .lean().sort({date: -1});
-  }
+  // if (filter._toEmail) {
+  //   return meeting.find({ownerId: userId})
+  //     .regex('toEmail', new RegExp(filter._toEmail))
+  //     .skip(curPos).limit(cnt)
+  //     .lean().sort({date: -1});
+  // }
+  // else if (filter._title) {
+  //   return meeting.find({ownerId: userId})
+  //     .regex('title', new RegExp(filter._title))
+  //     .skip(curPos).limit(cnt)
+  //     .lean().sort({date: -1});
+  // }
+  // else {
+  //   return meeting.find({ownerId: userId})
+  //     .skip(curPos).limit(cnt)
+  //     .lean().sort({date: -1});
+  // }
 }
 
 export async function getAllByIndex(userId: string, curPos: number, cnt: number) {
