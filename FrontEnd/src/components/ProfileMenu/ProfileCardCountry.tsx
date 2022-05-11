@@ -2,9 +2,10 @@ import { countryWrapper, itemStyle } from './styles'
 import React, { memo, SyntheticEvent } from 'react'
 import { css } from '@emotion/react'
 import CountrySelector, { countries, CountryType } from '../CountrySelector/CountrySelector'
-import { AutocompleteValue, Button } from '@mui/material'
+import { AutocompleteValue } from '@mui/material'
 import getCountryName from '../../lib/countryName'
 import styled from '@emotion/styled'
+import { resetButton } from '../../lib/styles/resetButton'
 
 export type ProfileCardCountryProps = {
   title: string
@@ -32,16 +33,15 @@ function ProfileCardCountry({ title, editable, country, onChange }: ProfileCardC
             )}
             {!edit && <div css={countryNormalStyle}>{getCountryName(country)}</div>}
             {!edit && (
-              <div>
-                <Button
-                  variant="contained"
-                  color="primary"
+              <div style={{ alignSelf: 'center' }}>
+                <button
+                  css={resetButton}
                   onClick={() => {
                     setEdit((prev) => !prev)
                   }}
                 >
-                  {'Edit'}
-                </Button>
+                  <img src={'/assets/write.png'} alt={'edit-btn'} style={{ width: '17px', height: '17px' }} />
+                </button>
               </div>
             )}
           </CountryInner>

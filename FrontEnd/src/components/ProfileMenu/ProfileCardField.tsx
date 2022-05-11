@@ -29,6 +29,8 @@ function ProfileCardField({ title, text, editable, onChange, onAdd, onRemove, fi
             <div
               css={css`
                 display: flex;
+                align-items: center;
+                margin-bottom: 0.5rem;
               `}
             >
               <Input placeholder={title} name={title} value={text || ''} onChange={onChange} css={inputStyle} />
@@ -38,7 +40,7 @@ function ProfileCardField({ title, text, editable, onChange, onAdd, onRemove, fi
                 onClick={onAdd}
                 style={{ width: '1.5rem', fontSize: '0.875rem', height: '40px' }}
               >
-                add
+                +
               </Button>
             </div>
           )}

@@ -42,10 +42,6 @@ export const countryWrapper = css`
   width: 100%;
   flex-direction: column;
 
-  div {
-    height: 2.5rem;
-  }
-
   svg {
     width: 1.5rem;
     height: 1.5rem;
@@ -79,27 +75,6 @@ export const textStyle = css`
       width: 1rem;
       height: 1rem;
       cursor: pointer;
-    }
-  }
-
-  .save-cancel {
-    margin-top: 1rem;
-    display: inline-flex;
-
-    button {
-      &:hover {
-        background-color: ${palette.grey[200]};
-      }
-
-      &:disabled {
-        color: rgba(0, 0, 0, 0.3);
-        background-color: rgba(0, 0, 0, 0.05);
-        user-select: none;
-      }
-    }
-
-    button + button {
-      margin-left: 0.5rem;
     }
   }
 
