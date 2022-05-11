@@ -79,7 +79,13 @@ function Schedules({}: ScheduleViewProps) {
             <SearchBox filter={setMeetingFilter} onTypeChange={onTypeChange} type={type} setType={setSearchType} />
           </SearchContainer>
         )}
-        <ToggleButton value="check" selected={checked} onChange={handleChange} color={'primary'}>
+        <ToggleButton
+          value="check"
+          selected={checked}
+          onChange={handleChange}
+          color={'primary'}
+          sx={{ borderRadius: '1rem', border: 'none' }}
+        >
           <CalendarTodayIcon />
         </ToggleButton>
       </FormGroup>

@@ -11,12 +11,8 @@ export const boxWrapper = css`
   flex-direction: column;
   align-items: center;
   border-radius: 1rem;
-
-  img {
-    margin-top: 1rem;
-    width: 4rem;
-  }
   h1 {
+    margin-top: 2rem;
     margin-bottom: -2rem;
     font: normal normal 800 20px/23px NanumSquareOTF;
     color: #333333;

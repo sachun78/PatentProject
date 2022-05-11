@@ -7,7 +7,7 @@ import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import User from '../../pages/User'
 import { footerStyle, mainStyle, sidebarStyle } from './styles'
-import InitialInputModal from '../../components/InitialInputModal'
+import InitialModal from '../../components/InitialModal'
 
 const Home = loadable(() => import('pages/Home'))
 const Profile = loadable(() => import('pages/Profile'))
@@ -57,7 +57,7 @@ export default function AppLayout({}: AppLayoutProps) {
       <AppLayout.Footer>
         <Sponsor />
       </AppLayout.Footer>
-      <InitialInputModal />
+      <InitialModal />
     </>
   )
 }

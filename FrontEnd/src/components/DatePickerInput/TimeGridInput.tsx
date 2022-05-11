@@ -88,31 +88,44 @@ function TimeGridInput({
             })}`
           : 'Select Date'}
       </div>
-      <Dialog onClose={handleClose} open={open} fullScreen scroll={'body'}>
+      <Dialog onClose={handleClose} open={open} fullScreen>
         <DialogTitle>Set Meeting Date</DialogTitle>
-        <DialogContent dividers={true} style={{ overflow: 'auto', maxHeight: '90%' }}>
+        <DialogContent dividers={true}>
           <DialogContentText>
             Drag and select Start time and end time. You can select only validate time
           </DialogContentText>
-          <CalendarContainer style={{ minWidth: '100%' }}>
+          <CalendarContainer>
             <FullCalendar
               ref={calendarRef}
               plugins={[timeGridPlugin, interactionPlugin, dayGridPlugin]}
-              initialView="timeGridFourDay"
+              initialView="timeGridWeek"
               selectable={true}
               slotEventOverlap={false}
               allDaySlot={false}
-              initialDate={startDate}
+              initialDate={new Date()}
               selectOverlap={false}
-              headerToolbar={false}
-              height={800}
+              headerToolbar={{
+                left: 'prev next',
+                center: 'title',
+                right: '',
+              }}
               select={(info) => {
                 timeChange(info.start, info.end)
                 dateChange(info.start)
                 info.view.calendar.unselect()
                 setOpen(false)
               }}
+              slotLabelFormat={{
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+              }}
+              slotDuration={'00:30:00'}
               nowIndicator={true}
+              stickyHeaderDates={true}
+              contentHeight={'auto'}
+              height={'auto'}
+              stickyFooterScrollbar={true}
               events={reserve_event}
               selectAllow={(selectInfo) => {
                 let startDate = selectInfo.start
@@ -129,7 +142,7 @@ function TimeGridInput({
                 // return이 true 이면 enable select.
                 return false
               }}
-              visibleRange={{ start: startDate }}
+              validRange={{ start: startDate, end: endDate }}
               dayHeaderFormat={{
                 month: 'numeric',
                 day: 'numeric',
@@ -149,32 +162,14 @@ function TimeGridInput({
 }
 
 const CalendarContainer = styled.div`
-  height: 100%;
-
   .fc-view {
-    overflow-x: auto;
-    min-width: 100%;
+    //overflow-x: auto;
   }
 
-  .fc-view > table {
-    min-width: 100%;
-    width: 1440px;
-    border-radius: 1rem;
-    position: relative;
-  }
-
-  .fc-time-grid .fc-slats {
-    z-index: 4;
-    pointer-events: none;
-  }
-
-  .fc-scroller.fc-time-grid-container {
-    overflow: initial !important;
-  }
-
-  .fc-axis {
+  .fc-view > table thead th:first-of-type {
     position: sticky !important;
     left: 0 !important;
+    z-index: 2 !important;
   }
 
   .fc-timegrid-col.fc-day.fc-day-past {
@@ -186,12 +181,6 @@ const CalendarContainer = styled.div`
   /* Styling for each event from Schedule */
 
   .fc-time-grid-event.fc-v-event.fc-event {
-    border-radius: 4px;
-    border: none;
-    padding: 5px;
-    opacity: 0.65;
-    left: 5% !important;
-    right: 5% !important;
   }
 
   /* Bolds the name of the event and inherits the font size */
@@ -211,42 +200,9 @@ const CalendarContainer = styled.div`
 
   .fc td,
   .fc th {
-    border-style: none !important;
     border-width: 1px !important;
     padding: 0 !important;
     vertical-align: top !important;
-    border-radius: 4px !important;
-  }
-
-  /* Inherits background for each event from Schedule. */
-
-  .fc-event .fc-bg {
-    z-index: 1 !important;
-    background: inherit !important;
-    opacity: 0.25 !important;
-  }
-
-  /* Normal font weight for the time in each event */
-
-  .fc-time-grid-event .fc-time {
-    font-weight: normal !important;
-  }
-
-  /* Apply same opacity to all day events */
-
-  .fc-ltr .fc-h-event.fc-not-end,
-  .fc-rtl .fc-h-event.fc-not-start {
-    opacity: 0.65 !important;
-    margin-left: 12px !important;
-    padding: 5px !important;
-  }
-
-  /* Apply same opacity to all day events */
-
-  .fc-day-grid-event.fc-h-event.fc-event.fc-not-start.fc-end {
-    opacity: 0.65 !important;
-    margin-left: 12px !important;
-    padding: 5px !important;
   }
 
   .fc-day-today {

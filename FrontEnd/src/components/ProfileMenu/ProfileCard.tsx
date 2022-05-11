@@ -10,6 +10,7 @@ import ProfileCardEmail from './ProfileCardEmail'
 import ProfileCardCountry from './ProfileCardCountry'
 import ProfileCardSave from './ProfileCardSave'
 import useProfileImg from 'hooks/useProfileImg'
+import ProfileCardPhone from './ProfileCardPhone'
 
 export type ProfileCardProps = {
   children: React.ReactNode
@@ -122,5 +123,6 @@ ProfileCard.Field = ProfileCardField
 ProfileCard.Email = ProfileCardEmail
 ProfileCard.Country = ProfileCardCountry
 ProfileCard.Save = ProfileCardSave
+ProfileCard.Phone = ProfileCardPhone
 
 export default ProfileCard

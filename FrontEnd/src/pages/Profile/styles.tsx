@@ -1,4 +1,5 @@
 import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 
 export const wrapper = css`
   display: flex;
@@ -22,7 +23,7 @@ export const titleStyle = css`
     margin-bottom: 1rem;
   }
 `
-export const infoStyle = css`
+export const InfoStyleDiv = styled.div`
   padding-right: 3rem;
   display: flex;
   flex-flow: column;

@@ -6,8 +6,9 @@ import useAuth from 'hooks/useAuth'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Avatar } from '@mui/material'
 import { dividerStyle, logoStyle, menuStyle, sidebarStyle, userStyle } from './styles'
-import useProfileImg from 'hooks/useProfileImg'
 import { BiLogOut } from 'react-icons/bi'
+import { API_PATH } from 'lib/api/client'
+import gravatar from 'gravatar'
 
 type SidebarProps = {}
 
@@ -16,7 +17,6 @@ function Sidebar({}: SidebarProps) {
   const queryClient = useQueryClient()
   const user = queryClient.getQueryData<User>('user')
   const navigate = useNavigate()
-  const { profileSrc } = useProfileImg()
   if (!user) return null
 
   return (
@@ -34,11 +34,13 @@ function Sidebar({}: SidebarProps) {
       <div css={userStyle}>
         <Avatar
           alt={user.username}
-          src={profileSrc}
+          src={`${API_PATH}static/${user.email}`}
           sx={{ width: 60, height: 60 }}
           onClick={() => navigate('/profile')}
           imgProps={{ crossOrigin: 'anonymous' }}
-        />
+        >
+          <img src={gravatar.url(user.email, { s: '60px', d: 'retro' })} alt={'fallback'} />
+        </Avatar>
         <span>{user.username}</span>
         <BiLogOut onClick={() => logout()} />
       </div>
