@@ -8,8 +8,20 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import { differenceInCalendarDays, formatDistanceToNow } from 'date-fns'
 
 import styled from '@emotion/styled'
-import { brandColor } from '../../lib/palette'
-import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
+import { brandColor } from 'lib/palette'
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+  Stack,
+  Switch,
+  Typography,
+} from '@mui/material'
+import useToggle from 'hooks/useToggle'
+import { css } from '@emotion/react'
 
 export type TimeGridInputProps = {
   startTime: Date
@@ -38,7 +50,7 @@ function TimeGridInput({
   const handleOpen = useCallback(() => {
     setOpen(true)
   }, [])
-
+  const [isHour, onToggleUnit] = useToggle(true)
   const handleClose = useCallback(() => {
     setOpen(false)
   }, [])
@@ -53,7 +65,7 @@ function TimeGridInput({
       end.setDate(date.getDate())
 
       return {
-        title: 'MET',
+        title: 'reserved',
         start: start.toISOString(),
         end: end.toISOString(),
         allDay: false,
@@ -91,9 +103,7 @@ function TimeGridInput({
       <Dialog onClose={handleClose} open={open} fullScreen>
         <DialogTitle>Set Meeting Date</DialogTitle>
         <DialogContent dividers={true}>
-          <DialogContentText>
-            Drag and select Start time and end time. You can select only validate time
-          </DialogContentText>
+          <DialogContentText></DialogContentText>
           <CalendarContainer>
             <FullCalendar
               ref={calendarRef}
@@ -120,7 +130,7 @@ function TimeGridInput({
                 minute: '2-digit',
                 hour12: false,
               }}
-              slotDuration={'00:30:00'}
+              slotDuration={isHour ? '01:00:00' : '00:30:00'}
               nowIndicator={true}
               stickyHeaderDates={true}
               contentHeight={'auto'}
@@ -156,10 +166,32 @@ function TimeGridInput({
             />
           </CalendarContainer>
         </DialogContent>
+        <DialogActions>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <div css={rectangleStyle('#d0d0d0')}></div>&<div css={rectangleStyle('#ccc')}></div>
+            unavailable
+            <div css={rectangleStyle('#fff')}></div>
+            available
+          </Stack>
+          <Divider sx={{ height: 28, m: 1 }} orientation="vertical" />
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Typography>30 minute</Typography>
+            <Switch value={isHour} defaultChecked onChange={onToggleUnit} />
+            <Typography>1 hour</Typography>
+          </Stack>
+        </DialogActions>
       </Dialog>
     </InputBase>
   )
 }
+
+const rectangleStyle = (color: string) => css`
+  width: 20px;
+  height: 20px;
+  background: ${color};
+  margin-right: 4px !important;
+  border: 1px solid #ddd;
+`
 
 const CalendarContainer = styled.div`
   .fc-view {
@@ -207,6 +239,11 @@ const CalendarContainer = styled.div`
 
   .fc-day-today {
     background: #fff !important;
+  }
+
+  .fc-next-button,
+  .fc-prev-button {
+    background: ${brandColor} !important;
   }
 `
 

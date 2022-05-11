@@ -4,13 +4,14 @@ import { MdEmail, MdOutlineLocationOn, MdSimCard } from 'react-icons/md'
 import { IMeeting } from 'lib/api/types'
 import styled from '@emotion/styled'
 import { OutlinedInput } from '@mui/material'
+import media from '../../lib/styles/media'
+import { format } from 'date-fns'
 
 export type BookingSideProps = {
   meeting: IMeeting
-  profile?: { company: string }
 }
 
-function BookingSide({ meeting, profile }: BookingSideProps) {
+function BookingSide({ meeting }: BookingSideProps) {
   return (
     <div css={sideStyle}>
       <section css={sectionStyle}>
@@ -19,21 +20,11 @@ function BookingSide({ meeting, profile }: BookingSideProps) {
       </section>
       <section css={sectionStyle}>
         <div>
-          <BsCalendarDate /> <h3>{new Date(meeting.date).toLocaleDateString()}</h3>
+          <BsCalendarDate /> <h3>{format(new Date(meeting.date), 'EEEE, d MMM, yyyy')}</h3>
         </div>
         <div>
           <BsClock />
-          <h3>
-            {new Date(meeting.startTime).toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-            ~
-            {new Date(meeting.endTime).toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-          </h3>
+          <h3>{format(new Date(meeting.startTime), 'HH:mm') + ' - ' + format(new Date(meeting.endTime), 'HH:mm')}</h3>
         </div>
         <div>
           <MdOutlineLocationOn /> <h3>{meeting.location}</h3>
@@ -46,10 +37,10 @@ function BookingSide({ meeting, profile }: BookingSideProps) {
           <h3>{meeting.ownerEmail}</h3>
         </div>
         <div>
-          <h3>{meeting.ownerName}</h3>
+          <MdSimCard /> <h3>{meeting.ownerCompany ?? 'company is not provided'}</h3>
         </div>
         <div>
-          <MdSimCard /> <h3>{profile?.company}</h3>
+          <MdSimCard /> <h3>{meeting.ownerPhone ?? 'phone is not provided'}</h3>
         </div>
       </section>
       <CommentSection>
@@ -70,6 +61,10 @@ const sideStyle = css`
   padding-top: 2rem;
   padding-left: 3rem;
   padding-right: 1rem;
+
+  ${media.medium} {
+    border-right: none;
+  }
 `
 const nameStyle = css`
   margin: 0 0 3px;
@@ -92,6 +87,7 @@ const sectionStyle = css`
     display: flex;
     align-items: center;
     margin-bottom: 0.4rem;
+
     h3 {
       font-size: 1rem;
       font-weight: 400;

@@ -24,7 +24,7 @@ function MeetingReschedule({}: MeetingRescheduleProps) {
 
   return (
     <div css={wrapper}>
-      <BookingSide meeting={meeting.data} profile={meeting.sendProfile} />
+      <BookingSide meeting={meeting.data} />
       <BookingReplanMain meeting={meeting} />
     </div>
   )

@@ -17,7 +17,6 @@ function ScheduleTable({ meetings }: ScheduleTableProps) {
       <Table sx={{ minWidth: 700 }} aria-label="history schedule table" size={'small'}>
         <TableHead>
           <TableRow>
-            <StyledTableCell align="center">Title</StyledTableCell>
             <StyledTableCell align="center">Name</StyledTableCell>
             <StyledTableCell align="center">Company</StyledTableCell>
             <StyledTableCell align="center">Email</StyledTableCell>
@@ -38,7 +37,6 @@ function ScheduleTable({ meetings }: ScheduleTableProps) {
             }
             return (
               <StyledTableRow key={row._id + row.date} hover onClick={() => navi('/meeting/schedule/' + row._id)}>
-                <StyledTableCell align="center">{row.title}</StyledTableCell>
                 <StyledTableCell align="center">{row.ownerName}</StyledTableCell>
                 <StyledTableCell align="center">{row.company}</StyledTableCell>
                 <StyledTableCell align="center">{row.toEmail}</StyledTableCell>

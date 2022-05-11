@@ -1,9 +1,10 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
 import {
+  ButtonBlock,
   Container,
   Field,
   FieldItem,
-  mailToStyle,
+  InnerBlock,
   Middle,
   NameMailContainer,
   Summary,
@@ -11,11 +12,10 @@ import {
   UserHeader,
 } from './styles'
 import React, { useCallback } from 'react'
-import { Button, ButtonGroup, Grid, Tooltip } from '@mui/material'
+import { Grid, Tooltip } from '@mui/material'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { User as UserType } from 'lib/api/types'
 import useBuddyQuery from 'hooks/query/useBuddyQuery'
-import { MdOutlineSafetyDivider, MdOutlineWork, MdPersonAdd, MdPersonRemove } from 'react-icons/md'
 import { getProfilebyEmail } from 'lib/api/me/getProfile'
 import { toast } from 'react-toastify'
 import { addBuddy } from 'lib/api/buddy/addBuddy'
@@ -25,14 +25,11 @@ import { useRecoilState } from 'recoil'
 import { eventSelectModalState } from 'atoms/eventState'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
 import getCountryName from 'lib/countryName'
-import { BiWorld } from 'react-icons/bi'
 import randomColor from 'randomcolor'
 import { brandColor } from 'lib/palette'
-import { BsFilePerson } from 'react-icons/bs'
 import EventSelectDialog from 'components/Events/EventSelectDialog'
 import { url } from 'gravatar'
 import { API_PATH } from 'lib/api/client'
-import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
 
 export type UserProps = {}
 
@@ -108,67 +105,82 @@ function User({}: UserProps) {
           alt={email}
           crossOrigin={'anonymous'}
           onError={(e) => {
-            e.currentTarget.src = url(email ?? '', { s: `100px`, d: 'retro' })
+            e.currentTarget.src = url(email ?? '', { s: `60px`, d: 'retro' })
           }}
         />
-        <NameMailContainer>
-          <h1>
-            {email} {user.email === email && '(나)'}
-          </h1>
-          <span>{profileData.username}</span>
-        </NameMailContainer>
-        <ButtonGroup variant="outlined">
-          {user.email === email ? null : !buddyData.buddy ||
-            buddyData.buddy?.findIndex((elem: { email: string; profile: any }) => elem.email === email) === -1 ? (
-            <Button disabled={addBuddyMutation.isLoading} onClick={onAddNetwork} variant={'contained'}>
-              <MdPersonAdd />
-            </Button>
-          ) : (
-            <Button disabled={delBuddyMutation.isLoading} onClick={onDeleteNetwork}>
-              <MdPersonRemove />
-            </Button>
-          )}
-          {user.email !== email && (
-            <Button onClick={onRequestMeeting} variant={'contained'}>
-              Invite
-            </Button>
-          )}
-        </ButtonGroup>
-        {user.email !== email && (
-          <Link
-            css={mailToStyle}
-            to={'#'}
-            onClick={(e) => {
-              window.location.href = `mailto:${email}`
-              e.preventDefault()
-            }}
-          >
-            <AlternateEmailIcon />
-          </Link>
-        )}
+        <InnerBlock>
+          <NameMailContainer>
+            <h1>
+              {profileData.username} {user.email === email && '(나)'}
+            </h1>
+            <span>{email}</span>
+          </NameMailContainer>
+          <ButtonBlock>
+            {user.email === email ? null : !buddyData.buddy ||
+              buddyData.buddy?.findIndex((elem: { email: string; profile: any }) => elem.email === email) === -1 ? (
+              <button disabled={addBuddyMutation.isLoading} onClick={onAddNetwork}>
+                <img src={'/assets/follow.png'} alt={'follow'} />
+              </button>
+            ) : (
+              <button
+                disabled={delBuddyMutation.isLoading}
+                onClick={onDeleteNetwork}
+                style={{ backgroundColor: brandColor }}
+              >
+                <img src={'/assets/follow-1.png'} alt={'follow-1'} />
+              </button>
+            )}
+            {user.email !== email && (
+              <button onClick={onRequestMeeting}>
+                {' '}
+                <img src={'/assets/invite.png'} alt={'invite'} />
+              </button>
+            )}
+            {user.email !== email && (
+              <button>
+                <Link
+                  to={'#'}
+                  onClick={(e) => {
+                    window.location.href = `mailto:${email}`
+                    e.preventDefault()
+                  }}
+                >
+                  <img src={'/assets/email.png'} alt={'email'} />
+                </Link>
+              </button>
+            )}
+          </ButtonBlock>
+        </InnerBlock>
       </UserHeader>
       <UserBody>
         <Summary>
           <h3>Summary</h3>
           <Tooltip title="Company" placement={'left'}>
             <span>
-              <MdOutlineWork />
+              {/*<MdOutlineWork />*/}
+              <img src={'/assets/company.png'} alt={'company'} />
               {profileData.company}
             </span>
           </Tooltip>
           <Tooltip title="Position" placement={'left'}>
             <span>
-              <BsFilePerson /> {profileData.position}
+              <img src={'/assets/position.png'} alt={'Position'} />
+              {profileData.position}
             </span>
           </Tooltip>
           <Tooltip title="Department" placement={'left'}>
             <span>
-              <MdOutlineSafetyDivider /> {profileData.department}
+              <img src={'/assets/department.png'} alt={'Department'} /> {profileData.department}
             </span>
           </Tooltip>
           <Tooltip title="Country" placement={'left'}>
             <span>
-              <BiWorld /> {getCountryName(profileData.country!)}
+              <img src={'/assets/country.png'} alt={'Country'} /> {getCountryName(profileData.country!)}
+            </span>
+          </Tooltip>
+          <Tooltip title="Wemet" placement={'left'}>
+            <span>
+              <img src={'/assets/meeting.png'} alt={'Wemet'} /> 0
             </span>
           </Tooltip>
         </Summary>
@@ -185,7 +197,7 @@ function User({}: UserProps) {
           </div>
         </Middle>
         <Field>
-          <h3>Fields</h3>
+          <h3>Field</h3>
           <Grid container>
             {profileData.field?.map((elem: string) => {
               const color = randomColor({

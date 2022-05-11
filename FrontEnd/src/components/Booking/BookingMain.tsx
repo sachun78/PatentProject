@@ -5,6 +5,7 @@ import React, { useCallback } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 import { Box, Button } from '@mui/material'
 import { Link } from 'react-router-dom'
+import media from '../../lib/styles/media'
 
 export type BookingMainProps = {
   code: string | null
@@ -42,12 +43,7 @@ function BookingMain({ code, status }: BookingMainProps) {
     <div css={mainStyle}>
       <img src="/assets/wemet_logo.png" alt="wemet-logo" />
       {status === 'none' && (
-        <Box
-          display="flex"
-          justifyContent="space-around"
-          minWidth={400}
-          marginTop={1}
-        >
+        <Box display="flex" justifyContent="space-around" minWidth={400} marginTop={1}>
           <Button
             onClick={onConfirm}
             disabled={cancelMut.isLoading || confirmMut.isLoading}
@@ -66,16 +62,8 @@ function BookingMain({ code, status }: BookingMainProps) {
           </Button>
         </Box>
       )}
-      {status === 'confirm' && (
-        <>
-          <div>The Meeting is Confirmed.</div>
-        </>
-      )}
-      {status === 'cancel' && (
-        <>
-          <div>The Meeting is Canceled</div>
-        </>
-      )}
+      {status === 'confirm' && <div>The Meeting is Confirmed.</div>}
+      {status === 'cancel' && <div>The Meeting is Canceled</div>}
       {status !== 'none' && <Link to={'/'}>Back</Link>}
     </div>
   )
@@ -93,6 +81,14 @@ const mainStyle = css`
 
   img {
     width: 30%;
+  }
+
+  ${media.medium} {
+    width: 100%;
+
+    img {
+      display: none;
+    }
   }
 `
 

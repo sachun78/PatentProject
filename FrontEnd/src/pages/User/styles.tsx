@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import palette, { brandColor } from 'lib/palette'
+import { resetButton } from '../../lib/styles/resetButton'
 
 export const Container = styled.div`
   max-width: 90rem;
@@ -15,29 +16,25 @@ export const UserHeader = styled.div`
   align-items: center;
   padding: 2rem 0;
   border-bottom: 1px solid #eee;
-  box-shadow: inset 0 calc(-1 * 1px) 0 rgba(0, 0, 0, 0.1);
-  margin-bottom: 1rem;
-  margin-left: 2rem;
-  margin-right: 2rem;
+  box-shadow: inset 0 calc(-1 * 1px) 0 #9c9c9c;
+  margin-bottom: 1.5625rem;
+  margin-left: 1.875rem;
+  margin-right: 1.875rem;
 
   img {
-    margin-right: 2rem;
+    margin-right: 1.25rem;
     border-radius: 999px;
-    width: 100px;
-    height: 100px;
+    width: 60px;
+    height: 60px;
     border: 1px solid #ddd;
-  }
-
-  button {
-    margin-left: 1rem;
   }
 `
 
 export const UserBody = styled.div`
   display: flex;
-  padding: 2rem 0;
-  margin-left: 2rem;
-  margin-right: 2rem;
+  padding: 0 0 2rem;
+  margin-left: 1.875rem;
+  margin-right: 1.875rem;
 
   h3 {
     margin: 0 0 1rem;
@@ -49,10 +46,16 @@ export const Summary = styled.div`
   flex-direction: column;
   flex: 1;
   padding-right: 1rem;
+  color: #6c6c6c;
 
-  svg {
-    margin-right: 1rem;
-    font-size: 1.5rem;
+  h3 {
+    font: normal normal 800 16px/18px NanumSquareOTF;
+  }
+
+  img {
+    margin-right: 0.375rem;
+    width: 1.375rem;
+    height: 1.375rem;
     color: ${brandColor};
   }
 
@@ -60,8 +63,7 @@ export const Summary = styled.div`
     display: flex;
     align-items: center;
     margin-bottom: 0.5rem;
-
-    color: #5e5c7f;
+    font: normal normal normal 16px/26px NanumSquareOTF;
   }
 `
 
@@ -92,7 +94,6 @@ export const FieldItem = styled.div`
   align-items: center;
   margin-right: 0.5rem;
   margin-bottom: 0.25rem;
-  // background: ${palette.lightBlue[50]};
   color: white;
   padding: 0.25rem 0.5rem;
   border-radius: 0.4rem;
@@ -100,17 +101,52 @@ export const FieldItem = styled.div`
   ${FieldStyle}
 `
 
+export const ButtonBlock = styled.div`
+  display: flex;
+
+  button {
+    width: 36px;
+    height: 36px;
+    ${resetButton};
+    border: 1px solid #910457;
+    border-radius: 999px;
+    cursor: pointer;
+
+    img {
+      display: inline-block;
+      max-width: 100%;
+      width: 1.25rem;
+      height: 1.25rem;
+      object-fit: cover;
+      border: none;
+      margin: 0;
+    }
+  }
+
+  button + button {
+    margin-left: 0.625rem;
+  }
+`
+
+export const InnerBlock = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`
+
 export const NameMailContainer = styled.div`
   display: flex;
   flex-direction: column;
 
   h1 {
-    margin-bottom: 0.5rem;
+    margin-bottom: 5px;
+    color: #333;
+    font: normal normal 800 18px/21px NanumSquareOTF;
   }
 
   span {
-    font-size: 1.125rem;
-    color: #999;
+    font: normal normal normal 15px/17px NanumSquareOTF;
+    color: #9c9c9c;
   }
 `
 

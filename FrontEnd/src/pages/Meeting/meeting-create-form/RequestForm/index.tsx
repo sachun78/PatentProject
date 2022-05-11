@@ -10,7 +10,7 @@ import { buttonStyle, FlexRow, sectionStyle } from './styles'
 import { Navigate, useNavigate } from 'react-router-dom'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { Avatar, Box, Button, OutlinedInput } from '@mui/material'
 import { ContainerBlock } from 'pages/Meeting/styles'
 import { getEvent } from 'lib/api/event/getEvent'
@@ -34,6 +34,7 @@ export default function RequestForm({}: RequestViewProps) {
   const [meetuser, setMeetuser] = useMeetingReqUser()
   const [location, setLoaction] = useState('성수역 1번 출구')
   const navi = useNavigate()
+  const qc = useQueryClient()
   const [form, onChange] = useInputs({
     to: '',
     comment: '',
@@ -63,6 +64,7 @@ export default function RequestForm({}: RequestViewProps) {
         pauseOnFocusLoss: false,
         autoClose: 3000,
       })
+      qc.invalidateQueries(['meetings', '', 'title'])
       navi('/meeting')
     },
     onError: () => {

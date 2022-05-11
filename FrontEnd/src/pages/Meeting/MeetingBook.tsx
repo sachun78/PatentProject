@@ -1,6 +1,7 @@
 import { css } from '@emotion/react'
 import { Route, Routes } from 'react-router-dom'
 import loadable from '@loadable/component'
+import media from 'lib/styles/media'
 
 export type MeetingConfirmProps = {}
 
@@ -28,11 +29,14 @@ const pageStyle = css`
   height: 100vh;
 `
 const wrapper = css`
-  padding-right: 5%;
-  padding-left: 5%;
+  padding: 0;
   margin: auto;
   display: flex;
   justify-content: center;
+
+  ${media.medium} {
+    border-right: none;
+  }
 `
 
 export default MeetingBook

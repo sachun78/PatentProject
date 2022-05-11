@@ -1,4 +1,5 @@
 import { css } from '@emotion/react'
+import media from 'lib/styles/media'
 
 export const mainStyle = css`
   flex: 1 1 50%;
@@ -10,10 +11,21 @@ export const mainStyle = css`
   flex-direction: column;
   height: 100%;
   align-items: center;
+  justify-content: space-between;
 
   img {
     width: 30%;
     margin-bottom: 1rem;
+  }
+
+  ${media.medium} {
+    width: 100%;
+    border-top: 1px solid #e6e6e6;
+    padding: 2rem;
+
+    form {
+      width: 100%;
+    }
   }
 `
 
@@ -28,4 +40,8 @@ export const wrapper = css`
   transition: all 0.22s ease-out;
   position: relative;
   background-color: rgba(255, 255, 255, 0.8);
+
+  ${media.medium} {
+    flex-direction: column;
+  }
 `

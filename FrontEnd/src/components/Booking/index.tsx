@@ -24,7 +24,7 @@ function Booking({}: BookingProps) {
   }
   return (
     <div css={wrapper}>
-      <BookingSide meeting={bookingData.data} profile={bookingData.sendProfile} />
+      <BookingSide meeting={bookingData.data} />
       <BookingMain code={code} status={bookingData.data.status} />
     </div>
   )

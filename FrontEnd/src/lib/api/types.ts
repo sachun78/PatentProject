@@ -35,10 +35,6 @@ export type IReplan = {
     event_endDate: Date
     meeting_timeList: { startTime: string; endTime: string; date: string }[]
   }
-  sendProfile: {
-    company: string
-    country: string
-  }
 }
 export type IMeeting = {
   _id: string
@@ -50,12 +46,14 @@ export type IMeeting = {
   toEmail: string
   ownerEmail: string
   ownerName: string
+  ownerCompany: string
+  ownerPhone: string
+  company: string
   location: string
   comment: string
   status: string
   code: string
   history: any
-  company: string
 }
 
 export type IAuthCode = {

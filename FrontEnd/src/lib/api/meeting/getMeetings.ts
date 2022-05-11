@@ -1,24 +1,19 @@
 import client from '../client'
-import { searchSelect } from 'components/Schedules'
 
-export async function getMeetings(id: string, type: searchSelect) {
-  const prefix = type === 'email' ? 'toEmail' : 'title'
-  // const suffix = id ? `?${prefix}=${id}` : ``
+export async function getMeetingsCursor(pageParam: number) {
   const response = await client.get('/api/meeting', {
     params: {
-      [prefix]: id ?? undefined,
+      curPos: pageParam,
+      cnt: 3,
     },
   })
   return response.data
 }
 
-export async function getMeetingsCursor(id: string, type: searchSelect, pageParam: number) {
-  const prefix = !id ? 'title' : type === 'email' ? 'toEmail' : 'title'
+export async function getMeetingSearch(searchParam: string) {
   const response = await client.get('/api/meeting', {
     params: {
-      curPos: pageParam,
-      cnt: 3,
-      [prefix]: id,
+      search: searchParam,
     },
   })
   return response.data

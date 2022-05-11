@@ -56,7 +56,7 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
       replanMut.mutate({
         code: meeting.data.code,
         data: {
-          location,
+          location: meeting.data.location,
           date,
           startTime,
           endTime,
@@ -64,7 +64,7 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
         },
       })
     },
-    [comment, replanMut, meeting.data.code, location, date, startTime, endTime]
+    [comment, replanMut, meeting.data.code, meeting.data.location, date, startTime, endTime]
   )
 
   if (meeting.data.status !== 'none') {
@@ -83,11 +83,9 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
 
   return (
     <div css={mainStyle}>
-      <Typography component="h6" variant="h3" align={'center'}>
-        Replan
-      </Typography>
+      <h3>Replan</h3>
       <form onSubmit={onSubmit}>
-        <RequestSection title={'Select Date'}>
+        <RequestSection title={'Change Date'}>
           <TimeGridInput
             startTime={startTime}
             endTime={endTime}
@@ -99,7 +97,7 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
             dateChange={onDateChange}
           />
         </RequestSection>
-        <RequestSection title={'Location'}>{location}</RequestSection>
+        {/*<RequestSection title={'Location'}>{location}</RequestSection>*/}
         <RequestSection title={'Comment'}>
           <OutlinedInput
             placeholder="Leave a comment"

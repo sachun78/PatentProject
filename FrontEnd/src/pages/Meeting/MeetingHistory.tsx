@@ -1,29 +1,21 @@
 import { tableStyle } from 'components/Schedules/styles'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import ScheduleTable from 'components/Schedules/ScheduleTable'
-import { searchSelect } from 'components/Schedules'
 import { useInfiniteQuery } from 'react-query'
 import { getMeetingsCursor } from 'lib/api/meeting/getMeetings'
 
 export type MeetingHistoryProps = {}
 
 function MeetingHistory({}: MeetingHistoryProps) {
-  const [meetingFilter] = useState('')
-  const [type] = useState<searchSelect>('title')
-
-  const { data, isLoading } = useInfiniteQuery(
-    ['meetings', '', type],
-    ({ pageParam = 0 }) => getMeetingsCursor(meetingFilter, type, pageParam),
-    {
-      getNextPageParam: (lastPage, pages) => {
-        // page 길이 5이면
-        const morePagesExist = lastPage?.length === 3
-        if (!morePagesExist) return false
-        return pages.flat().length - 1
-      },
-      enabled: false,
-    }
-  )
+  const { data, isLoading } = useInfiniteQuery(['meetings'], ({ pageParam = 0 }) => getMeetingsCursor(pageParam), {
+    getNextPageParam: (lastPage, pages) => {
+      // page 길이 5이면
+      const morePagesExist = lastPage?.length === 3
+      if (!morePagesExist) return false
+      return pages.flat().length - 1
+    },
+    enabled: false,
+  })
 
   const meetings = useMemo(() => {
     if (!data) return []
