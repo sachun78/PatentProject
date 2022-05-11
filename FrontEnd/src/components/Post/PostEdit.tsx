@@ -110,10 +110,15 @@ function PostEdit() {
   const imageHandler = () => {
     const ops = quillInstance.current.getContents().ops
     const innerImage = ops.filter((insert: any) => insert.insert['image'] !== undefined)
-    // console.log(innerImage)
-    if (innerImage.length > 3) {
-      alert('이미지는 4개까지')
-      return
+    
+    if(innerImage.length > 3) {
+      toast.success('There are up to four image attachments.', {
+        position: toast.POSITION.TOP_CENTER,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+        autoClose: 2000,
+      })
+      return;
     }
 
     // 1. 이미지를 저장할 input type=file DOM을 만든다.

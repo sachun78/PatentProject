@@ -7,15 +7,19 @@ type conferenceProps = {}
 
 function Conference({}: conferenceProps) {
   
-  const img1 = 'tempConference.jpg'
-  const img2 = 'testCon.jpg'
+  const img1 = '/assets/conference_sample.png'
+  const img2 = '/assets/conference_sample2.jpg'
 
   return (
       <div className='container' css={containerStyle}>
         <ConferenceCard img={img1} />
         <ConferenceCard img={img2} />      
         <ConferenceCard img={img1} />
-        <ConferenceCard img={img2} />     
+        <ConferenceCard img={img2} />
+        <ConferenceCard img={img1} />
+        <ConferenceCard img={img2} />
+        <ConferenceCard img={img1} />
+        <ConferenceCard img={img2} />
               
       </div>    
   );
@@ -30,5 +34,5 @@ const containerStyle = css`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  padding: 30px; 
+  /* padding: 30px;  */
 `

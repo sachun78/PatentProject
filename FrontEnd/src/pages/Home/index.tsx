@@ -55,9 +55,9 @@ function Home({}: HomeProps) {
 
   return (
     <>
-      <Stack>
-        <FilterCard onFilter={onFilter} />
-        {filter && <FilterArea />}
+      <FilterCard onFilter={onFilter} />
+      <Stack>        
+        {filter && <FilterArea />}  
         <Link css={linkStyle} to={'/postWrite/'} state={{}}>
           <PostForm />
         </Link>        

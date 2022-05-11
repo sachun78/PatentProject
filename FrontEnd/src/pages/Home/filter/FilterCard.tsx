@@ -39,15 +39,12 @@ function FilterCard({ onFilter }: filterCardProps) {
 export default FilterCard
 
 const containerStyle = css`
-  /* background: rgba(255, 255, 255, 0.8); */
-  /* border-radius: 1rem; */
-  /* box-shadow: 0 3px 6px #00000029; */
-
+  position: absolute;
   max-width: 54.375rem;
-  min-height: 4rem;
-
+  min-height: 2rem;
+  margin-top: 2.5rem;  
   margin-bottom: 0.5rem;
-  padding: 0.875rem;
+  top: -1px;  
   display: flex
   
 `
