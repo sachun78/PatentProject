@@ -199,7 +199,7 @@ export async function sendResultMail(req: IRequest, res: Response) {
 
   try {
     const meeting = await meetingRepo.getById(mId);
-    if (meeting) {
+    if (meeting && meeting.status === 'replan') {
       meeting["status"] = mStatus;
       console.log(meeting);
 
@@ -230,6 +230,9 @@ export async function sendInvitMail(req: IRequest, res: Response) {
       const meetData = await meetingRepo.getById(meetId);
       if (!meetData) {
         return res.status(409).json({ message: `meeting is not found`});
+      }
+      if (meetData.status == 'cancel' || meetData.status == 'none') {
+        return res.status(403).json({ message: `meeting status error`});
       }
       const eventData = await eventRepo.getById(meetData.eventId);
       if (!eventData) {
