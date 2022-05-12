@@ -127,6 +127,7 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
     let sendData: any = {};
     sendData['event_startDate'] = eventData.start_date;
     sendData['event_endDate'] = eventData.end_date;
+    sendData['event_restritedTime'] = eventData.restricted_time;
 
     let tmpML = [];
     let meetTimeList = [];
@@ -134,7 +135,7 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
     for (let i = 0; i < meetList.length; i++) {
       let tmpObj: any = {};
       tmpML[i] = JSON.parse(JSON.stringify(meetList[i]));
-      if (tmpML[i].status !== 'cancel' && tmpML[i].id !== data.id) {
+      if (tmpML[i].status === 'confirm' && tmpML[i].id !== data.id) {
         tmpObj['date'] = tmpML[i].date;
         tmpObj['startTime'] = tmpML[i].startTime;
         tmpObj['endTime'] = tmpML[i].endTime;
