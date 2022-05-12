@@ -58,8 +58,8 @@ export async function getPosts(req: IRequest, res: Response) {
   try {
     const curPos = req.query.curPos as string;
     const cnt = req.query.cnt as string;
+    const search = req.query.search;
     const postId = req.params.id;
-    const search = req.pararm.search;
 
     if (curPos && cnt) {
       let _curPos: number = parseInt(curPos);
