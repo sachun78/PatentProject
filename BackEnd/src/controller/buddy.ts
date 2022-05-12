@@ -13,7 +13,7 @@ export async function addBuddy(req: IRequest, res: Response, next: NextFunction)
       console.log("[HJBAE] no exist!! => create");
       const buddyUser = await userRepo.findByEmail(req.body.email);
       if (buddyUser) {
-        const buddyItem = { email: req.body.email, profile: buddyUser.profile};
+        const buddyItem = { email: req.body.email, name: buddyUser.username, profile: buddyUser.profile};
         const buddy = await buddyRepo.createBuddy(req.userId, buddyItem);
         res.status(201).json({ message: `create buddy`});
       }
@@ -32,7 +32,7 @@ export async function addBuddy(req: IRequest, res: Response, next: NextFunction)
         return res.status(409).json({ message: `buddy(${req.body.email}) is not found`});
       }
 
-      const buddyItem = {email: req.body.email, profile: buddyUser.profile};
+      const buddyItem = {email: req.body.email, name: buddyUser.username, profile: buddyUser.profile};
       const buddy_list: any = [buddyItem, ...getBuddy.buddy];
       const update = await buddyRepo.updateBuddy(getBuddy.id, buddy_list);
       res.status(200).json({ message: `add buddy ok`});
