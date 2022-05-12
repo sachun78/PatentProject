@@ -60,10 +60,14 @@ export async function getMeetings(req: IRequest, res: Response, next: NextFuncti
       useExtendedSearch: true,
       keys: ['ownerCompnay', 'toEmail', 'title', 'ownerName']
     });
-    retData = fuse.search("'" + searchData);
-    retData = retData.map(value => value.item);
-    console.log(retData);
-    res.status(200).json(retData);
+    if (searchData) {
+      retData = fuse.search("'" + searchData);
+      retData = retData.map(value => value.item);
+      return res.status(200).json(retData);
+    }
+    else {
+      return res.status(200).json(data);
+    }
   }
   catch(e) {
     console.error(`[meetingCtrl][getMeetings] Fail meeting get all`);

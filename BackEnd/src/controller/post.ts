@@ -58,8 +58,8 @@ export async function getPosts(req: IRequest, res: Response) {
   try {
     const curPos = req.query.curPos as string;
     const cnt = req.query.cnt as string;
+    const search = req.query.search;
     const postId = req.params.id;
-    const search = req.pararm.search;
 
     if (curPos && cnt) {
       let _curPos: number = parseInt(curPos);
@@ -81,11 +81,14 @@ export async function getPosts(req: IRequest, res: Response) {
         useExtendedSearch: true,
         keys: ['owner_username', 'owner_email', 'contents']
       });
-      retData = fuse.search("'" + search);
-      retData = retData.map(value => value.item);
-      console.log(retData);
-
-      return res.status(200).json(retData);
+      if (search) {
+        retData = fuse.search("'" + search);
+        retData = retData.map(value => value.item);
+        return res.status(200).json(retData);
+      }
+      else {
+        return res.status(200).json(data);
+      }
     }
     else {
       const post = await postRepo.findById(postId);
