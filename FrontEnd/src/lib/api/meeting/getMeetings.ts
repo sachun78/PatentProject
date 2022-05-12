@@ -18,3 +18,8 @@ export async function getMeetingSearch(searchParam: string) {
   })
   return response.data
 }
+
+export async function getMeetingHistory() {
+  const response = await client.get('/api/meeting/history')
+  return response.data
+}

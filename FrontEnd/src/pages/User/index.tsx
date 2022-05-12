@@ -157,7 +157,6 @@ function User({}: UserProps) {
           <h3>Summary</h3>
           <Tooltip title="Company" placement={'left'}>
             <span>
-              {/*<MdOutlineWork />*/}
               <img src={'/assets/company.png'} alt={'company'} />
               {profileData.company}
             </span>

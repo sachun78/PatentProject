@@ -9,7 +9,7 @@ import useInput from 'hooks/useInput'
 import { createMeetingResult } from 'lib/api/meeting/createMeetingResult'
 import { upload } from 'lib/api/meeting/resultUpload'
 import styled from '@emotion/styled'
-import { useRemoveOutlineHover } from '../../lib/styles/muiStyles'
+import { useRemoveOutlineHover } from 'lib/styles/muiStyles'
 
 export type MeetingResultProps = {}
 

@@ -64,7 +64,7 @@ export default function RequestForm({}: RequestViewProps) {
         pauseOnFocusLoss: false,
         autoClose: 3000,
       })
-      qc.invalidateQueries(['meetings', '', 'title'])
+      qc.invalidateQueries(['meetings'])
       navi('/meeting')
     },
     onError: () => {
