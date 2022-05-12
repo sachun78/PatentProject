@@ -7,6 +7,7 @@ export interface IEvent {
     title: string,
     start_date: Date,
     end_date: Date,
+    restricted_time: any[],
     meeting_list: string[]
 };
 
@@ -15,6 +16,10 @@ export const eventSchema = new mongoose.Schema<IEvent>({
     title: {type: String, required: true},
     start_date: {type: Date, required: true},
     end_date: {type: Date, required: true},
+    restricted_time: [{
+      start: { type: Date, default: ''},
+      end: { type: Date, default: ''},
+    }],
     meeting_list: {type: [String], ref: 'meetings', default: []}
 }, 
 {

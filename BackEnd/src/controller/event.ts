@@ -48,6 +48,7 @@ export async function createEvent(req: IRequest, res: Response) {
     title: event.title,
     start_date: event.start_date,
     end_date: event.end_date,
+    restricted_time: event.restricted_time,
     meeting_list: event.meeting_list
   });
 }
