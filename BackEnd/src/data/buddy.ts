@@ -12,6 +12,7 @@ export const buddySchema = new mongoose.Schema<IBuddy>({
   //buddy: [Schema.Types.Mixed]
   buddy: [{ 
     email: { type: String, default: ''},
+    name: { type: String, default: ''},
     profile: { type: String, default: ''}
   }]
 },{
