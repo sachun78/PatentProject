@@ -48,7 +48,6 @@ export type IMeeting = {
   ownerName: string
   ownerCompany: string
   ownerPhone: string
-  company: string
   location: string
   comment: string
   status: string

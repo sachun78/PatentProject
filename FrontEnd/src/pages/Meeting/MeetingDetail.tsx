@@ -7,7 +7,7 @@ import { Button, Stack } from '@mui/material'
 import { ContainerBlock, MeetingSection, ScheduleInfoBlock, StatusBlock } from './styles'
 import MeetingResult from 'components/Schedules/MeetingResult'
 import { IMeeting } from 'lib/api/types'
-import { format, formatDistanceToNow } from 'date-fns'
+import { format, formatDistanceToNow, isBefore } from 'date-fns'
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined'
@@ -33,8 +33,7 @@ function MeetingDetail({}: MeetingDetailProps) {
 
   const isResult = useMemo(() => {
     if (!data) return false
-    const dist = formatDistanceToNow(new Date(data?.startTime), { addSuffix: true })
-    return dist.includes('ago') && (data.status === 'confirm' || data.status === 'replan')
+    return isBefore(new Date(data.startTime), new Date()) && data.status === 'confirm'
   }, [data])
 
   if (!id) {
@@ -70,10 +69,10 @@ function MeetingDetail({}: MeetingDetailProps) {
         </MeetingSection>
         <MeetingSection>
           <h2>Participants</h2>
-          <Stack direction="row" spacing={2} style={{ alignItems: 'center' }}>
+          <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
             <p>{data.toEmail}</p>
-            <Link to={`/u/${data.toEmail}`} style={{ height: '18px' }}>
-              <Button variant="contained" style={{ height: '18px' }}>
+            <Link to={`/u/${data.toEmail}`}>
+              <Button variant="contained" size={'small'}>
                 INFO
               </Button>
             </Link>
@@ -91,15 +90,20 @@ function MeetingDetail({}: MeetingDetailProps) {
           <ScheduleInfoBlock>
             <PlaceOutlinedIcon /> {data.location}
           </ScheduleInfoBlock>
-          <StatusBlock state={data.status}>
-            {data.status !== 'none' ? data.status : isExpired ? 'expired' : 'pending'}
-          </StatusBlock>
         </MeetingSection>
         <MeetingSection>
           <h2>Message</h2>
           <div className={'multiline'}>{data.comment} </div>
         </MeetingSection>
+        <MeetingSection>
+          <h2>State</h2>
+          <StatusBlock state={data.status}>
+            {data.status !== 'none' ? data.status : isExpired ? 'expired' : 'pending'}
+          </StatusBlock>
+          <Button>Confirm</Button> <Button>Cancel</Button> <Button>Change</Button>
+        </MeetingSection>
       </ContainerBlock>
+
       {isResult && <MeetingResult />}
     </Stack>
   )

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import shortid from "shortid";
 import multer from "multer";
 import sharp from "sharp";
+import Fuse from 'fuse.js';
 
 import * as postRepo from "data/post";
 import * as userRepo from "data/auth";
@@ -58,6 +59,7 @@ export async function getPosts(req: IRequest, res: Response) {
     const curPos = req.query.curPos as string;
     const cnt = req.query.cnt as string;
     const postId = req.params.id;
+    const search = req.pararm.search;
 
     if (curPos && cnt) {
       let _curPos: number = parseInt(curPos);
@@ -68,10 +70,27 @@ export async function getPosts(req: IRequest, res: Response) {
       return res.status(200).json(indexData);
     }
 
-    const posts = await (postId
-      ? postRepo.findById(postId)
-      : postRepo.getPostAll());
-    res.status(200).json(posts);
+    let retData;
+    if (!postId) {
+      const data = await postRepo.getPostAll();
+      if (!data) {
+        return res.status(200).json([]);
+      }
+      const fuse = new Fuse(data, {
+        includeScore: true,
+        useExtendedSearch: true,
+        keys: ['owner_username', 'owner_email', 'contents']
+      });
+      retData = fuse.search("'" + search);
+      retData = retData.map(value => value.item);
+      console.log(retData);
+
+      return res.status(200).json(retData);
+    }
+    else {
+      const post = await postRepo.findById(postId);
+      return res.status(200).json(post);
+    }
   } catch (e) {
     console.error(`[Post][getPosts] ${e}`);
     throw new Error(`[Post][getPosts] ${e}`);

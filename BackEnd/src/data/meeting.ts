@@ -73,7 +73,7 @@ export async function getAll(userId: string) {
 }
 
 export async function getAllHistory(userId: string) {
-  return meeting.find({ownerId: userId}).ne('history', '').lean().sort({date: -1});
+  return meeting.find({ownerId: userId}).ne('history', '').populate('history').lean().sort({date: -1});
 }
 
 export async function getAllByIndex(userId: string, curPos: number, cnt: number) {
