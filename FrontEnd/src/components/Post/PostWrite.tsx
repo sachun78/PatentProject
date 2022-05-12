@@ -69,9 +69,9 @@ function PostWrite({}: postWriteProps) {
   const onImageSetting = () => {    
     
     const innerImage = quillInstance.current.getContents().ops.filter((insert: any) => (insert.insert['image'] !== undefined))
-    
+    console.log(innerImage)
     innerImage.map((insert: any) => {      
-      image.push(insert.insert['image'].slice(29))            
+      image.push(insert.insert['image'])            
     })      
     
   }
@@ -126,7 +126,7 @@ function PostWrite({}: postWriteProps) {
     const input: any = document.createElement('input')
     // 속성 써주기
     input.setAttribute('type', 'file')
-    input.setAttribute('accept', 'image/*')
+    input.setAttribute('accept', 'image/*, .ico')
     input.click()
 
     // input에 변화가 생긴다면 = 이미지를 선택

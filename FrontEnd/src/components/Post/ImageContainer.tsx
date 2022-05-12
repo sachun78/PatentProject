@@ -40,8 +40,8 @@ const ImageContainer = ({ images, isDetail } : imageContainerProps) => {
 
   const srcset = (image: string, size: number, rows = 1, cols = 1) => {
     return {
-      src: `${API_PATH}static/${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-      srcSet: `${API_PATH}static/${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format&dpr=2 2x`,
+      src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
+      srcSet: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format&dpr=2 2x`,
     }
   }
 

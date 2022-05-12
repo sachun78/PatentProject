@@ -88,4 +88,5 @@ export type IBuddy = {
   _id: string
   email: string
   profile: IProfile
+  name: string
 }

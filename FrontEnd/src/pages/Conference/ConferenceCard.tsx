@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import * as React from 'react';
+import Paper from '@mui/material/Paper';
 
 
 type conferenceCardProps = {
@@ -8,7 +9,7 @@ type conferenceCardProps = {
 
 function ConferenceCard({ img }: conferenceCardProps) {
   return (
-    <div className='card' css={cardStyle}>
+    <Paper elevation={3} css={cardStyle}>    
       <div className='imgBx'>
         <img src={img}
           style={{ 
@@ -26,9 +27,8 @@ function ConferenceCard({ img }: conferenceCardProps) {
         Singapore <br />
         Sample text Sample text Sample text Sample text Sample text
         </p>
-      </div>
-    </div>          
-    
+      </div>    
+    </Paper>
   );
 }
 
@@ -36,7 +36,8 @@ export default ConferenceCard
 
 const titleStyle=css`
   position: relative;
-  margin-top: -3rem  
+  margin-top: -3rem;
+  color: #333333;  
 `
 
 const cardStyle = css`
@@ -78,7 +79,7 @@ const contentStyle = css`
   position: relative;  
   padding: 10px 15px;
   text-align: center;
-  color: #111;
+  color: #6c6c6c;
   visibility: hidden;
   opacity: 0;
   transition: 0.3s ease-in-out; 
