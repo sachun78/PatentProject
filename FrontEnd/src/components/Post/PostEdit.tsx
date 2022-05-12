@@ -32,7 +32,7 @@ function PostEdit() {
       .getContents()
       .ops.filter((insert: any) => insert.insert['image'] !== undefined)
     innerImage.map((insert: any) => {
-      image.push(insert.insert['image'].slice(29))
+      image.push(insert.insert['image'])
     })
   }
 
@@ -165,7 +165,7 @@ function PostEdit() {
 
     post.images.map(
       (img: any) =>
-        (quill.root.innerHTML = quill.root.innerHTML + `<img src='${API_PATH}static/${img}' crossOrigin='anonymous' />`)
+        (quill.root.innerHTML = quill.root.innerHTML + `<img src='${img}' crossOrigin='anonymous' />`)
     )
     quill.root.innerHTML = quill.root.innerHTML + post.contents
 
