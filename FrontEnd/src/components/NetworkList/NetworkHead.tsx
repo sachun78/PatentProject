@@ -1,8 +1,6 @@
 import { css } from '@emotion/react'
 import { brandColor } from 'lib/palette'
-import { IconButton } from '@mui/material'
-import SearchIcon from '@mui/icons-material/Search'
-import { useNetworkModalState } from '../../atoms/networkState'
+import { useNetworkModalState } from 'atoms/networkState'
 
 export type NetworkHeadProps = {}
 
@@ -11,15 +9,15 @@ function NetworkHead({}: NetworkHeadProps) {
   return (
     <div css={HeadStyle}>
       <h1>Network</h1>
-      <IconButton
-        sx={{ p: '8px' }}
-        aria-label="search-network"
-        onClick={() => {
-          setOpen(true)
-        }}
-      >
-        <SearchIcon />
-      </IconButton>
+      {/*<IconButton*/}
+      {/*  sx={{ p: '8px' }}*/}
+      {/*  aria-label="search-network"*/}
+      {/*  onClick={() => {*/}
+      {/*    setOpen(true)*/}
+      {/*  }}*/}
+      {/*>*/}
+      {/*  <SearchIcon />*/}
+      {/*</IconButton>*/}
     </div>
   )
 }

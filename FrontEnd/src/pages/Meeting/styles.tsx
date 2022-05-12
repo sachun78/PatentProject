@@ -61,6 +61,7 @@ export const MeetingSection = styled.section`
 const statusColor = ({ state }: { state: string }) => css`
   background: ${(state === 'replan' || state === 'met') && brandColor};
   background: ${state === 'confirm' && palette.green[400]};
+  background: ${state === 'pending' && palette.deepOrange[400]};
 `
 
 export const StatusBlock = styled.div`
@@ -99,9 +100,5 @@ export const ScheduleInfoBlock = styled.div`
 
   svg {
     margin-right: 1rem;
-  }
-
-  &:nth-last-of-type(2) {
-    margin-bottom: 1rem;
   }
 `

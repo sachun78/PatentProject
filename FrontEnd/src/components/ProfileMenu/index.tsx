@@ -145,10 +145,8 @@ function ProfileMenu({}: ProfileMenuProps) {
           onRemove={onFieldRemove}
         />
         <ProfileCard.Country title="Country" onChange={handleCountry} country={country ?? 'AD'} />
+        <ProfileCard.Text title="Default Comment" text={position ?? ''} onChange={onPositionChange} />
         <ProfileCard.Save onSave={onSaveProfile} loading={!isSaveActive || saveMutation.isLoading} />
-      </InfoViewSection>
-      <InfoViewSection title="Additional">
-        <InfoViewCard.Item title="About" type={'career'} />
       </InfoViewSection>
     </InfoStyleDiv>
   )

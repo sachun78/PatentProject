@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import palette, { brandColor } from 'lib/palette'
-import { resetButton } from '../../lib/styles/resetButton'
+import { resetButton } from 'lib/styles/resetButton'
 
 export const Container = styled.div`
   max-width: 90rem;
@@ -37,7 +37,9 @@ export const UserBody = styled.div`
   margin-right: 1.875rem;
 
   h3 {
-    margin: 0 0 1rem;
+    margin: 0 0 0.625rem;
+    font: normal normal 800 16px/18px NanumSquareOTF;
+    color: #6c6c6c;
   }
 `
 
@@ -47,10 +49,6 @@ export const Summary = styled.div`
   flex: 1;
   padding-right: 1rem;
   color: #6c6c6c;
-
-  h3 {
-    font: normal normal 800 16px/18px NanumSquareOTF;
-  }
 
   img {
     margin-right: 0.375rem;
@@ -68,7 +66,6 @@ export const Summary = styled.div`
 `
 
 export const Middle = styled.div`
-  flex: 1;
   padding-right: 1rem;
 
   pre {
@@ -82,7 +79,7 @@ export const Middle = styled.div`
 `
 
 export const Field = styled.div`
-  flex: 1;
+  margin-top: 0.625rem;
 `
 
 const FieldStyle = ({ color }: { color: string }) => css`
@@ -94,9 +91,9 @@ export const FieldItem = styled.div`
   align-items: center;
   margin-right: 0.5rem;
   margin-bottom: 0.25rem;
-  color: white;
+  color: #fff;
   padding: 0.25rem 0.5rem;
-  border-radius: 0.4rem;
+  border-radius: 50px;
   font-size: 0.875rem;
   ${FieldStyle}
 `

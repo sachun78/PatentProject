@@ -8,7 +8,7 @@ export type ProfileCardSaveProps = {
   loading: boolean
 }
 
-const useStyle = makeStyles((theme) => ({
+export const useButtonStyle = makeStyles((theme) => ({
   root: {
     marginTop: '1.875rem',
     borderRadius: '1rem',
@@ -20,7 +20,7 @@ const useStyle = makeStyles((theme) => ({
 }))
 
 function ProfileCardSave({ onSave, loading }: ProfileCardSaveProps) {
-  const classes = useStyle()
+  const classes = useButtonStyle()
   return (
     <SaveBlock>
       <Button variant="contained" disabled={loading} onClick={onSave} classes={classes}>
@@ -30,7 +30,7 @@ function ProfileCardSave({ onSave, loading }: ProfileCardSaveProps) {
   )
 }
 
-const SaveBlock = styled.div`
+export const SaveBlock = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;

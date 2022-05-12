@@ -31,7 +31,7 @@ const networkStyle = css`
   align-items: center;
   justify-content: center;
   margin-right: 1rem;
-  max-width: 60rem;
+  width: 54.375rem;
 `
 
 export default NetworkList

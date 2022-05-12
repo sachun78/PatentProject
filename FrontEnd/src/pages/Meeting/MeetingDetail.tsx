@@ -3,14 +3,15 @@ import React, { useMemo } from 'react'
 import { useQuery } from 'react-query'
 import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
 import { toast } from 'react-toastify'
-import { Button, Stack } from '@mui/material'
-import { ContainerBlock, MeetingSection, ScheduleInfoBlock, StatusBlock } from './styles'
+import { Button, Divider, Stack, ToggleButton } from '@mui/material'
+import { ContainerBlock, MeetingSection, ScheduleInfoBlock } from './styles'
 import MeetingResult from 'components/Schedules/MeetingResult'
 import { IMeeting } from 'lib/api/types'
-import { format, formatDistanceToNow, isBefore } from 'date-fns'
+import { format, isBefore } from 'date-fns'
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined'
+import { SaveBlock, useButtonStyle } from 'components/ProfileMenu/ProfileCardSave'
 
 export type MeetingDetailProps = {}
 
@@ -25,16 +26,15 @@ function MeetingDetail({}: MeetingDetailProps) {
 
   const isExpired = useMemo(() => {
     if (!data) return false
-    const dist = formatDistanceToNow(new Date(data.startTime), {
-      addSuffix: true,
-    })
-    return dist.includes('ago')
+    return isBefore(new Date(data.startTime), new Date())
   }, [data])
 
   const isResult = useMemo(() => {
     if (!data) return false
     return isBefore(new Date(data.startTime), new Date()) && data.status === 'confirm'
   }, [data])
+
+  const classes = useButtonStyle()
 
   if (!id) {
     return <Navigate replace to={'/'} />
@@ -71,7 +71,7 @@ function MeetingDetail({}: MeetingDetailProps) {
           <h2>Participants</h2>
           <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
             <p>{data.toEmail}</p>
-            <Link to={`/u/${data.toEmail}`}>
+            <Link to={`/u/${data.toEmail}`} style={{ textDecoration: 'none' }}>
               <Button variant="contained" size={'small'}>
                 INFO
               </Button>
@@ -96,14 +96,27 @@ function MeetingDetail({}: MeetingDetailProps) {
           <div className={'multiline'}>{data.comment} </div>
         </MeetingSection>
         <MeetingSection>
-          <h2>State</h2>
-          <StatusBlock state={data.status}>
-            {data.status !== 'none' ? data.status : isExpired ? 'expired' : 'pending'}
-          </StatusBlock>
-          <Button>Confirm</Button> <Button>Cancel</Button> <Button>Change</Button>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+            <h2>state:{data.status !== 'none' ? data.status : isExpired ? 'expired' : 'pending'}</h2>
+            {!isResult && !isExpired && (data.status === 'confirm' || data.status === 'replan') && (
+              <ToggleButton value={true} onChange={() => {}} size={'small'}>
+                Change Request
+              </ToggleButton>
+            )}
+          </div>
+          <Divider />
+          {!isExpired && data.status === 'replan' && (
+            <SaveBlock style={{ justifyContent: 'space-between' }}>
+              <Button variant={'contained'} classes={classes}>
+                Confirm
+              </Button>
+              <Button variant={'contained'} classes={classes}>
+                Cancel
+              </Button>
+            </SaveBlock>
+          )}
         </MeetingSection>
       </ContainerBlock>
-
       {isResult && <MeetingResult />}
     </Stack>
   )

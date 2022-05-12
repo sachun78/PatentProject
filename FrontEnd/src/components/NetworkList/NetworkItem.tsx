@@ -5,11 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import { Avatar, Grid, Tooltip } from '@mui/material'
 import gravatar from 'gravatar'
 import React, { memo } from 'react'
-import { MdOutlineSafetyDivider, MdOutlineWork } from 'react-icons/md'
 import { FieldItem } from 'pages/User/styles'
 import getCountryName from 'lib/countryName'
-import randomColor from 'randomcolor'
-import { BsFilePerson } from 'react-icons/bs'
 import { API_PATH } from '../../lib/api/client'
 
 export type NetworkItemProps = {
@@ -37,24 +34,24 @@ function NetworkItem({ data }: NetworkItemProps) {
       </div>
       <div css={informStyle}>
         <div css={companyBoxStyle}>
-          <Tooltip title="Company" placement={'left'}>
+          <Tooltip title="Company" placement={'top'}>
             <span>
-              <img src="/assets/company.png" style={{ width: '1rem', marginRight: '0.5rem' }} />
+              <img src="/assets/company.png" />
               {data.profile.company}
             </span>
           </Tooltip>
-          <Tooltip title="Country" placement={'left'}>
-            <span style={{width: '9rem'}}>
-              <img src="/assets/country.png" style={{ width: '1rem', marginRight: '0.5rem' }} />
+          <Tooltip title="Country" placement={'top'}>
+            <span>
+              <img src="/assets/country.png" />
               {getCountryName(data.profile.country!)}
             </span>
           </Tooltip>
         </div>
         <Tooltip title="Field" placement={'left'}>
-          <div style={{ display: 'flex', flexDirection: 'row'}}>
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
             <Grid container>
               {data.profile.field?.map((elem: string) => (
-                <FieldItem key={elem} color="#123560" style={{ borderRadius: '1rem'}}>
+                <FieldItem key={elem} color="#1E3560">
                   {elem}
                 </FieldItem>
               ))}
@@ -64,9 +61,8 @@ function NetworkItem({ data }: NetworkItemProps) {
       </div>
       <div css={stateStyle}>
         <div>
-          <img src="/assets/meeting.png" style={{ width: '1rem'}} />
+          <img src="/assets/meeting.png" style={{ width: '1rem' }} />
         </div>
-        <div>0</div>
       </div>
     </div>
   )
@@ -77,23 +73,34 @@ const companyBoxStyle = css`
   flex-direction: row;
   color: #6c6c6c;
   margin-bottom: 0.5rem;
+
+  span + span {
+    margin-left: 0.625rem;
+  }
+
+  span img {
+    width: 1.375rem;
+    margin-right: 6px;
+  }
 `
 
 const itemStyle = css`
   display: flex;
   width: 100%;
-  max-height: 5.625rem;
-  height: 5.625rem;
+  max-height: 6.875rem;
+  height: 6.875rem;
   align-items: center;
-  background: rgba(255, 255, 255, 0.7);
+  background: #fff;
+  opacity: 0.7;
   border-radius: 0.5rem;
-  padding: 0.75rem;
+  padding: 1.5625rem 1.875rem;
 
   &:hover {
     color: ${brandColor};
     background: rgba(255, 255, 255, 1);
-    box-shadow: 0 0.5rem 25px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 5px 11px #00000029;
     cursor: pointer;
+    opacity: 1;
   }
 
   & + & {
@@ -133,25 +140,25 @@ const informStyle = css`
   }
 
   span {
-    width: 7rem;
-    margin-top: 0.3rem;
-    margin-bottom: 0.2rem;
     display: flex;
     align-items: center;
   }
 `
 const stateStyle = css`
-  display: relative
-  width: 3rem;
-  min-width: 3rem;
-  margin-right: 0.5rem;
-  padding: 0.5rem;
-  font-size: 0.5rem;  
+  width: 3.75rem;
+  max-height: 3.75rem;
+  height: 100%;
+  margin-right: 2px;
   background: #f2f2f2;
   text-align: center;
-  border-radius: 0.5rem;
-  .request-block {
-    margin-right: 1rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  span {
+    color: #6c6c6c;
+    font: normal normal normal 16px/18px NanumSquareOTF;
   }
 `
 

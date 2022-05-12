@@ -153,65 +153,58 @@ function User({}: UserProps) {
         </InnerBlock>
       </UserHeader>
       <UserBody>
-        <Summary>
-          <h3>Summary</h3>
-          <Tooltip title="Company" placement={'left'}>
-            <span>
-              <img src={'/assets/company.png'} alt={'company'} />
-              {profileData.company}
-            </span>
-          </Tooltip>
-          <Tooltip title="Position" placement={'left'}>
-            <span>
-              <img src={'/assets/position.png'} alt={'Position'} />
-              {profileData.position}
-            </span>
-          </Tooltip>
-          <Tooltip title="Department" placement={'left'}>
-            <span>
-              <img src={'/assets/department.png'} alt={'Department'} /> {profileData.department}
-            </span>
-          </Tooltip>
-          <Tooltip title="Country" placement={'left'}>
-            <span>
-              <img src={'/assets/country.png'} alt={'Country'} /> {getCountryName(profileData.country!)}
-            </span>
-          </Tooltip>
-          <Tooltip title="Wemet" placement={'left'}>
-            <span>
-              <img src={'/assets/meeting.png'} alt={'Wemet'} /> 0
-            </span>
-          </Tooltip>
-        </Summary>
         <Middle>
-          <div className="career-summary">
-            <h3>About</h3>
-            <pre>
-              LONGLONG LONGLONG LONGLONG TEXT LONGLONG LONGLONG LONGLONG TEXT LONGLONG LONGLONG LONGLONG TEXT LONGLONG
-              LONGLONG LONGLONG TEXT LONGLONG LONGLONG LONGLONG TEXT LONGLONG LONGLONG LONGLONG TEXT
-            </pre>
-          </div>
-          <div className="History">
-            <h3>Previous Meeting</h3>
-          </div>
+          <Summary>
+            <h3>Summary</h3>
+            <Tooltip title="Company" placement={'left'}>
+              <span>
+                <img src={'/assets/company.png'} alt={'company'} />
+                {profileData.company}
+              </span>
+            </Tooltip>
+            <Tooltip title="Position" placement={'left'}>
+              <span>
+                <img src={'/assets/position.png'} alt={'Position'} />
+                {profileData.position}
+              </span>
+            </Tooltip>
+            <Tooltip title="Department" placement={'left'}>
+              <span>
+                <img src={'/assets/department.png'} alt={'Department'} /> {profileData.department}
+              </span>
+            </Tooltip>
+            <Tooltip title="Country" placement={'left'}>
+              <span>
+                <img src={'/assets/country.png'} alt={'Country'} /> {getCountryName(profileData.country!)}
+              </span>
+            </Tooltip>
+            <Tooltip title="Wemet" placement={'left'}>
+              <span>
+                <img src={'/assets/meeting.png'} alt={'Wemet'} /> 0
+              </span>
+            </Tooltip>
+            <Field>
+              <h3>Field</h3>
+              <Grid container>
+                {profileData.field?.map((elem: string) => {
+                  const color = randomColor({
+                    hue: brandColor,
+                    format: 'rgb', // e.g. 'rgb(225,200,20)'
+                    seed: elem,
+                  })
+                  return (
+                    <FieldItem key={elem} color={color}>
+                      {elem}
+                    </FieldItem>
+                  )
+                })}
+              </Grid>
+            </Field>
+          </Summary>
         </Middle>
-        <Field>
-          <h3>Field</h3>
-          <Grid container>
-            {profileData.field?.map((elem: string) => {
-              const color = randomColor({
-                hue: brandColor,
-                format: 'rgb', // e.g. 'rgb(225,200,20)'
-                seed: elem,
-              })
-              return (
-                <FieldItem key={elem} color={color}>
-                  {elem}
-                </FieldItem>
-              )
-            })}
-          </Grid>
-        </Field>
+        <div className="History">
+          <h3>Relative Meeting</h3>
+        </div>
       </UserBody>
       <EventSelectDialog />
     </Container>

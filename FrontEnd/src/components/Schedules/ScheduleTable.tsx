@@ -38,6 +38,11 @@ function ScheduleTable({ meetings, type = 'schedule' }: ScheduleTableProps) {
                 status = 'pending'
               }
             }
+            if (status === 'replan') {
+              if (isBefore(new Date(row.startTime), new Date())) {
+                status = 'expired'
+              }
+            }
             return (
               <StyledTableRow key={row._id + row.date} hover onClick={() => navi('/meeting/schedule/' + row._id)}>
                 <StyledTableCell align="center">{row.ownerName}</StyledTableCell>
@@ -59,7 +64,9 @@ function ScheduleTable({ meetings, type = 'schedule' }: ScheduleTableProps) {
                       <StatusBlock state={status}>{status}</StatusBlock>
                     </Badge>
                   ) : (
-                    <StatusBlock state={'met'}>{'MET'}</StatusBlock>
+                    <StatusBlock state={row.history.status ? 'met' : ''}>
+                      {row.history.status ? 'MET' : 'Failure'}
+                    </StatusBlock>
                   )}
                 </StyledTableCell>
               </StyledTableRow>
