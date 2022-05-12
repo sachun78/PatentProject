@@ -77,8 +77,9 @@ export async function getMeetings(req: IRequest, res: Response, next: NextFuncti
 
 export async function getMeetingHistory(req: IRequest, res: Response) {
   const user_id = req.userId;
+  const toEmail = req.query.toEmail;
 
-  const data = await meetingRepo.getAllHistory(user_id);
+  const data = await meetingRepo.getAllHistory(user_id, toEmail);
   res.status(200).json(data);
 }
 
