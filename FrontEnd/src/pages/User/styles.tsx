@@ -117,9 +117,10 @@ export const ButtonBlock = styled.div`
       max-width: 100%;
       width: 1.25rem;
       height: 1.25rem;
-      object-fit: cover;
+      object-fit: scale-down;
       border: none;
       margin: 0;
+      border-radius: 0;
     }
   }
 

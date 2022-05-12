@@ -46,7 +46,7 @@ export const MeetingSection = styled.section`
   p {
     margin: 0;
     font: normal normal normal 16px/18px NanumSquareOTF;
-    padding: 0.5rem 0 1rem;
+    padding: 0.5rem 0 0;
     border-radius: 0.5rem;
 
     &:hover {
@@ -59,7 +59,7 @@ export const MeetingSection = styled.section`
   }
 `
 const statusColor = ({ state }: { state: string }) => css`
-  background: ${state === 'replan' && brandColor};
+  background: ${(state === 'replan' || state === 'met') && brandColor};
   background: ${state === 'confirm' && palette.green[400]};
 `
 

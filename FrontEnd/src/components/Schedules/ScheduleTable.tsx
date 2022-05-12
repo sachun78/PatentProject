@@ -5,11 +5,14 @@ import React from 'react'
 import { IMeeting } from 'lib/api/types'
 import { useNavigate } from 'react-router-dom'
 
+type ScheduleType = 'schedule' | 'history'
+
 export type ScheduleTableProps = {
   meetings: IMeeting[]
+  type?: ScheduleType
 }
 
-function ScheduleTable({ meetings }: ScheduleTableProps) {
+function ScheduleTable({ meetings, type = 'schedule' }: ScheduleTableProps) {
   const navi = useNavigate()
 
   return (
@@ -38,7 +41,7 @@ function ScheduleTable({ meetings }: ScheduleTableProps) {
             return (
               <StyledTableRow key={row._id + row.date} hover onClick={() => navi('/meeting/schedule/' + row._id)}>
                 <StyledTableCell align="center">{row.ownerName}</StyledTableCell>
-                <StyledTableCell align="center">{row.company}</StyledTableCell>
+                <StyledTableCell align="center">{row.ownerCompany}</StyledTableCell>
                 <StyledTableCell align="center">{row.toEmail}</StyledTableCell>
                 <StyledTableCell align="center">
                   {format(new Date(row.date), 'EEEE, d MMM, yyyy')} <br />
@@ -46,19 +49,18 @@ function ScheduleTable({ meetings }: ScheduleTableProps) {
                 </StyledTableCell>
                 <StyledTableCell align="left">{row.location}</StyledTableCell>
                 <StyledTableCell align="center">
-                  <Badge
-                    color="error"
-                    variant="standard"
-                    badgeContent={'end'}
-                    invisible={
-                      status === 'cancel' ||
-                      status === 'expired' ||
-                      status === 'pending' ||
-                      isAfter(new Date(row.startTime), new Date())
-                    }
-                  >
-                    <StatusBlock state={status}>{status}</StatusBlock>
-                  </Badge>
+                  {type === 'schedule' ? (
+                    <Badge
+                      color="error"
+                      variant="standard"
+                      badgeContent={'end'}
+                      invisible={status !== 'confirm' || isAfter(new Date(row.startTime), new Date())}
+                    >
+                      <StatusBlock state={status}>{status}</StatusBlock>
+                    </Badge>
+                  ) : (
+                    <StatusBlock state={'met'}>{'MET'}</StatusBlock>
+                  )}
                 </StyledTableCell>
               </StyledTableRow>
             )
