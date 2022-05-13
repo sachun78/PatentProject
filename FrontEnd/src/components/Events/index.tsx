@@ -11,10 +11,11 @@ import EventCalendar from './EventCalendar'
 import EventCard from './EventCard'
 import EventModal from './EventModal'
 import { noScheduleStyle, wrapper } from './styles'
-import { formatDistanceToNow } from 'date-fns'
+import { isBefore } from 'date-fns'
 import { useCurrentEventState } from 'atoms/eventState'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import TableViewIcon from '@mui/icons-material/TableView'
+import EventTable from './EventTable'
 
 type EventsProps = {}
 
@@ -84,13 +85,12 @@ function Events({}: EventsProps) {
       </FormGroup>
       {checked ? (
         <EventCalendar />
+      ) : tableChecked ? (
+        <EventTable events={data} />
       ) : (
         <div css={wrapper}>
-          {[...data].reverse().map((event) => {
-            const dist = formatDistanceToNow(new Date(event.end_date), {
-              addSuffix: true,
-            })
-            if (!tableChecked && dist.includes('ago')) {
+          {data.map((event) => {
+            if (isBefore(new Date(event.end_date), new Date())) {
               return null
             }
             return (
@@ -101,7 +101,6 @@ function Events({}: EventsProps) {
                 startDate={new Date(event.start_date)}
                 endDate={new Date(event.end_date)}
                 count={event.meeting_list.length}
-                disabled={dist.includes('ago')}
               />
             )
           })}

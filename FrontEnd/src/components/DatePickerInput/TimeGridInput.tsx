@@ -215,7 +215,7 @@ const CalendarContainer = styled.div`
 
   .fc-timegrid-col.fc-day.fc-day-past {
     border: 1px solid #999999;
-    background-color: #cccccc;
+    background-color: rgba(208, 208, 208, 0.3);
   }
 
   // theme start
