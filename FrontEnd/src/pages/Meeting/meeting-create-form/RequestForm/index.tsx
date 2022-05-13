@@ -61,6 +61,12 @@ export default function RequestForm({}: RequestViewProps) {
   })
 
   const profile = useMemo(() => qc.getQueryData<IProfile>('profile'), [qc])
+  const filteredTimeEvent = useMemo(() => {
+    if (!event) return []
+    return (event.meeting_list as IMeeting[]).filter((meeting: IMeeting) => {
+      return meeting.status === 'confirm'
+    })
+  }, [event])
 
   const createScheduleMut = useMutation(createMeeting, {
     onSuccess: () => {
@@ -259,7 +265,7 @@ export default function RequestForm({}: RequestViewProps) {
               onChangeTime(sDate)
               onChangeEndTime(eDate)
             }}
-            timeEvent={event.meeting_list as IMeeting[]}
+            timeEvent={filteredTimeEvent}
             dateChange={onChangeDate}
             unavailables={event.restricted_time}
           />
@@ -270,10 +276,12 @@ export default function RequestForm({}: RequestViewProps) {
         <RequestSection
           title={'Comment'}
           checkButton={
-            <FormControlLabel
-              control={<Checkbox value={isDefaultComment} onClick={onToggleIsDefaultComment} />}
-              label="use a default comment"
-            />
+            profile?.signature && (
+              <FormControlLabel
+                control={<Checkbox value={isDefaultComment} onClick={onToggleIsDefaultComment} />}
+                label="use a default comment"
+              />
+            )
           }
         >
           <OutlinedInput

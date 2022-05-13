@@ -32,7 +32,7 @@ export type TimeGridInputProps = {
   date: Date
   timeChange: (start: Date, end: Date) => void
   dateChange: (date: Date) => void
-  timeEvent: { startTime: string; endTime: string; date: string }[] | IMeeting[]
+  timeEvent: Array<{ startTime: string; endTime: string; date: string }> | IMeeting[]
   unavailables: Array<{ start: string; end: string }>
 }
 

@@ -123,7 +123,7 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
             multiline
           />
         </RequestSection>
-        <Button variant={'contained'} type={'submit'} fullWidth>
+        <Button variant={'contained'} type={'submit'} disabled={replanMut.isLoading} fullWidth>
           Submit
         </Button>
       </form>
