@@ -13,6 +13,7 @@ export type IProfile = {
   field?: string[]
   country?: string
   phone?: string
+  signature?: string
 }
 
 export type IProfileDetail = {

@@ -7,7 +7,7 @@ import gravatar from 'gravatar'
 import React, { memo } from 'react'
 import { FieldItem } from 'pages/User/styles'
 import getCountryName from 'lib/countryName'
-import { API_PATH } from '../../lib/api/client'
+import { API_PATH } from 'lib/api/client'
 
 export type NetworkItemProps = {
   data: { email: string; profile: IProfile; name: string }
@@ -61,7 +61,7 @@ function NetworkItem({ data }: NetworkItemProps) {
       </div>
       <div css={stateStyle}>
         <div>
-          <img src="/assets/meeting.png" style={{ width: '1rem' }} />
+          <img src="/assets/meeting.png" style={{ width: '1rem' }} alt={'meeting'} />
         </div>
       </div>
     </div>

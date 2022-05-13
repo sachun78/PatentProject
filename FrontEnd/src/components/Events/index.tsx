@@ -14,7 +14,7 @@ import { noScheduleStyle, wrapper } from './styles'
 import { formatDistanceToNow } from 'date-fns'
 import { useCurrentEventState } from 'atoms/eventState'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
-import ContrastIcon from '@mui/icons-material/Contrast'
+import TableViewIcon from '@mui/icons-material/TableView'
 
 type EventsProps = {}
 
@@ -23,14 +23,14 @@ function Events({}: EventsProps) {
   const { setOpen, setEdit } = useEventModal()
   const { setStartDate, setEndDate } = useDateRangeHook()
   const [checked, setChecked] = useRecoilState(eventSwitchState)
-  const [outdateChecked, setOutdateChecked] = useState(false)
+  const [tableChecked, setTableChecked] = useState(false)
   const [, setEvent] = useCurrentEventState()
 
   const handleChange = useCallback(() => {
     setChecked((prev) => !prev)
   }, [setChecked])
-  const onOutdateChange = useCallback(() => {
-    setOutdateChecked((prev) => !prev)
+  const onTableViewChange = useCallback(() => {
+    setTableChecked((prev) => !prev)
   }, [])
   const onClickNewEvent = useCallback(() => {
     setOpen(true)
@@ -77,8 +77,8 @@ function Events({}: EventsProps) {
           <CalendarTodayIcon />
         </ToggleButton>
         {!checked && (
-          <ToggleButton value="check" selected={outdateChecked} onChange={onOutdateChange} color={'primary'}>
-            <ContrastIcon />
+          <ToggleButton value="check" selected={tableChecked} onChange={onTableViewChange} color={'primary'}>
+            <TableViewIcon />
           </ToggleButton>
         )}
       </FormGroup>
@@ -90,7 +90,7 @@ function Events({}: EventsProps) {
             const dist = formatDistanceToNow(new Date(event.end_date), {
               addSuffix: true,
             })
-            if (!outdateChecked && dist.includes('ago')) {
+            if (!tableChecked && dist.includes('ago')) {
               return null
             }
             return (

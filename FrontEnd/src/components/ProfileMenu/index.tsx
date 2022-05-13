@@ -10,7 +10,8 @@ import { CountryType } from '../CountrySelector/CountrySelector'
 import _ from 'lodash'
 import { patchProfile } from 'lib/api/me/getProfile'
 import { InfoStyleDiv } from 'pages/Profile/styles'
-import { useProfileFormState } from '../../atoms/profileFormState'
+import { useProfileFormState } from 'atoms/profileFormState'
+import useInput from 'hooks/useInput'
 
 export type ProfileMenuProps = {}
 
@@ -23,6 +24,7 @@ function ProfileMenu({}: ProfileMenuProps) {
   const [company, setCompany] = useState(data?.company)
   const [department, setDepartment] = useState(data?.department)
   const [position, setPosition] = useState(data?.position)
+  const [signature, onChangeSignature] = useInput(data?.signature)
   const [country, setCountry] = useState(data?.country ?? 'KR')
   const [phone, setPhone] = useProfileFormState()
 
@@ -37,7 +39,8 @@ function ProfileMenu({}: ProfileMenuProps) {
       data?.department !== department ||
       data?.position !== position ||
       difference.length > 0 ||
-      country !== data?.country,
+      country !== data?.country ||
+      signature !== data?.signature,
     [
       company,
       country,
@@ -46,10 +49,12 @@ function ProfileMenu({}: ProfileMenuProps) {
       data?.department,
       data?.phone,
       data?.position,
+      data?.signature,
       department,
       difference.length,
       phone,
       position,
+      signature,
     ]
   )
 
@@ -117,8 +122,9 @@ function ProfileMenu({}: ProfileMenuProps) {
       field: fields,
       country,
       phone,
+      signature,
     })
-  }, [company, country, department, fields, position, saveMutation, phone])
+  }, [saveMutation, company, department, position, fields, country, phone, signature])
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -145,7 +151,7 @@ function ProfileMenu({}: ProfileMenuProps) {
           onRemove={onFieldRemove}
         />
         <ProfileCard.Country title="Country" onChange={handleCountry} country={country ?? 'AD'} />
-        <ProfileCard.Text title="Default Comment" text={position ?? ''} onChange={onPositionChange} />
+        <ProfileCard.Text title="Default Comment" text={signature ?? ''} onChange={onChangeSignature} />
         <ProfileCard.Save onSave={onSaveProfile} loading={!isSaveActive || saveMutation.isLoading} />
       </InfoViewSection>
     </InfoStyleDiv>

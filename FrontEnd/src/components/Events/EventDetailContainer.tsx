@@ -6,7 +6,7 @@ import { useQuery } from 'react-query'
 import { Navigate } from 'react-router-dom'
 import EventDetailCard from './EventDetailCard'
 import UnavailableTimePicker from '../UnavailableTimePicker'
-import { IEvent } from '../../lib/api/types'
+import { IEvent, IMeeting } from '../../lib/api/types'
 import { format } from 'date-fns'
 
 export type EventDetailLeftProps = {
@@ -33,13 +33,14 @@ function EventDetailContainer({ id }: EventDetailLeftProps) {
       <section css={dateSectionStyle}>
         <MdCalendarToday />
         <span>
-          {format(new Date(event.start_date), 'yyyy/MM/dd')} - {format(new Date(event.end_date), 'yyy/MM/dd')}
+          {format(new Date(event.start_date), 'yyyy/MM/dd')} - {format(new Date(event.end_date), 'yyyy/MM/dd')}
         </span>
       </section>
       <UnavailableTimePicker
         startDate={event.start_date}
         endDate={event.end_date}
         unavailableList={event.restricted_time}
+        reserveEvent={event.meeting_list as IMeeting[]}
         id={id}
       />
       <>

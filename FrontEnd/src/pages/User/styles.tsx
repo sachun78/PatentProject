@@ -4,7 +4,8 @@ import palette, { brandColor } from 'lib/palette'
 import { resetButton } from 'lib/styles/resetButton'
 
 export const Container = styled.div`
-  max-width: 90rem;
+  max-width: 54.375rem;
+  width: 54.375rem;
   background: rgba(255, 255, 255, 0.8);
   height: 100%;
   border-radius: 1rem;

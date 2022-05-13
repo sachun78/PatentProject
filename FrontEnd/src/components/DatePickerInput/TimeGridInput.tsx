@@ -67,7 +67,7 @@ function TimeGridInput({
       borderColor: '#f5f5f5',
       textColor: '#f5f5f5',
       editable: false,
-      rendering: 'background',
+      display: 'background',
     }))
     const formatTimeEvents = timeEvent.map((event) => {
       const date = new Date(event.date)

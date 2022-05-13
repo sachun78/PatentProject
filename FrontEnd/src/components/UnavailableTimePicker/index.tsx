@@ -7,15 +7,18 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import { CalendarContainer } from './styles'
 import { useMutation } from 'react-query'
 import { updateEventRestrictedTime } from 'lib/api/event/updateEvent'
+import { IMeeting } from 'lib/api/types'
+import { brandColor } from '../../lib/palette'
 
 export type UnavailableTimePickerProps = {
   id: string
   startDate: Date
   endDate: Date
   unavailableList: Array<{ start: Date; end: Date }>
+  reserveEvent: IMeeting[]
 }
 
-function UnavailableTimePicker({ id, startDate, endDate, unavailableList }: UnavailableTimePickerProps) {
+function UnavailableTimePicker({ id, startDate, endDate, unavailableList, reserveEvent }: UnavailableTimePickerProps) {
   const [open, setOpen] = useState(false)
   const [currentUnavailableList, setCurrentUnavailableList] = useState(unavailableList)
   const calendarRef = useRef<FullCalendar | null>(null)
@@ -39,16 +42,37 @@ function UnavailableTimePicker({ id, startDate, endDate, unavailableList }: Unav
   )
 
   const events = useMemo(() => {
-    return currentUnavailableList.map((item) => {
+    const unavailableEvent = currentUnavailableList.map((unavailable) => ({
+      title: 'unavailable',
+      start: new Date(unavailable.start),
+      end: new Date(unavailable.end),
+      backgroundColor: '#ff0000',
+      borderColor: '#f5f5f5',
+      textColor: '#f5f5f5',
+      editable: false,
+      display: 'background',
+    }))
+
+    const formatTimeEvents = reserveEvent.map((event) => {
+      const date = new Date(event.date)
+      const start = new Date(event.startTime)
+      start.setFullYear(date.getFullYear())
+      start.setDate(date.getDate())
+      const end = new Date(event.endTime)
+      end.setFullYear(date.getFullYear())
+      end.setDate(date.getDate())
+
       return {
-        title: 'Unavailable',
-        start: item.start,
-        end: item.end,
-        color: '#ff0000',
-        rendering: 'background',
+        title: 'reserved',
+        start: start.toISOString(),
+        end: end.toISOString(),
+        allDay: false,
+        backgroundColor: brandColor,
       }
     })
-  }, [currentUnavailableList])
+
+    return [...unavailableEvent, ...formatTimeEvents]
+  }, [currentUnavailableList, reserveEvent])
 
   return (
     <>
