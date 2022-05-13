@@ -1,16 +1,21 @@
 import { css } from '@emotion/react'
 import palette from 'lib/palette'
+import React from 'react'
 
 type RequestSectionProps = {
   title: string
   children: React.ReactNode
+  checkButton?: React.ReactNode
 }
 
-function RequestSection({ title, children }: RequestSectionProps) {
+function RequestSection({ title, children, checkButton }: RequestSectionProps) {
   return (
     <section css={sectionStyle}>
-      <h3>{title}</h3>
-      <div>{children}</div>
+      <div className={'header'}>
+        <h3>{title}</h3>
+        {checkButton}
+      </div>
+      <div className={'child-item'}>{children}</div>
     </section>
   )
 }
@@ -27,8 +32,12 @@ const sectionStyle = css`
     margin-top: 0;
     margin-bottom: 0.5rem;
   }
-
-  & > div {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .child-item {
     position: relative;
     display: flex;
     width: 100%;

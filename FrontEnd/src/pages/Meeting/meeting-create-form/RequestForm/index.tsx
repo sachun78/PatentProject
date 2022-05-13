@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useCurrentEventState } from 'atoms/eventState'
 import useDateTimeHook from 'hooks/useDateTimeHook'
 import useInputs from 'hooks/useInputs'
@@ -11,7 +11,7 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { Button, OutlinedInput } from '@mui/material'
+import { Button, Checkbox, FormControlLabel, OutlinedInput } from '@mui/material'
 import { ContainerBlock } from 'pages/Meeting/styles'
 import { getEvent } from 'lib/api/event/getEvent'
 import TimeGridInput from 'components/DatePickerInput/TimeGridInput'
@@ -20,16 +20,19 @@ import { useRemoveOutlineHover } from 'lib/styles/muiStyles'
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined'
 import { format } from 'date-fns'
 import ProfileBox from 'components/ProfileBox'
+import { IMeeting, IProfile } from 'lib/api/types'
+import useToggle from 'hooks/useToggle'
 
 type RequestViewProps = {}
 
 export default function RequestForm({}: RequestViewProps) {
   const [curEvent] = useCurrentEventState()
+  const [meetuser, setMeetuser] = useMeetingReqUser()
   const { startDate, endDate } = useDateRangeHook()
   const { date, time, setDate, setTime } = useDateTimeHook()
   const [endTime, setEndTime] = useState<Date | null>(null)
-  const [meetuser, setMeetuser] = useMeetingReqUser()
   const [location, setLoaction] = useState('성수역 1번 출구')
+  const [isDefaultComment, onToggleIsDefaultComment] = useToggle(false)
   const navi = useNavigate()
   const qc = useQueryClient()
   const [form, onChange] = useInputs({
@@ -56,6 +59,8 @@ export default function RequestForm({}: RequestViewProps) {
     retry: false,
     staleTime: 5000,
   })
+
+  const profile = useMemo(() => qc.getQueryData<IProfile>('profile'), [qc])
 
   const createScheduleMut = useMutation(createMeeting, {
     onSuccess: () => {
@@ -111,7 +116,7 @@ export default function RequestForm({}: RequestViewProps) {
     (e) => {
       e.preventDefault()
       const { title, to, comment } = form
-      if ((!to.trim() && !meetuser) || !location.trim() || !comment.trim() || !title.trim() || !time || !endTime) {
+      if ((!to.trim() && !meetuser) || !location.trim() || !title.trim() || !time || !endTime) {
         toast.error('Please fill out the form', {
           position: toast.POSITION.TOP_CENTER,
           pauseOnHover: false,
@@ -129,10 +134,21 @@ export default function RequestForm({}: RequestViewProps) {
         endTime,
         location,
         toEmail: meetuser ? meetuser.toLowerCase() : to.toLowerCase(),
-        comment,
+        comment: !isDefaultComment ? comment : profile?.signature ?? '',
       })
     },
-    [createScheduleMut, curEvent.id, date, endTime, form, location, meetuser, time]
+    [
+      createScheduleMut,
+      curEvent.id,
+      date,
+      endTime,
+      form,
+      isDefaultComment,
+      location,
+      meetuser,
+      profile?.signature,
+      time,
+    ]
   )
 
   useEffect(() => {
@@ -243,7 +259,7 @@ export default function RequestForm({}: RequestViewProps) {
               onChangeTime(sDate)
               onChangeEndTime(eDate)
             }}
-            timeEvent={event.meeting_list}
+            timeEvent={event.meeting_list as IMeeting[]}
             dateChange={onChangeDate}
             unavailables={event.restricted_time}
           />
@@ -251,12 +267,20 @@ export default function RequestForm({}: RequestViewProps) {
         <RequestSection title={'Location'}>
           <LocationInput onChange={onChangeLocation} value={location} />
         </RequestSection>
-        <RequestSection title={'Comment'}>
+        <RequestSection
+          title={'Comment'}
+          checkButton={
+            <FormControlLabel
+              control={<Checkbox value={isDefaultComment} onClick={onToggleIsDefaultComment} />}
+              label="use a default comment"
+            />
+          }
+        >
           <OutlinedInput
             placeholder="Leave a message"
             name="comment"
-            value={form.comment}
-            onChange={onChange}
+            value={!isDefaultComment ? form.comment : profile?.signature}
+            onChange={!isDefaultComment ? onChange : undefined}
             multiline
             fullWidth
             minRows={3}
