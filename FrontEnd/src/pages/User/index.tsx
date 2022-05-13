@@ -86,9 +86,9 @@ function User({}: UserProps) {
     return <div>Loading...</div>
   }
 
-  if (!email || !user || !buddyData || !profileData) {
+  if (!email || !user || !buddyData || !profileData || !profileData.company || !profileData.country) {
     if (!toast.isActive('user-not-found')) {
-      toast.error(`Cannot found user(${email}) information`, {
+      toast.error(`User Information Error Occured`, {
         toastId: 'user-not-found',
         pauseOnFocusLoss: false,
         pauseOnHover: false,

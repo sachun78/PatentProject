@@ -8,7 +8,7 @@ import { CalendarContainer } from './styles'
 import { useMutation } from 'react-query'
 import { updateEventRestrictedTime } from 'lib/api/event/updateEvent'
 import { IMeeting } from 'lib/api/types'
-import { brandColor } from '../../lib/palette'
+import { brandColor } from 'lib/palette'
 
 export type UnavailableTimePickerProps = {
   id: string
