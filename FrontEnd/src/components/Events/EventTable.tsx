@@ -1,7 +1,7 @@
 import { Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material'
 import { StyledTableCell, StyledTableRow } from 'pages/Meeting/styles'
 import { format, isBefore } from 'date-fns'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IEvent } from 'lib/api/types'
 
@@ -10,6 +10,15 @@ export type EventTableProps = {
 }
 
 function EventTable({ events }: EventTableProps) {
+  const sortedEvent = useMemo(() => {
+    return events.sort((a, b) => {
+      if (isBefore(new Date(b.end_date), new Date(a.end_date))) {
+        return -1
+      }
+      return 0
+    })
+  }, [events])
+
   const navi = useNavigate()
   return (
     <TableContainer component={Paper} style={{ borderRadius: '1rem', maxWidth: '80.3125rem', marginBottom: '1rem' }}>
@@ -22,7 +31,7 @@ function EventTable({ events }: EventTableProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {[...events].reverse().map((row) => {
+          {sortedEvent.map((row) => {
             const disabled = isBefore(new Date(row.end_date), new Date())
             return (
               <StyledTableRow

@@ -10,9 +10,10 @@ import media from '../../lib/styles/media'
 export type BookingMainProps = {
   code: string | null
   status: string
+  expire: boolean
 }
 
-function BookingMain({ code, status }: BookingMainProps) {
+function BookingMain({ code, status, expire }: BookingMainProps) {
   const qc = useQueryClient()
 
   const confirmMut = useMutation(confirmMeeting, {
@@ -38,33 +39,38 @@ function BookingMain({ code, status }: BookingMainProps) {
   }, [cancelMut, code])
 
   if (!code) return null
-
   return (
     <div css={mainStyle}>
       <img src="/assets/wemet_logo.png" alt="wemet-logo" />
-      {status === 'none' && (
-        <Box display="flex" justifyContent="space-around" minWidth={400} marginTop={1}>
-          <Button
-            onClick={onConfirm}
-            disabled={cancelMut.isLoading || confirmMut.isLoading}
-            variant={'contained'}
-            size={'large'}
-          >
-            Confirm
-          </Button>
-          <Button
-            onClick={onCancel}
-            disabled={cancelMut.isLoading || confirmMut.isLoading}
-            variant={'contained'}
-            size={'large'}
-          >
-            Cancel
-          </Button>
-        </Box>
+      {expire ? (
+        <div> Meeting is expired</div>
+      ) : (
+        <>
+          {status === 'none' && (
+            <Box display="flex" justifyContent="space-around" minWidth={400} marginTop={1}>
+              <Button
+                onClick={onConfirm}
+                disabled={cancelMut.isLoading || confirmMut.isLoading}
+                variant={'contained'}
+                size={'large'}
+              >
+                Confirm
+              </Button>
+              <Button
+                onClick={onCancel}
+                disabled={cancelMut.isLoading || confirmMut.isLoading}
+                variant={'contained'}
+                size={'large'}
+              >
+                Cancel
+              </Button>
+            </Box>
+          )}
+          {status === 'confirm' && <div>The Meeting is Confirmed.</div>}
+          {status === 'cancel' && <div>The Meeting is Canceled</div>}
+          {status !== 'none' && <Link to={'/'}>Back</Link>}
+        </>
       )}
-      {status === 'confirm' && <div>The Meeting is Confirmed.</div>}
-      {status === 'cancel' && <div>The Meeting is Canceled</div>}
-      {status !== 'none' && <Link to={'/'}>Back</Link>}
     </div>
   )
 }
