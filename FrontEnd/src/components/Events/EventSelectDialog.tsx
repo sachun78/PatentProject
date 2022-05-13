@@ -102,8 +102,8 @@ function EventSelectDialog({}: EventSelectModalProps) {
               title={eventParsed[index].title}
               id={eventParsed[index]._id}
               count={eventParsed[index].meeting_list.length}
-              endDate={eventParsed[index].end_date}
-              startDate={eventParsed[index].start_date}
+              endDate={new Date(eventParsed[index].end_date)}
+              startDate={new Date(eventParsed[index].start_date)}
               cardView
             />
           </div>

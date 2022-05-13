@@ -149,7 +149,7 @@ const ScheduleDetailContents = styled.section`
 
     font: normal normal normal 16px/18px NanumSquareOTF;
     border-radius: 0.25rem;
-    box-shadow: 0px 8px 6px #00000029;
+    box-shadow: 0 8px 6px #00000029;
     user-select: none;
   }
 `

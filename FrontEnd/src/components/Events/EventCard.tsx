@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useCurrentEventState } from 'atoms/eventState'
 import { useEventModal } from 'hooks/useEventTitle'
 import useDateRangeHook from 'hooks/useDateRangeHook'
-import { memo, useCallback } from 'react'
+import React, { memo, MouseEvent, useCallback } from 'react'
 import media from 'lib/styles/media'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
 import { FiEdit } from 'react-icons/fi'
@@ -13,8 +13,8 @@ import { periodString } from 'lib/stringParser'
 export type EventCardProps = {
   id: string
   title: string
-  startDate: string
-  endDate: string
+  startDate: Date
+  endDate: Date
   count: number
   cardView?: boolean
   disabled?: boolean
@@ -28,7 +28,7 @@ function EventCard({ title, startDate, endDate, id, count, cardView = false, dis
   const [, setMeetuser] = useMeetingReqUser()
 
   const handleEdit = useCallback(
-    (e: React.MouseEvent<SVGElement>) => {
+    (e: MouseEvent<SVGElement>) => {
       e.stopPropagation()
       setOpen(true)
       setEdit(true)
@@ -66,7 +66,7 @@ function EventCard({ title, startDate, endDate, id, count, cardView = false, dis
         </div>
         <div css={contentStyle}>
           <span>
-            Period: <b>{periodString(startDate, endDate)}</b>
+            Period: <b>{periodString(startDate.toISOString(), endDate.toISOString())}</b>
           </span>
           <span>
             Schedule(s): <b>{count}</b>
@@ -83,6 +83,8 @@ function EventCard({ title, startDate, endDate, id, count, cardView = false, dis
     </div>
   )
 }
+
+export default memo(EventCard)
 
 const wrapper = (maxWidth: boolean) => css`
   ${maxWidth
@@ -188,4 +190,3 @@ const contentStyle = css`
     margin-bottom: 0.5rem;
   }
 `
-export default memo(EventCard)

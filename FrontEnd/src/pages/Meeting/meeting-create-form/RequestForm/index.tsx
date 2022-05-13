@@ -6,23 +6,20 @@ import { createMeeting } from 'lib/api/meeting/createMeeting'
 import LocationInput from 'components/LocationMap/LocationInput'
 import RequestSection from './RequestSection'
 import { toast } from 'react-toastify'
-import { buttonStyle, FlexRow, sectionStyle } from './styles'
+import { buttonStyle, sectionStyle } from './styles'
 import { Navigate, useNavigate } from 'react-router-dom'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { Avatar, Box, Button, OutlinedInput } from '@mui/material'
+import { Button, OutlinedInput } from '@mui/material'
 import { ContainerBlock } from 'pages/Meeting/styles'
 import { getEvent } from 'lib/api/event/getEvent'
 import TimeGridInput from 'components/DatePickerInput/TimeGridInput'
 import { getProfilebyEmail } from 'lib/api/me/getProfile'
-import { brandColor } from 'lib/palette'
-import { API_PATH } from 'lib/api/client'
-import getCountryName from 'lib/countryName'
-import gravatar from 'gravatar'
-import { useRemoveOutlineHover } from '../../../../lib/styles/muiStyles'
+import { useRemoveOutlineHover } from 'lib/styles/muiStyles'
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined'
 import { format } from 'date-fns'
+import ProfileBox from 'components/ProfileBox'
 
 type RequestViewProps = {}
 
@@ -36,16 +33,20 @@ export default function RequestForm({}: RequestViewProps) {
   const navi = useNavigate()
   const qc = useQueryClient()
   const [form, onChange] = useInputs({
-    to: '',
     comment: '',
     title: '',
+    to: '',
+    firm: '',
+    name: '',
   })
 
+  // Get Current Event
   const { data: event, isLoading } = useQuery(['event', curEvent.id], getEvent, {
     enabled: !!curEvent.id,
     retry: false,
   })
 
+  // Get User Profile
   const {
     data: profileData,
     isLoading: isLoadingProfile,
@@ -68,7 +69,7 @@ export default function RequestForm({}: RequestViewProps) {
       navi('/meeting')
     },
     onError: () => {
-      toast.error('Something went wrong', {
+      toast.error('Something Error', {
         position: toast.POSITION.TOP_CENTER,
         pauseOnHover: false,
         pauseOnFocusLoss: false,
@@ -190,29 +191,46 @@ export default function RequestForm({}: RequestViewProps) {
             />
           )}
         </RequestSection>
-        {profileData && (
-          <Box style={{ background: brandColor, color: '#fff', padding: '4px', borderRadius: '8px', margin: '4px' }}>
-            <h3>Member</h3>
-            <FlexRow>
-              <Avatar
-                alt={'photo'}
-                src={`${API_PATH}static/${profileData.photo_path}`}
-                sx={{ width: 44, height: 44, marginRight: 1, marginLeft: 1 }}
-                imgProps={{ crossOrigin: 'anonymous' }}
-              >
-                <img src={gravatar.url(profileData.email ?? '', { s: '44px', d: 'retro' })} alt={'fallback-img'} />
-              </Avatar>
-              <div>
-                <p>{profileData.username}</p>
-                <p>
-                  {profileData.company + ' ' + getCountryName(profileData.country ?? 'KR')}
-                  {profileData.field?.map((item) => (
-                    <span key={item}>{' ' + item} </span>
-                  ))}
-                </p>
-              </div>
-            </FlexRow>
-          </Box>
+        {profileData && <ProfileBox profileData={profileData} />}
+        {!profileData && !isLoadingProfile && form.to && (
+          <>
+            <RequestSection title={'Name'}>
+              <OutlinedInput
+                name="name"
+                type={'text'}
+                value={form.name}
+                onChange={onChange}
+                placeholder={'Enter a name to request'}
+                classes={classes}
+                sx={{ height: 38 }}
+                fullWidth
+              />
+            </RequestSection>
+            <RequestSection title={'Firm'}>
+              <OutlinedInput
+                name="firm"
+                type={'text'}
+                value={form.firm}
+                onChange={onChange}
+                placeholder={'Enter the firm'}
+                classes={classes}
+                sx={{ height: 38 }}
+                fullWidth
+              />
+            </RequestSection>
+            <RequestSection title={'Phone'}>
+              <OutlinedInput
+                name="phone"
+                type={'text'}
+                value={form.title}
+                onChange={onChange}
+                placeholder={'Enter a phone number'}
+                classes={classes}
+                sx={{ height: 38 }}
+                fullWidth
+              />
+            </RequestSection>
+          </>
         )}
         <RequestSection title={'Period'}>
           <TimeGridInput
@@ -227,6 +245,7 @@ export default function RequestForm({}: RequestViewProps) {
             }}
             timeEvent={event.meeting_list}
             dateChange={onChangeDate}
+            unavailables={event.restricted_time}
           />
         </RequestSection>
         <RequestSection title={'Location'}>

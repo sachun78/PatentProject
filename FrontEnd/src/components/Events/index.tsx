@@ -98,8 +98,8 @@ function Events({}: EventsProps) {
                 key={event._id}
                 id={event._id}
                 title={event.title}
-                startDate={event.start_date}
-                endDate={event.end_date}
+                startDate={new Date(event.start_date)}
+                endDate={new Date(event.end_date)}
                 count={event.meeting_list.length}
                 disabled={dist.includes('ago')}
               />

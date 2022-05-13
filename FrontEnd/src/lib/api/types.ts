@@ -24,9 +24,10 @@ export type IProfileDetail = {
 export type IEvent = {
   _id: string
   title: string
-  start_date: string
-  end_date: string
-  meeting_list: string[]
+  start_date: Date
+  end_date: Date
+  meeting_list: string[] | IMeeting[]
+  restricted_time: any[]
 }
 export type IReplan = {
   data: IMeeting

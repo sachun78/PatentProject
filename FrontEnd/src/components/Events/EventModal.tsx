@@ -77,7 +77,6 @@ function EventModal({}: CreateEventModalProps) {
     }
 
     // 설정된 종료일이 현재 날짜보다 앞에 있는 경우
-    console.log(endDate)
     const ed = new Date(endDate)
     const dist = formatDistanceToNow(ed, {
       addSuffix: true,

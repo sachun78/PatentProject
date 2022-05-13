@@ -95,9 +95,9 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
             timeChange={onTimeChange}
             timeEvent={meeting.sendData.meeting_timeList}
             dateChange={onDateChange}
+            unavailables={[]}
           />
         </RequestSection>
-        {/*<RequestSection title={'Location'}>{location}</RequestSection>*/}
         <RequestSection title={'Comment'}>
           <OutlinedInput
             placeholder="Leave a comment"

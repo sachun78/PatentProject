@@ -1,6 +1,6 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
-import React, { useMemo } from 'react'
-import { useQuery } from 'react-query'
+import React, { useCallback, useMemo } from 'react'
+import { useMutation, useQuery } from 'react-query'
 import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
 import { toast } from 'react-toastify'
 import { Button, Divider, Stack, ToggleButton } from '@mui/material'
@@ -12,12 +12,13 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined'
 import { SaveBlock, useButtonStyle } from 'components/ProfileMenu/ProfileCardSave'
+import { updateMeeting } from '../../lib/api/meeting/updateMeeting'
 
 export type MeetingDetailProps = {}
 
 function MeetingDetail({}: MeetingDetailProps) {
   const { id } = useParams()
-  const { data, isLoading, error } = useQuery<IMeeting>(['meeting', id], () => getMeetingOne(id!), {
+  const { data, isLoading, error, refetch } = useQuery<IMeeting>(['meeting', id], () => getMeetingOne(id!), {
     retry: false,
     enabled: !!id,
     refetchOnWindowFocus: false,
@@ -33,6 +34,20 @@ function MeetingDetail({}: MeetingDetailProps) {
     if (!data) return false
     return isBefore(new Date(data.startTime), new Date()) && data.status === 'confirm'
   }, [data])
+
+  const finalMut = useMutation(updateMeeting, {
+    onSuccess: () => {
+      refetch()
+    },
+    onError: () => {},
+  })
+
+  const onResult = useCallback(
+    (type: string) => () => {
+      finalMut.mutate({ meetingId: id!, status: type })
+    },
+    []
+  )
 
   const classes = useButtonStyle()
 
@@ -107,10 +122,20 @@ function MeetingDetail({}: MeetingDetailProps) {
           <Divider />
           {!isExpired && data.status === 'replan' && (
             <SaveBlock style={{ justifyContent: 'space-between' }}>
-              <Button variant={'contained'} classes={classes}>
+              <Button
+                variant={'contained'}
+                classes={classes}
+                onClick={onResult('confirm')}
+                disabled={finalMut.isLoading}
+              >
                 Confirm
               </Button>
-              <Button variant={'contained'} classes={classes}>
+              <Button
+                variant={'contained'}
+                classes={classes}
+                onClick={onResult('cancel')}
+                disabled={finalMut.isLoading}
+              >
                 Cancel
               </Button>
             </SaveBlock>

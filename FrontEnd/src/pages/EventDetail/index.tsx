@@ -19,7 +19,6 @@ function EventDetail({}: EventProps) {
 }
 
 const pageStyle = css`
-  max-width: 90rem;
   display: flex;
   flex-direction: column;
 `

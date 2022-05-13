@@ -22,6 +22,7 @@ import {
 } from '@mui/material'
 import useToggle from 'hooks/useToggle'
 import { css } from '@emotion/react'
+import { IMeeting } from '../../lib/api/types'
 
 export type TimeGridInputProps = {
   startTime: Date
@@ -31,7 +32,8 @@ export type TimeGridInputProps = {
   date: Date
   timeChange: (start: Date, end: Date) => void
   dateChange: (date: Date) => void
-  timeEvent: { startTime: string; endTime: string; date: string }[]
+  timeEvent: { startTime: string; endTime: string; date: string }[] | IMeeting[]
+  unavailables: Array<{ start: string; end: string }>
 }
 
 function TimeGridInput({
@@ -43,6 +45,7 @@ function TimeGridInput({
   timeEvent,
   dateChange,
   date,
+  unavailables,
 }: TimeGridInputProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -54,8 +57,19 @@ function TimeGridInput({
   const handleClose = useCallback(() => {
     setOpen(false)
   }, [])
+
   const reserve_event = useMemo(() => {
-    return timeEvent.map((event) => {
+    const unavailableEvent = unavailables.map((unavailable) => ({
+      title: 'unavailable',
+      start: new Date(unavailable.start),
+      end: new Date(unavailable.end),
+      backgroundColor: '#ff0000',
+      borderColor: '#f5f5f5',
+      textColor: '#f5f5f5',
+      editable: false,
+      rendering: 'background',
+    }))
+    const formatTimeEvents = timeEvent.map((event) => {
       const date = new Date(event.date)
       const start = new Date(event.startTime)
       start.setFullYear(date.getFullYear())
@@ -72,7 +86,8 @@ function TimeGridInput({
         backgroundColor: brandColor,
       }
     })
-  }, [timeEvent])
+    return [...unavailableEvent, ...formatTimeEvents]
+  }, [timeEvent, unavailables])
 
   const dateDiff = useMemo(() => {
     return differenceInCalendarDays(endDate, startDate) + 1
@@ -156,12 +171,6 @@ function TimeGridInput({
               dayHeaderFormat={{
                 month: 'numeric',
                 day: 'numeric',
-              }}
-              views={{
-                timeGridFourDay: {
-                  type: 'timeGridDay',
-                  duration: { days: dateDiff ?? 1 },
-                },
               }}
             />
           </CalendarContainer>

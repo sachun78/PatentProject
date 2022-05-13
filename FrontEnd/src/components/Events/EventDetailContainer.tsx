@@ -5,7 +5,9 @@ import { css } from '@emotion/react'
 import { useQuery } from 'react-query'
 import { Navigate } from 'react-router-dom'
 import EventDetailCard from './EventDetailCard'
-import { periodString } from '../../lib/stringParser'
+import UnavailableTimePicker from '../UnavailableTimePicker'
+import { IEvent } from '../../lib/api/types'
+import { format } from 'date-fns'
 
 export type EventDetailLeftProps = {
   id: string
@@ -16,7 +18,7 @@ function EventDetailContainer({ id }: EventDetailLeftProps) {
     data: event,
     isLoading,
     error,
-  } = useQuery(['event', id], getEvent, {
+  } = useQuery<IEvent>(['event', id], getEvent, {
     enabled: !!id,
     retry: false,
   })
@@ -30,8 +32,16 @@ function EventDetailContainer({ id }: EventDetailLeftProps) {
       <h1 css={titleEventStyle}>{event.title}</h1>
       <section css={dateSectionStyle}>
         <MdCalendarToday />
-        <span>{periodString(event.start_date, event.end_date)}</span>
+        <span>
+          {format(new Date(event.start_date), 'yyyy/MM/dd')} - {format(new Date(event.end_date), 'yyy/MM/dd')}
+        </span>
       </section>
+      <UnavailableTimePicker
+        startDate={event.start_date}
+        endDate={event.end_date}
+        unavailableList={event.restricted_time}
+        id={id}
+      />
       <>
         <h3 css={titleEventStyle}>Meeting List</h3>
         {event.meeting_list.length > 0 ? (
@@ -84,8 +94,7 @@ const scheduleWrapStyle = css`
   display: flex;
   width: 100%;
   flex-wrap: wrap;
-  flex: 1;
-  height: 100%;
+  //flex: 1;
 `
 
 export default EventDetailContainer
