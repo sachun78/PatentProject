@@ -1,4 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
+import Fuse from 'fuse.js';
+
 import * as eventRepo from 'data/event';
 import * as meetingRepo from 'data/meeting';
 
@@ -8,13 +10,27 @@ interface IRequest {
 
 export async function getEvents(req: IRequest, res: Response) {
   const month = req.query.month;
+  const keyword = req.query.search;
   const user_id = req.userId;
 
   const data = await (month
     ? eventRepo.getAllByMonth(user_id, month)
     : eventRepo.getAll(user_id));
 
-  res.status(200).json(data);
+  let retData;
+  const fuse = new Fuse(data, {
+    includeScore: true,
+    useExtendedSearch: true,
+    keys: ['title']
+  });
+  if (keyword) {
+    retData = fuse.search("'" + keyword);
+    retData = retData.map(value => value.item);
+    return res.status(200).json(retData);
+  }
+  else {
+    return res.status(200).json(data);
+  }
 }
 
 export async function getEvent(req: IRequest, res: Response) {
