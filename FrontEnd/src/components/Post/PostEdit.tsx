@@ -138,7 +138,7 @@ function PostEdit() {
 
       postImgUpload(formData).then((res) => {
         quillInstance.current.root.innerHTML =
-          quillInstance.current.root.innerHTML + `<img src='${API_PATH}static/${res.fileName}' crossorigin='anonymous'>`
+        quillInstance.current.root.innerHTML + `<img src='${API_PATH}static/${res.fileName}' crossorigin='anonymous' width='500px' height='300px' >` 
 
         setTimeout(() => quillInstance.current.setSelection(range.index + 2), 0)
       })
@@ -154,7 +154,7 @@ function PostEdit() {
           container: [
             [{ size: ['small', false, 'large', 'huge'] }],
             ['bold', 'italic', 'underline', 'strike'],
-            [{ list: 'ordered' }, { list: 'bullet' }],
+            [{ list: 'ordered' }, { list: 'bullet' }, { align: [false,"center", "right", "justify"]}],
             ['blockquote', 'code-block', 'link', 'image'],
           ],
           handlers: {
