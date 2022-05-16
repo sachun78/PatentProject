@@ -113,7 +113,7 @@ function Schedules({}: ScheduleViewProps) {
           </ToggleButton>
         )}
       </FormGroup>
-      {/*달력 모드인 경우 캘릭더*/}
+      {/*달력 모드인 경우 캘린더*/}
       {checked && <ScheduleCalendar meetings={meetings} />}
       {/*일반 모드인 경우 Table*/}
       {!checked && !search && <ScheduleTable meetings={meetings} />}

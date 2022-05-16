@@ -45,7 +45,7 @@ export default function AppLayout({}: AppLayoutProps) {
           <Route index element={<Home />} />
           <Route path="/postDetail/:id" element={<PostDetail />} />
           <Route path="/meeting/*" element={<Member />} />
-          <Route path="/network" element={<Network />} />
+          <Route path="/network/*" element={<Network />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/conference" element={<Conference />} />
           <Route path="/u/:email" element={<User />} />

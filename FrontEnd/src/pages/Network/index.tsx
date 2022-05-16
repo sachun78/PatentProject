@@ -2,7 +2,7 @@ import { css } from '@emotion/react'
 import React from 'react'
 import NetworkList from 'components/NetworkList'
 import NetworkHead from 'components/NetworkList/NetworkHead'
-import NetworkSearchDialog from '../../components/NetworkList/NetworkSearchDialog'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
 type NetworkProps = {}
 
@@ -10,8 +10,11 @@ function Network({}: NetworkProps) {
   return (
     <div css={wrapper}>
       <NetworkHead />
-      <NetworkList />
-      <NetworkSearchDialog />
+      <Routes>
+        <Route path={'/my'} element={<NetworkList />} />
+        <Route path={'/browse'} element={<NetworkList />} />
+        <Route path={'*'} element={<Navigate to={'my'} />} />
+      </Routes>
     </div>
   )
 }

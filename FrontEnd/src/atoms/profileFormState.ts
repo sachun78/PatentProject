@@ -1,7 +1,7 @@
 import { atom, useRecoilState } from 'recoil'
 
 export const profileFormState = atom<string>({
-  key: 'networkState',
+  key: 'profileFormState',
   default: '',
 })
 
