@@ -5,10 +5,11 @@ import { useSearchInputState } from 'atoms/searchInputState'
 
 export type SearchBoxProps = {
   filter: Dispatch<string>
+  post?: boolean
 }
 
-function SearchBox({ filter }: SearchBoxProps) {
-  const [value, setValue] = useSearchInputState()
+function SearchBox({ filter, post }: SearchBoxProps) {
+  const [value, setValue] = useSearchInputState()  
 
   const onChange = useCallback(
     (e) => {
@@ -29,16 +30,28 @@ function SearchBox({ filter }: SearchBoxProps) {
   return (
     <Paper
       component="form"
-      sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '100%', borderRadius: '1rem' }}
+      sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '100%', borderRadius: '1rem'}}
       onSubmit={onSearch}
     >
-      <InputBase
+      {post ? (
+        <InputBase
+        sx={{ ml: 1, flex: 1 }}
+        placeholder="Search Writer, Contents..."
+        value={value}
+        onChange={onChange}
+        inputProps={{ 'aria-label': 'search posts' }}
+      />
+      ) : (
+        <InputBase
         sx={{ ml: 1, flex: 1 }}
         placeholder="Search Schedules..."
         value={value}
         onChange={onChange}
         inputProps={{ 'aria-label': 'search schedule' }}
       />
+
+      )}
+      
       <IconButton type="submit" sx={{ p: '8px' }} aria-label="search">
         <SearchIcon />
       </IconButton>

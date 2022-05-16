@@ -8,15 +8,13 @@ export type filterCardProps = {
   onFilter: Function
 }
 
-function FilterCard({ onFilter }: filterCardProps) {
+function FilterCard({ onFilter }: filterCardProps) {  
 
   const onClickFilter = () => {
     onFilter()
-  }
-
-  return (
-    <div css={containerStyle}>
-    <div style={{ flex: 4}}></div>
+  }  
+  
+  return (        
     <Stack direction="row" css={cardStyle} spacing={1}>           
       <Button        
         variant="outlined"  
@@ -31,26 +29,13 @@ function FilterCard({ onFilter }: filterCardProps) {
       >
         Nation
       </Button>        
-    </Stack>
-    </div>
+    </Stack>          
   )
 }
 
 export default FilterCard
 
-const containerStyle = css`
-  position: absolute;
-  max-width: 54.375rem;
-  min-height: 2rem;
-  margin-top: 2.5rem;  
-  margin-bottom: 0.5rem;
-  top: -1px;  
-  display: flex
-  
-`
-
-
 const cardStyle = css`
-  flex: 1
-  height: 100%
+  position: absolute
+  right: 0
 `

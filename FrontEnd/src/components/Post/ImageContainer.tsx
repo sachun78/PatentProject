@@ -1,9 +1,6 @@
 import { css } from '@emotion/react'
-import { flexibleCompare } from '@fullcalendar/react'
 import { Box, ImageList, ImageListItem, Modal } from '@mui/material'
-import { height } from '@mui/system'
 import React, { useState } from 'react'
-import { API_PATH } from '../../lib/api/client'
 
 type imageContainerProps = {
   images: string[]
@@ -50,7 +47,7 @@ const ImageContainer = ({ images, isDetail } : imageContainerProps) => {
     <>
     {images.length === 0 ? <div></div> : 
     <ImageList
-      sx={{ width: 640, height: 340, justifyContent: "center", position: "relative", margin: "0 auto"  }}
+      sx={{ width: 640, height: 340, justifyContent: "center", position: "relative", margin: "0 auto", borderBottom: '1 solid #000000'  }}
       variant="quilted"
       cols={2}
       rowHeight={166}      
