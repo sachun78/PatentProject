@@ -88,14 +88,26 @@ export async function getMeeting(req: IRequest, res: Response) {
   const user_id = req.userId;
   const id = req.params.id;
 
-  let sendProfile: any = {};
-
+  let sendData: any = {};
   const data = await meetingRepo.getById(id);
   if (data) {
     if (data.ownerId !== user_id) {
       return res.status(403).send('[getMeeting] forbidden');
     }
-    res.status(200).json(data);
+    sendData = JSON.parse(JSON.stringify(data));
+
+    const user = await authRepo.findByEmail(data.toEmail);
+    if (!user) {
+      sendData.isPaidUser = false;
+    }
+    else {
+      sendData.isPaidUser = true;
+    }
+
+    let isPossibleAddSchedule = await isPossibleAdd(data.eventId, {start: data.startTime, end: data.endTime});
+    sendData.isPossibleAddSchedule = isPossibleAddSchedule;
+
+    res.status(200).json(sendData);
   }
   else {
     res.status(404).json({ message: `meeting id(${id}) not found`});
@@ -227,8 +239,8 @@ export async function sendResultMail(req: IRequest, res: Response) {
 
 export async function sendInvitMail(req: IRequest, res: Response) {
   const user_id = req.userId;
-  const bodyData = req.body;
   const meetId = req.query.meetId;
+  let bodyData = req.body;
 
   try {
     if (meetId) {
@@ -247,7 +259,10 @@ export async function sendInvitMail(req: IRequest, res: Response) {
         return res.status(403).json({ message: 'event owner is different. meeting create fail'});
       }
 
-      const modify = await meetingRepo.updateMeeting(meetId, {status: 'none', code: shortid.generate()});
+      bodyData.status = 'none';
+      bodyData.code = shortid.generate();
+
+      const modify = await meetingRepo.updateMeeting(meetId, bodyData);
       if (!modify) {
         return res.status(500).json({ message: `Failed save meeting ${bodyData.toEmail}`});
       }
@@ -314,9 +329,9 @@ async function createMeeting(userId: string, body: any) {
     ownerCompany: profileCompany,
     toEmail: body.toEmail,
     toImage: toUserImage,
-    toPhone: '',
-    toName: '',
-    toCompany: '',
+    toPhone: body.toPhone,
+    toName: body.toName,
+    toCompany: body.toCompany,
     eventId: body.eventId, 
     title: body.title,
     date: body.date, 
@@ -349,7 +364,6 @@ async function createMeeting(userId: string, body: any) {
 let isPossibleAdd = async (eventId: string, time: any) => {
   let restrictedTime, retValue;
   const event = await eventRepo.getById(eventId);
-  console.log('time', time);
 
   let year, month, day, hours, minutes, seconds;
   time.start = new Date(time.start);
@@ -359,7 +373,6 @@ let isPossibleAdd = async (eventId: string, time: any) => {
   hours = time.start.getHours();
   minutes = time.start.getMinutes() + 1;
   time.start = new Date(year, month, day, hours, minutes);
-  console.log('start', time.start);
 
   time.end = new Date(time.end);
   year = time.end.getFullYear();
@@ -368,7 +381,6 @@ let isPossibleAdd = async (eventId: string, time: any) => {
   hours = time.end.getHours();
   minutes = time.end.getMinutes() - 1;
   time.end = new Date(year, month, day, hours, minutes);
-  console.log('end', time.end);
    
   if (event) {
     restrictedTime = event.restricted_time;
@@ -380,20 +392,9 @@ let isPossibleAdd = async (eventId: string, time: any) => {
         restrictedTime.push(value);
       }
     }
-    console.log('time', restrictedTime);
   }
 
   retValue = restrictedTime?.find((item) => {
-    console.log('start', isWithinInterval(new Date(time.start), {
-      start: new Date(item.start),
-      end: new Date(item.end)
-    }))
-
-    console.log('end', isWithinInterval(new Date(time.end), {
-      start: new Date(item.start),
-      end: new Date(item.end)
-    }))
-
     return ( 
       isWithinInterval(new Date(time.start), {
         start: new Date(item.start),
@@ -405,6 +406,5 @@ let isPossibleAdd = async (eventId: string, time: any) => {
       })
     )
   })
-  console.log('ret', !retValue)
   return !retValue;
 }
