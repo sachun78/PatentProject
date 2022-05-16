@@ -11,9 +11,10 @@ export type BookingMainProps = {
   code: string | null
   status: string
   expire: boolean
+  reserved?: boolean
 }
 
-function BookingMain({ code, status, expire }: BookingMainProps) {
+function BookingMain({ code, status, expire, reserved }: BookingMainProps) {
   const qc = useQueryClient()
 
   const confirmMut = useMutation(confirmMeeting, {
@@ -46,7 +47,7 @@ function BookingMain({ code, status, expire }: BookingMainProps) {
         <div> Meeting is expired</div>
       ) : (
         <>
-          {status === 'none' && (
+          {status === 'none' && reserved && (
             <Box display="flex" justifyContent="space-around" minWidth={400} marginTop={1}>
               <Button
                 onClick={onConfirm}
@@ -65,6 +66,15 @@ function BookingMain({ code, status, expire }: BookingMainProps) {
                 Cancel
               </Button>
             </Box>
+          )}
+          {status === 'none' && !reserved && (
+            <div>
+              Another Meeting in time is reserved.
+              <br /> if you want meeting please
+              <Link to={`../replan?code=${code}`} replace>
+                replan
+              </Link>
+            </div>
           )}
           {status === 'confirm' && <div>The Meeting is Confirmed.</div>}
           {status === 'cancel' && <div>The Meeting is Canceled</div>}

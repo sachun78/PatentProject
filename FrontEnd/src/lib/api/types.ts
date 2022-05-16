@@ -56,6 +56,8 @@ export type IMeeting = {
   status: string
   code: string
   history: any
+  isPossibleAddSchedule: string
+  isPaidUser: string
 }
 
 export type IAuthCode = {

@@ -10,7 +10,7 @@ import getCountryName from 'lib/countryName'
 import { API_PATH } from 'lib/api/client'
 
 export type NetworkItemProps = {
-  data: { email: string; profile: IProfile; name: string }
+  data: { email: string; profile: IProfile; name: string; username?: string }
 }
 
 function NetworkItem({ data }: NetworkItemProps) {
@@ -29,7 +29,7 @@ function NetworkItem({ data }: NetworkItemProps) {
         </Avatar>
       </div>
       <div css={userStyle}>
-        <div css={nameStyle}>{data.name}</div>
+        <div css={nameStyle}>{data.name || data.username}</div>
         <div css={emailStyle}>{data.email}</div>
       </div>
       <div css={informStyle}>
@@ -40,12 +40,14 @@ function NetworkItem({ data }: NetworkItemProps) {
               {data.profile.company}
             </span>
           </Tooltip>
-          <Tooltip title="Country" placement={'top'}>
-            <span>
-              <img src="/assets/country.png" />
-              {getCountryName(data.profile.country!)}
-            </span>
-          </Tooltip>
+          {data.profile.country && (
+            <Tooltip title="Country" placement={'top'}>
+              <span>
+                <img src="/assets/country.png" alt={'country'} />
+                {getCountryName(data.profile.country)}
+              </span>
+            </Tooltip>
+          )}
         </div>
         <Tooltip title="Field" placement={'left'}>
           <div style={{ display: 'flex', flexDirection: 'row' }}>

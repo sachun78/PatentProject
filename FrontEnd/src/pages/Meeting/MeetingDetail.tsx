@@ -89,11 +89,13 @@ function MeetingDetail({}: MeetingDetailProps) {
           <h2>Participants</h2>
           <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
             <p>{data.toEmail}</p>
-            <Link to={`/u/${data.toEmail}`} style={{ textDecoration: 'none' }}>
-              <Button variant="contained" size={'small'}>
-                INFO
-              </Button>
-            </Link>
+            {data.isPaidUser && (
+              <Link to={`/u/${data.toEmail}`} style={{ textDecoration: 'none' }}>
+                <Button variant="contained" size={'small'}>
+                  INFO
+                </Button>
+              </Link>
+            )}
           </Stack>
         </MeetingSection>
         <MeetingSection>
@@ -125,14 +127,18 @@ function MeetingDetail({}: MeetingDetailProps) {
           {data.status === 'replan' && <Divider />}
           {!isExpired && data.status === 'replan' && (
             <SaveBlock style={{ justifyContent: 'space-between' }}>
-              <Button
-                variant={'contained'}
-                classes={classes}
-                onClick={onResult('confirm')}
-                disabled={finalMut.isLoading}
-              >
-                Confirm
-              </Button>
+              {data.isPossibleAddSchedule ? (
+                <Button
+                  variant={'contained'}
+                  classes={classes}
+                  onClick={onResult('confirm')}
+                  disabled={finalMut.isLoading}
+                >
+                  Confirm
+                </Button>
+              ) : (
+                <div>apply time already reserved,so need change time</div>
+              )}
               <Button
                 variant={'contained'}
                 classes={classes}

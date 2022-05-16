@@ -31,7 +31,12 @@ function Booking({}: BookingProps) {
   return (
     <div css={wrapper}>
       <BookingSide meeting={bookingData.data} />
-      <BookingMain code={code} status={bookingData.data.status} expire={isExpired ?? false} />
+      <BookingMain
+        code={code}
+        status={bookingData.data.status}
+        expire={isExpired ?? false}
+        reserved={bookingData.isPossibleAddSchedule}
+      />
     </div>
   )
 }

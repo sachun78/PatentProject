@@ -29,7 +29,7 @@ function Schedules({}: ScheduleViewProps) {
     {
       getNextPageParam: (lastPage, pages) => {
         // page 길이 5이면
-        const morePagesExist = lastPage?.length === 3
+        const morePagesExist = lastPage?.length === 5
         if (!morePagesExist) return false
         return pages.flat().length
       },

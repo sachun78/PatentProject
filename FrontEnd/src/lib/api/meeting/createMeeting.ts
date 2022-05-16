@@ -11,6 +11,9 @@ type MeetingInput = {
   title: string
   eventId: string
   toEmail: string
+  toCompany: string
+  toName: string
+  toPhone: string
   date: Date
   startTime: Date
   endTime: Date

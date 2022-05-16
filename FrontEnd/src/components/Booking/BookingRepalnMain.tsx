@@ -17,13 +17,13 @@ export type BookingRepalnMainProps = {
 export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
   const [location, onChangeLocation] = useInput(meeting.data.location)
   const [date, , setDate] = useInput(new Date(meeting.data.date))
-  const [startTime, , setStartTime] = useInput(new Date(meeting.data.startTime))
-  const [endTime, , setEndTime] = useInput(new Date(meeting.data.endTime))
+  const [startTime, , setStartTime] = useInput<Date | null>(null)
+  const [endTime, , setEndTime] = useInput<Date | null>(null)
   const [comment, onChangeComment] = useInput('')
   const eventStart = useMemo(() => new Date(meeting.sendData.event_startDate), [meeting.sendData.event_startDate])
   const eventEnd = useMemo(() => new Date(meeting.sendData.event_endDate), [meeting.sendData.event_endDate])
 
-  const isExpired = useMemo(() => isBefore(new Date(startTime), new Date()), [startTime])  
+  const isExpired = useMemo(() => isBefore(new Date(meeting.data.startTime), new Date()), [meeting.data.startTime])
   const qc = useQueryClient()
   const replanMut = useMutation(replanMeeting, {
     onSuccess: () => {
@@ -51,7 +51,8 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
     (e) => {
       e.preventDefault()
 
-      if (!comment) {
+      if (!comment || !startTime || !endTime) {
+        alert('All fields are required')
         return
       }
 
@@ -66,7 +67,7 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
         },
       })
     },
-    [comment, replanMut, meeting.data.code, meeting.data.location, date, startTime, endTime]
+    [comment, startTime, endTime, replanMut, meeting.data.code, location, date]
   )
 
   if (meeting.data.status !== 'none') {
@@ -97,7 +98,7 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
   return (
     <div css={mainStyle}>
       <h3>Replan</h3>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} style={{ width: '100%' }}>
         <RequestSection title={'Change Date'}>
           <TimeGridInput
             startTime={startTime}
@@ -112,12 +113,7 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
           />
         </RequestSection>
         <RequestSection title={'Change Location'}>
-          <OutlinedInput            
-            name="location"
-            fullWidth
-            value={location}
-            onChange={onChangeLocation}            
-          />
+          <OutlinedInput name="location" fullWidth value={location} onChange={onChangeLocation} />
         </RequestSection>
         <RequestSection title={'Comment'}>
           <OutlinedInput

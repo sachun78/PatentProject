@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useCurrentEventState } from 'atoms/eventState'
 import useDateTimeHook from 'hooks/useDateTimeHook'
 import useInputs from 'hooks/useInputs'
@@ -22,6 +22,8 @@ import { format } from 'date-fns'
 import ProfileBox from 'components/ProfileBox'
 import { IMeeting, IProfile } from 'lib/api/types'
 import useToggle from 'hooks/useToggle'
+import PhoneInput from '../../../../components/PhoneInput'
+import PhoneInputT from 'react-phone-number-input'
 
 type RequestViewProps = {}
 
@@ -33,10 +35,15 @@ export default function RequestForm({}: RequestViewProps) {
   const [endTime, setEndTime] = useState<Date | null>(null)
   const [location, setLoaction] = useState('서울특별시 성동구 아차산로 100')
   const [detailOpen, setDetailOpen] = useState(false)
-  const [detailAddress, setDetailAddress] = useState("")
+  const [detailAddress, setDetailAddress] = useState('')
   const [isDefaultComment, onToggleIsDefaultComment] = useToggle(false)
+  const [phone, setPhone] = useState('')
+  const onChangePhone = useCallback((value?: any | undefined) => {
+    setPhone(value)
+  }, [])
   const navi = useNavigate()
   const qc = useQueryClient()
+  const ref = useRef(null)
   const [form, onChange] = useInputs({
     comment: '',
     title: '',
@@ -117,7 +124,6 @@ export default function RequestForm({}: RequestViewProps) {
   const onChangeDetailAdress = (e: any) => {
     console.log(e.target.value)
     setDetailAddress(e.target.value)
-    
   }
 
   const onBlur = useCallback(
@@ -145,6 +151,12 @@ export default function RequestForm({}: RequestViewProps) {
         return
       }
 
+      const toCompany = profileData?.company ? profileData.company : form.firm
+      const toName = profileData?.username ? profileData.username : form.name
+      const toPhone = profileData?.phone ? profileData.phone : phone
+
+      console.log(toCompany, toName, toPhone)
+
       createScheduleMut.mutate({
         eventId: curEvent.id,
         title,
@@ -153,6 +165,9 @@ export default function RequestForm({}: RequestViewProps) {
         endTime,
         location: `${location} ${detailAddress}`,
         toEmail: meetuser ? meetuser.toLowerCase() : to.toLowerCase(),
+        toCompany,
+        toName,
+        toPhone,
         comment: !isDefaultComment ? comment : profile?.signature ?? '',
       })
     },
@@ -160,12 +175,17 @@ export default function RequestForm({}: RequestViewProps) {
       createScheduleMut,
       curEvent.id,
       date,
+      detailAddress,
       endTime,
       form,
       isDefaultComment,
       location,
       meetuser,
+      phone,
       profile?.signature,
+      profileData?.company,
+      profileData?.phone,
+      profileData?.username,
       time,
     ]
   )
@@ -256,15 +276,14 @@ export default function RequestForm({}: RequestViewProps) {
                 />
               </RequestSection>
               <RequestSection title={'Phone'}>
-                <OutlinedInput
-                  name="phone"
-                  type={'text'}
-                  value={form.title}
-                  onChange={onChange}
-                  placeholder={'Enter a phone number'}
-                  classes={classes}
-                  sx={{ height: 38 }}
-                  fullWidth
+                <PhoneInputT
+                  placeholder="Enter phone number"
+                  value={phone}
+                  onChange={onChangePhone}
+                  inputComponent={PhoneInput}
+                  ref={ref}
+                  international
+                  style={{ width: '100%' }}
                 />
               </RequestSection>
             </>
@@ -289,20 +308,20 @@ export default function RequestForm({}: RequestViewProps) {
         <RequestSection title={'Location'}>
           <LocationInput onChange={onChangeLocation} value={location} />
         </RequestSection>
-        {detailOpen && 
-        <RequestSection title={"Detail address"}>
-          <OutlinedInput
-                name="detail"
-                type={'text'}
-                value={detailAddress}
-                onChange={onChangeDetailAdress}
-                placeholder={'Enter detailed address'}
-                classes={classes}
-                sx={{ height: 38 }}
-                fullWidth
-              />
-        </RequestSection>
-        }
+        {detailOpen && (
+          <RequestSection title={'Detail address'}>
+            <OutlinedInput
+              name="detail"
+              type={'text'}
+              value={detailAddress}
+              onChange={onChangeDetailAdress}
+              placeholder={'Enter detailed address'}
+              classes={classes}
+              sx={{ height: 38 }}
+              fullWidth
+            />
+          </RequestSection>
+        )}
         <RequestSection
           title={'Comment'}
           checkButton={

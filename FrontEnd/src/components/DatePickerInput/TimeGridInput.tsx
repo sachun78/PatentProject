@@ -24,7 +24,7 @@ import { css } from '@emotion/react'
 import { IMeeting } from 'lib/api/types'
 
 export type TimeGridInputProps = {
-  startTime: Date
+  startTime: Date | null
   endTime: Date | null
   startDate: Date
   endDate: Date
@@ -105,7 +105,7 @@ function TimeGridInput({
         }}
       >
         {endTime
-          ? `${date.toDateString()}, ${startTime.toLocaleTimeString([], {
+          ? `${date.toDateString()}, ${startTime?.toLocaleTimeString([], {
               hour: '2-digit',
               minute: '2-digit',
             })} ~ ${endTime.toLocaleTimeString([], {

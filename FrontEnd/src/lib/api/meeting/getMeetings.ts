@@ -4,7 +4,7 @@ export async function getMeetingsCursor(pageParam: number) {
   const response = await client.get('/api/meeting', {
     params: {
       curPos: pageParam,
-      cnt: 3,
+      cnt: 5,
     },
   })
   return response.data
