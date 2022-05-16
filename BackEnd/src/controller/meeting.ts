@@ -239,8 +239,8 @@ export async function sendResultMail(req: IRequest, res: Response) {
 
 export async function sendInvitMail(req: IRequest, res: Response) {
   const user_id = req.userId;
-  const bodyData = req.body;
   const meetId = req.query.meetId;
+  let bodyData = req.body;
 
   try {
     if (meetId) {
@@ -259,7 +259,10 @@ export async function sendInvitMail(req: IRequest, res: Response) {
         return res.status(403).json({ message: 'event owner is different. meeting create fail'});
       }
 
-      const modify = await meetingRepo.updateMeeting(meetId, {status: 'none', code: shortid.generate()});
+      bodyData.status = 'none';
+      bodyData.code = shortid.generate();
+
+      const modify = await meetingRepo.updateMeeting(meetId, bodyData);
       if (!modify) {
         return res.status(500).json({ message: `Failed save meeting ${bodyData.toEmail}`});
       }
@@ -326,9 +329,9 @@ async function createMeeting(userId: string, body: any) {
     ownerCompany: profileCompany,
     toEmail: body.toEmail,
     toImage: toUserImage,
-    toPhone: '',
-    toName: '',
-    toCompany: '',
+    toPhone: body.toPhone,
+    toName: body.toName,
+    toCompany: body.toCompany,
     eventId: body.eventId, 
     title: body.title,
     date: body.date, 
