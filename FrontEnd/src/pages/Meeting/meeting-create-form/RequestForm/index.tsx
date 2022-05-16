@@ -29,7 +29,7 @@ export default function RequestForm({}: RequestViewProps) {
   const { date, time, setDate, setTime } = useDateTimeHook()
   const [endTime, setEndTime] = useState<Date | null>(null)
   const [meetuser, setMeetuser] = useMeetingReqUser()
-  const [location, setLoaction] = useState('성수역 1번 출구')
+  const [location, setLoaction] = useState('서울특별시 성동구 뚝섬로 434')
   const navi = useNavigate()
   const qc = useQueryClient()
   const [form, onChange] = useInputs({
