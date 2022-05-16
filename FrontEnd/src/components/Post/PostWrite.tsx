@@ -22,30 +22,7 @@ function PostWrite({}: postWriteProps) {
   const quillInstance = useRef<any>(null)
   const navigate = useNavigate()
   const user = qc.getQueryData<User>('user') as User
-  const [image, setImage] = useState<string[]>([])  
-  
-  // const BlockEmbed = Quill.import('blots/block/embed');
-  // class ImageBlot extends BlockEmbed {
-  //   static create(data: any) {
-      
-  //     const node = super.create(data);
-  //     node.setAttribute('data-src', data.src);
-  //     node.setAttribute('src', data.src);
-  //     node.setAttribute('crossorigin', data.custom);
-  //     return node;
-  //   }
-
-  //   static value(domNode: any ) {
-  //     const { src, crossorigin } = domNode.dataSet;
-  //     return { src, crossorigin };
-  //   }
-  // }
-
-  // ImageBlot.blotName = 'imageBlot';
-  // ImageBlot.className = 'image-blot';
-  // ImageBlot.tagName = 'img';
-
-  // Quill.register('formats/imageBlot', ImageBlot)
+  const [image, setImage] = useState<string[]>([])   
   
   const createPostMut = useMutation(createPost, {
     onSuccess: () => {
@@ -78,8 +55,7 @@ function PostWrite({}: postWriteProps) {
     
   }
 
-  const onSubmit = useCallback((e) => {
-    // const imgRegex = /<p><img[^>]*src=[\"']?([^>\"']+)[\"']?[^</p>]*>/gi
+  const onSubmit = useCallback((e) => {    
     const imgRegex = /<img[^>]*src=[\"']?([^>\"']+)[\"']?[^/>]*>/g
     onImageSetting()
     e.preventDefault()
@@ -143,18 +119,8 @@ function PostWrite({}: postWriteProps) {
       postImgUpload(formData).then((res) => {
                         
         quillInstance.current.root.innerHTML = 
-          quillInstance.current.root.innerHTML + `<img src='${API_PATH}static/${res.fileName}' crossorigin='anonymous'>` 
-
-        // quillInstance.current.insertEmbed(
-        //   range.index,
-        //   'imageBlot',
-        //   {
-        //     src: `${API_PATH}static/${res.fileName}`,
-        //     crossorigin: 'anonymous'
-        //   }
-        // )
+        quillInstance.current.root.innerHTML + `<img src='${API_PATH}static/${res.fileName}' crossorigin='anonymous' width='500px' height='300px' >` 
         
-        // // quillInstance.current.setSelection(range.index + 1)              
         setTimeout(() => quillInstance.current.setSelection(range.index + 2), 0)
       })      
       
@@ -171,7 +137,7 @@ function PostWrite({}: postWriteProps) {
           container: [
             [{ size: ['small', false, 'large', 'huge'] }],
             ['bold', 'italic', 'underline', 'strike'],
-            [{ list: 'ordered' }, { list: 'bullet' }],
+            [{ list: 'ordered' }, { list: 'bullet' }, { align: [false,"center", "right", "justify"]}],
             ['blockquote', 'code-block', 'image'],
           ],
           handlers: {
