@@ -24,7 +24,7 @@ function ProfileMenu({}: ProfileMenuProps) {
   const [company, setCompany] = useState(data?.company)
   const [department, setDepartment] = useState(data?.department)
   const [position, setPosition] = useState(data?.position)
-  const [signature, onChangeSignature] = useInput(data?.signature)
+  const [signature, onChangeSignature, setSignature] = useInput(data?.signature)
   const [country, setCountry] = useState(data?.country ?? 'KR')
   const [phone, setPhone] = useProfileFormState()
 
@@ -79,6 +79,7 @@ function ProfileMenu({}: ProfileMenuProps) {
     setFields(data?.field ?? [])
     setCountry(data?.country ?? 'KR')
     setPhone(data?.phone ?? '')
+    setSignature(data?.signature ?? '')
   }, [data])
 
   const onFieldRemove = useCallback((tag_name: string) => {

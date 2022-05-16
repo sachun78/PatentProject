@@ -1,6 +1,5 @@
 import { css } from '@emotion/react'
 import { IComment } from 'lib/api/types'
-import media from 'lib/styles/media'
 import 'quill/dist/quill.bubble.css'
 import React from 'react'
 import { Link } from 'react-router-dom'
@@ -25,7 +24,7 @@ function Post({ _id, owner_username, owner_email, like_cnt, comment, images, cre
   return (
     <div css={postStyle}>
       <PostHeader owner_username={owner_username} owner_email={owner_email} createdAt={createdAt} />
-      <Link className='detail' to={`/postDetail/${_id}`}>
+      <Link className="detail" to={`/postDetail/${_id}`}>
         <ImageContainer images={images} isDetail={false} />
         <PostTextContainer contents={contents} />
       </Link>
@@ -51,22 +50,17 @@ const postStyle = css`
   border-radius: 1rem;
   position: relative;
   opacity: 0.8;
-  width: 100%; 
+  width: 100%;
 
   a:link,
   a:visited,
   a:hover {
     text-decoration: none;
     cursor: pointer;
-    
   }
 
   .detail {
-    z-index: -1;    
-  }
-
-  ${media.small} {
-    margin-right: 1rem;
+    z-index: -1;
   }
 `
 export default Post

@@ -25,7 +25,7 @@ function NetworkList({}: NetworkListProps) {
   )
 }
 
-const networkStyle = css`
+export const networkStyle = css`
   display: flex;
   flex-direction: column;
   align-items: center;

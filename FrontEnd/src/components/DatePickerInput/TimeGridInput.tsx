@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import InputBase from '../InputBase/InputBase'
-import { textStyle } from './TimePickerInput'
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
@@ -22,7 +21,7 @@ import {
 } from '@mui/material'
 import useToggle from 'hooks/useToggle'
 import { css } from '@emotion/react'
-import { IMeeting } from '../../lib/api/types'
+import { IMeeting } from 'lib/api/types'
 
 export type TimeGridInputProps = {
   startTime: Date
@@ -253,6 +252,21 @@ const CalendarContainer = styled.div`
   .fc-next-button,
   .fc-prev-button {
     background: ${brandColor} !important;
+  }
+`
+
+export const textStyle = css`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  width: 100%;
+
+  &:focus-visible {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
   }
 `
 

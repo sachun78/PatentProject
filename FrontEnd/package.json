@@ -61,6 +61,7 @@
     "jest-resolve": "^27.4.2",
     "jest-watch-typeahead": "^1.0.0",
     "joi": "^17.5.0",
+    "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^2.4.5",
     "moment": "^2.29.1",
     "npm": "^8.8.0",
@@ -186,7 +187,7 @@
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.7.2",
-    "@types/lodash": "^4.14.181",
+    "@types/lodash": "^4.14.182",
     "@types/quill": "^2.0.9"
   }
 }
