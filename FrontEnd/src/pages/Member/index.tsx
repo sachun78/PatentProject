@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import React from 'react'
-import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom'
+import { Navigate, NavLink, Route, Routes } from 'react-router-dom'
 import { itemStyle, tabStyle, wrapper } from './style'
 import loadable from '@loadable/component'
 import MeetingHistory from '../Meeting/MeetingHistory'
@@ -13,11 +13,6 @@ const Schedules = loadable(() => import('components/Schedules'))
 const EventDetail = loadable(() => import('pages/EventDetail'))
 
 function Member({}: MemberShipProps) {
-  const loc = useLocation()
-
-  if (loc.pathname === '/meeting') {
-    return <Navigate to={'event'} />
-  }
   return (
     <div css={wrapper}>
       <Box sx={{ width: '100%' }}>
@@ -44,6 +39,7 @@ function Member({}: MemberShipProps) {
           <Route path="schedule" element={<Schedules />} />
           <Route path="schedule/*" element={<Meeting />} />
           <Route path="history" element={<MeetingHistory />} />
+          <Route path="*" element={<Navigate to={'event'} />} />
         </Routes>
       </Box>
     </div>

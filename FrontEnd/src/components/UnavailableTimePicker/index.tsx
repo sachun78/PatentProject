@@ -40,6 +40,9 @@ function UnavailableTimePicker({ id, startDate, endDate, unavailableList, reserv
       },
     }
   )
+  const onSave = useCallback(() => {
+    editUnavailableTime.mutate({ id, restricted_time: currentUnavailableList })
+  }, [currentUnavailableList, editUnavailableTime, id])
 
   const events = useMemo(() => {
     const unavailableEvent = currentUnavailableList.map((unavailable) => ({
@@ -145,11 +148,7 @@ function UnavailableTimePicker({ id, startDate, endDate, unavailableList, reserv
           </CalendarContainer>
         </DialogContent>
         <DialogActions>
-          <Button
-            variant={'contained'}
-            disabled={editUnavailableTime.isLoading}
-            onClick={() => editUnavailableTime.mutate({ id, restricted_time: currentUnavailableList })}
-          >
+          <Button variant={'contained'} disabled={editUnavailableTime.isLoading} onClick={onSave}>
             Ok
           </Button>
         </DialogActions>

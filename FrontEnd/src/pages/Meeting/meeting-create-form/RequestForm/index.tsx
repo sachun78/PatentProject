@@ -120,12 +120,16 @@ export default function RequestForm({}: RequestViewProps) {
     
   }
 
-  const onBlur = useCallback(() => {
-    if (!form.to.trim()) {
-      return
-    }
-    refetch()
-  }, [form.to, profileData, refetch])
+  const onBlur = useCallback(
+    (e) => {
+      e.preventDefault()
+      if (!form.to.trim()) {
+        return
+      }
+      refetch()
+    },
+    [form.to, refetch]
+  )
 
   const onSubmit = useCallback(
     (e) => {
@@ -222,46 +226,49 @@ export default function RequestForm({}: RequestViewProps) {
             />
           )}
         </RequestSection>
-        {profileData && <ProfileBox profileData={profileData} />}
-        {!profileData && !isLoadingProfile && form.to && (
-          <>
-            <RequestSection title={'Name'}>
-              <OutlinedInput
-                name="name"
-                type={'text'}
-                value={form.name}
-                onChange={onChange}
-                placeholder={'Enter a name to request'}
-                classes={classes}
-                sx={{ height: 38 }}
-                fullWidth
-              />
-            </RequestSection>
-            <RequestSection title={'Firm'}>
-              <OutlinedInput
-                name="firm"
-                type={'text'}
-                value={form.firm}
-                onChange={onChange}
-                placeholder={'Enter the firm'}
-                classes={classes}
-                sx={{ height: 38 }}
-                fullWidth
-              />
-            </RequestSection>
-            <RequestSection title={'Phone'}>
-              <OutlinedInput
-                name="phone"
-                type={'text'}
-                value={form.title}
-                onChange={onChange}
-                placeholder={'Enter a phone number'}
-                classes={classes}
-                sx={{ height: 38 }}
-                fullWidth
-              />
-            </RequestSection>
-          </>
+        {profileData ? (
+          <ProfileBox profileData={profileData} />
+        ) : (
+          form.to && (
+            <>
+              <RequestSection title={'Name'}>
+                <OutlinedInput
+                  name="name"
+                  type={'text'}
+                  value={form.name}
+                  onChange={onChange}
+                  placeholder={'Enter a name to request'}
+                  classes={classes}
+                  sx={{ height: 38 }}
+                  fullWidth
+                />
+              </RequestSection>
+              <RequestSection title={'Firm'}>
+                <OutlinedInput
+                  name="firm"
+                  type={'text'}
+                  value={form.firm}
+                  onChange={onChange}
+                  placeholder={'Enter the firm'}
+                  classes={classes}
+                  sx={{ height: 38 }}
+                  fullWidth
+                />
+              </RequestSection>
+              <RequestSection title={'Phone'}>
+                <OutlinedInput
+                  name="phone"
+                  type={'text'}
+                  value={form.title}
+                  onChange={onChange}
+                  placeholder={'Enter a phone number'}
+                  classes={classes}
+                  sx={{ height: 38 }}
+                  fullWidth
+                />
+              </RequestSection>
+            </>
+          )
         )}
         <RequestSection title={'Period'}>
           <TimeGridInput

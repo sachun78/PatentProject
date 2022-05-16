@@ -1,6 +1,7 @@
 import { inputStyle, itemStyle, textStyle } from './styles'
-import Input from '../Input/Input'
 import React, { memo, useCallback } from 'react'
+import { OutlinedInput } from '@mui/material'
+import { useRemoveOutlineHover } from '../../lib/styles/muiStyles'
 
 export type ProfileCardTextProps = {
   editable?: boolean
@@ -12,6 +13,7 @@ export type ProfileCardTextProps = {
 function ProfileCardText({ editable = false, text, title, onChange }: ProfileCardTextProps) {
   const [edit, setEdit] = React.useState(editable)
   const toggle = useCallback(() => setEdit((prevState) => !prevState), [])
+  const classes = useRemoveOutlineHover()
 
   return (
     <div css={itemStyle}>
@@ -29,13 +31,15 @@ function ProfileCardText({ editable = false, text, title, onChange }: ProfileCar
             </div>
           )}
           {edit && (
-            <Input
+            <OutlinedInput
               placeholder={title}
               name={title}
               value={text || ''}
               onChange={onChange}
               autoComplete="off"
               css={inputStyle}
+              classes={classes}
+              style={{ height: '40px' }}
             />
           )}
         </div>

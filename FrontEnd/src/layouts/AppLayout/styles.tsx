@@ -15,7 +15,7 @@ export const mainStyle = css`
 
   ${media.small} {
     margin-left: 0;
-    padding-left: 1rem;
+    padding-left: 0;
   }
 `
 export const sidebarStyle = css`
@@ -41,7 +41,7 @@ export const sidebarStyle = css`
 export const footerStyle = css`
   width: 100%;
   height: 5.1875rem;
-  background: #F2F2F2;
+  background: #f2f2f2;
   z-index: 999;
   position: fixed;
   bottom: 0;

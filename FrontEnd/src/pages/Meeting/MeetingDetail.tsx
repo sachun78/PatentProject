@@ -12,12 +12,15 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined'
 import { SaveBlock, useButtonStyle } from 'components/ProfileMenu/ProfileCardSave'
-import { updateMeeting } from '../../lib/api/meeting/updateMeeting'
+import { updateMeeting } from 'lib/api/meeting/updateMeeting'
+import MeetingChange from 'components/Schedules/MeetingChange'
+import useToggle from 'hooks/useToggle'
 
 export type MeetingDetailProps = {}
 
 function MeetingDetail({}: MeetingDetailProps) {
   const { id } = useParams()
+  const [change, onChangeToggle] = useToggle(false)
   const { data, isLoading, error, refetch } = useQuery<IMeeting>(['meeting', id], () => getMeetingOne(id!), {
     retry: false,
     enabled: !!id,
@@ -46,7 +49,7 @@ function MeetingDetail({}: MeetingDetailProps) {
     (type: string) => () => {
       finalMut.mutate({ meetingId: id!, status: type })
     },
-    []
+    [finalMut, id]
   )
 
   const classes = useButtonStyle()
@@ -71,7 +74,7 @@ function MeetingDetail({}: MeetingDetailProps) {
   }
 
   if (!data) {
-    return <div>Meeting not valid</div>
+    return null
   }
 
   return (
@@ -114,12 +117,12 @@ function MeetingDetail({}: MeetingDetailProps) {
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
             <h2>state:{data.status !== 'none' ? data.status : isExpired ? 'expired' : 'pending'}</h2>
             {!isResult && !isExpired && (data.status === 'confirm' || data.status === 'replan') && (
-              <ToggleButton value={true} onChange={() => {}} size={'small'}>
-                Change Request
+              <ToggleButton value={change} onChange={onChangeToggle} size={'small'}>
+                Change {change ? '<' : '>'}
               </ToggleButton>
             )}
           </div>
-          <Divider />
+          {data.status === 'replan' && <Divider />}
           {!isExpired && data.status === 'replan' && (
             <SaveBlock style={{ justifyContent: 'space-between' }}>
               <Button
@@ -142,7 +145,7 @@ function MeetingDetail({}: MeetingDetailProps) {
           )}
         </MeetingSection>
       </ContainerBlock>
-      {isResult && <MeetingResult />}
+      {isResult ? <MeetingResult /> : change && <MeetingChange place={data.location} eventId={data.eventId} />}
     </Stack>
   )
 }
