@@ -315,6 +315,8 @@ async function createMeeting(userId: string, body: any) {
     toEmail: body.toEmail,
     toImage: toUserImage,
     toPhone: '',
+    toName: '',
+    toCompany: '',
     eventId: body.eventId, 
     title: body.title,
     date: body.date, 
