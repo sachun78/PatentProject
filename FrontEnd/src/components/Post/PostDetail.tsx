@@ -271,7 +271,7 @@ const titleStyle = css`
 `
 const buttonWrapper = css`
   display: flex;
-  margin: 1.25rem 1.875rem 1.875rem 1.25rem;
+  margin: 1.25rem 1.25rem 1.875rem 1.25rem;
   /* margin: 1.25rem; */
   user-select: none;
   justify-content: space-between;
