@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import shortid from 'shortid';
 import Fuse from 'fuse.js';
+import { isWithinInterval } from 'date-fns'
 
 import * as meetingRepo from 'data/meeting';
 import * as authRepo from 'data/auth';
@@ -111,8 +112,10 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
       return res.status(409).json({ message: `meeting code:(${code}) not found`});
     }
 
+    let isPossibleAddSchedule = await isPossibleAdd(data.eventId, {start: data.startTime, end: data.endTime});
+
     if (status !== 'replan') {
-      return res.status(200).json({data});
+      return res.status(200).json({data, isPossibleAddSchedule});
     }
 
     const eventId = data.eventId;
@@ -143,6 +146,7 @@ export async function getMeetingByCode(req: IRequest, res: Response, next: NextF
       }
     }
     sendData['meeting_timeList'] = meetTimeList;
+    sendData['isPossibleAddSchedule'] = isPossibleAddSchedule;
     console.log(sendData);
     res.status(200).json({data, sendData});
   }
@@ -233,7 +237,7 @@ export async function sendInvitMail(req: IRequest, res: Response) {
         return res.status(409).json({ message: `meeting is not found`});
       }
       if (meetData.status == 'cancel' || meetData.status == 'none') {
-        return res.status(403).json({ message: `meeting status error`});
+        return res.status(403).json({ message: `meeting status(${meetData.status}) is wrong`});
       }
       const eventData = await eventRepo.getById(meetData.eventId);
       if (!eventData) {
@@ -338,4 +342,67 @@ async function createMeeting(userId: string, body: any) {
     ownerPhoto: user.photo_path
   };
   return retMeetingData;
+}
+
+let isPossibleAdd = async (eventId: string, time: any) => {
+  let restrictedTime, retValue;
+  const event = await eventRepo.getById(eventId);
+  console.log('time', time);
+
+  let year, month, day, hours, minutes, seconds;
+  time.start = new Date(time.start);
+  year = time.start.getFullYear();
+  month = time.start.getMonth();
+  day = time.start.getDate();
+  hours = time.start.getHours();
+  minutes = time.start.getMinutes() + 1;
+  time.start = new Date(year, month, day, hours, minutes);
+  console.log('start', time.start);
+
+  time.end = new Date(time.end);
+  year = time.end.getFullYear();
+  month = time.end.getMonth();
+  day = time.end.getDate();
+  hours = time.end.getHours();
+  minutes = time.end.getMinutes() - 1;
+  time.end = new Date(year, month, day, hours, minutes);
+  console.log('end', time.end);
+   
+  if (event) {
+    restrictedTime = event.restricted_time;
+    const meetingList = JSON.parse(JSON.stringify(event.meeting_list));
+    for (let i = 0; i < meetingList.length; i++) {
+      if (meetingList[i].status === 'confirm') {
+        let value;
+        value = { start: meetingList[i].startTime, end: meetingList[i].endTime};
+        restrictedTime.push(value);
+      }
+    }
+    console.log('time', restrictedTime);
+  }
+
+  retValue = restrictedTime?.find((item) => {
+    console.log('start', isWithinInterval(new Date(time.start), {
+      start: new Date(item.start),
+      end: new Date(item.end)
+    }))
+
+    console.log('end', isWithinInterval(new Date(time.end), {
+      start: new Date(item.start),
+      end: new Date(item.end)
+    }))
+
+    return ( 
+      isWithinInterval(new Date(time.start), {
+        start: new Date(item.start),
+        end: new Date(item.end)
+      }) || 
+      isWithinInterval(new Date(time.end), {
+        start: new Date(item.start),
+        end: new Date(item.end)
+      })
+    )
+  })
+  console.log('ret', !retValue)
+  return !retValue;
 }
