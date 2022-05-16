@@ -53,23 +53,25 @@ function UnavailableTimePicker({ id, startDate, endDate, unavailableList, reserv
       display: 'background',
     }))
 
-    const formatTimeEvents = reserveEvent.map((event) => {
-      const date = new Date(event.date)
-      const start = new Date(event.startTime)
-      start.setFullYear(date.getFullYear())
-      start.setDate(date.getDate())
-      const end = new Date(event.endTime)
-      end.setFullYear(date.getFullYear())
-      end.setDate(date.getDate())
+    const formatTimeEvents = reserveEvent
+      .filter((event) => event.status === 'confirm')
+      .map((event) => {
+        const date = new Date(event.date)
+        const start = new Date(event.startTime)
+        start.setFullYear(date.getFullYear())
+        start.setDate(date.getDate())
+        const end = new Date(event.endTime)
+        end.setFullYear(date.getFullYear())
+        end.setDate(date.getDate())
 
-      return {
-        title: 'reserved',
-        start: start.toISOString(),
-        end: end.toISOString(),
-        allDay: false,
-        backgroundColor: brandColor,
-      }
-    })
+        return {
+          title: 'reserved',
+          start: start.toISOString(),
+          end: end.toISOString(),
+          allDay: false,
+          backgroundColor: brandColor,
+        }
+      })
 
     return [...unavailableEvent, ...formatTimeEvents]
   }, [currentUnavailableList, reserveEvent])
