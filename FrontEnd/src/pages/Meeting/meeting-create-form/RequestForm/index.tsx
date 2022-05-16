@@ -32,6 +32,8 @@ export default function RequestForm({}: RequestViewProps) {
   const { date, time, setDate, setTime } = useDateTimeHook()
   const [endTime, setEndTime] = useState<Date | null>(null)
   const [location, setLoaction] = useState('서울특별시 성동구 아차산로 100')
+  const [detailOpen, setDetailOpen] = useState(false)
+  const [detailAddress, setDetailAddress] = useState("")
   const [isDefaultComment, onToggleIsDefaultComment] = useToggle(false)
   const navi = useNavigate()
   const qc = useQueryClient()
@@ -109,7 +111,14 @@ export default function RequestForm({}: RequestViewProps) {
 
   const onChangeLocation = useCallback((change: string) => {
     setLoaction(change)
+    setDetailOpen(true)
   }, [])
+
+  const onChangeDetailAdress = (e: any) => {
+    console.log(e.target.value)
+    setDetailAddress(e.target.value)
+    
+  }
 
   const onBlur = useCallback(() => {
     if (!form.to.trim()) {
@@ -138,7 +147,7 @@ export default function RequestForm({}: RequestViewProps) {
         date,
         startTime: time,
         endTime,
-        location,
+        location: `${location} ${detailAddress}`,
         toEmail: meetuser ? meetuser.toLowerCase() : to.toLowerCase(),
         comment: !isDefaultComment ? comment : profile?.signature ?? '',
       })
@@ -273,6 +282,20 @@ export default function RequestForm({}: RequestViewProps) {
         <RequestSection title={'Location'}>
           <LocationInput onChange={onChangeLocation} value={location} />
         </RequestSection>
+        {detailOpen && 
+        <RequestSection title={"Detail address"}>
+          <OutlinedInput
+                name="detail"
+                type={'text'}
+                value={detailAddress}
+                onChange={onChangeDetailAdress}
+                placeholder={'Enter detailed address'}
+                classes={classes}
+                sx={{ height: 38 }}
+                fullWidth
+              />
+        </RequestSection>
+        }
         <RequestSection
           title={'Comment'}
           checkButton={

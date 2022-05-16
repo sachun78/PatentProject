@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
 import { css } from '@emotion/react'
+import React, { useEffect, useRef, useState } from 'react'
 
 declare global {
   interface Window {
@@ -7,17 +7,22 @@ declare global {
   }
 }
 
+type locationMapProps = {
+  location: string,
+  getLocation: Function
+}
+
 const { google } = window
 
-const LocationMap = ({ location, getLocation }: { location: string, getLocation: Function }) => {
-
+const LocationMap = ({ location, getLocation }: locationMapProps) => {  
   const mapRef = useRef(null)
+  const [search, setSearch] = useState("")
 
   const [latLng] = useState({
     lat: -34.34,
     lng: 150.324
-  })
-
+  })  
+  
   const setLatLng = (newLatLng: { lat: any; lng: any; }) => {
 
     latLng.lat = newLatLng.lat
@@ -27,15 +32,30 @@ const LocationMap = ({ location, getLocation }: { location: string, getLocation:
   // 로케이션 반환 함수
   const setLocation = (newLoc: string) => {
     getLocation(newLoc)
+  }    
+
+  const onChange = (e: any) => {
+    setSearch(e.target.value)
   }
+
+  // const onKeyDown = (e: any) => {    
+
+  //   if(e.key === "Enter") {
+  //     console.log(e.keyCode)
+  //     e.preventDefault();        
+  //   }      
+  // }
 
   useEffect(() => {
 
     // 기본 저장된 주소 가져오기
     const geocoder = new google.maps.Geocoder()
+    
+    console.log(location)
 
     geocoder
       .geocode({ 'address': location }, function(result: { geometry: { location: any; }; }[], status: string) {
+        console.log(location, status)
 
         if (status === 'OK') {
           const newLatLng = {
@@ -43,8 +63,7 @@ const LocationMap = ({ location, getLocation }: { location: string, getLocation:
             lng: result[0].geometry.location.lng()
           }
 
-          setLatLng(newLatLng)
-
+          setLatLng(newLatLng)          
           const mapContainer = mapRef.current,
             mapOption = {
               center: latLng,
@@ -62,7 +81,15 @@ const LocationMap = ({ location, getLocation }: { location: string, getLocation:
           const submitButton = document.getElementById('search') as HTMLInputElement
           map.controls[google.maps.ControlPosition.TOP_LEFT].push(submitButton)
 
-          submitButton.addEventListener('click', () => {
+          inputText.addEventListener('keydown', (e) => {
+            if(e.key === "Enter") {              
+              e.preventDefault();        
+            }
+          })
+
+
+          submitButton.addEventListener('click', () => {                        
+            
             geocode(inputText.value, map)
             inputText.value = ''
           })
@@ -80,7 +107,7 @@ const LocationMap = ({ location, getLocation }: { location: string, getLocation:
 
 
         }
-      })
+      })    
 
     function geocodeLatLng(evtLatLng: any) {
       geocoder
@@ -119,7 +146,7 @@ const LocationMap = ({ location, getLocation }: { location: string, getLocation:
   return (
     <>
       <div className='searchBox' css={searchBoxStyle}>
-          <input id='input' type='text' placeholder='Search Place' css={inputStyels} />
+          <input id='input' type='text' placeholder='Search Place' css={inputStyels} onChange={onChange} value={search}/>
           <input id='search' type='button' value='search' className='button' css={buttonStyles} />
       </div>
 
