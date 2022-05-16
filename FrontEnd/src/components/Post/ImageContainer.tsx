@@ -47,7 +47,7 @@ const ImageContainer = ({ images, isDetail } : imageContainerProps) => {
     <>
     {images.length === 0 ? <div></div> : 
     <ImageList
-      sx={{ width: 640, height: 340, justifyContent: "center", position: "relative", margin: "0 auto", borderBottom: '1 solid #000000'  }}
+      sx={{height: 340, justifyContent: "center", position: "relative", margin: "0 30px", borderBottom: '1px solid #888'  }}
       variant="quilted"
       cols={2}
       rowHeight={166}      
@@ -78,7 +78,7 @@ const ImageContainer = ({ images, isDetail } : imageContainerProps) => {
     <>
     {images.length === 0 ? <div></div> : 
     <ImageList
-      sx={{ width: 640, height: 340, justifyContent: "center", position: "relative", margin: "0 auto"  }}
+      sx={{ height: 340, justifyContent: "center", position: "relative", margin: "0 30px", borderBottom: '1px solid #888'  }}
       variant="quilted"
       cols={2}
       rowHeight={166}      

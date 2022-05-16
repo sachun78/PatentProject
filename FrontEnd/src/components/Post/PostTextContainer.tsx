@@ -34,5 +34,10 @@ const bodyStyle = css`
   font: normal normal 14px 'NanumSquare';
   line-height: 1.142857143;
   color: #000;  
+
+  .ql-editor {
+    padding: 20px 0 0 0
+  }
+
   `
 export default PostTextContainer

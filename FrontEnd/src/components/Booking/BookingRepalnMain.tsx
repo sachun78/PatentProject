@@ -15,7 +15,7 @@ export type BookingRepalnMainProps = {
 }
 
 export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
-  const [location] = useInput(meeting.data.location)
+  const [location, onChangeLocation] = useInput(meeting.data.location)
   const [date, , setDate] = useInput(new Date(meeting.data.date))
   const [startTime, , setStartTime] = useInput(new Date(meeting.data.startTime))
   const [endTime, , setEndTime] = useInput(new Date(meeting.data.endTime))
@@ -23,8 +23,7 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
   const eventStart = useMemo(() => new Date(meeting.sendData.event_startDate), [meeting.sendData.event_startDate])
   const eventEnd = useMemo(() => new Date(meeting.sendData.event_endDate), [meeting.sendData.event_endDate])
 
-  const isExpired = useMemo(() => isBefore(new Date(startTime), new Date()), [startTime])
-
+  const isExpired = useMemo(() => isBefore(new Date(startTime), new Date()), [startTime])  
   const qc = useQueryClient()
   const replanMut = useMutation(replanMeeting, {
     onSuccess: () => {
@@ -59,7 +58,7 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
       replanMut.mutate({
         code: meeting.data.code,
         data: {
-          location: meeting.data.location,
+          location,
           date,
           startTime,
           endTime,
@@ -110,6 +109,14 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
             timeEvent={meeting.sendData.meeting_timeList}
             dateChange={onDateChange}
             unavailables={meeting.sendData.event_restritedTime}
+          />
+        </RequestSection>
+        <RequestSection title={'Change Location'}>
+          <OutlinedInput            
+            name="location"
+            fullWidth
+            value={location}
+            onChange={onChangeLocation}            
           />
         </RequestSection>
         <RequestSection title={'Comment'}>

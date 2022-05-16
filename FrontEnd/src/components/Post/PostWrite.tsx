@@ -1,8 +1,10 @@
 import { css } from '@emotion/react'
+import { RadioGroup } from '@mui/material'
 import { createPost } from 'lib/api/post/createPost'
 import { postImgUpload } from 'lib/api/post/postImgUpload'
 import { User } from 'lib/api/types'
 import palette from 'lib/palette'
+import { range } from 'lodash'
 import Quill from 'quill'
 import 'quill/dist/quill.snow.css'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -77,7 +79,8 @@ function PostWrite({}: postWriteProps) {
   }
 
   const onSubmit = useCallback((e) => {
-    const imgRegex = /<p><img[^>]*src=[\"']?([^>\"']+)[\"']?[^</p>]*>/gi
+    // const imgRegex = /<p><img[^>]*src=[\"']?([^>\"']+)[\"']?[^</p>]*>/gi
+    const imgRegex = /<img[^>]*src=[\"']?([^>\"']+)[\"']?[^/>]*>/g
     onImageSetting()
     e.preventDefault()
     if (!body.trim()) {
@@ -111,7 +114,8 @@ function PostWrite({}: postWriteProps) {
   const imageHandler = () => {    
 
     const ops = quillInstance.current.getContents().ops    
-    const innerImage = ops.filter((insert: any) => (insert.insert['image'] !== undefined))       
+    const innerImage = ops.filter((insert: any) => (insert.insert['image'] !== undefined))
+    const range = quillInstance.current.getSelection(true);       
     
     if(innerImage.length > 3) {
       toast.success('There are up to four image attachments.', {
@@ -126,7 +130,7 @@ function PostWrite({}: postWriteProps) {
     const input: any = document.createElement('input')
     // 속성 써주기
     input.setAttribute('type', 'file')
-    input.setAttribute('accept', 'image/*, .ico')
+    input.setAttribute('accept', '.png, .jpeg, .jpg, .bmp')
     input.click()
 
     // input에 변화가 생긴다면 = 이미지를 선택
@@ -137,7 +141,7 @@ function PostWrite({}: postWriteProps) {
       formData.append('post_img', file, makeUUID(file.name))      
 
       postImgUpload(formData).then((res) => {
-        const range = quillInstance.current.getSelection(true);
+                        
         quillInstance.current.root.innerHTML = 
           quillInstance.current.root.innerHTML + `<img src='${API_PATH}static/${res.fileName}' crossorigin='anonymous'>` 
 
@@ -150,10 +154,12 @@ function PostWrite({}: postWriteProps) {
         //   }
         // )
         
-        // // quillInstance.current.setSelection(range.index + 1)        
+        // // quillInstance.current.setSelection(range.index + 1)              
+        setTimeout(() => quillInstance.current.setSelection(range.index + 2), 0)
       })      
       
-    })
+    })    
+    
   }
 
   useEffect(() => {

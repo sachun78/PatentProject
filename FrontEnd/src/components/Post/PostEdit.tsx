@@ -60,7 +60,7 @@ function PostEdit() {
 
   const onSubmit = useCallback(
     (e) => {
-      const imgRegex = /<p><img[^>]*src=[\"']?([^>\"']+)[\"']?[^</p>]*>/gi
+      const imgRegex = /<img[^>]*src=[\"']?([^>\"']+)[\"']?[^/>]*>/g
       onImageSetting()
       e.preventDefault()
       if (!body.trim()) {
@@ -110,6 +110,7 @@ function PostEdit() {
   const imageHandler = () => {
     const ops = quillInstance.current.getContents().ops
     const innerImage = ops.filter((insert: any) => insert.insert['image'] !== undefined)
+    const range = quillInstance.current.getSelection(true);      
     
     if(innerImage.length > 3) {
       toast.success('There are up to four image attachments.', {
@@ -125,7 +126,7 @@ function PostEdit() {
     const input: any = document.createElement('input')
     // 속성 써주기
     input.setAttribute('type', 'file')
-    input.setAttribute('accept', 'image/*')
+    input.setAttribute('accept', '.png, .jpeg, .jpg, .bmp')
     input.click()
 
     // input에 변화가 생긴다면 = 이미지를 선택
@@ -138,6 +139,8 @@ function PostEdit() {
       postImgUpload(formData).then((res) => {
         quillInstance.current.root.innerHTML =
           quillInstance.current.root.innerHTML + `<img src='${API_PATH}static/${res.fileName}' crossorigin='anonymous'>`
+
+        setTimeout(() => quillInstance.current.setSelection(range.index + 2), 0)
       })
     })
   }
