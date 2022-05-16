@@ -13,6 +13,7 @@ export type IProfile = {
   field?: string[]
   country?: string
   phone?: string
+  signature?: string
 }
 
 export type IProfileDetail = {
@@ -32,6 +33,7 @@ export type IEvent = {
 export type IReplan = {
   data: IMeeting
   sendData: {
+    event_restritedTime: Array<{ start: string; end: string }>
     event_startDate: Date
     event_endDate: Date
     meeting_timeList: { startTime: string; endTime: string; date: string }[]

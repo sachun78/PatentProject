@@ -8,6 +8,7 @@ import { replanMeeting } from '../../lib/api/meeting/replanMeeting'
 import { useMutation, useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
 import TimeGridInput from '../DatePickerInput/TimeGridInput'
+import { isBefore } from 'date-fns'
 
 export type BookingRepalnMainProps = {
   meeting: IReplan
@@ -21,6 +22,8 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
   const [comment, onChangeComment] = useInput('')
   const eventStart = useMemo(() => new Date(meeting.sendData.event_startDate), [meeting.sendData.event_startDate])
   const eventEnd = useMemo(() => new Date(meeting.sendData.event_endDate), [meeting.sendData.event_endDate])
+
+  const isExpired = useMemo(() => isBefore(new Date(startTime), new Date()), [startTime])
 
   const qc = useQueryClient()
   const replanMut = useMutation(replanMeeting, {
@@ -81,6 +84,17 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
     )
   }
 
+  if (isExpired) {
+    return (
+      <div css={mainStyle}>
+        <Typography variant="h5">Expired Meeting</Typography>
+        <Link to={'/'} style={{ textAlign: 'center', marginTop: '1rem' }}>
+          Back
+        </Link>
+      </div>
+    )
+  }
+
   return (
     <div css={mainStyle}>
       <h3>Replan</h3>
@@ -95,7 +109,7 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
             timeChange={onTimeChange}
             timeEvent={meeting.sendData.meeting_timeList}
             dateChange={onDateChange}
-            unavailables={[]}
+            unavailables={meeting.sendData.event_restritedTime}
           />
         </RequestSection>
         <RequestSection title={'Comment'}>
@@ -109,7 +123,7 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
             multiline
           />
         </RequestSection>
-        <Button variant={'contained'} type={'submit'} fullWidth>
+        <Button variant={'contained'} type={'submit'} disabled={replanMut.isLoading} fullWidth>
           Submit
         </Button>
       </form>

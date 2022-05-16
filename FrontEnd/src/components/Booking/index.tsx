@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import { getMeetingInfoByCode } from 'lib/api/meeting/getMeetingInfoByCode'
 import { wrapper } from './styles'
 import { useQuery } from 'react-query'
+import { isBefore } from 'date-fns'
 
 export type BookingProps = {}
 
@@ -16,6 +17,11 @@ function Booking({}: BookingProps) {
     refetchOnWindowFocus: false,
   })
 
+  const isExpired = useMemo(() => {
+    if (!bookingData) return false
+    return isBefore(new Date(bookingData.data.startTime), new Date())
+  }, [bookingData])
+
   if (code === '') {
     return <Navigate to={'/'} />
   }
@@ -25,7 +31,7 @@ function Booking({}: BookingProps) {
   return (
     <div css={wrapper}>
       <BookingSide meeting={bookingData.data} />
-      <BookingMain code={code} status={bookingData.data.status} />
+      <BookingMain code={code} status={bookingData.data.status} expire={isExpired ?? false} />
     </div>
   )
 }

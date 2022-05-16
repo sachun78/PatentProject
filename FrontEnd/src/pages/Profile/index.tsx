@@ -10,7 +10,6 @@ function Profile({}: ProfileProps) {
         <img src={'/assets/profile.png'} alt={'profile'} />
         <h2>Profile</h2>
       </div>
-      <div />
       <ProfileMenu />
     </div>
   )

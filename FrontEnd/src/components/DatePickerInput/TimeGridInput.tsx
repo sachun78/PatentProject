@@ -32,7 +32,7 @@ export type TimeGridInputProps = {
   date: Date
   timeChange: (start: Date, end: Date) => void
   dateChange: (date: Date) => void
-  timeEvent: { startTime: string; endTime: string; date: string }[] | IMeeting[]
+  timeEvent: Array<{ startTime: string; endTime: string; date: string }> | IMeeting[]
   unavailables: Array<{ start: string; end: string }>
 }
 
@@ -67,7 +67,7 @@ function TimeGridInput({
       borderColor: '#f5f5f5',
       textColor: '#f5f5f5',
       editable: false,
-      rendering: 'background',
+      display: 'background',
     }))
     const formatTimeEvents = timeEvent.map((event) => {
       const date = new Date(event.date)
@@ -215,7 +215,7 @@ const CalendarContainer = styled.div`
 
   .fc-timegrid-col.fc-day.fc-day-past {
     border: 1px solid #999999;
-    background-color: #cccccc;
+    background-color: rgba(208, 208, 208, 0.3);
   }
 
   // theme start
