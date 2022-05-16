@@ -3,6 +3,7 @@ import React, { useCallback, useState } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 import AskRemoveModal from './AskRemoveModal'
+import { css } from '@emotion/react'
 
 type postActionButtonsProps = {
   _id: string
@@ -39,6 +40,7 @@ const PostActionButtons = ({ _id }: postActionButtonsProps) => {
 
   return (
     <>
+      <div css={temp}>
       <div className={'item'} onClick={onEdit}>
         Edit
       </div>
@@ -50,8 +52,16 @@ const PostActionButtons = ({ _id }: postActionButtonsProps) => {
         onConfirm={onDelete}
         onCancel={onCancel}
       />
+      </div> 
     </>
   )
 }
 
 export default PostActionButtons
+
+const temp = css`
+  display: flex;
+  flex-direction: row;
+  
+
+`
