@@ -169,10 +169,10 @@ function PostHeader({ owner_username, owner_email, createdAt }: PostHeaderProps)
                     sx={{ zIndex: "999"}}
                   >
                     <Link to={`/u/${owner_email}`} css={linkStyle}>
-                      <MenuItem onClick={handleClose} disableRipple>
-                        <ListItemIcon>
-                          <img src="/assets/profile.png" style={{ width: "1rem" }} />
-                        </ListItemIcon>
+                      <MenuItem onClick={handleClose} disableRipple>                      
+                        <ListItemIcon css={iconBoxStyle}>
+                          <img src="/assets/profile.png" style={{ width: "20px", height: "20px", display: 'inline-block', margin:"auto"}} />
+                        </ListItemIcon>                        
                         <ListItemText >
                           Profile
                         </ListItemText>
@@ -180,21 +180,21 @@ function PostHeader({ owner_username, owner_email, createdAt }: PostHeaderProps)
                     </Link>
                     {user.email === owner_email ? null : !buddyData.buddy || buddyData.buddy?.findIndex((elem: { email: string; profile: any }) => elem.email === owner_email) === -1 
                     ? (            
-                    <MenuItem onClick={onAddNetwork} disableRipple>
-                      <ListItemIcon>
-                      <img src="/assets/follow.png" style={{ width: "1.5rem" }} />
-                      </ListItemIcon>
+                    <MenuItem onClick={onAddNetwork} disableRipple>                      
+                      <ListItemIcon css={iconBoxStyle}>
+                        <img src="/assets/follow.png" style={{ width: "20px", height: "20px", display: 'inline-block', margin:"auto"}} />
+                      </ListItemIcon>                      
                       <ListItemText>
                         Add
                       </ListItemText>
                     </MenuItem>                      
                     ) : (
                     <MenuItem onClick={onDeleteNetwork} disableRipple>
-                      <ListItemIcon>
-                      <img src="/assets/follow-1.png" style={{ width: "1.5rem", background: "rgb(145, 4, 87, 0.9)" }} />
+                      <ListItemIcon  css={iconBoxStyle} sx={{background: "#910457"}}>
+                      <img src="/assets/follow-1.png" style={{ width: "20px", height: "20px", display: 'inline-block', margin:"auto", background: "#910457"}} />
                       </ListItemIcon>
                       <ListItemText>
-                        Delete
+                        Cancle
                       </ListItemText>
                     </MenuItem>)}                    
                   </MenuList>
@@ -206,6 +206,14 @@ function PostHeader({ owner_username, owner_email, createdAt }: PostHeaderProps)
     </div>
   )
 }
+
+const iconBoxStyle = css`  
+  
+  height: 36px;
+  border: 1px solid #910457;
+  border-radius: 999px;
+  margin-right: 1rem      
+`
 
 const linkStyle = css`
   color: #000;  
