@@ -31,7 +31,7 @@ export default function RequestForm({}: RequestViewProps) {
   const { startDate, endDate } = useDateRangeHook()
   const { date, time, setDate, setTime } = useDateTimeHook()
   const [endTime, setEndTime] = useState<Date | null>(null)
-  const [location, setLoaction] = useState('성수역 1번 출구')
+  const [location, setLoaction] = useState('서울특별시 성동구 아차산로 100')
   const [isDefaultComment, onToggleIsDefaultComment] = useToggle(false)
   const navi = useNavigate()
   const qc = useQueryClient()
