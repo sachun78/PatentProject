@@ -1,15 +1,18 @@
 import { css } from '@emotion/react'
-import { Stack } from '@mui/material'
+import { Stack, ToggleButton } from '@mui/material'
 import Post from 'components/Post/'
-import { getPosts } from 'lib/api/post/getPosts'
+import SearchBox from 'components/SearchBox'
+import { getPosts, getPostsSearch } from 'lib/api/post/getPosts'
 import { IPost } from 'lib/api/types'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
-import { useInfiniteQuery } from 'react-query'
+import { useInfiniteQuery, useQuery } from 'react-query'
 import { Link } from 'react-router-dom'
 import FilterArea from './filter/FilterArea'
 import FilterCard from './filter/FilterCard'
 import PostForm from './form/PostForm'
+import SearchIcon from '@mui/icons-material/Search'
+import SearchOffIcon from '@mui/icons-material/SearchOff'
 
 type HomeProps = {}
 
@@ -17,10 +20,16 @@ function Home({}: HomeProps) {
   const [filter, setFilter] = useState(false)
 
   const { ref, inView } = useInView()
+  const [searchText, setSearchText] = useState('')
+  const [search, setSearch] = useState(false)  
+  const onSearchMode = useCallback(() => {
+    setSearch((prev) => !prev)
+    setSearchText('')
+  }, [setSearch])
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
     ['posts'],
-    ({ pageParam = 0 }) => getPosts(pageParam),
+    ({ pageParam = 0}) => getPosts(pageParam),
     {
       getNextPageParam: (lastPage, pages) => {
         
@@ -29,7 +38,11 @@ function Home({}: HomeProps) {
         return pages.flat().length
       },
     }
-  )
+  )    
+
+  const { data: searchData } = useQuery(['posts_search', searchText], () => getPostsSearch(searchText), {
+    enabled: !!searchText,
+  })    
 
   useEffect(() => {
     if(!data) return;
@@ -46,7 +59,6 @@ function Home({}: HomeProps) {
     })
   }, [data])
 
-
   if (isLoading) return <div>로딩중!!</div>  
 
   const onFilter = (value: boolean) => {
@@ -55,13 +67,42 @@ function Home({}: HomeProps) {
 
   return (
     <>
-      <FilterCard onFilter={onFilter} />
+      <div css={searchBoxStyle}>
+        {search && 
+        <SearchBox filter={setSearchText} post={true} />}
+        <ToggleButton
+          value="check"
+          selected={search}
+          onChange={onSearchMode}
+          color={'primary'}
+          sx={{ borderRadius: '1rem', border: 'none' }}
+        >
+          {!search ? <SearchIcon /> : <SearchOffIcon />}
+        </ToggleButton>
+        <FilterCard onFilter={onFilter} />                
+      </div>
       <Stack>        
         {filter && <FilterArea />}  
         <Link css={linkStyle} to={'/postWrite/'} state={{}}>
           <PostForm />
-        </Link>        
-        {posts?.map((post: IPost) => (
+        </Link>
+        {searchData && searchData?.map((search: IPost) => (
+          <div key={search._id} css={postViewStyle}>
+            <Post 
+              key={search._id}
+              _id={search._id}
+              owner_username={search.owner_username}
+              owner_email={search.owner_email}
+              owner_id={search.owner_id}
+              like_cnt={search.like_cnt}
+              contents={search.contents}
+              comment={search.comment}
+              images={search.images}
+              createdAt={search.createdAt}
+            />
+          </div> 
+        ))}        
+        {!searchData && posts?.map((post: IPost) => (
           <div key={post._id} css={postViewStyle} ref={ref}>    
           <Post
             key={post._id}
@@ -81,6 +122,19 @@ function Home({}: HomeProps) {
     </>
   )
 }
+
+const searchBoxStyle = css`
+  position: absolute;
+  display: flex;  
+  max-width: 54.375rem;
+  width: 54.375rem;
+  min-height: 2rem;
+  margin-top: 2.5rem;  
+  margin-bottom: 0.5rem;
+  top: -1px;        
+  flex-direction: row;  
+  justify-content: flex-end;
+`
 
 const postViewStyle = css`
   max-width: 54.375rem;

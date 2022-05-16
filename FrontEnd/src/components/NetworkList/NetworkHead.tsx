@@ -1,23 +1,26 @@
 import { css } from '@emotion/react'
 import { brandColor } from 'lib/palette'
-import { useNetworkModalState } from 'atoms/networkState'
+import { itemStyle, tabStyle } from '../../pages/Member/style'
+import { NavLink } from 'react-router-dom'
+import React from 'react'
 
 export type NetworkHeadProps = {}
 
 function NetworkHead({}: NetworkHeadProps) {
-  const [, setOpen] = useNetworkModalState()
   return (
     <div css={HeadStyle}>
-      <h1>Network</h1>
-      {/*<IconButton*/}
-      {/*  sx={{ p: '8px' }}*/}
-      {/*  aria-label="search-network"*/}
-      {/*  onClick={() => {*/}
-      {/*    setOpen(true)*/}
-      {/*  }}*/}
-      {/*>*/}
-      {/*  <SearchIcon />*/}
-      {/*</IconButton>*/}
+      <ul css={tabStyle}>
+        <li>
+          <NavLink css={itemStyle} to={'my'}>
+            Network
+          </NavLink>
+        </li>
+        <li>
+          <NavLink css={itemStyle} to={'browse'}>
+            Browse
+          </NavLink>
+        </li>
+      </ul>
     </div>
   )
 }
