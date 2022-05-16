@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 
 type imageContainerProps = {
   images: string[]
-  isDetail: boolean  
+  isDetail: boolean    
 }
 
 type IImage = {
@@ -16,7 +16,8 @@ type IImage = {
 const ImageContainer = ({ images, isDetail } : imageContainerProps) => {  
   
   const [open, setOpen] = useState(false)
-  const [imgSrc, setImgSrc] = useState('')    
+  const [imgSrc, setImgSrc] = useState('')
+  const height = isDetail ? 540 : 311
   
   const handleOpen = (e: any) => {
     setImgSrc(e.target.src)
@@ -47,16 +48,15 @@ const ImageContainer = ({ images, isDetail } : imageContainerProps) => {
     <>
     {images.length === 0 ? <div></div> : 
     <ImageList
-      sx={{height: 340, justifyContent: "center", position: "relative", margin: "0 30px", borderBottom: '1px solid #888'  }}
+      sx={{height: height, justifyContent: "center", position: "relative", margin: "0 30px", borderBottom: '1px solid #888', overflow: 'hidden' }}
       variant="quilted"
       cols={2}
-      rowHeight={166}      
+      rowHeight={270}      
     >
       {imageData.map((item, idx) => (
         <ImageListItem key={idx} cols={item.cols || 1} rows={item.rows || 1} sx={{ borderRadius: "1rem "}}>          
           <img
-            {...srcset(item.img, 300, item.rows, item.cols)}
-            // height="100%"
+            {...srcset(item.img, 300, item.rows, item.cols)}            
             loading="lazy"
             style={{borderRadius: '1rem', cursor: 'zoom-in'}}
             crossOrigin="anonymous"
@@ -78,19 +78,19 @@ const ImageContainer = ({ images, isDetail } : imageContainerProps) => {
     <>
     {images.length === 0 ? <div></div> : 
     <ImageList
-      sx={{ height: 340, justifyContent: "center", position: "relative", margin: "0 30px", borderBottom: '1px solid #888'  }}
+      sx={{ height: height, justifyContent: "center", position: "relative", margin: "0 30px", borderBottom: '1px solid #888', borderRadius: '1rem', overflow: 'hidden'  }}
       variant="quilted"
       cols={2}
       rowHeight={166}      
     >
       {imageData.map((item, idx) => (
-        <ImageListItem key={idx} cols={item.cols || 1} rows={item.rows || 1} sx={{ borderRadius: "1rem "}}>
+        <ImageListItem key={idx} cols={item.cols || 1} rows={item.rows || 1} sx={{ borderRadius: "1rem"}}>
           
           <img
             {...srcset(item.img, 300, item.rows, item.cols)}
             // height="100%"
             loading="lazy"
-            style={{borderRadius: '1rem'}}
+            style={{ borderRadius: '1rem' }}
             crossOrigin="anonymous"
           />
         </ImageListItem>
