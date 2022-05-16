@@ -49,8 +49,8 @@ function LocationInput({ value, onChange }: locationInputProps) {
       </div>
 
       {open && (
-        <div css={calendarStyle}>
-          <LocationMap location={address} getLocation={getLocation} />
+        <div css={calendarStyle}>          
+          <LocationMap location={address} getLocation={getLocation} />          
         </div>
       )}
     </InputBase>
@@ -83,7 +83,7 @@ const calendarStyle = css`
   z-index: 10;
   top: 0.1rem;
   transform: translate3d(0, -100%, 0);
-  height: 35rem;
+  height: 30rem;
 `
 
 export default LocationInput

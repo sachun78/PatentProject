@@ -142,12 +142,14 @@ function PostDetail({}: postDetailProps) {
         <ImageContainer images={post.images} isDetail={true} />
         <PostTextContainer contents={post.contents} />
         <div css={buttonWrapper}>
-          <div className={'item'} onClick={onLike}>
-            {likeClicked ? <BsHeartFill className={'filled'} /> : <BsHeart />}
-            {post.like_cnt.length}
-          </div>
-          <div className={'item'}>
-            <BsChatLeftDots /> {post.comment.length}
+          <div css={leftButtonsStyle}>
+            <div className={'item'} onClick={onLike}>
+              {likeClicked ? <BsHeartFill className={'filled'} /> : <BsHeart />}
+              {post.like_cnt.length}
+            </div>
+            <div className={'item'}>
+              <BsChatLeftDots /> {post.comment.length}
+            </div>
           </div>
           {post.owner_id === user.id && <PostActionButtons _id={post._id} />}
         </div>
@@ -190,6 +192,11 @@ function PostDetail({}: postDetailProps) {
 }
 
 export default PostDetail
+
+const leftButtonsStyle = css`
+  display: flex;
+  flex-direction: row;
+`
 
 const wrapStyle = css`
   display: flex;
@@ -266,7 +273,7 @@ const buttonWrapper = css`
   margin: 1.25rem 1.875rem 1.875rem 1.25rem;
   /* margin: 1.25rem; */
   user-select: none;
-  /* justify-content: center; */
+  justify-content: space-between;
 
   .item {
     height: 1.875rem;
