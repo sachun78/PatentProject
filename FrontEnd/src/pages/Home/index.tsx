@@ -1,7 +1,10 @@
 import { css } from '@emotion/react'
+import SearchIcon from '@mui/icons-material/Search'
+import SearchOffIcon from '@mui/icons-material/SearchOff'
 import { Stack, ToggleButton } from '@mui/material'
 import Post from 'components/Post/'
 import SearchBox from 'components/SearchBox'
+import usePostQuery from 'hooks/query/usePostQuery'
 import { getPosts, getPostsSearch } from 'lib/api/post/getPosts'
 import { IPost } from 'lib/api/types'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -11,8 +14,6 @@ import { Link } from 'react-router-dom'
 import FilterArea from './filter/FilterArea'
 import FilterCard from './filter/FilterCard'
 import PostForm from './form/PostForm'
-import SearchIcon from '@mui/icons-material/Search'
-import SearchOffIcon from '@mui/icons-material/SearchOff'
 
 type HomeProps = {}
 
@@ -25,28 +26,28 @@ function Home({}: HomeProps) {
   const onSearchMode = useCallback(() => {
     setSearch((prev) => !prev)
     setSearchText('')
-  }, [setSearch])
+  }, [setSearch])   
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
     ['posts'],
-    ({ pageParam = 0}) => getPosts(pageParam),
-    {
+    ({ pageParam = 0 }) => getPosts(pageParam),
+    {      
       getNextPageParam: (lastPage, pages) => {
         
         const morePagesExist = lastPage.length === 5        
         if (!morePagesExist) return false
         return pages.flat().length
-      },
-    }
-  )    
+      }      
+    }    
+  )      
+  
 
   const { data: searchData } = useQuery(['posts_search', searchText], () => getPostsSearch(searchText), {
     enabled: !!searchText,
-  })    
+  })      
 
   useEffect(() => {
     if(!data) return;
-
     if (hasNextPage && inView) {
       fetchNextPage()
     }
@@ -57,7 +58,7 @@ function Home({}: HomeProps) {
     return data.pages.flat().filter((post) => {
       return !post.history
     })
-  }, [data])
+  }, [data])  
 
   if (isLoading) return <div>로딩중!!</div>  
 
@@ -101,7 +102,7 @@ function Home({}: HomeProps) {
               createdAt={search.createdAt}
             />
           </div> 
-        ))}        
+        ))}         
         {!searchData && posts?.map((post: IPost) => (
           <div key={post._id} css={postViewStyle} ref={ref}>    
           <Post
@@ -124,7 +125,7 @@ function Home({}: HomeProps) {
 }
 
 const searchBoxStyle = css`
-  position: absolute;
+  position: fixed;
   display: flex;  
   max-width: 54.375rem;
   width: 54.375rem;
@@ -134,6 +135,7 @@ const searchBoxStyle = css`
   top: -1px;        
   flex-direction: row;  
   justify-content: flex-end;
+  z-index: 999;
 `
 
 const postViewStyle = css`
