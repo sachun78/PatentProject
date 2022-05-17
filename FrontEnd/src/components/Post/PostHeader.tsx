@@ -16,21 +16,25 @@ import useBuddyQuery from 'hooks/query/useBuddyQuery';
 import { addBuddy } from 'lib/api/buddy/addBuddy';
 import { deleteBuddy } from 'lib/api/buddy/deleteBuddy';
 import { API_PATH } from 'lib/api/client';
+import { deletePost } from 'lib/api/post/deletePost';
 import { User as UserType } from 'lib/api/types';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MdMoreHoriz } from 'react-icons/md';
 import { useMutation, useQueryClient } from 'react-query';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import palette, { brandColor } from '../../lib/palette';
+import AskRemoveModal from './AskRemoveModal';
 
 export type PostHeaderProps = {
   owner_username: string
   owner_email: string
   createdAt: Date
+  owner_id: string
+  _id: string
 }
 
-function PostHeader({ owner_username, owner_email, createdAt }: PostHeaderProps) {
+function PostHeader({ owner_username, owner_email, createdAt, _id, owner_id }: PostHeaderProps) {
   const date = useMemo(() => new Date(createdAt), [])  
   const [url] = useState(`${API_PATH}static/${owner_email}`)
   const today = new Date();
@@ -38,12 +42,35 @@ function PostHeader({ owner_username, owner_email, createdAt }: PostHeaderProps)
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLDivElement>(null);
   const qc = useQueryClient()
+  const [modal, setModal] = useState(false)
+  const navigate = useNavigate()
   const user = qc.getQueryData<UserType>('user')
   const { data: buddyData, isLoading } = useBuddyQuery()    
   const prevOpen = useRef(open);
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
+
+  const onRemoveClick = () => {
+    setModal(true)
+  }
+
+  const onCancel = () => {
+    setModal(false)
+  }
+
+  const deletePostlMut = useMutation(deletePost, {
+    onSuccess: () => {
+      qc.invalidateQueries(['post', _id])
+      qc.invalidateQueries(['posts'])
+      navigate("/")
+    },
+  })
+
+  const onDelete = useCallback(() => {
+    if (!_id) return
+    deletePostlMut.mutate(_id)
+  }, [deletePostlMut, _id])
 
   const handleClose = (event: Event | React.SyntheticEvent) => {
     if (
@@ -159,7 +186,7 @@ function PostHeader({ owner_username, owner_email, createdAt }: PostHeaderProps)
                   placement === 'bottom-start' ? 'left top' : 'left bottom',
               }}
             >
-              <Paper style={{width: '15ch'}}>
+              <Paper style={{width: '13ch'}}>
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList
                     autoFocusItem={open}
@@ -170,15 +197,42 @@ function PostHeader({ owner_username, owner_email, createdAt }: PostHeaderProps)
                   >
                     <Link to={`/u/${owner_email}`} css={linkStyle}>
                       <MenuItem onClick={handleClose} disableRipple>                      
-                        <ListItemIcon css={iconBoxStyle}>
+                        {/* <ListItemIcon css={iconBoxStyle}>
                           <img src="/assets/profile.png" style={{ width: "20px", height: "20px", display: 'inline-block', margin:"auto"}} />
-                        </ListItemIcon>                        
+                        </ListItemIcon>                         */}
                         <ListItemText >
-                          Profile
+                          Writer
+                        </ListItemText>
+                      </MenuItem>
+                    </Link>                    
+                    <Link to={`/postDetail/${_id}`} css={linkStyle}>
+                      <MenuItem onClick={handleClose} disableRipple>
+                        <ListItemText>
+                        View details
                         </ListItemText>
                       </MenuItem>
                     </Link>
-                    {user.email === owner_email ? null : !buddyData.buddy || buddyData.buddy?.findIndex((elem: { email: string; profile: any }) => elem.email === owner_email) === -1 
+                    {owner_id === user.id && ( <div>
+                    <Link to={`/PostEdit/${_id}`} css={linkStyle}>
+                      <MenuItem onClick={handleClose} disableRipple>
+                        <ListItemText>
+                          Edit
+                        </ListItemText>
+                      </MenuItem>
+                    </Link>                    
+                      <MenuItem onClick={onRemoveClick} disableRipple>
+                        <ListItemText>
+                          Delete
+                        </ListItemText>
+                      </MenuItem>
+                    
+                    <AskRemoveModal
+                      visible={modal}
+                      onConfirm={onDelete}
+                      onCancel={onCancel}
+                    />
+                    </div>) }
+                    {/* {user.email === owner_email ? null : !buddyData.buddy || buddyData.buddy?.findIndex((elem: { email: string; profile: any }) => elem.email === owner_email) === -1 
                     ? (            
                     <MenuItem onClick={onAddNetwork} disableRipple>                      
                       <ListItemIcon css={iconBoxStyle}>
@@ -196,7 +250,7 @@ function PostHeader({ owner_username, owner_email, createdAt }: PostHeaderProps)
                       <ListItemText>
                         Cancle
                       </ListItemText>
-                    </MenuItem>)}                    
+                    </MenuItem>)}                     */}
                   </MenuList>
                 </ClickAwayListener>
               </Paper>

@@ -166,16 +166,21 @@ function PostEdit() {
 
     const quill = quillInstance.current
 
-    post.images.map(
-      (img: any) =>
-        (quill.root.innerHTML = quill.root.innerHTML + `<img src='${img}' crossOrigin='anonymous' />`)
-    )
-    quill.root.innerHTML = quill.root.innerHTML + post.contents
+    if(post) {
+      post.images.map(
+        (img: any) =>
+          (quill.root.innerHTML = quill.root.innerHTML + `<img src='${img}' crossOrigin='anonymous' />`)
+      )
+      quill.root.innerHTML = quill.root.innerHTML + post.contents
+  
+      quill.on('text-change', () => {
+        setBody(quill.root.innerHTML)
+      })
+    }
+    
+  }, [post])
 
-    quill.on('text-change', () => {
-      setBody(quill.root.innerHTML)
-    })
-  }, [])
+  if(!post) return <div>로딩중!</div>
 
   return (
     <>
