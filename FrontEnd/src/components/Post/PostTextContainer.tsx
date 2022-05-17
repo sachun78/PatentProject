@@ -30,8 +30,7 @@ function PostTextContainer({ contents }: postTextContainerProps) {
 }
 
 const bodyStyle = css`
-  padding: 0 1.875rem;
-  font: normal normal 14px 'NanumSquare';
+  padding: 0 1.875rem;  
   line-height: 1.142857143;
   color: #000;  
 

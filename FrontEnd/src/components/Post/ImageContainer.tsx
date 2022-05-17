@@ -58,7 +58,7 @@ const ImageContainer = ({ images, isDetail } : imageContainerProps) => {
           <img
             {...srcset(item.img, 300, item.rows, item.cols)}            
             loading="lazy"
-            style={{borderRadius: '1rem', cursor: 'zoom-in'}}
+            style={{borderRadius: '1rem', cursor: 'zoom-in', objectFit: 'fill'}}
             crossOrigin="anonymous"
             onClick={handleOpen}  
           />                    
