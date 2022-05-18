@@ -30,16 +30,12 @@ export const mainStyle = css`
 `
 
 export const wrapper = css`
-  width: 100%;
-  border: 1px solid rgba(26, 26, 26, 0.1);
-  border-radius: 8px;
-  box-shadow: 0 1px 8px 0 rgb(0 0 0 / 8%);
+  border-radius: 1rem;
   display: flex;
-  flex: 1 1 auto;
-  min-height: 550px;
+  flex-direction: column;
+  width: 54.375rem;
   transition: all 0.22s ease-out;
   position: relative;
-  background-color: rgba(255, 255, 255, 0.8);
 
   ${media.medium} {
     flex-direction: column;

@@ -51,12 +51,15 @@ export type IMeeting = {
   ownerName: string
   ownerCompany: string
   ownerPhone: string
+  toName: string
+  toPhone: string
+  toCompany: string
   location: string
   comment: string
   status: string
   code: string
   history: any
-  isPossibleAddSchedule: string
+  isPossibleAddSchedule: boolean
   isPaidUser: string
 }
 

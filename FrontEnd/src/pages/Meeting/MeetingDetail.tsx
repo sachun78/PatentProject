@@ -1,20 +1,18 @@
-import { Link, Navigate, useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 import React, { useCallback, useMemo } from 'react'
 import { useMutation, useQuery } from 'react-query'
 import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
 import { toast } from 'react-toastify'
 import { Button, Divider, Stack, ToggleButton } from '@mui/material'
-import { ContainerBlock, MeetingSection, ScheduleInfoBlock } from './styles'
+import { ContainerBlock, InfoLink, MeetingSection, ScheduleInfoBlock } from './styles'
 import MeetingResult from 'components/Schedules/MeetingResult'
 import { IMeeting } from 'lib/api/types'
 import { format, isBefore } from 'date-fns'
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined'
-import AccessTimeIcon from '@mui/icons-material/AccessTime'
-import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined'
 import { SaveBlock, useButtonStyle } from 'components/ProfileMenu/ProfileCardSave'
 import { updateMeeting } from 'lib/api/meeting/updateMeeting'
 import MeetingChange from 'components/Schedules/MeetingChange'
 import useToggle from 'hooks/useToggle'
+import IconControl from '../../components/IconControl'
 
 export type MeetingDetailProps = {}
 
@@ -92,27 +90,34 @@ function MeetingDetail({}: MeetingDetailProps) {
         <MeetingSection>
           <h2>Participant</h2>
           <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
-            <p>{data.toEmail}</p>
+            <p>{data.toName ? data.toName : '/name is empty/'}</p>
+            <div className={'divider'}></div>
+            <p className={'email'}>{data.toEmail}</p>
             {data.isPaidUser && (
-              <Link to={`/u/${data.toEmail}`} style={{ textDecoration: 'none' }}>
-                <Button variant="contained" size={'small'}>
-                  INFO
-                </Button>
-              </Link>
+              <InfoLink to={`/u/${data.toEmail}`}>
+                <IconControl name={'infoUser'} style={{ marginRight: '3px' }} />
+                info
+              </InfoLink>
             )}
           </Stack>
+          <ScheduleInfoBlock>
+            <IconControl name={'company'} style={{ minWidth: '22px' }} /> {data.ownerCompany}
+          </ScheduleInfoBlock>
+          <ScheduleInfoBlock>
+            <IconControl name={'phone'} style={{ minWidth: '22px' }} /> {data.ownerPhone}
+          </ScheduleInfoBlock>
         </MeetingSection>
         <MeetingSection>
           <h2>Schedule Information</h2>
           <ScheduleInfoBlock>
-            <CalendarMonthOutlinedIcon /> {format(new Date(data?.date), 'EEEE, d MMM, yyyy')}
+            <IconControl name={'date'} /> {format(new Date(data?.date), 'EEEE, d MMM, yyyy')}
           </ScheduleInfoBlock>
           <ScheduleInfoBlock>
-            <AccessTimeIcon />
+            <IconControl name={'time'} />
             {format(new Date(data.startTime), 'HH:mm') + ' - ' + format(new Date(data.endTime), 'HH:mm')}
           </ScheduleInfoBlock>
           <ScheduleInfoBlock>
-            <PlaceOutlinedIcon /> {data.location}
+            <IconControl name={'place'} style={{ minWidth: '22px' }} /> {data.location}
           </ScheduleInfoBlock>
         </MeetingSection>
         <MeetingSection>
@@ -121,7 +126,12 @@ function MeetingDetail({}: MeetingDetailProps) {
         </MeetingSection>
         <MeetingSection>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <h2>state:{data.status !== 'none' ? data.status : isExpired ? 'expired' : 'pending'}</h2>
+            <h2>
+              State
+              <span className={'state-text'}>
+                {data.status !== 'none' ? data.status : isExpired ? 'expired' : 'pending'}
+              </span>
+            </h2>
             {!isResult && !isExpired && (data.status === 'confirm' || data.status === 'replan') && (
               <ToggleButton value={change} onChange={onChangeToggle} size={'small'}>
                 Change {change ? '<' : '>'}

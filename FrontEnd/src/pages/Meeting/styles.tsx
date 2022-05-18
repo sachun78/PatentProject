@@ -2,6 +2,8 @@ import styled from '@emotion/styled'
 import { TableCell, tableCellClasses, TableRow } from '@mui/material'
 import palette, { brandColor } from '../../lib/palette'
 import { css } from '@emotion/react'
+import { resetButton } from '../../lib/styles/resetButton'
+import { Link } from 'react-router-dom'
 
 export const ContainerBlock = styled.div`
   position: relative;
@@ -38,9 +40,16 @@ export const MeetingSection = styled.section`
     color: #6c6c6c;
     font: normal normal normal 16px/26px NanumSquareOTF;
   }
+
   .email {
     font: normal normal normal 16px/18px NanumSquareOTF;
     color: #9c9c9c;
+  }
+
+  .state-text {
+    font: normal normal normal 16px/26px NanumSquareOTF;
+    color: #6c6c6c;
+    margin-left: 1.25rem;
   }
 
   h2 {
@@ -54,11 +63,13 @@ export const MeetingSection = styled.section`
     margin: 0;
     font: normal normal normal 16px/18px NanumSquareOTF;
   }
+
   .divider {
     background: #d9d9d9 0% 0% no-repeat padding-box;
     height: 18px;
     width: 1px;
   }
+
   //p + p {
   //  margin-top: 0.625rem;
   //}
@@ -101,9 +112,32 @@ export const ScheduleInfoBlock = styled.div`
   display: flex;
   align-items: center;
   margin-top: 0.5rem;
-  color: #8b88b1;
 
   svg {
-    margin-right: 1rem;
+    margin-right: 6px;
   }
+`
+
+export const UploadButton = styled.button`
+  ${resetButton};
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 12.5rem;
+  min-height: 12.5rem;
+  background-color: #f2f2f2;
+`
+
+export const InfoLink = styled(Link)`
+  border: 1px solid #9c9c9c;
+  text-decoration: none;
+  border-radius: 0.75rem;
+  padding: 3px 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font: normal normal normal 12px/18px NanumSquareOTF;
+  color: #6c6c6c;
 `

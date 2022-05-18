@@ -2,7 +2,7 @@ import { Navigate, useParams } from 'react-router-dom'
 import { useMutation, useQuery } from 'react-query'
 import React, { useCallback, useRef, useState } from 'react'
 import { Box, Button, FormControlLabel, OutlinedInput, Radio, RadioGroup } from '@mui/material'
-import { ContainerBlock, MeetingSection } from '../../pages/Meeting/styles'
+import { ContainerBlock, MeetingSection, UploadButton } from '../../pages/Meeting/styles'
 import { getEvent } from 'lib/api/event/getEvent'
 import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
 import useInput from 'hooks/useInput'
@@ -10,6 +10,7 @@ import { createMeetingResult } from 'lib/api/meeting/createMeetingResult'
 import { upload } from 'lib/api/meeting/resultUpload'
 import styled from '@emotion/styled'
 import { useRemoveOutlineHover } from 'lib/styles/muiStyles'
+import IconControl from '../IconControl'
 
 export type MeetingResultProps = {}
 
@@ -113,34 +114,36 @@ function MeetingResult({}: MeetingResultProps) {
           >
             <MeetingSection>
               <h2>Result</h2>
-              <OutlinedInput minRows={4} multiline value={result} onChange={onChange} />
+              <OutlinedInput
+                minRows={6}
+                multiline
+                value={result}
+                placeholder={'Enter your text here'}
+                onChange={onChange}
+              />
             </MeetingSection>
             <MeetingSection>
               <h2>Photo</h2>
-              <Box component="span" sx={{ p: 2, border: '1px dashed grey' }}>
-                <input
-                  ref={fileRef}
-                  onChange={onImgUpload}
-                  type="file"
-                  style={{ display: 'none' }}
-                  accept="image/*"
-                  name="mhistory_img"
-                />
-                {filePath ? (
-                  <ImgView src={`${API_PATH}static/${filePath}`} alt={'result-img'} crossOrigin="anonymous" />
-                ) : (
-                  <Button
-                    fullWidth
-                    variant={'outlined'}
-                    onClick={(e) => {
-                      fileRef?.current?.click()
-                      e.preventDefault()
-                    }}
-                  >
-                    Upload
-                  </Button>
-                )}
-              </Box>
+              <input
+                ref={fileRef}
+                onChange={onImgUpload}
+                type="file"
+                style={{ display: 'none' }}
+                accept="image/*"
+                name="mhistory_img"
+              />
+              {filePath ? (
+                <ImgView src={`${API_PATH}static/${filePath}`} alt={'result-img'} crossOrigin="anonymous" />
+              ) : (
+                <UploadButton
+                  onClick={(e) => {
+                    e.preventDefault()
+                    fileRef?.current?.click()
+                  }}
+                >
+                  <IconControl name={'add'} />
+                </UploadButton>
+              )}
             </MeetingSection>
             <MeetingSection>
               <h2>Whether or not we met</h2>
@@ -151,7 +154,7 @@ function MeetingResult({}: MeetingResultProps) {
             </MeetingSection>
 
             <Button type={'submit'} fullWidth variant={'contained'}>
-              Save
+              Submit
             </Button>
           </form>
         ) : (
