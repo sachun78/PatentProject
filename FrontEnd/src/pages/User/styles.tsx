@@ -4,7 +4,6 @@ import palette, { brandColor } from 'lib/palette'
 import { resetButton } from 'lib/styles/resetButton'
 
 export const Container = styled.div`
-  max-width: 54.375rem;
   width: 54.375rem;
   background: rgba(255, 255, 255, 0.8);
   height: 100%;
@@ -33,9 +32,9 @@ export const UserHeader = styled.div`
 
 export const UserBody = styled.div`
   display: flex;
-  padding: 0 0 2rem;
-  margin-left: 1.875rem;
-  margin-right: 1.875rem;
+  flex-direction: column;
+  padding: 0 1.875rem 2rem;
+  width: 100%;
 
   h3 {
     margin: 0 0 0.625rem;
@@ -48,8 +47,8 @@ export const Summary = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding-right: 1rem;
   color: #6c6c6c;
+  margin-bottom: 1.875rem;
 
   img {
     margin-right: 0.375rem;
@@ -67,20 +66,21 @@ export const Summary = styled.div`
 `
 
 export const Middle = styled.div`
+  width: 100%;
+  display: flex;
   padding-right: 1rem;
-
-  pre {
-    white-space: pre-wrap;
-    font-size: 0.75rem;
-    font-family: NanumSquareOTF;
-    line-height: 1.5;
-    margin: 0 0 1rem;
-    color: ${palette.blueGrey[600]};
-  }
+  // pre {
+  //   white-space: pre-wrap;
+  //   font-size: 0.75rem;
+  //   font-family: NanumSquareOTF;
+  //   line-height: 1.5;
+  //   margin: 0 0 1rem;
+  //   color: ${palette.blueGrey[600]};
+  // }
 `
 
 export const Field = styled.div`
-  margin-top: 0.625rem;
+  flex: 1;
 `
 
 const FieldStyle = ({ color }: { color: string }) => css`
