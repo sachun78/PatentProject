@@ -152,7 +152,7 @@ function ProfileMenu({}: ProfileMenuProps) {
           onRemove={onFieldRemove}
         />
         <ProfileCard.Country title="Country" onChange={handleCountry} country={country ?? 'AD'} />
-        <ProfileCard.Text title="Default Comment" text={signature ?? ''} onChange={onChangeSignature} />
+        <ProfileCard.Text title="Default Comment" text={signature ?? ''} onChange={onChangeSignature} multiline />
         <ProfileCard.Save onSave={onSaveProfile} loading={!isSaveActive || saveMutation.isLoading} />
       </InfoViewSection>
     </InfoStyleDiv>

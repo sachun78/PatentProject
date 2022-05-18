@@ -83,10 +83,14 @@ function MeetingDetail({}: MeetingDetailProps) {
         <h1>{data.title}</h1>
         <MeetingSection>
           <h2>Organizer</h2>
-          <p>{data.ownerEmail}</p>
+          <Stack direction="row" spacing={'10px'} sx={{ alignItems: 'center' }}>
+            <p>{data.ownerName}</p>
+            <div className={'divider'}></div>
+            <p className={'email'}>{data.ownerEmail}</p>
+          </Stack>
         </MeetingSection>
         <MeetingSection>
-          <h2>Participants</h2>
+          <h2>Participant</h2>
           <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
             <p>{data.toEmail}</p>
             {data.isPaidUser && (

@@ -10,12 +10,13 @@ export const ContainerBlock = styled.div`
   width: 29.0625rem;
   min-width: 465px;
   background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 2px 5px 11px #00000029;
   border-radius: 1rem;
   padding: 30px;
 
   h1 {
     color: #333;
-    margin: 0 0 1.25rem;
+    margin: 0 0 1.875rem;
     font: normal normal 800 20px/23px NanumSquareOTF;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -25,7 +26,7 @@ export const ContainerBlock = styled.div`
 export const MeetingSection = styled.section`
   display: flex;
   flex-direction: column;
-  margin-bottom: 0.875rem;
+  margin-bottom: 1.3125rem;
   color: #333333;
   width: 100%;
 
@@ -34,11 +35,17 @@ export const MeetingSection = styled.section`
     max-width: 100%;
     overflow-wrap: break-word;
     font-size: 1rem;
-    color: #5e5c7f;
+    color: #6c6c6c;
+    font: normal normal normal 16px/26px NanumSquareOTF;
+  }
+  .email {
+    font: normal normal normal 16px/18px NanumSquareOTF;
+    color: #9c9c9c;
   }
 
   h2 {
-    font: normal normal 800 16px/18px NanumSquareOTF;
+    font: normal normal 800 16px/36px NanumSquareOTF;
+    line-height: 2.25;
     margin: 0 0 0.25rem;
     border-radius: 0.5rem;
   }
@@ -46,17 +53,15 @@ export const MeetingSection = styled.section`
   p {
     margin: 0;
     font: normal normal normal 16px/18px NanumSquareOTF;
-    padding: 0.5rem 0 0;
-    border-radius: 0.5rem;
-
-    &:hover {
-      font-weight: bold;
-    }
   }
-
-  p + p {
-    margin-top: 0.625rem;
+  .divider {
+    background: #d9d9d9 0% 0% no-repeat padding-box;
+    height: 18px;
+    width: 1px;
   }
+  //p + p {
+  //  margin-top: 0.625rem;
+  //}
 `
 const statusColor = ({ state }: { state: string }) => css`
   background: ${(state === 'replan' || state === 'met') && brandColor};

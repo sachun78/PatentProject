@@ -17,7 +17,8 @@ function SidebarItem({ text, to, ignore }: SidebarItemProps) {
           if (ignore) {
             e.preventDefault()
           }
-        }}>
+        }}
+      >
         <span>{text}</span>
       </NavLink>
     </li>
@@ -27,21 +28,20 @@ function SidebarItem({ text, to, ignore }: SidebarItemProps) {
 const linkStyle = css`
   display: flex;
   align-items: center;
-  color: #6C6C6C;
+  color: #6c6c6c;
   text-decoration: none;
   width: 95px;
   justify-content: center;
+  font: normal normal normal 17px/19px NanumSquareOTF;
 
   span {
-    font: normal normal normal 17px/19px NanumSquareOTF;
     text-align: center;
     padding: 1.25rem 0 1.25rem;
   }
 
   &.active {
     color: #910457;
-    font: normal normal normal 18px 'NanumSquare';
-    line-height: 1.166666667;
+    font-weight: bold;
   }
 `
 
