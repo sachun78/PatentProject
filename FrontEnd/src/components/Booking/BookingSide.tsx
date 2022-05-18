@@ -7,7 +7,7 @@ import { API_PATH } from 'lib/api/client'
 import gravatar from 'gravatar'
 import React from 'react'
 import IconControl from '../IconControl'
-import { useRemoveOutlineHover } from '../../lib/styles/muiStyles'
+import { useRemoveOutlineHover } from 'lib/styles/muiStyles'
 
 export type BookingSideProps = {
   meeting: IMeeting
@@ -101,7 +101,7 @@ const eventNameStyle = css`
   color: #333333;
 `
 
-const sectionTitle = css`
+export const sectionTitle = css`
   font: normal normal 800 12px/13px NanumSquareOTF;
   color: #910457;
   margin-bottom: 1.25rem;

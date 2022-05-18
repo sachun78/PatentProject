@@ -1,14 +1,16 @@
 import { mainStyle } from './styles'
-import { IReplan } from '../../lib/api/types'
+import { IReplan } from 'lib/api/types'
 import useInput from 'hooks/useInput'
 import RequestSection from 'pages/Meeting/meeting-create-form/RequestForm/RequestSection'
 import { Button, OutlinedInput, Typography } from '@mui/material'
 import React, { useCallback, useMemo } from 'react'
-import { replanMeeting } from '../../lib/api/meeting/replanMeeting'
+import { replanMeeting } from 'lib/api/meeting/replanMeeting'
 import { useMutation, useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
 import TimeGridInput from '../DatePickerInput/TimeGridInput'
 import { isBefore } from 'date-fns'
+import { sectionTitle } from './BookingSide'
+import { useRemoveOutlineHover } from 'lib/styles/muiStyles'
 
 export type BookingRepalnMainProps = {
   meeting: IReplan
@@ -70,6 +72,8 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
     [comment, startTime, endTime, replanMut, meeting.data.code, location, date]
   )
 
+  const classes = useRemoveOutlineHover()
+
   if (meeting.data.status !== 'none') {
     const isReplan = meeting.data.status === 'replan'
     return (
@@ -97,9 +101,9 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
 
   return (
     <div css={mainStyle}>
-      <h3>Replan</h3>
+      <h3 css={sectionTitle}>/ Replan /</h3>
       <form onSubmit={onSubmit} style={{ width: '100%' }}>
-        <RequestSection title={'Change Date'}>
+        <RequestSection title={'Change Date'} icon={'date'}>
           <TimeGridInput
             startTime={startTime}
             endTime={endTime}
@@ -112,10 +116,23 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
             unavailables={meeting.sendData.event_restritedTime}
           />
         </RequestSection>
-        <RequestSection title={'Change Location'}>
-          <OutlinedInput name="location" fullWidth value={location} onChange={onChangeLocation} />
+        <RequestSection title={'Change Location'} icon={'place'}>
+          <OutlinedInput
+            name="location"
+            fullWidth
+            value={location}
+            onChange={onChangeLocation}
+            classes={classes}
+            style={{ height: '38px' }}
+            inputProps={{
+              style: {
+                color: '#6c6c6c',
+                font: 'normal normal normal 16px/26px NanumSquareOTF',
+              },
+            }}
+          />
         </RequestSection>
-        <RequestSection title={'Comment'}>
+        <RequestSection title={'Comment'} icon={'comment'}>
           <OutlinedInput
             placeholder="Leave a comment"
             name="comment"
@@ -124,6 +141,13 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
             onChange={onChangeComment}
             minRows={3}
             multiline
+            classes={classes}
+            inputProps={{
+              style: {
+                color: '#6c6c6c',
+                font: 'normal normal normal 16px/26px NanumSquareOTF',
+              },
+            }}
           />
         </RequestSection>
         <Button variant={'contained'} type={'submit'} disabled={replanMut.isLoading} fullWidth>
