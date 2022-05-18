@@ -26,6 +26,13 @@ function MeetingDetail({}: MeetingDetailProps) {
     staleTime: 5000,
   })
 
+  const finalMut = useMutation(updateMeeting, {
+    onSuccess: () => {
+      refetch()
+    },
+    onError: () => {},
+  })
+
   const isExpired = useMemo(() => {
     if (!data) return false
     return isBefore(new Date(data.startTime), new Date())
@@ -35,13 +42,6 @@ function MeetingDetail({}: MeetingDetailProps) {
     if (!data) return false
     return isBefore(new Date(data.startTime), new Date()) && data.status === 'confirm'
   }, [data])
-
-  const finalMut = useMutation(updateMeeting, {
-    onSuccess: () => {
-      refetch()
-    },
-    onError: () => {},
-  })
 
   const onResult = useCallback(
     (type: string) => () => {
@@ -125,7 +125,7 @@ function MeetingDetail({}: MeetingDetailProps) {
           <div className={'multiline'}>{data.comment} </div>
         </MeetingSection>
         <MeetingSection>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <h2>
               State
               <span className={'state-text'}>
@@ -165,7 +165,11 @@ function MeetingDetail({}: MeetingDetailProps) {
           )}
         </MeetingSection>
       </ContainerBlock>
-      {isResult ? <MeetingResult /> : change && <MeetingChange place={data.location} eventId={data.eventId} />}
+      {isResult ? (
+        <MeetingResult />
+      ) : (
+        change && <MeetingChange place={data.location} eventId={data.eventId} meetingId={data._id} />
+      )}
     </Stack>
   )
 }

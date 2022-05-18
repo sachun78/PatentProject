@@ -89,7 +89,7 @@ function TimeGridInput({
   }, [timeEvent, unavailables])
 
   const dateDiff = useMemo(() => {
-    return differenceInCalendarDays(endDate, startDate) + 1
+    return differenceInCalendarDays(new Date(endDate), new Date(startDate)) + 1
   }, [endDate, startDate])
 
   return (
