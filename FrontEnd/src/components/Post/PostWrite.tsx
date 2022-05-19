@@ -1,5 +1,6 @@
 import { css } from '@emotion/react'
 import { RadioGroup } from '@mui/material'
+import IconControl from 'components/IconControl'
 import { createPost } from 'lib/api/post/createPost'
 import { postImgUpload } from 'lib/api/post/postImgUpload'
 import { User } from 'lib/api/types'
@@ -131,7 +132,8 @@ function PostWrite({}: postWriteProps) {
   useEffect(() => {
     
     quillInstance.current = new Quill(quillElement.current, {
-      theme: 'snow',      
+      theme: 'snow',
+      placeholder: "    Enter your text here.",
       modules: {
         toolbar: {
           container: [
@@ -157,101 +159,96 @@ function PostWrite({}: postWriteProps) {
   return (
     <>
       <div css={postWriteStyle}>
-        <form onSubmit={onSubmit} encType="multipart/form-data">
-          <input css={inputStyle} value="Feel Free To Write" readOnly />
-          <div className={'divider'}>{''}</div>
+        <form onSubmit={onSubmit} encType="multipart/form-data" style={{ height: "100%", marginBottom: "1.875rem" }}>
+          <div css={headStyle}>
+            <IconControl name={'write'} style={{ padding: "0 0.375rem 0 0" }}/>
+              New Post
+          </div>          
           <div css={quillWrapperStyle}>
             <div css={editorStyle} ref={quillElement} />
           </div>
         </form>
-      </div>
-      <div css={buttonWrapStyle}>
-        <button css={buttonStyle} onClick={onSubmit}>
-          Posting
-        </button>
-        <button css={buttonStyle} onClick={onCancle}>
-          Cancle
-        </button>
-      </div>
+        <div css={buttonWrapStyle}>        
+          <button css={buttonStyle} onClick={onCancle} style={{ background: '#9C9C9C'}}>
+            Cancle
+          </button>
+          <button css={buttonStyle} onClick={onSubmit} style={{ background: '#910457'}}>
+            Posting
+          </button>
+        </div>
+      </div>      
     </>
   )
 }
 
 export default PostWrite
 
-const editorStyle = css`
-  height: 22rem;
+const headStyle = css`
+  display: flex;
+  font:  800 18px NanumSquareOTF;
+  align-items: center;
+  padding: 1.875rem 0 1.875rem 1.875rem;
+  color: #333333;
 `
-const quillWrapperStyle = css`
-  margin: 1rem;
 
-  .ql-editor {
-    font-size: 1.125rem;
-    line-height: 1.5;
-    margin-top: 2rem;
-    margin-left: 1rem;
+const editorStyle = css`
+  max-height: 26.125rem;
+  background: #FFFFFF !important;
+`
+const quillWrapperStyle = css` 
+  height: 32.5rem;  
+
+  .ql-container {
+    border: none !important;
+  }
+  .ql-toolbar {
+    background: #F2F2F2;
+    border: none !important;
+    padding: 0.5rem 0 0.5rem 1rem !important;
   }
 
-  height: 22rem;
+  .ql-editor {        
+    font: 15px NanumSquareOTF;
+    line-height: 1.5;
+    margin: 1.875rem;
+    padding: 0;
+    color: #6C6C6C;
+    
+  }
+
+  .ql-editor.ql-blank::before{
+    font: 15px NanumSquareOTF;
+    color: #D9D9D9;    
+  }  
 `
 const postWriteStyle = css`
-  max-width: 54.375rem;
-  height: 35rem;
+  width: 54.375rem;
+  height: 37.5rem;
   margin-bottom: 1.6rem;
   align-items: flex-start;
   box-shadow: 0 3px 6px #00000029;
-  border-radius: 1rem;
+  border-radius: 0.7rem;
   opacity: 0.8;
   position: relative;
-  background: #fff;
-
-  .divider {
-    margin: auto;
-    margin-top: 1.25rem;
-    margin-bottom: 1.875rem;
-    border: 1px solid #9c9c9c;
-    width: 95%;
-  }
+  background: #FFFFFF;
+  
 `
 
-const inputStyle = css`
-  width: 100%;
-  border: none;
-  outline: none;
-  padding-bottom: 0.5rem;
-  margin-top: 2rem;
-  padding: 0 2rem;
-  font-size: 2rem;
-`
 const buttonWrapStyle = css`
-  margin-top: 1rem;
-  margin-bottom: 3rem;
-
+  display: flex;
+  justify-content: center;  
   button + button {
-    margin-left: 0.5rem;
-  }
-
-  height: 2.125rem;
-
-  & + & {
-    margin-left: 0.5rem;
-  }
-
-  padding: 0 2rem;
+    margin-left: 1.25rem;
+  }     
 `
 
-const buttonStyle = css`
+const buttonStyle = css`  
   border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-weight: bold;
-  padding: 0.25rem 1rem;
-  color: white;
-  outline: none;
-  cursor: pointer;
-  background: ${palette.cyan[800]};
-
-  &:hover {
-    background: ${palette.cyan[600]};
-  }
+  border-radius: 999px;  
+  width: 9.375rem;
+  height: 1.75rem;
+  font: 14px NanumSquareOTF;
+  font-weight: 100;  
+  color: white;  
+  cursor: pointer;    
 `

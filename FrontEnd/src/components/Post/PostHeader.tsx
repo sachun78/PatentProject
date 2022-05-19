@@ -275,7 +275,7 @@ const linkStyle = css`
 
 const headerStyle = css`
   display: flex;
-  padding-top: 1.875rem;
+  padding-top: 1.5625rem;
   padding-left: 1.875rem;
   padding-right: 1.875rem;
   padding-bottom: 20px;

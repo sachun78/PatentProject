@@ -6,6 +6,8 @@ import { ReactComponent as plus } from './iconmonstr-plus-6.svg'
 import { ReactComponent as home } from './iconmonstr-home-6.svg'
 import { ReactComponent as schedule } from './iconmonstr-calendar-4.svg'
 import { ReactComponent as network } from './iconmonstr-user-29.svg'
+import { ReactComponent as searchIcon } from './search.svg'
+import { ReactComponent as write } from './write.svg'
 import { ReactComponent as add } from './add.svg'
 import { ReactComponent as infoUser } from './info-user.svg'
 import { ReactComponent as time } from './time.svg'
@@ -34,4 +36,6 @@ export {
   date,
   company,
   comment,
+  searchIcon,
+  write
 }

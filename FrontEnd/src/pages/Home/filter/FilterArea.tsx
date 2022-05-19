@@ -1,24 +1,24 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import InputUnstyled from '@mui/base/InputUnstyled';
 import Autocomplete from '@mui/material/Autocomplete';
 import { css } from '@emotion/react'
+import { InputBase } from '@mui/material';
 
 function FilterArea() {
-  return (
-    <div css={containerStyle}>
+  return (    
     <Autocomplete
-      id="country-select-demo"
-      sx={{ width: 300, flex: 4 }}
+      css={containerStyle}
+      id="country-select-demo"        
       multiple
       options={countries}
-      autoHighlight
-      getOptionLabel={(option) => option.label}
+      autoHighlight      
       renderOption={(props, option) => (
         <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
           <img
             loading="lazy"
-            width="20"
+            width="16"
             src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
             srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
             alt=""
@@ -27,17 +27,19 @@ function FilterArea() {
         </Box>
       )}
       renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Choose a country"
-          inputProps={{
-            ...params.inputProps,
-            autoComplete: 'new-password', // disable autocomplete and autofill
-          }}
-        />
+        <>          
+          <TextField            
+            css={textStyle}          
+            {...params}
+            placeholder="Choose a country"            
+            // inputProps={{
+            //   ...params.inputProps,
+            //   autoComplete: 'new-password', // disable autocomplete and autofill
+            // }}
+          />
+        </>
       )}
-    />
-    </div>
+    />    
   );
 }
 
@@ -476,43 +478,35 @@ const countries: readonly CountryType[] = [
 
 export default FilterArea
 
+const textStyle = css`
+  height: 1.375rem;
+  /* input, label, div, span, legend, fieldset {
+    
+    margin: 0px;
+    padding: 0px;
+    font: 14px NanumSquareOTF;
+    max-height: 1.375rem;
+    display: flex;
+    align-items: center;
+        
+  } */  
+  input::placeholder {
+    color: #6C6C6C;
+    font: 14px NanumSquareOTF;
+  }
+  /* label, div {
+    height: 100%;
+    display: flex;
+    align-items: center;    
+  } */
+
+`
 
 const containerStyle = css`
-    display: flex;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 1rem;
-  box-shadow: 0 3px 6px #00000029;
-
-  max-width: 54.375rem;  
-
-  margin-bottom: 1.25rem;
-  padding: 1.875rem;
-
-  h1 {
-    margin: 0;
-    color: #333;
-    font: normal normal 800 18px NanumSquareOTF;
-    line-height: 1.166666667;
-  }
-
-  .divider {
-    margin-top: 1.25rem;
-    margin-bottom: 1.875rem;
-    border: 1px solid #9C9C9C;
-  }
-
-  .input-post {
-    display: flex;
-
-    span {
-      flex: 1;
-      color: #9C9C9C;
-    }
-
-    svg {
-      width: 18px;
-      height: 18px;
-      fill: #9C9C9C;
-    }
-  }
+  display: flex;      
+  align-items: center;
+  width: 25rem;
+  max-height: 1.375rem;
+  height: 1.375rem;
+  
 `
