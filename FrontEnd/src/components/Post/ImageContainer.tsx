@@ -58,9 +58,9 @@ const ImageContainer = ({ images, isDetail } : imageContainerProps) => {
           <img
             {...srcset(item.img, 300, item.rows, item.cols)}            
             loading="lazy"
-            style={{borderRadius: '1rem', cursor: 'zoom-in', objectFit: 'fill'}}
+            style={{borderRadius: '1rem', objectFit: 'fill'}}
             crossOrigin="anonymous"
-            onClick={handleOpen}  
+            // onClick={handleOpen}  
           />                    
           <Modal open={open} onClose={handleClose} css={modalStyle}>
             <Box css={boxWrapper}>
@@ -90,7 +90,7 @@ const ImageContainer = ({ images, isDetail } : imageContainerProps) => {
             {...srcset(item.img, 300, item.rows, item.cols)}
             // height="100%"
             loading="lazy"
-            style={{ borderRadius: '1rem' }}
+            style={{ borderRadius: '1rem', objectFit: 'fill' }}
             crossOrigin="anonymous"
           />
         </ImageListItem>

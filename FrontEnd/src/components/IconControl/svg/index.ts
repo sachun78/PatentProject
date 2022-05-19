@@ -9,5 +9,6 @@ import { ReactComponent as home } from './iconmonstr-home-6.svg'
 import { ReactComponent as flip } from './iconmonstr-flip-chart-7.svg'
 import { ReactComponent as schedule } from './iconmonstr-calendar-4.svg'
 import { ReactComponent as network } from './iconmonstr-user-29.svg'
-
-export { links, welcome, undo, back, upload, edit, plus,home,flip, schedule, network }
+import { ReactComponent as searchIcon } from './search.svg'
+import { ReactComponent as write } from './write.svg'
+export { links, welcome, undo, back, upload, edit, plus,home,flip, schedule, network, searchIcon, write }
