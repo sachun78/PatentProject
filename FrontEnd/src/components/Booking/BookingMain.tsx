@@ -5,7 +5,8 @@ import React, { useCallback } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 import { Box, Button } from '@mui/material'
 import { Link } from 'react-router-dom'
-import media from '../../lib/styles/media'
+import media from 'lib/styles/media'
+import styled from '@emotion/styled'
 
 export type BookingMainProps = {
   code: string | null
@@ -40,9 +41,9 @@ function BookingMain({ code, status, expire, reserved }: BookingMainProps) {
   }, [cancelMut, code])
 
   if (!code) return null
+
   return (
     <div css={mainStyle}>
-      <img src="/assets/wemet_logo.png" alt="wemet-logo" />
       {expire ? (
         <div> Meeting is expired</div>
       ) : (
@@ -50,20 +51,33 @@ function BookingMain({ code, status, expire, reserved }: BookingMainProps) {
           {status === 'none' && reserved && (
             <Box display="flex" justifyContent="space-around" minWidth={400} marginTop={1}>
               <Button
-                onClick={onConfirm}
-                disabled={cancelMut.isLoading || confirmMut.isLoading}
-                variant={'contained'}
-                size={'large'}
-              >
-                Confirm
-              </Button>
-              <Button
                 onClick={onCancel}
                 disabled={cancelMut.isLoading || confirmMut.isLoading}
                 variant={'contained'}
-                size={'large'}
+                style={{
+                  width: '150px',
+                  height: '28px',
+                  borderRadius: '1rem',
+                  background: '#9C9C9C',
+                  font: 'normal normal normal 14px/26px NanumSquareOTF',
+                  textTransform: 'none',
+                }}
               >
                 Cancel
+              </Button>
+              <Button
+                onClick={onConfirm}
+                disabled={cancelMut.isLoading || confirmMut.isLoading}
+                variant={'contained'}
+                style={{
+                  width: '150px',
+                  height: '28px',
+                  borderRadius: '1rem',
+                  font: 'normal normal normal 14px/26px NanumSquareOTF',
+                  textTransform: 'none',
+                }}
+              >
+                Confirm
               </Button>
             </Box>
           )}
@@ -76,9 +90,11 @@ function BookingMain({ code, status, expire, reserved }: BookingMainProps) {
               </Link>
             </div>
           )}
-          {status === 'confirm' && <div>The Meeting is Confirmed.</div>}
-          {status === 'cancel' && <div>The Meeting is Canceled</div>}
-          {status !== 'none' && <Link to={'/'}>Back</Link>}
+          <Flexbox>
+            {status === 'confirm' && <div>The Meeting is Confirmed.</div>}
+            {status === 'cancel' && <div>The Meeting is Canceled</div>}
+            {status !== 'none' && <Link to={'/'}>Back</Link>}
+          </Flexbox>
         </>
       )}
     </div>
@@ -86,18 +102,11 @@ function BookingMain({ code, status, expire, reserved }: BookingMainProps) {
 }
 
 const mainStyle = css`
-  flex: 1 1 50%;
-  width: 50%;
-
-  padding: 3rem;
+  width: 100%;
+  margin: 1.875rem 0;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-
-  img {
-    width: 30%;
-  }
 
   ${media.medium} {
     width: 100%;
@@ -106,6 +115,13 @@ const mainStyle = css`
       display: none;
     }
   }
+`
+
+const Flexbox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `
 
 export default BookingMain

@@ -49,7 +49,7 @@ const globalStyle = css`
   #root {
     overflow-x: hidden;
     min-height: 100%;
-    background: url('/assets/background.jpg') no-repeat center center fixed;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('/assets/background.jpg');
     background-size: cover;
   }
 

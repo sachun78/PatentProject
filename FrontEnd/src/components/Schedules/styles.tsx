@@ -34,8 +34,6 @@ export const tableStyle = css`
 `
 
 export const calendarStyle = css`
-  @import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
-
   .fc-today-button {
     width: 73px !important;
     padding: 4px 0 !important;

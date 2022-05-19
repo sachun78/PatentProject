@@ -1,6 +1,6 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Header, Section1 } from './styles'
+import { useNavigate } from 'react-router-dom'
+import { CardItem, CardSection, Footer, Header, Section1 } from './styles'
 
 export type LandingProps = {}
 
@@ -11,40 +11,57 @@ function Landing({}: LandingProps) {
     <>
       <Header>
         <div className={'logo'}>
-          <img src={'/assets/wemet_logo.png'} alt={'logo'} />
+          <img src={'/assets/wemet_logo_mini.png'} alt={'logo'} />
         </div>
         <ul>
           <li>
-            <Link to={'/login'}>Login</Link>
+            <button onClick={() => navigation('/login')} className={'btn-login'}>
+              Login
+            </button>
           </li>
           <li className={'skip'}>
             <button onClick={() => navigation('/email/check')}>Get started</button>
           </li>
         </ul>
       </Header>
-      <section style={{ width: '100%', height: '104px' }}></section>
       <Section1>
-        <p>ABOUT US</p>
+        <img src={'/assets/wemet_logo.png'} alt={'logo'} className={'main-logo'} />
         <h1>
           We bring people <span>together</span>. You make the <span>magic</span> happen.
         </h1>
         <p className={'contents'}>
-          Calendly takes the busywork of scheduling off your to-do list so you can get more done. Thousands of teams
-          across the globe use Calendly to make millions of 1-click meetings every week. Coordinate, connect, and
+          Calendly takes the busywork of scheduling off your to-do list so you can get more done. thousands of teams
+          across the globe use calendly to make millions of 1-click meetings every week. coordinate, connect, and
           nurture relationships all in one meeting lifecycle platform.
         </p>
-      </Section1>
-      <Section1>
-        <h2>We're the #1 scheduling platform</h2>
-      </Section1>
-      <Section1>
-        <h2>We're the #1 scheduling platform</h2>
-      </Section1>
-      <Section1>
-        <h2>We're the #1 scheduling platform</h2>
-      </Section1>
-      <Section1>
-        <h2>We're the #1 scheduling platform</h2>
+        <CardSection>
+          <CardItem>
+            <img src={'/assets/rending_meeting.png'} />
+            <div>SCHEDULING PLATFORM</div>
+          </CardItem>
+          <CardItem>
+            <img src={'/assets/rending_meeting2.png'} />
+            <div>SCHEDULING PLATFORM</div>
+          </CardItem>
+          <CardItem>
+            <img src={'/assets/rending_meeting.png'} />
+            <div>SCHEDULING PLATFORM</div>
+          </CardItem>
+          <CardItem>
+            <img src={'/assets/rending_meeting2.png'} />
+            <div>SCHEDULING PLATFORM</div>
+          </CardItem>
+        </CardSection>
+        <Footer>
+          <span>sponsor</span>
+          <img src={'/assets/logo-hanyang.png'} className={'sungam'} />
+          <img src={'/assets/logo-sungam.png'} className={'sungam'} />
+          <img src={'/assets/logo-cisun.png'} className={'cisun'} />
+          <img src={'/assets/logo-hanyang.png'} className={'sungam'} />
+          <img src={'/assets/logo-sungam.png'} className={'sungam'} />
+          <img src={'/assets/logo-cisun.png'} className={'cisun'} />
+          <img src={'/assets/logo-hanyang.png'} className={'sungam'} />
+        </Footer>
       </Section1>
     </>
   )

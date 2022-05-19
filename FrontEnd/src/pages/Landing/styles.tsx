@@ -1,72 +1,121 @@
 import styled from '@emotion/styled'
-import { brandColor } from '../../lib/palette'
+import { brandColor } from 'lib/palette'
+import { resetButton } from 'lib/styles/resetButton'
+
+export const CardSection = styled.section`
+  margin-top: 4.375rem;
+  display: flex;
+  align-items: center;
+`
+
+export const CardItem = styled.div`
+  width: 285px;
+  height: 25rem;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: none;
+    border-radius: 15px;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 15rem;
+    height: 10.1875rem;
+    padding: 20px;
+    background: white;
+    position: absolute;
+    bottom: 0;
+    transform: translate3d(10%, 200%, 0);
+    z-index: 2;
+    box-shadow: 2px 5px 11px #00000029;
+    border-radius: 15px;
+  }
+
+  & + & {
+    margin-left: 1.25rem;
+  }
+`
 
 export const Section1 = styled.section`
-  background-position: center bottom;
-  background-size: cover;
-  background-repeat: no-repeat;
+  background: white;
   display: flex;
   justify-content: center;
-  padding: 80px 40px;
-  width: 100%;
-
   align-items: center;
   flex-direction: column;
 
-  span {
-    color: ${brandColor};
+  padding: 10.625rem 0 3.125rem;
+  margin-top: 8.75rem;
+  width: 100%;
+
+  .main-logo {
+    position: absolute;
+    top: 180px;
+    width: 116px;
+    height: 150px;
   }
 
-  p {
-    letter-spacing: -0.01em;
-    text-align: left;
-    color: rgb(102, 102, 102);
-    font-size: 1rem;
-    line-height: 1;
-    font-weight: 900;
-    text-transform: uppercase;
+  span {
+    font-weight: 800;
   }
 
   h1 {
-    font-size: 4.20875rem;
-    line-height: 1;
-    font-weight: 800;
-    letter-spacing: -0.01em;
     text-align: center;
-    color: rgb(0, 0, 0);
-    margin-top: 48px;
+    color: #333333;
+    font: normal normal 300 60px/80px NanumSquareOTF;
+    line-height: 1.333333333;
+    text-transform: uppercase;
+    max-width: 56.25rem;
   }
 
   p.contents {
-    letter-spacing: -0.01em;
-    text-align: center;
-    color: rgb(0, 0, 0);
-    font-size: 1.125rem;
-    line-height: 2;
-    font-weight: 500;
-    margin-top: 48px;
-    max-width: 700px;
+    text-align: left;
+    color: #6c6c6c;
+    font: normal normal normal 18px/28px NanumSquareOTF;
+    line-height: 1.75;
+    margin-top: 3.125rem;
+    max-width: 37rem;
   }
 `
+export const Footer = styled.footer`
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 59.5625rem;
+  margin: 7.6875rem auto 0;
+
+  span {
+    font: normal normal 800 15px/17px NanumSquareOTF;
+    color: #9c9c9c;
+  }
+
+  .sungam {
+    width: 73px;
+    height: 17px;
+  }
+
+  .cisun {
+    width: 51px;
+    height: 17px;
+  }
+`
+
 export const Header = styled.nav`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  height: 104px;
-  padding-left: 40px;
-  padding-right: 40px;
-  background: rgba(255, 255, 255, 1);
-  box-shadow: rgb(0 0 0 / 4%) 0px 4px 4px;
+  max-width: 75rem;
+  height: 6.25rem;
+  margin: 0 auto;
+
   img {
-    width: 5rem;
-    height: 5rem;
   }
+
   ul {
     display: flex;
     align-items: center;
@@ -99,29 +148,28 @@ export const Header = styled.nav`
   }
 
   button {
+    ${resetButton};
     overflow: visible;
-    appearance: none;
 
     position: relative;
     display: inline-flex;
-    -webkit-box-align: center;
     align-items: center;
-    -webkit-box-pack: center;
     justify-content: center;
     text-align: center;
-    border: none;
-    outline: none;
     cursor: pointer;
     transition: all 0.2s linear 0s;
     color: rgb(255, 255, 255);
     background-color: ${brandColor};
-    opacity: 1;
-    height: 48px;
-    padding-left: 24px;
-    padding-right: 24px;
-    border-radius: 40px;
-    font-weight: 700;
-    font-size: 0.875rem;
+    height: 1.75rem;
+    width: 9.375rem;
+    border-radius: 1rem;
+    font: normal normal normal 14px/26px NanumSquareOTF;
     line-height: 1;
+  }
+
+  .btn-login {
+    color: ${brandColor};
+    background-color: transparent;
+    border: 1px solid ${brandColor};
   }
 `

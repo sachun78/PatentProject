@@ -5,18 +5,20 @@ import { useRemoveOutlineHover } from 'lib/styles/muiStyles'
 import useInput from 'hooks/useInput'
 import RequestSection from 'pages/Meeting/meeting-create-form/RequestForm/RequestSection'
 import TimeGridInput from '../DatePickerInput/TimeGridInput'
-import { useQuery } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 import { getEvent } from '../../lib/api/event/getEvent'
 import useDateRangeHook from '../../hooks/useDateRangeHook'
 import useDateTimeHook from '../../hooks/useDateTimeHook'
 import { IMeeting } from '../../lib/api/types'
+import { changeMeeting } from '../../lib/api/meeting/updateMeeting'
 
 export type MeetingChangeProps = {
   place: string
   eventId: string
+  meetingId: string
 }
 
-function MeetingChange({ place, eventId }: MeetingChangeProps) {
+function MeetingChange({ place, eventId, meetingId }: MeetingChangeProps) {
   const [replace, setReplace] = useInput(place)
   const [comment, onChangeComment] = useInput('')
   const classes = useRemoveOutlineHover()
@@ -29,6 +31,8 @@ function MeetingChange({ place, eventId }: MeetingChangeProps) {
   const { startDate, endDate } = useDateRangeHook()
   const { date, time, setDate, setTime } = useDateTimeHook()
   const [endTime, setEndTime] = useState<Date | null>(null)
+
+  const onChangeMeeting = useMutation(changeMeeting, {})
 
   const onChangeDate = useCallback(
     (change: Date) => {
@@ -50,23 +54,42 @@ function MeetingChange({ place, eventId }: MeetingChangeProps) {
 
   const filteredTimeEvent = useMemo(() => {
     if (!event) return []
-    return (event.meeting_list as IMeeting[]).filter((meeting: IMeeting) => {
-      return meeting.status === 'confirm'
-    })
-  }, [event])
+    return (event.meeting_list as IMeeting[])
+      .filter((meeting: IMeeting) => {
+        return meeting._id !== meetingId
+      })
+      .filter((meeting: IMeeting) => {
+        return meeting.status === 'confirm'
+      })
+  }, [event, meetingId])
+
+  const onSubmit = useCallback(
+    (e) => {
+      e.preventDefault()
+      console.log(replace, comment, time, endTime)
+      if (!endTime) {
+        return console.log('종료시간을 입력해주세요')
+      }
+      if (!comment.trim()) {
+        return
+      }
+      onChangeMeeting.mutate({ meetingId, location: replace, comment, startTime: time, endTime })
+    },
+    [comment, endTime, meetingId, onChangeMeeting, replace, time]
+  )
 
   if (!event) return null
 
   return (
     <ContainerBlock>
-      <form>
+      <form onSubmit={onSubmit}>
         <RequestSection title={'TimeSelect'}>
           <TimeGridInput
             startTime={time}
             endTime={endTime}
             date={date}
-            startDate={startDate}
-            endDate={endDate}
+            startDate={event.start_date}
+            endDate={event.end_date}
             timeChange={(sDate: Date, eDate: Date) => {
               onChangeTime(sDate)
               onChangeEndTime(eDate)
@@ -100,7 +123,7 @@ function MeetingChange({ place, eventId }: MeetingChangeProps) {
           />
         </RequestSection>
         <Button type={'submit'} variant={'contained'}>
-          Change
+          Submit
         </Button>
       </form>
     </ContainerBlock>

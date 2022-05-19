@@ -88,10 +88,6 @@ function TimeGridInput({
     return [...unavailableEvent, ...formatTimeEvents]
   }, [timeEvent, unavailables])
 
-  const dateDiff = useMemo(() => {
-    return differenceInCalendarDays(endDate, startDate) + 1
-  }, [endDate, startDate])
-
   return (
     <InputBase ref={ref} style={{ position: 'relative', width: '100%' }}>
       <div
@@ -264,6 +260,8 @@ export const textStyle = css`
   padding-left: 1rem;
   padding-right: 1rem;
   width: 100%;
+
+  color: #6c6c6c;
 
   &:focus-visible {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);

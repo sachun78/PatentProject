@@ -2,21 +2,15 @@ import { css } from '@emotion/react'
 import media from 'lib/styles/media'
 
 export const mainStyle = css`
-  flex: 1 1 50%;
-  width: 50%;
+  width: 100%;
   transition: all 0.22s ease-out;
-
-  padding: 3rem;
+  margin-top: 1.25rem;
+  padding: 1.875rem;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  align-items: center;
-  justify-content: space-between;
-
-  img {
-    width: 30%;
-    margin-bottom: 1rem;
-  }
+  background: #fff;
+  box-shadow: 2px 5px 11px #00000029;
+  border-radius: 1rem;
 
   ${media.medium} {
     width: 100%;
@@ -30,16 +24,12 @@ export const mainStyle = css`
 `
 
 export const wrapper = css`
-  width: 100%;
-  border: 1px solid rgba(26, 26, 26, 0.1);
-  border-radius: 8px;
-  box-shadow: 0 1px 8px 0 rgb(0 0 0 / 8%);
+  border-radius: 1rem;
   display: flex;
-  flex: 1 1 auto;
-  min-height: 550px;
+  flex-direction: column;
+  width: 54.375rem;
   transition: all 0.22s ease-out;
   position: relative;
-  background-color: rgba(255, 255, 255, 0.8);
 
   ${media.medium} {
     flex-direction: column;
