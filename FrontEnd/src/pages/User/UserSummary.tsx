@@ -4,6 +4,7 @@ import getCountryName from 'lib/countryName'
 import React from 'react'
 import { useQuery } from 'react-query'
 import { getProfilebyEmail } from 'lib/api/me/getProfile'
+import { Navigate } from 'react-router-dom'
 
 export type UserSummaryProps = {
   email: string
@@ -15,7 +16,8 @@ function UserSummary({ email }: UserSummaryProps) {
     staleTime: 5000,
   })
 
-  if (!profileData || isLoadingProfile) return null
+  if (isLoadingProfile) return null
+  if (!profileData) return <Navigate to={'..'} replace />
   return (
     <UserBody>
       <Middle>
@@ -24,25 +26,27 @@ function UserSummary({ email }: UserSummaryProps) {
           <Tooltip title="Company" placement={'left'}>
             <span>
               <img src={'/assets/company.png'} alt={'company'} />
-              {profileData.company}
+              {profileData.company ?? '-'}
             </span>
           </Tooltip>
           <Tooltip title="Position" placement={'left'}>
             <span>
               <img src={'/assets/position.png'} alt={'Position'} />
-              {profileData.position}
+              {profileData.position ?? '-'}
             </span>
           </Tooltip>
           <Tooltip title="Department" placement={'left'}>
             <span>
-              <img src={'/assets/department.png'} alt={'Department'} /> {profileData.department}
+              <img src={'/assets/department.png'} alt={'Department'} /> {profileData.department ?? '-'}
             </span>
           </Tooltip>
-          <Tooltip title="Country" placement={'left'}>
-            <span>
-              <img src={'/assets/country.png'} alt={'Country'} /> {getCountryName(profileData.country!)}
-            </span>
-          </Tooltip>
+          {profileData.country && (
+            <Tooltip title="Country" placement={'left'}>
+              <span>
+                <img src={'/assets/country.png'} alt={'Country'} /> {getCountryName(profileData.country)}
+              </span>
+            </Tooltip>
+          )}
           <Tooltip title="Wemet" placement={'left'}>
             <span>
               <img src={'/assets/meeting.png'} alt={'Wemet'} /> 0

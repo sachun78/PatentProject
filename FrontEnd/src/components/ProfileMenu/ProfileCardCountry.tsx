@@ -1,4 +1,4 @@
-import { countryWrapper, itemStyle } from './styles'
+import { countryWrapper, InitItemStyle, itemStyle } from './styles'
 import React, { memo, SyntheticEvent } from 'react'
 import { css } from '@emotion/react'
 import CountrySelector, { countries, CountryType } from '../CountrySelector/CountrySelector'
@@ -12,13 +12,14 @@ export type ProfileCardCountryProps = {
   editable?: boolean
   country: string
   onChange: (e: SyntheticEvent, v: AutocompleteValue<CountryType, undefined, undefined, undefined>) => void
+  size?: 'small' | 'large'
 }
 
-function ProfileCardCountry({ title, editable, country, onChange }: ProfileCardCountryProps) {
+function ProfileCardCountry({ title, editable, country, onChange, size = 'large' }: ProfileCardCountryProps) {
   const [edit, setEdit] = React.useState(editable ?? false)
 
   return (
-    <div css={itemStyle}>
+    <div css={size === 'large' ? itemStyle : InitItemStyle}>
       <div className="inner">
         <div className="title">
           <label>{title}</label>

@@ -24,6 +24,7 @@ import { ReactComponent as cardSelect } from './card-select.svg'
 import { ReactComponent as left } from './left.svg'
 import { ReactComponent as right } from './right.svg'
 import { ReactComponent as list } from './list.svg'
+import { ReactComponent as profile } from './profile.svg'
 
 export {
   links,
@@ -52,4 +53,5 @@ export {
   right,
   list,
   dateSelect,
+  profile,
 }

@@ -1,4 +1,4 @@
-import { itemStyle } from './styles'
+import { InitItemStyle, itemStyle } from './styles'
 import React, { useCallback, useRef, useState } from 'react'
 import PhoneInputT from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
@@ -10,9 +10,10 @@ import { brandColor } from '../../lib/palette'
 export type ProfileCardPhoneProps = {
   title: string
   phone?: string
+  size?: 'small' | 'large'
 }
 
-function ProfileCardPhone({ title, phone }: ProfileCardPhoneProps) {
+function ProfileCardPhone({ title, phone, size = 'large' }: ProfileCardPhoneProps) {
   const [value, setValue] = useProfileFormState()
   const [edit, setEdit] = useState(false)
   const ref = useRef(null)
@@ -23,7 +24,7 @@ function ProfileCardPhone({ title, phone }: ProfileCardPhoneProps) {
     [setValue]
   )
   return (
-    <div css={itemStyle}>
+    <div css={size === 'large' ? itemStyle : InitItemStyle}>
       <div className="inner">
         <div className="title">
           <label>{title}</label>

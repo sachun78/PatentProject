@@ -14,7 +14,7 @@ import { AxiosError } from 'axios'
 import { MdLock } from 'react-icons/md'
 import { checkCode } from 'lib/api/auth/sendmail'
 import { toast } from 'react-toastify'
-import { containerStyle, inputStyle } from '../Login/styles'
+import { containerStyle, inputStyle, loginFormStyle } from '../Login/styles'
 
 type RegisterProps = {}
 
@@ -43,8 +43,6 @@ export default function Signup({}: RegisterProps) {
 
   const mutation = useMutation('signUp', () => signup({ ...form, email: data?.email || '' }), {
     onSuccess: () => {
-      // Global Toast 표시, 로그인 페이지로 이동
-      toast.success('register success', { position: 'top-center' })
       navigate('/login')
     },
     onError(err: AxiosError) {
@@ -114,97 +112,98 @@ export default function Signup({}: RegisterProps) {
     toast.error('code is empty', { position: 'top-center' })
     return <Navigate replace to={'/login'} />
   }
+
   return (
     <Auth>
-      <div css={containerStyle} style={{ padding: '3rem' }}>
-        <h2 className="title">Sign Up</h2>
-        <form
-          onSubmit={onSubmit}
-          style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}
-        >
-          <section>
-            <TextField
-              label="Email"
-              variant="outlined"
-              type="text"
-              name="email"
-              value={data.email}
-              css={inputStyle}
-              style={{ width: '100%' }}
-              disabled
-              InputProps={{
-                style: { fontSize: 12, backgroundColor: 'white' },
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <MdLock />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <TextField
-              label="Name"
-              variant="outlined"
-              type="text"
-              name="username"
-              value={form.username}
-              onChange={onChange}
-              css={inputStyle}
-              autoComplete="off"
-              style={{ width: '100%' }}
-              InputProps={{ style: { fontSize: 12 } }}
-            />
-            <TextField
-              label="Password"
-              variant="outlined"
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={onChange}
-              css={inputStyle}
-              autoComplete="password"
-              style={{ width: '100%' }}
-              InputProps={{ style: { fontSize: 12 } }}
-            />
-            <TextField
-              label="Confirm Password"
-              variant="outlined"
-              type="password"
-              name="password_confirm"
-              autoComplete="password-confirm"
-              value={form.password_confirm}
-              onChange={onChange}
-              css={inputStyle}
-              style={{ width: '100%' }}
-              InputProps={{ style: { fontSize: 12 } }}
-            />
-            {error && (
-              <FormHelperText
-                error
-                id="helper-text-signup-error"
-                variant={'outlined'}
-                sx={{ fontSize: 14, textAlign: 'center' }}
-              >
-                {error}
-              </FormHelperText>
-            )}
-          </section>
-          <section>
-            <div css={privacyStyle}>
-              <p>
-                By clicking Sign Up, you are indicating that you have read and
-                <br />
-                acknowledge the
-                <NavLink to={'/policy/terms'}> Terms of Service</NavLink> and{' '}
-                <NavLink to={'/policy/privacy'}>Privacy Notice</NavLink>.
-              </p>
-            </div>
-            <div className="button-div">
-              <Button variant="contained" disabled={mutation.isLoading} type="submit" fullWidth>
-                Sign Up
-              </Button>
-            </div>
-          </section>
-        </form>
+      <div css={containerStyle} style={{ height: '44.875rem' }}>
+        <figure>
+          <img src={'/assets/login_logo.png'} alt={'login-logo'} />
+        </figure>
+        <div css={loginFormStyle}>
+          <form
+            onSubmit={onSubmit}
+            style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}
+          >
+            <section>
+              <TextField
+                label="Email"
+                variant="outlined"
+                type="text"
+                name="email"
+                value={data.email}
+                css={inputStyle}
+                disabled
+                style={{ height: '45px' }}
+                InputProps={{
+                  style: { fontSize: 12, backgroundColor: 'white' },
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <MdLock />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <TextField
+                label="Name"
+                variant="outlined"
+                type="text"
+                name="username"
+                value={form.username}
+                onChange={onChange}
+                css={inputStyle}
+                autoComplete="off"
+                style={{ height: '45px' }}
+              />
+              <TextField
+                label="Password"
+                variant="outlined"
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={onChange}
+                css={inputStyle}
+                autoComplete="password"
+                style={{ height: '45px' }}
+              />
+              <TextField
+                label="Confirm Password"
+                variant="outlined"
+                type="password"
+                name="password_confirm"
+                autoComplete="password-confirm"
+                value={form.password_confirm}
+                onChange={onChange}
+                css={inputStyle}
+                style={{ height: '45px' }}
+              />
+              {error && (
+                <FormHelperText
+                  error
+                  id="helper-text-signup-error"
+                  variant={'outlined'}
+                  sx={{ fontSize: 14, textAlign: 'center' }}
+                >
+                  {error}
+                </FormHelperText>
+              )}
+            </section>
+            <section>
+              <div css={privacyStyle}>
+                <p>
+                  By clicking Sign Up, you are indicating that you have read and
+                  <br />
+                  acknowledge the <NavLink to={'/policy/terms'}>Terms of Service</NavLink> and{' '}
+                  <NavLink to={'/policy/privacy'}>Privacy Notice</NavLink>.
+                </p>
+              </div>
+              <div className="button-div">
+                <Button variant="contained" disabled={mutation.isLoading} type="submit" fullWidth>
+                  Sign Up
+                </Button>
+              </div>
+            </section>
+          </form>
+        </div>
       </div>
     </Auth>
   )

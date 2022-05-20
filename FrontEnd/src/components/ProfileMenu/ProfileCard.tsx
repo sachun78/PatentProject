@@ -5,7 +5,6 @@ import { careerStyle, emailStyle, itemStyle, photoStyle } from './styles'
 import { upload } from 'lib/api/me/upload'
 import ProfileCardText from './ProfileCardText'
 import ProfileCardField from './ProfileCardField'
-import ProfileCardEmail from './ProfileCardEmail'
 import ProfileCardCountry from './ProfileCardCountry'
 import ProfileCardSave from './ProfileCardSave'
 import useProfileImg from 'hooks/useProfileImg'
@@ -22,7 +21,6 @@ function ProfileCard({ children }: ProfileCardProps) {
 ProfileCard.Item = ProfileCardItem
 ProfileCard.Text = ProfileCardText
 ProfileCard.Field = ProfileCardField
-ProfileCard.Email = ProfileCardEmail
 ProfileCard.Country = ProfileCardCountry
 ProfileCard.Save = ProfileCardSave
 ProfileCard.Phone = ProfileCardPhone

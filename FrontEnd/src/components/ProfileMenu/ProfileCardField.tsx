@@ -1,9 +1,9 @@
-import { inputStyle, itemStyle, tagStyle, textStyle } from './styles'
+import { InitItemStyle, inputStyle, itemStyle, tagStyle, textStyle } from './styles'
 import React from 'react'
 import { css } from '@emotion/react'
-import Input from '../Input/Input'
-import { Button, Chip } from '@mui/material'
+import { Chip, OutlinedInput } from '@mui/material'
 import useToggle from 'hooks/useToggle'
+import { useRemoveOutlineHover } from '../../lib/styles/muiStyles'
 
 export type ProfileCardFieldProps = {
   title: string
@@ -13,13 +13,24 @@ export type ProfileCardFieldProps = {
   onAdd?: () => void
   onRemove: (t: string) => void
   fields: string[]
+  size?: 'small' | 'large'
 }
 
-function ProfileCardField({ title, text, editable, onChange, onAdd, onRemove, fields }: ProfileCardFieldProps) {
+function ProfileCardField({
+  title,
+  text,
+  editable,
+  onChange,
+  onAdd,
+  onRemove,
+  fields,
+  size = 'large',
+}: ProfileCardFieldProps) {
   const [edit, toggle] = useToggle(editable ?? false)
+  const classes = useRemoveOutlineHover()
 
   return (
-    <div css={itemStyle}>
+    <div css={size === 'large' ? itemStyle : InitItemStyle}>
       <div className="inner">
         <div className="title">
           <label>{title}</label>
@@ -33,15 +44,25 @@ function ProfileCardField({ title, text, editable, onChange, onAdd, onRemove, fi
                 margin-bottom: 0.5rem;
               `}
             >
-              <Input placeholder={title} name={title} value={text || ''} onChange={onChange} css={inputStyle} />
-              <Button
-                disabled={text === ''}
-                className="plus"
-                onClick={onAdd}
-                style={{ width: '1.5rem', fontSize: '0.875rem', height: '40px' }}
-              >
-                +
-              </Button>
+              <OutlinedInput
+                placeholder={text}
+                name={title}
+                value={text || ''}
+                onChange={onChange}
+                css={inputStyle}
+                classes={classes}
+                style={{ height: '45px' }}
+                endAdornment={
+                  <button
+                    disabled={text === ''}
+                    className="plus"
+                    onClick={onAdd}
+                    style={{ width: '25px', height: '25px' }}
+                  >
+                    +
+                  </button>
+                }
+              />
             </div>
           )}
           <div className="text">

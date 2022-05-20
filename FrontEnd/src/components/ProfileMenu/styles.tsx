@@ -79,17 +79,11 @@ export const textStyle = css`
   }
 
   .plus {
-    height: 3rem;
-    font-size: 1.3rem;
-    justify-content: center;
-    align-items: center;
-    background-color: ${palette.grey[50]};
-    padding-right: 1rem;
-    padding-left: 1rem;
-    border-radius: 0.4rem;
-    font-weight: 600;
-    margin-left: 1rem;
-    margin-top: 0.2rem;
+    ${resetButton};
+    border: 1px solid #9c9c9c;
+    padding: 0;
+    margin: 0;
+    border-radius: 50px;
 
     &:disabled {
       color: rgba(0, 0, 0, 0.3);
@@ -107,6 +101,7 @@ export const careerStyle = css`
   width: 100%;
 `
 // PROFILECARD STYLES
+
 export const itemStyle = css`
   padding: 0.9375rem 1.875rem;
 
@@ -134,6 +129,28 @@ export const itemStyle = css`
     label {
       color: #6c6c6c;
       font: normal normal normal 16px/26px NanumSquareOTF;
+    }
+  }
+`
+
+export const InitItemStyle = css`
+  ${itemStyle};
+  padding: 0;
+  min-height: 2.8125rem;
+
+  & + & {
+    margin-top: 1.25rem;
+  }
+
+  .inner {
+    height: 100%;
+  }
+
+  .title {
+    width: 7.8125rem;
+
+    label {
+      color: #9c9c9c;
     }
   }
 `
