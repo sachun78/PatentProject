@@ -20,8 +20,7 @@ function Home({}: HomeProps) {
   const [filter, setFilter] = useState(false)
 
   const { ref, inView } = useInView()
-  const [searchText, setSearchText] = useState('')
-  const [changeColor, setChangecolor] = useState(false)
+  const [searchText, setSearchText] = useState('')  
   const [filterOn, setFilterOn] = useState(false);
   const [search, setSearch] = useState(false)  
   const onSearchMode = useCallback(() => {
@@ -81,7 +80,7 @@ function Home({}: HomeProps) {
       <div css={searchBoxStyle}>
         <div css={nationStyle} onFocus={onFocus} onBlur={onBlur} tabIndex={1}>
           <img src="/assets/country.png" alt={'country'} style={{ width: "1rem", height: "1rem", marginRight: "0.3125rem" }} />
-          <div>Nation</div>
+          <div style={{ marginRight: '1.25rem' }}>Nation</div>
           {/* {filterOn &&}  */}
           
           <FilterArea />
