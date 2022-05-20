@@ -39,7 +39,7 @@ function EventCalendar({}: ScheduleCalendarProps) {
   }
 
   return (
-    <div css={calendarStyle} style={{ top: 0 }}>
+    <div css={calendarStyle} style={{ top: '-27px' }}>
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
@@ -58,7 +58,7 @@ function EventCalendar({}: ScheduleCalendarProps) {
         fixedWeekCount={false}
         events={calendarEvents}
         eventClick={handleEventClick}
-        height={'auto'}
+        height={'39.1875rem'}
         aspectRatio={1.765557164}
         select={(info) => {
           info.view.calendar.unselect()

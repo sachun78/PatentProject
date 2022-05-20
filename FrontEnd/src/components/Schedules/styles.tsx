@@ -92,6 +92,7 @@ export const calendarStyle = css`
   }
 
   .fc-day-today {
+    background: #ffebe8 !important;
     .fc-daygrid-day-number {
       color: ${brandColor} !important;
     }

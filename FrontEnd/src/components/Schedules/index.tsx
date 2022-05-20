@@ -127,13 +127,15 @@ function Schedules({}: ScheduleViewProps) {
       {/*일반 모드인 경우 Table*/}
       {!checked && !search && <ScheduleTable meetings={meetings} />}
       {/*검색 모드인 경우 Table*/}
-      {!checked && search && !searchText ? (
-        <div>Search Schedule, input meeting name, useremail or name</div>
-      ) : searchData && searchData.length ? (
-        <ScheduleTable meetings={searchData} />
-      ) : (
-        <div css={noScheduleStyle}>{searchLoading ? <h1>Searching...</h1> : <h1>There is no result</h1>}</div>
-      )}
+      {!checked &&
+        search &&
+        (!searchText ? (
+          <div>Search Schedule, input meeting name, useremail or name</div>
+        ) : searchData && searchData.length ? (
+          <ScheduleTable meetings={searchData} />
+        ) : (
+          <div css={noScheduleStyle}>{searchLoading ? <h1>Searching...</h1> : <h1>There is no result</h1>}</div>
+        ))}
       {!checked && !search && hasNextPage && (
         <Button
           ref={ref}

@@ -3,7 +3,7 @@ import React, { Dispatch, useCallback, useState } from 'react'
 import { useSearchInputState } from 'atoms/searchInputState'
 import IconControl from 'components/IconControl'
 import { css } from '@emotion/react'
-import { useFocusOutlineStyle } from '../../lib/styles/muiStyles'
+import { useFocusOutlineStyle } from 'lib/styles/muiStyles'
 
 export type SearchBoxProps = {
   filter: Dispatch<string>

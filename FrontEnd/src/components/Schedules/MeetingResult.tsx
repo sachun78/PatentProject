@@ -153,7 +153,18 @@ function MeetingResult({}: MeetingResultProps) {
               </RadioGroup>
             </MeetingSection>
 
-            <Button type={'submit'} fullWidth variant={'contained'}>
+            <Button
+              type={'submit'}
+              variant={'contained'}
+              sx={{
+                width: '150px',
+                height: '28px',
+                alignSelf: 'center',
+                borderRadius: '1rem',
+                font: 'normal normal normal 14px/26px NanumSquareOTF',
+                textTransform: 'none',
+              }}
+            >
               Submit
             </Button>
           </form>

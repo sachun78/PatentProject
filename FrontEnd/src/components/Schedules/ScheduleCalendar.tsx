@@ -61,8 +61,9 @@ function ScheduleCalendar({ meetings }: ScheduleCalendarProps) {
         showNonCurrentDates={false}
         fixedWeekCount={false}
         eventClick={onScheduleClick}
-        aspectRatio={2.079796265}
-      ></FullCalendar>
+        height={'39.1875rem'}
+        aspectRatio={1.765557164}
+      />
     </div>
   )
 }

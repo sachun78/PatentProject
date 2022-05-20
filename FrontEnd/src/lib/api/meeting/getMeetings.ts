@@ -1,4 +1,5 @@
 import client from '../client'
+import { QueryFunctionContext } from 'react-query'
 
 export async function getMeetingsCursor(pageParam: number) {
   const response = await client.get('/api/meeting', {
@@ -21,5 +22,13 @@ export async function getMeetingSearch(searchParam: string) {
 
 export async function getMeetingHistory() {
   const response = await client.get('/api/meeting/history')
+  return response.data
+}
+
+export async function getMeetingHistoryUser({ queryKey }: QueryFunctionContext) {
+  const [, email] = queryKey
+  const response = await client.get('/api/meeting/history', {
+    params: { toEmail: email },
+  })
   return response.data
 }

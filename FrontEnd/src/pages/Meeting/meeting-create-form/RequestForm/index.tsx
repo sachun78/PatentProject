@@ -11,7 +11,7 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { Button, Checkbox, FormControlLabel, OutlinedInput } from '@mui/material'
+import { Checkbox, FormControlLabel, OutlinedInput } from '@mui/material'
 import { ContainerBlock } from 'pages/Meeting/styles'
 import { getEvent } from 'lib/api/event/getEvent'
 import TimeGridInput from 'components/DatePickerInput/TimeGridInput'
@@ -24,6 +24,7 @@ import { IMeeting, IProfile } from 'lib/api/types'
 import useToggle from 'hooks/useToggle'
 import PhoneInput from '../../../../components/PhoneInput'
 import PhoneInputT from 'react-phone-number-input'
+import LoadingButton from '@mui/lab/LoadingButton'
 
 type RequestViewProps = {}
 
@@ -344,14 +345,9 @@ export default function RequestForm({}: RequestViewProps) {
             classes={classes}
           />
         </RequestSection>
-        <Button
-          css={buttonStyle}
-          variant={'contained'}
-          disabled={createScheduleMut.isLoading || createScheduleMut.data}
-          type={'submit'}
-        >
-          PROPOSE MEETING
-        </Button>
+        <LoadingButton css={buttonStyle} variant={'contained'} loading={createScheduleMut.isLoading} type={'submit'}>
+          Propose Meeting
+        </LoadingButton>
       </form>
     </ContainerBlock>
   )

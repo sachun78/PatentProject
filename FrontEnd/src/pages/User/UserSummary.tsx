@@ -5,6 +5,8 @@ import React from 'react'
 import { useQuery } from 'react-query'
 import { getProfilebyEmail } from 'lib/api/me/getProfile'
 import { Navigate } from 'react-router-dom'
+import { getMeetingHistoryUser } from '../../lib/api/meeting/getMeetings'
+import ScheduleTable from '../../components/Schedules/ScheduleTable'
 
 export type UserSummaryProps = {
   email: string
@@ -16,8 +18,11 @@ function UserSummary({ email }: UserSummaryProps) {
     staleTime: 5000,
   })
 
-  if (isLoadingProfile) return null
-  if (!profileData) return <Navigate to={'..'} replace />
+  const { data: historyData, isLoading: isLoadingHistory } = useQuery(['meeting_history', email], getMeetingHistoryUser)
+
+  if (isLoadingProfile || isLoadingHistory) return null
+  if (!profileData || !historyData) return <Navigate to={'..'} replace />
+
   return (
     <UserBody>
       <Middle>
@@ -49,7 +54,8 @@ function UserSummary({ email }: UserSummaryProps) {
           )}
           <Tooltip title="Wemet" placement={'left'}>
             <span>
-              <img src={'/assets/meeting.png'} alt={'Wemet'} /> 0
+              <img src={'/assets/meeting.png'} alt={'Wemet'} />
+              {historyData.length}
             </span>
           </Tooltip>
         </Summary>
@@ -68,6 +74,7 @@ function UserSummary({ email }: UserSummaryProps) {
       </Middle>
       <div className="History">
         <h3>Relative Meeting</h3>
+        <ScheduleTable meetings={historyData} type={'history'} />
       </div>
     </UserBody>
   )

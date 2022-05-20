@@ -112,7 +112,15 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export const ScheduleInfoBlock = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 0.5rem;
+
+  & {
+    color: #6c6c6c;
+    font: normal normal normal 16px/26px NanumSquareOTF;
+  }
+
+  & + & {
+    margin-top: 4px;
+  }
 
   svg {
     margin-right: 6px;
