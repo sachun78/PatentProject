@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { TableCell, tableCellClasses, TableRow } from '@mui/material'
+import { TableCell, tableCellClasses, TableRow, ToggleButton } from '@mui/material'
 import palette, { brandColor } from '../../lib/palette'
 import { css } from '@emotion/react'
 import { resetButton } from '../../lib/styles/resetButton'
@@ -140,4 +140,19 @@ export const InfoLink = styled(Link)`
 
   font: normal normal normal 12px/18px NanumSquareOTF;
   color: #6c6c6c;
+`
+
+export const RescheduleButton = styled(ToggleButton)`
+  border: 1px solid #9c9c9c;
+  border-radius: 3.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 1.125rem;
+
+  font: normal normal normal 12px/18px NanumSquareOTF;
+  color: #6c6c6c;
+  text-transform: none;
+  margin-left: 10px;
 `

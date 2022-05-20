@@ -47,11 +47,13 @@ export const calendarStyle = css`
       color: ${brandColor} !important;
     }
   }
-
+  .fc-toolbar-chunk > div {
+    display: flex;
+  }
   .fc-daygrid-day-number {
     padding: 0.5rem 0.5rem 0.25rem !important;
     color: #6c6c6c;
-    font: normal normal 800 15px 'NanumSquare';
+    font: normal normal 800 15px NanumSquareOTF;
     line-height: 1.133333333;
   }
 
@@ -149,9 +151,9 @@ export const calendarStyle = css`
 
   .fc .fc-toolbar-title {
     color: ${brandColor};
-    font: normal normal normal 20px NanumSquareOTF;
-    font-weight: 900 !important;
-    line-height: 1.15;
+    font: normal normal 800 18px/21px NanumSquareOTF;
+    margin-left: 15px;
+    margin-right: 15px;
   }
 
   max-width: 80.3125rem;
@@ -160,4 +162,6 @@ export const calendarStyle = css`
   border-radius: 1rem;
   box-shadow: 0 3px 6px #00000029;
   background: rgba(255, 255, 255, 0.7);
+  position: relative;
+  top: -2.875rem;
 `

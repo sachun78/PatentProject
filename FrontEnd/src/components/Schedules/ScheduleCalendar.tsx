@@ -7,8 +7,8 @@ import { useCallback, useMemo } from 'react'
 import { calendarStyle } from './styles'
 import { useNavigate } from 'react-router-dom'
 import { isBefore } from 'date-fns'
-import palette, { brandColor } from '../../lib/palette'
-import { IMeeting } from '../../lib/api/types'
+import palette, { brandColor } from 'lib/palette'
+import { IMeeting } from 'lib/api/types'
 
 export type ScheduleCalendarProps = {
   meetings: IMeeting[]
@@ -53,9 +53,9 @@ function ScheduleCalendar({ meetings }: ScheduleCalendarProps) {
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
         headerToolbar={{
-          center: 'title',
-          left: 'prev next',
-          right: 'today',
+          center: 'prev,title,next',
+          left: '',
+          right: '',
         }}
         events={scheduleEvents}
         showNonCurrentDates={false}

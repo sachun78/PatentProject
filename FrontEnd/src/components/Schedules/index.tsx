@@ -80,8 +80,8 @@ function Schedules({}: ScheduleViewProps) {
           maxWidth: '80.3125rem',
           display: 'flex',
           justifyContent: 'flex-end',
-          position: 'absolute',
-          transform: 'translate3d(-1rem, -105%, 0)',
+          position: 'relative',
+          transform: 'translate3d(0, -100%, 0)',
           right: 0,
         }}
       >

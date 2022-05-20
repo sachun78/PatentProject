@@ -1,6 +1,8 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CardItem, CardSection, Footer, Header, Section1 } from './styles'
+import IconControl from '../../components/IconControl'
+import { css } from '@emotion/react'
 
 export type LandingProps = {}
 
@@ -24,6 +26,7 @@ function Landing({}: LandingProps) {
           </li>
         </ul>
       </Header>
+      <section style={{ width: '100%', height: '100px' }}></section>
       <Section1>
         <img src={'/assets/wemet_logo.png'} alt={'logo'} className={'main-logo'} />
         <h1>
@@ -37,19 +40,43 @@ function Landing({}: LandingProps) {
         <CardSection>
           <CardItem>
             <img src={'/assets/rending_meeting.png'} />
-            <div>SCHEDULING PLATFORM</div>
+            <div>
+              <div css={dateIcon}>
+                <IconControl name={'dateSelect'} />
+              </div>
+              <h4>SCHEDULING PLATFORM</h4>
+              <p>Sample text Sample text Sample text Sample text Sample text Sample.</p>
+            </div>
           </CardItem>
           <CardItem>
             <img src={'/assets/rending_meeting2.png'} />
-            <div>SCHEDULING PLATFORM</div>
+            <div>
+              <div css={dateIcon}>
+                <IconControl name={'dateSelect'} />
+              </div>
+              <h4>SCHEDULING PLATFORM</h4>
+              <p>Sample text Sample text Sample text Sample text Sample text Sample.</p>
+            </div>
           </CardItem>
           <CardItem>
             <img src={'/assets/rending_meeting.png'} />
-            <div>SCHEDULING PLATFORM</div>
+            <div>
+              <div css={dateIcon}>
+                <IconControl name={'dateSelect'} />
+              </div>
+              <h4>SCHEDULING PLATFORM</h4>
+              <p>Sample text Sample text Sample text Sample text Sample text Sample.</p>
+            </div>
           </CardItem>
           <CardItem>
             <img src={'/assets/rending_meeting2.png'} />
-            <div>SCHEDULING PLATFORM</div>
+            <div>
+              <div css={dateIcon}>
+                <IconControl name={'dateSelect'} />
+              </div>
+              <h4>SCHEDULING PLATFORM</h4>
+              <p>Sample text Sample text Sample text Sample text Sample text Sample.</p>
+            </div>
           </CardItem>
         </CardSection>
         <Footer>
@@ -66,5 +93,19 @@ function Landing({}: LandingProps) {
     </>
   )
 }
+
+const dateIcon = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background: #6c6c6c;
+  box-shadow: 2px 5px 11px #00000029;
+  border-radius: 100%;
+  position: relative;
+  top: -50px;
+  margin: 0 auto;
+`
 
 export default Landing

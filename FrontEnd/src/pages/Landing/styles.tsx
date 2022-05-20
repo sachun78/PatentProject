@@ -19,21 +19,34 @@ export const CardItem = styled.div`
     border-radius: 15px;
   }
 
-  div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  & > div {
     width: 15rem;
     height: 10.1875rem;
     padding: 20px;
     background: white;
-    position: absolute;
-    bottom: 0;
-    transform: translate3d(10%, 200%, 0);
+    position: relative;
+    bottom: 100px;
+    margin: 0 auto;
     z-index: 2;
     box-shadow: 2px 5px 11px #00000029;
     border-radius: 15px;
+
+    h4 {
+      position: relative;
+      top: -39px;
+      text-align: center;
+      text-transform: uppercase;
+      font: normal normal 800 16px/36px NanumSquareOTF;
+      color: #333333;
+    }
+
+    p {
+      position: relative;
+      top: -40px;
+      text-align: center;
+      font: normal normal normal 16px/26px NanumSquareOTF;
+      color: #6c6c6c;
+    }
   }
 
   & + & {
@@ -105,13 +118,18 @@ export const Footer = styled.footer`
 `
 
 export const Header = styled.nav`
-  position: relative;
+  position: fixed;
   display: flex;
   justify-content: space-between;
   align-items: center;
   max-width: 75rem;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 6.25rem;
   margin: 0 auto;
+  backdrop-filter: blur(50px);
+  z-index: 50;
 
   img {
   }

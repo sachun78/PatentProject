@@ -1,0 +1,12 @@
+<svg id="data" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
+  <rect id="사각형_808" data-name="사각형 808" width="22" height="22" fill="none"/>
+  <g id="calendar" transform="translate(2 2)">
+    <path id="패스_14" data-name="패스 14" d="M1414.079,188.049h-1.553V187.3a.758.758,0,1,0-1.515,0v.744H1408.6V187.3a.758.758,0,1,0-1.515,0v.744h-2.407V187.3a.758.758,0,1,0-1.515,0v.744h-2.407V187.3a.758.758,0,1,0-1.515,0v.744h-1.553a.809.809,0,0,0-.806.811v14.871a.809.809,0,0,0,.806.811h16.388a.809.809,0,0,0,.806-.811V188.86A.809.809,0,0,0,1414.079,188.049Zm-.806,14.871H1398.5V192.239h14.776Z" transform="translate(-1396.885 -186.542)" fill="#fff"/>
+    <ellipse id="타원_1" data-name="타원 1" cx="1.058" cy="1.065" rx="1.058" ry="1.065" transform="translate(3.92 8.184)" fill="#fff"/>
+    <ellipse id="타원_2" data-name="타원 2" cx="1.058" cy="1.065" rx="1.058" ry="1.065" transform="translate(7.942 8.184)" fill="#fff"/>
+    <ellipse id="타원_3" data-name="타원 3" cx="1.058" cy="1.065" rx="1.058" ry="1.065" transform="translate(11.963 8.184)" fill="#fff"/>
+    <ellipse id="타원_4" data-name="타원 4" cx="1.058" cy="1.065" rx="1.058" ry="1.065" transform="translate(3.92 12.018)" fill="#fff"/>
+    <ellipse id="타원_5" data-name="타원 5" cx="1.058" cy="1.065" rx="1.058" ry="1.065" transform="translate(7.942 12.018)" fill="#fff"/>
+    <ellipse id="타원_6" data-name="타원 6" cx="1.058" cy="1.065" rx="1.058" ry="1.065" transform="translate(11.963 12.018)" fill="#fff"/>
+  </g>
+</svg>
