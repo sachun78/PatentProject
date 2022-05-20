@@ -56,7 +56,7 @@ function LoginForm({}: LoginFormProps) {
         css={inputStyle}
         fullWidth
         error={Boolean(loginError)}
-        sx={{ borderRadius: '12px', height: '45px' }}
+        style={{ borderRadius: '12px', height: '45px' }}
       />
       <OutlinedInput
         type="password"
@@ -68,7 +68,7 @@ function LoginForm({}: LoginFormProps) {
         autoComplete="password"
         fullWidth
         error={Boolean(loginError)}
-        sx={{ borderRadius: '12px', height: '45px' }}
+        style={{ borderRadius: '12px', height: '45px' }}
       />
       {loginError && (
         <FormHelperText error id="helper-text-login">

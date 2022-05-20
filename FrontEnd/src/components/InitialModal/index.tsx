@@ -1,5 +1,4 @@
 import { AutocompleteValue, Box, Button, Modal } from '@mui/material'
-import ProfileSection from '../ProfileMenu/ProfileSection'
 import ProfileCard from '../ProfileMenu/ProfileCard'
 import useInputs from 'hooks/useInputs'
 import React, { SyntheticEvent, useCallback, useEffect, useState } from 'react'
@@ -12,6 +11,8 @@ import { useMutation, useQueryClient } from 'react-query'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import { useProfileFormState } from 'atoms/profileFormState'
+import IconControl from '../IconControl'
+import styled from '@emotion/styled'
 
 export type InitialModalProps = {}
 
@@ -104,27 +105,33 @@ function InitialModal({}: InitialModalProps) {
 
   return (
     <Modal open={open} onClose={handleClose} disableEscapeKeyDown disableEnforceFocus>
-      <Box css={boxWrapper} p={1}>
-        <h1>Enter your profile</h1>
+      <Box css={boxWrapper}>
         <form css={formWrapper} onSubmit={handleSubmit}>
-          <ProfileSection title="Profile" description={'Please enter your default profile.'}>
-            <ProfileCard.Text title="company" text={company} editable onChange={onChange} />
-            <ProfileCard.Phone title="Phone number" />
-            <ProfileCard.Text title="department" text={department} editable onChange={onChange} />
-            <ProfileCard.Text title="position" text={position} editable onChange={onChange} />
-            <ProfileCard.Field
-              title="field"
-              text={fieldText}
-              onChange={onChangeFieldText}
-              onAdd={onFieldAdd}
-              fields={fields}
-              onRemove={onFieldRemove}
-              editable
-            />
-            <ProfileCard.Country title="country" onChange={handleCountry} country={country} editable />
-          </ProfileSection>
+          <HeaderDiv>
+            <h3>
+              <IconControl name={'profile'} /> Profile
+            </h3>
+            <div className="sub-comment">
+              <p>Please enter your default profile.</p>
+            </div>
+          </HeaderDiv>
+          <ProfileCard.Text title="Company" text={company} editable onChange={onChange} size={'small'} />
+          <ProfileCard.Phone title="Phone number" size={'small'} />
+          <ProfileCard.Text title="Department" text={department} editable onChange={onChange} size={'small'} />
+          <ProfileCard.Text title="Position" text={position} editable onChange={onChange} size={'small'} />
+          <ProfileCard.Field
+            title="Field"
+            text={fieldText}
+            onChange={onChangeFieldText}
+            onAdd={onFieldAdd}
+            fields={fields}
+            onRemove={onFieldRemove}
+            editable
+            size={'small'}
+          />
+          <ProfileCard.Country title="Country" onChange={handleCountry} country={country} editable size={'small'} />
           <Button className={'bot-button'} type="submit" color="primary" variant="contained">
-            OK
+            Save
           </Button>
         </form>
       </Box>
@@ -133,3 +140,25 @@ function InitialModal({}: InitialModalProps) {
 }
 
 export default InitialModal
+
+const HeaderDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.875rem;
+
+  h3 {
+    display: flex;
+    font: normal normal 800 18px/21px NanumSquareOTF;
+    color: #910457;
+
+    svg {
+      margin-right: 5px;
+    }
+  }
+
+  .sub-comment {
+    font: normal normal normal 14px/26px NanumSquareOTF;
+    color: #6c6c6c;
+  }
+`

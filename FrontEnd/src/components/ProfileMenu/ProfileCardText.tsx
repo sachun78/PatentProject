@@ -1,7 +1,7 @@
-import { inputStyle, itemStyle, textStyle } from './styles'
+import { InitItemStyle, inputStyle, itemStyle, textStyle } from './styles'
 import React, { memo, useCallback } from 'react'
 import { OutlinedInput } from '@mui/material'
-import { useRemoveOutlineHover } from '../../lib/styles/muiStyles'
+import { useRemoveOutlineHover } from 'lib/styles/muiStyles'
 
 export type ProfileCardTextProps = {
   editable?: boolean
@@ -9,15 +9,16 @@ export type ProfileCardTextProps = {
   title: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   multiline?: boolean
+  size?: 'small' | 'large'
 }
 
-function ProfileCardText({ editable = false, text, title, onChange, multiline }: ProfileCardTextProps) {
+function ProfileCardText({ editable = false, text, title, onChange, multiline, size = 'large' }: ProfileCardTextProps) {
   const [edit, setEdit] = React.useState(editable)
   const toggle = useCallback(() => setEdit((prevState) => !prevState), [])
   const classes = useRemoveOutlineHover()
 
   return (
-    <div css={itemStyle}>
+    <div css={size === 'large' ? itemStyle : InitItemStyle}>
       <div className="inner">
         <div className="title">
           <label>{title}</label>

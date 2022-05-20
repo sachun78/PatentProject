@@ -2,33 +2,28 @@ import { css } from '@emotion/react'
 import palette from 'lib/palette'
 
 export const undoStyle = css`
-  display: flex;
-  margin-top: 1rem;
-  justify-content: flex-end;
+  position: relative;
+  top: -10px;
   font-size: 1.2rem;
-  align-self: self-end;
-  position: absolute;
+  align-self: center;
   text-decoration: none;
-  margin-right: 1rem;
+  font: normal normal bold 15px/17px NanumSquareOTF;
+  color: #6c6c6c;
   &:hover {
     color: ${palette.grey[600]};
   }
 `
 
 export const privacyStyle = css`
-  margin: 1rem 0 2rem;
+  margin: 0 0 1.5625rem;
   text-align: center;
   padding: 0;
-
-  p {
-    color: #53535f;
-    font-size: 0.75rem;
-    line-height: 1.5;
-  }
+  font: normal normal normal 12px/20px NanumSquareOTF;
+  color: #6c6c6c;
 
   a {
     text-decoration: none;
-    color: ${palette.deepOrange[600]};
+    color: #910457;
   }
 
   a:hover {
