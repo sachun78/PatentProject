@@ -13,9 +13,8 @@ import EventModal from './EventModal'
 import { noScheduleStyle, wrapper } from './styles'
 import { isBefore } from 'date-fns'
 import { useCurrentEventState } from 'atoms/eventState'
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
-import TableViewIcon from '@mui/icons-material/TableView'
 import EventTable from './EventTable'
+import { css } from '@emotion/react'
 
 type EventsProps = {}
 
@@ -73,15 +72,61 @@ function Events({}: EventsProps) {
 
   return (
     <>
-      <FormGroup row={true} style={{ marginBottom: '20px', display: 'flex', justifyContent: 'flex-start' }}>
-        <ToggleButton value="check" selected={checked} onChange={handleChange} color={'primary'}>
-          <CalendarTodayIcon />
-        </ToggleButton>
+      <FormGroup
+        row={true}
+        style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          maxWidth: '76.25rem',
+          position: 'relative',
+          top: '-44px',
+        }}
+        css={groupStyle}
+      >
         {!checked && (
-          <ToggleButton value="check" selected={tableChecked} onChange={onTableViewChange} color={'primary'}>
-            <TableViewIcon />
+          <ToggleButton
+            value="check"
+            selected={!tableChecked}
+            onChange={onTableViewChange}
+            color={'primary'}
+            sx={{
+              borderRadius: '50px',
+              border: '1px solid #910457',
+              background: tableChecked ? '' : '#910457 !important',
+            }}
+          >
+            {tableChecked ? <IconControl name={'card'} /> : <IconControl name={'cardSelect'} />}
           </ToggleButton>
         )}
+        {!checked && (
+          <ToggleButton
+            value="check"
+            selected={tableChecked}
+            onChange={onTableViewChange}
+            color={'primary'}
+            sx={{
+              borderRadius: '50px',
+              border: '1px solid #910457',
+              background: !tableChecked ? '' : '#910457 !important',
+            }}
+          >
+            {!tableChecked ? <IconControl name={'list'} /> : <IconControl name={'listSelect'} />}
+          </ToggleButton>
+        )}
+        <ToggleButton
+          value="check"
+          selected={checked}
+          onChange={handleChange}
+          color={'primary'}
+          sx={{
+            borderRadius: '50px',
+            border: '1px solid #910457',
+            background: checked ? '#910457 !important' : '',
+          }}
+        >
+          {checked ? <IconControl name={'dateSelect'} /> : <IconControl name={'date'} />}
+        </ToggleButton>
       </FormGroup>
       {checked ? (
         <EventCalendar />
@@ -114,5 +159,11 @@ function Events({}: EventsProps) {
     </>
   )
 }
+
+const groupStyle = css`
+  button + button {
+    margin-left: 1.25rem;
+  }
+`
 
 export default Events

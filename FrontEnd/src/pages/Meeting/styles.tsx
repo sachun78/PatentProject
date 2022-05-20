@@ -69,10 +69,6 @@ export const MeetingSection = styled.section`
     height: 18px;
     width: 1px;
   }
-
-  //p + p {
-  //  margin-top: 0.625rem;
-  //}
 `
 const statusColor = ({ state }: { state: string }) => css`
   background: ${(state === 'replan' || state === 'met') && brandColor};
@@ -99,6 +95,10 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
     color: '#fff',
     fontWeight: 'bold',
   },
+  [`&.${tableCellClasses.body}`]: {
+    color: '#6C6C6C',
+    font: 'normal normal normal 16px/26px NanumSquareOTF',
+  },
 }))
 
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -106,6 +106,7 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:last-child td, &:last-child th': {
     border: 0,
   },
+  cursor: 'pointer',
 }))
 
 export const ScheduleInfoBlock = styled.div`

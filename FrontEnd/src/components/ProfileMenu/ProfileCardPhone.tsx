@@ -5,7 +5,7 @@ import 'react-phone-number-input/style.css'
 import PhoneInput from '../PhoneInput'
 import { useProfileFormState } from 'atoms/profileFormState'
 import styled from '@emotion/styled'
-import { brandColor } from '../../lib/palette'
+import { brandColor } from 'lib/palette'
 
 export type ProfileCardPhoneProps = {
   title: string

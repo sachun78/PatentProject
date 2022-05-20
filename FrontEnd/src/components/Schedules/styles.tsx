@@ -47,9 +47,12 @@ export const calendarStyle = css`
       color: ${brandColor} !important;
     }
   }
-  .fc-toolbar-chunk > div {
+
+  .fc-toolbar-chunk > div,
+  .fc-toolbar-chunk {
     display: flex;
   }
+
   .fc-daygrid-day-number {
     padding: 0.5rem 0.5rem 0.25rem !important;
     color: #6c6c6c;
@@ -58,18 +61,14 @@ export const calendarStyle = css`
   }
 
   .fc-col-header {
-    background: #fff;
-    color: #6c6c6c;
-    font: normal normal normal 17px NanumSquareOTF;
-    line-height: 1.117647059;
+    background: #910457;
+    color: #fff;
+    font: normal normal 800 15px/17px NanumSquareOTF;
   }
 
   .fc-col-header-cell {
-    padding: 0.5rem;
-  }
-
-  .fc .fc-toolbar.fc-header-toolbar {
-    margin-bottom: 1.125rem !important;
+    padding: 4.5px;
+    //min-height: 30px;
   }
 
   .fc-day-past,
@@ -118,11 +117,7 @@ export const calendarStyle = css`
 
   .fc-day-today {
     .fc-daygrid-day-number {
-      color: #fff !important;
-      background: ${brandColor} !important;
-      border-radius: 100% !important;
-      padding-top: 4px !important;
-      margin-top: 4px !important;
+      color: ${brandColor} !important;
     }
   }
 
@@ -156,9 +151,9 @@ export const calendarStyle = css`
     margin-right: 15px;
   }
 
-  max-width: 80.3125rem;
-  max-height: 42.9375rem;
-  padding: 1.875rem;
+  max-width: 76.25rem;
+  max-height: 43.1875rem;
+  padding: 2rem 1.875rem;
   border-radius: 1rem;
   box-shadow: 0 3px 6px #00000029;
   background: rgba(255, 255, 255, 0.7);

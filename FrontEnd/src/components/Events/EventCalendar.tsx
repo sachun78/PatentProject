@@ -3,12 +3,10 @@ import FullCalendar, { EventClickArg } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import useEventQuery from 'hooks/query/useEventQuery'
-import { brandColor } from 'lib/palette'
 import { useNavigate } from 'react-router-dom'
 import listPlugin from '@fullcalendar/list'
 import { calendarStyle } from '../Schedules/styles'
 import { formatDistanceToNow } from 'date-fns'
-import randomColor from 'randomcolor'
 
 export type ScheduleCalendarProps = {}
 
@@ -28,13 +26,9 @@ function EventCalendar({}: ScheduleCalendarProps) {
         title: event.title,
         start: event.start_date,
         end: event.end_date,
-        backgroundColor: dist.includes('ago')
-          ? '#9c9c9c'
-          : randomColor({
-              hue: brandColor,
-              format: 'rgb', // e.g. 'rgb(225,200,20)'
-              seed: event._id,
-            }),
+        backgroundColor: dist.includes('ago') ? '#9c9c9c' : 'rgba(97, 193, 190, 0.1)',
+        borderColor: dist.includes('ago') ? '#9c9c9c' : 'rgba(97, 193, 190, 0.1)',
+        textColor: '#6C6C6C',
         allDay: true,
       }
     })
@@ -45,14 +39,14 @@ function EventCalendar({}: ScheduleCalendarProps) {
   }
 
   return (
-    <div css={calendarStyle}>
+    <div css={calendarStyle} style={{ top: 0 }}>
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
         headerToolbar={{
-          left: 'title',
-          center: '',
-          right: 'prev today next',
+          left: '',
+          center: 'prev title next',
+          right: '',
         }}
         initialView="dayGridMonth"
         editable={false}
@@ -64,7 +58,8 @@ function EventCalendar({}: ScheduleCalendarProps) {
         fixedWeekCount={false}
         events={calendarEvents}
         eventClick={handleEventClick}
-        aspectRatio={2.079796265}
+        height={'auto'}
+        aspectRatio={1.765557164}
         select={(info) => {
           info.view.calendar.unselect()
         }}

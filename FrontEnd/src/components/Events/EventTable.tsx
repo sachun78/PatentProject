@@ -21,7 +21,7 @@ function EventTable({ events }: EventTableProps) {
 
   const navi = useNavigate()
   return (
-    <TableContainer component={Paper} style={{ borderRadius: '1rem', maxWidth: '80.3125rem', marginBottom: '1rem' }}>
+    <TableContainer component={Paper} style={{ borderRadius: '1rem', maxWidth: '76.25rem' }}>
       <Table sx={{ minWidth: 700 }} aria-label="history schedule table" size={'small'}>
         <TableHead>
           <TableRow>
@@ -36,9 +36,8 @@ function EventTable({ events }: EventTableProps) {
             return (
               <StyledTableRow
                 key={row._id}
-                hover={!disabled}
                 onClick={() => navi('/meeting/event/' + row._id)}
-                sx={disabled ? { backgroundColor: '#d3d3d3' } : undefined}
+                sx={disabled ? { backgroundColor: '#F2F2F2' } : undefined}
               >
                 <StyledTableCell align="center">{row.title}</StyledTableCell>
                 <StyledTableCell align="center">
