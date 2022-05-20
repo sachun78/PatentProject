@@ -38,19 +38,10 @@ export const noScheduleStyle = css`
   }
 `
 
-export const OptionContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 2.5rem;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 0.25rem 0 0 1rem;
-  border-radius: 0.5rem;
-`
 export const SearchContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   flex: 1;
   margin-right: 1rem;
 `

@@ -15,8 +15,15 @@ import { ReactComponent as place } from './place.svg'
 import { ReactComponent as phone } from './phone.svg'
 import { ReactComponent as email } from './email.svg'
 import { ReactComponent as date } from './date.svg'
+import { ReactComponent as dateSelect } from './date-select.svg'
 import { ReactComponent as company } from './company.svg'
 import { ReactComponent as comment } from './comment.svg'
+import { ReactComponent as reschedule } from './reschedule.svg'
+import { ReactComponent as card } from './card.svg'
+import { ReactComponent as cardSelect } from './card-select.svg'
+import { ReactComponent as left } from './left.svg'
+import { ReactComponent as right } from './right.svg'
+import { ReactComponent as list } from './list.svg'
 
 export {
   links,
@@ -37,5 +44,12 @@ export {
   company,
   comment,
   searchIcon,
-  write
+  write,
+  reschedule,
+  card,
+  cardSelect,
+  left,
+  right,
+  list,
+  dateSelect,
 }

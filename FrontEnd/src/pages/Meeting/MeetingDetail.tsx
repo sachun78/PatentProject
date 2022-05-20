@@ -3,8 +3,8 @@ import React, { useCallback, useMemo } from 'react'
 import { useMutation, useQuery } from 'react-query'
 import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
 import { toast } from 'react-toastify'
-import { Button, Divider, Stack, ToggleButton } from '@mui/material'
-import { ContainerBlock, InfoLink, MeetingSection, ScheduleInfoBlock } from './styles'
+import { Button, Divider, Stack } from '@mui/material'
+import { ContainerBlock, InfoLink, MeetingSection, RescheduleButton, ScheduleInfoBlock } from './styles'
 import MeetingResult from 'components/Schedules/MeetingResult'
 import { IMeeting } from 'lib/api/types'
 import { format, isBefore } from 'date-fns'
@@ -125,7 +125,7 @@ function MeetingDetail({}: MeetingDetailProps) {
           <div className={'multiline'}>{data.comment} </div>
         </MeetingSection>
         <MeetingSection>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <h2>
               State
               <span className={'state-text'}>
@@ -133,9 +133,10 @@ function MeetingDetail({}: MeetingDetailProps) {
               </span>
             </h2>
             {!isResult && !isExpired && (data.status === 'confirm' || data.status === 'replan') && (
-              <ToggleButton value={change} onChange={onChangeToggle} size={'small'}>
-                Change {change ? '<' : '>'}
-              </ToggleButton>
+              <RescheduleButton value={change} onChange={onChangeToggle}>
+                <IconControl name={'reschedule'} style={{ marginRight: '3px' }} />
+                Reschedule
+              </RescheduleButton>
             )}
           </div>
           {data.status === 'replan' && <Divider />}
