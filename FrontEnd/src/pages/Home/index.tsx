@@ -1,18 +1,15 @@
 import { css } from '@emotion/react'
 import AddIcon from '@mui/icons-material/Add'
-import { Fab, Stack, ToggleButton } from '@mui/material'
-import IconControl from 'components/IconControl'
-import { searchIcon } from 'components/IconControl/svg'
+import { Fab, Stack } from '@mui/material'
 import Post from 'components/Post/'
 import SearchBox from 'components/SearchBox'
 import { getPosts, getPostsSearch } from 'lib/api/post/getPosts'
 import { IPost } from 'lib/api/types'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import { Link } from 'react-router-dom'
 import FilterArea from './filter/FilterArea'
-import FilterCard from './filter/FilterCard'
 
 type HomeProps = {}
 
@@ -21,13 +18,7 @@ function Home({}: HomeProps) {
 
   const { ref, inView } = useInView()
   const [searchText, setSearchText] = useState('')  
-  const [filterOn, setFilterOn] = useState(false);
-  const [search, setSearch] = useState(false)  
-  const onSearchMode = useCallback(() => {
-    setSearch((prev) => !prev)
-    setSearchText('')
-  }, [setSearch])    
-  
+  const [filterOn, setFilterOn] = useState(false);  
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
     ['posts'],
@@ -81,9 +72,7 @@ function Home({}: HomeProps) {
         <div css={nationStyle} onFocus={onFocus} onBlur={onBlur} tabIndex={1}>
           <img src="/assets/country.png" alt={'country'} style={{ width: "1rem", height: "1rem", marginRight: "0.3125rem" }} />
           <div style={{ marginRight: '1.25rem' }}>Nation</div>
-          {/* {filterOn &&}  */}
-          
-          <FilterArea />
+          {filterOn && <FilterArea />}
           
         </div>                
         <SearchBox filter={setSearchText} post={true} />                
