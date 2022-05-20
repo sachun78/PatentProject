@@ -26,30 +26,26 @@ const AskModal = ({
     <Modal hideBackdrop open={true}>
       <Box
         sx={{
-          width: '20rem',
-          height: '8rem',
+          width: '29rem',
+          height: '7.75rem',
           position: 'absolute',
-          backgroundColor: `${grey[50]}`,
-          '&:hover': {
-            backgroundColor: `${grey[200]}`,
-            cursor: 'pointer',
-          },
-          padding: '1rem 1.5rem 1rem 1.5rem',
+          backgroundColor: "#F2F2F2",
+          padding: '1rem 1.5rem 1rem 2rem',
           borderRadius: '1rem',
           top: '20rem',
           left: '35rem',
-          opacity: [0.9, 0.9, 0.9],
+          opacity: [0.9, 0.9, 0.9],          
         }}
       >
-        <div>
-          <h2>{title}</h2>
-          <hr />
+        <div css={boxStyle}>
+          <h2 style={{ marginBottom: '0.5rem' }}>{title}</h2>
+          <hr style={{ marginBottom: '0.5rem' }} />
           <p>{description}</p>
           <div className="buttons" css={buttonWrapStyle}>
-            <button css={buttonStyle} onClick={onConfirm}>
+            <button css={buttonStyle} onClick={onConfirm} style={{ background: '#9C9C9C' }}>
               {confirmText}
             </button>
-            <button css={buttonStyle} onClick={onCancel}>
+            <button css={buttonStyle} onClick={onCancel} style={{ background: '#910457' }}>
               {cancelText}
             </button>
           </div>
@@ -61,17 +57,22 @@ const AskModal = ({
 
 export default AskModal
 
+const boxStyle = css`
+  font: NanumSquareOTF;
+  color: #6C6C6C;  
+`
+
 const buttonWrapStyle = css`
-  justify-content: center;
-  margin-top: 1rem;
-  margin-bottom: 3rem;
+  display: flex;  
+  justify-content: flex-end;
+  margin-top: 0.25rem;  
   button + button {
     margin-left: 0.5rem;
   }
   height: 2.125rem;
   & + & {
     margin-left: 0.5rem;
-  }
+  }  
 `
 
 const buttonStyle = css`
@@ -82,9 +83,5 @@ const buttonStyle = css`
   padding: 0.25rem 1rem;
   color: white;
   outline: none;
-  cursor: pointer;
-  background: ${palette.cyan[800]};
-  &:hover {
-    background: ${palette.cyan[600]};
-  }
+  cursor: pointer;  
 `

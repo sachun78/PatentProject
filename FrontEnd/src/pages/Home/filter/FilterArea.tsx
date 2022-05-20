@@ -1,15 +1,14 @@
-import * as React from 'react';
+import { css } from '@emotion/react';
+import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import InputUnstyled from '@mui/base/InputUnstyled';
-import Autocomplete from '@mui/material/Autocomplete';
-import { css } from '@emotion/react'
-import { InputBase } from '@mui/material';
+import * as React from 'react';
 
 function FilterArea() {
+  
   return (    
     <Autocomplete
-      css={containerStyle}
+      css={containerStyle}      
       id="country-select-demo"        
       multiple
       options={countries}
@@ -32,10 +31,10 @@ function FilterArea() {
             css={textStyle}          
             {...params}
             placeholder="Choose a country"            
-            // inputProps={{
-            //   ...params.inputProps,
-            //   autoComplete: 'new-password', // disable autocomplete and autofill
-            // }}
+            inputProps={{
+              ...params.inputProps,
+              autoComplete: 'new-password', // disable autocomplete and autofill
+            }}
           />
         </>
       )}
@@ -479,34 +478,41 @@ const countries: readonly CountryType[] = [
 export default FilterArea
 
 const textStyle = css`
-  height: 1.375rem;
-  /* input, label, div, span, legend, fieldset {
     
-    margin: 0px;
-    padding: 0px;
-    font: 14px NanumSquareOTF;
-    max-height: 1.375rem;
-    display: flex;
-    align-items: center;
-        
-  } */  
   input::placeholder {
     color: #6C6C6C;
     font: 14px NanumSquareOTF;
-  }
-  /* label, div {
-    height: 100%;
-    display: flex;
-    align-items: center;    
-  } */
+    align-items: center;
+  }  
 
 `
 
 const containerStyle = css`
-  display: flex;      
-  align-items: center;
-  width: 25rem;
-  max-height: 1.375rem;
+  width: 30.625rem;  
+  flex-grow: 1;
   height: 1.375rem;
-  
+  padding: 0 0 0 0;
+  align-items: center;  
+
+  .MuiFormControl-root {
+    position: relative;
+    height: 90%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  .MuiOutlinedInput-root {
+    position: relative; 
+    
+  }
+
+  .MuiOutlinedInput-notchedOutline {
+    border: 0;
+    
+  }
+
+  & .MuiAutocomplete-tag {
+    height: 1.2rem;
+  }
 `
