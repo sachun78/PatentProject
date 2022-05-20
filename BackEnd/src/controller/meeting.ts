@@ -272,13 +272,13 @@ export async function sendInvitMail(req: IRequest, res: Response) {
         .catch( reason => res.status(500).json({ message: `Failed email send ${reason}`}));
     }
     else {
-      const meetingData = await createMeeting(user_id, bodyData);
-      if (!meetingData) {
-        return res.status(500).json({ message: `Failed save meeting ${bodyData.toEmail}`});
-      }
+      const readyMeetingData = await readyCreateMeeting(user_id, bodyData);
 
-      sendmail(meetingData, EMAILTYPE.INVI)
-        .then( value => res.status(200).json({ message: `Success send email: ${meetingData.toEmail}, code(${meetingData.code})`}))
+      sendmail(readyMeetingData.revMeeting, EMAILTYPE.INVI)
+        .then( value => { 
+          createMeeting(readyMeetingData);
+          return res.status(200).json({ message: `Success send email: ${readyMeetingData.revMeeting.toEmail}, code(${readyMeetingData.revMeeting.code})`})
+        })
         .catch( reason => res.status(500).json({ message: `Failed email send ${reason}`}));
     }
   }
@@ -292,7 +292,7 @@ export async function deleteMeetings(eventId: string) {
   return meetingRepo.deleteMeetings(eventId);
 }
 
-async function createMeeting(userId: string, body: any) {
+async function readyCreateMeeting(userId: string, body: any) {
   const user = await authRepo.findById(userId);
   if (!user) {
     throw new Error('message: User is not found');
@@ -343,10 +343,20 @@ async function createMeeting(userId: string, body: any) {
     code: shortid.generate()
   };
 
-  const meeting = await meetingRepo.createMeeting(revMeeting);
+  return {revMeeting, toUserImage};
+}
+
+async function createMeeting(meetingData: any) {
+  
+  const meeting = await meetingRepo.createMeeting(meetingData.revMeeting);
   if (!meeting) {
     throw new Error('Failed create meeting');
   }
+
+  const event = await eventRepo.getById(meetingData.revMeeting.eventId);
+  if (!event) {
+    throw new Error('Not found event');
+  }  
 
   let meetingList: string[] = [meeting.id, ...event.meeting_list];
   const eventUpdate = await eventRepo.updateEvent(meeting.eventId, {meeting_list: meetingList});
@@ -355,8 +365,8 @@ async function createMeeting(userId: string, body: any) {
   }
 
   const retMeetingData = {
-    ...revMeeting,
-    ownerPhoto: user.photo_path
+    ...meetingData.revMeeting,
+    ownerPhoto: meetingData.toUserImage
   };
   return retMeetingData;
 }
