@@ -1,19 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import IconControl from '../IconControl'
-import { noScheduleStyle } from './styles'
 import { Button, FormGroup, ToggleButton } from '@mui/material'
 import ScheduleCalendar from './ScheduleCalendar'
 import { meetingSwitchState } from 'atoms/memberShipTabState'
 import { useRecoilState } from 'recoil'
 import ScheduleTable from './ScheduleTable'
-import { SearchContainer } from 'components/Events/styles'
+import { noScheduleStyle, SearchContainer } from 'components/Events/styles'
 import SearchBox from '../SearchBox'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import { getMeetingsCursor, getMeetingSearch } from 'lib/api/meeting/getMeetings'
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
-import SearchIcon from '@mui/icons-material/Search'
-import SearchOffIcon from '@mui/icons-material/SearchOff'
+import { css } from '@emotion/react'
 
 type ScheduleViewProps = {}
 
@@ -35,9 +32,13 @@ function Schedules({}: ScheduleViewProps) {
       },
     }
   )
-  const { data: searchData } = useQuery(['meeting_search', searchText], () => getMeetingSearch(searchText), {
-    enabled: !!searchText,
-  })
+  const { data: searchData, isLoading: searchLoading } = useQuery(
+    ['meeting_search', searchText],
+    () => getMeetingSearch(searchText),
+    {
+      enabled: !!searchText,
+    }
+  )
 
   useEffect(() => {
     if (inView) {
@@ -65,9 +66,8 @@ function Schedules({}: ScheduleViewProps) {
   if (meetings?.length === 0)
     return (
       <div css={noScheduleStyle}>
-        <IconControl name={'welcome'} />
-        <div>There is no upcoming schedule.</div>
-        <div>Create your schedule through an event.</div>
+        <h1>There is no upcoming schedule.</h1>
+        <h1>Create your schedule through an event.</h1>
       </div>
     )
 
@@ -77,28 +77,33 @@ function Schedules({}: ScheduleViewProps) {
         row={true}
         style={{
           marginBottom: '0.625rem',
-          maxWidth: '80.3125rem',
+          maxWidth: '76.25rem',
           display: 'flex',
           justifyContent: 'flex-end',
           position: 'relative',
           transform: 'translate3d(0, -100%, 0)',
           right: 0,
         }}
+        css={groupStyle}
       >
-        {!checked && search && (
-          <SearchContainer>
+        {!checked && (
+          <SearchContainer onFocus={onSearchMode}>
             <SearchBox filter={setSearchText} />
           </SearchContainer>
         )}
-        {!checked && (
+        {!search && (
           <ToggleButton
             value="check"
-            selected={search}
-            onChange={onSearchMode}
+            selected={!checked}
+            onChange={handleChange}
             color={'primary'}
-            sx={{ borderRadius: '1rem', border: 'none' }}
+            sx={{
+              borderRadius: '50px',
+              border: '1px solid #910457',
+              background: !checked ? '#910457 !important' : '',
+            }}
           >
-            {!search ? <SearchIcon /> : <SearchOffIcon />}
+            {checked ? <IconControl name={'list'} /> : <IconControl name={'listSelect'} />}
           </ToggleButton>
         )}
         {!search && (
@@ -107,9 +112,13 @@ function Schedules({}: ScheduleViewProps) {
             selected={checked}
             onChange={handleChange}
             color={'primary'}
-            sx={{ borderRadius: '1rem', border: 'none' }}
+            sx={{
+              borderRadius: '50px',
+              border: '1px solid #910457',
+              background: checked ? '#910457 !important' : '',
+            }}
           >
-            <CalendarTodayIcon />
+            {checked ? <IconControl name={'dateSelect'} /> : <IconControl name={'date'} />}
           </ToggleButton>
         )}
       </FormGroup>
@@ -118,7 +127,13 @@ function Schedules({}: ScheduleViewProps) {
       {/*일반 모드인 경우 Table*/}
       {!checked && !search && <ScheduleTable meetings={meetings} />}
       {/*검색 모드인 경우 Table*/}
-      {!checked && search && <ScheduleTable meetings={searchData || []} />}
+      {!checked && search && !searchText ? (
+        <div>Search Schedule, input meeting name, useremail or name</div>
+      ) : searchData && searchData.length ? (
+        <ScheduleTable meetings={searchData} />
+      ) : (
+        <div css={noScheduleStyle}>{searchLoading ? <h1>Searching...</h1> : <h1>There is no result</h1>}</div>
+      )}
       {!checked && !search && hasNextPage && (
         <Button
           ref={ref}
@@ -134,3 +149,9 @@ function Schedules({}: ScheduleViewProps) {
 }
 
 export default Schedules
+
+const groupStyle = css`
+  button + button {
+    margin-left: 1.25rem;
+  }
+`

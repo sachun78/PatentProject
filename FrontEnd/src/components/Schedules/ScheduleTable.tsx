@@ -19,9 +19,8 @@ function ScheduleTable({ meetings, type = 'schedule' }: ScheduleTableProps) {
     <TableContainer
       component={Paper}
       style={{
-        borderRadius: '1rem',
-        maxWidth: '80.3125rem',
-        marginBottom: '1rem',
+        borderRadius: '22px',
+        maxWidth: '76.25rem',
         position: 'relative',
       }}
       sx={type === 'history' ? { top: 0 } : { top: '-2.875rem' }}
@@ -61,7 +60,7 @@ function ScheduleTable({ meetings, type = 'schedule' }: ScheduleTableProps) {
                   {format(new Date(row.date), 'EEEE, d MMM, yyyy')} <br />
                   {format(new Date(row.startTime), 'HH:mm - ')} {format(new Date(row.endTime), 'HH:mm')}
                 </StyledTableCell>
-                <StyledTableCell align="left">{row.location}</StyledTableCell>
+                <StyledTableCell align="center">{row.location}</StyledTableCell>
                 <StyledTableCell align="center">
                   {type === 'schedule' ? (
                     <Badge

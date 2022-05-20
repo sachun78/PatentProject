@@ -1,5 +1,4 @@
 import { css } from '@emotion/react'
-import { brandColor } from 'lib/palette'
 import styled from '@emotion/styled'
 
 export const wrapper = css`
@@ -20,22 +19,17 @@ export const noScheduleStyle = css`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 60rem;
-  svg {
-    width: 33%;
-    height: 33%;
-    margin-top: 5rem;
-    min-width: 20rem;
+  max-width: 76.25rem;
+  height: 530px;
+
+  h1 {
+    font: normal normal 800 16px/18px NanumSquareOTF;
+    color: #6c6c6c;
+    margin: 0;
   }
 
-  div {
-    margin-top: 10px;
-    font-size: 2rem;
-    font-weight: 600;
-    color: ${brandColor};
-    user-select: none;
-    text-align: center;
-  }
+  border: 1px solid #9c9c9c;
+  border-radius: 16px;
 `
 
 export const SearchContainer = styled.div`
@@ -44,4 +38,5 @@ export const SearchContainer = styled.div`
   justify-content: flex-end;
   flex: 1;
   margin-right: 1rem;
+  max-height: 50px;
 `

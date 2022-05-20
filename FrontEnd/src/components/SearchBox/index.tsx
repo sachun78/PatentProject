@@ -1,10 +1,9 @@
 import { IconButton, InputBase, Paper } from '@mui/material'
-import SearchIcon from '@mui/icons-material/Search'
-import { Dispatch, useCallback, useState } from 'react'
+import React, { Dispatch, useCallback, useState } from 'react'
 import { useSearchInputState } from 'atoms/searchInputState'
-import React from 'react'
 import IconControl from 'components/IconControl'
 import { css } from '@emotion/react'
+import { useFocusOutlineStyle } from '../../lib/styles/muiStyles'
 
 export type SearchBoxProps = {
   filter: Dispatch<string>
@@ -13,7 +12,7 @@ export type SearchBoxProps = {
 
 function SearchBox({ filter, post }: SearchBoxProps) {
   const [value, setValue] = useSearchInputState()
-  const [bdColor, setBdColor] = useState("#9C9C9C")  
+  const [bdColor, setBdColor] = useState('#9C9C9C')
 
   const onChange = useCallback(
     (e) => {
@@ -32,36 +31,61 @@ function SearchBox({ filter, post }: SearchBoxProps) {
   )
 
   const onFocus = () => {
-    setBdColor("#910457")        
+    setBdColor('#910457')
   }
 
   const onBlur = () => {
-    setBdColor("#9C9C9C")
+    setBdColor('#9C9C9C')
   }
 
-  if(post) return (        
-    <form css={nationStyle} style={{ width: "15.625rem", borderColor: `${bdColor}`, justifyContent: 'space-between' }} onFocus={onFocus} onBlur={onBlur} onSubmit={onSearch}>        
-      <input type='text' placeholder='Search' style={{ background: "transparent", border: "none"}} value={value} onChange={onChange} />
-      <IconControl name={'searchIcon'} />        
-    </form>    
-  );    
+  const classes = useFocusOutlineStyle()
+
+  if (post)
+    return (
+      <form
+        css={nationStyle}
+        style={{ width: '15.625rem', borderColor: `${bdColor}`, justifyContent: 'space-between' }}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onSubmit={onSearch}
+      >
+        <input
+          type="text"
+          placeholder="Search"
+          style={{ background: 'transparent', border: 'none' }}
+          value={value}
+          onChange={onChange}
+        />
+        <IconControl name={'searchIcon'} />
+      </form>
+    )
 
   return (
     <Paper
       component="form"
-      sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '100%', borderRadius: '1rem'}}
+      sx={{
+        p: '2px 4px',
+        display: 'flex',
+        alignItems: 'center',
+        width: '250px',
+        borderRadius: '50px',
+        background: 'transparent',
+      }}
+      classes={classes}
       onSubmit={onSearch}
-    >    
+    >
       <InputBase
-        sx={{ ml: 1, flex: 1 }}
-        placeholder="Search Schedules..."
+        sx={{ ml: '18px', flex: 1 }}
+        placeholder="Search"
         value={value}
         onChange={onChange}
-        inputProps={{ 'aria-label': 'search schedule' }}
-      />      
-      
+        inputProps={{
+          'aria-label': 'search schedule',
+        }}
+      />
+
       <IconButton type="submit" sx={{ p: '8px' }} aria-label="search">
-        <SearchIcon />
+        <IconControl name={'searchIcon'} />
       </IconButton>
     </Paper>
   )
@@ -78,7 +102,7 @@ const nationStyle = css`
   align-items: center;
   width: 15.625rem;
   border-color: bdColor;
-  justify-content: space-between;  
+  justify-content: space-between;
 
   input {
     width: 12.5rem;
@@ -86,7 +110,7 @@ const nationStyle = css`
   }
 
   input::placeholder {
-    color: #D9D9D9;
+    color: #d9d9d9;
   }
 
   input:focus {

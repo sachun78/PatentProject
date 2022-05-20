@@ -4,7 +4,7 @@ import IconControl from 'components/IconControl/IconControl'
 import useEventQuery from 'hooks/query/useEventQuery'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import { useEventModal } from 'hooks/useEventTitle'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { eventSwitchState } from 'atoms/memberShipTabState'
 import EventCalendar from './EventCalendar'
@@ -45,10 +45,18 @@ function Events({}: EventsProps) {
     setEndDate(temp_date)
   }, [setEdit, setEndDate, setEvent, setOpen, setStartDate])
 
+  const outDatedEvents = useMemo(
+    () =>
+      data?.filter((event) => {
+        const event_date = new Date(event.start_date)
+        return isBefore(event_date, new Date())
+      }),
+    [data]
+  )
+
   if (isLoading)
     return (
       <div css={noScheduleStyle}>
-        <IconControl name={'welcome'} />
         <CircularProgress />
         <div>Loading...</div>
       </div>
@@ -58,8 +66,7 @@ function Events({}: EventsProps) {
     return (
       <>
         <div css={noScheduleStyle}>
-          <IconControl name={'welcome'} />
-          <div>No events were generated.</div>
+          <h1>No events were generated.</h1>
           <br />
           <Button variant={'contained'} onClick={onClickNewEvent} style={{ marginLeft: '1rem' }}>
             + Create new event

@@ -25,7 +25,7 @@ function Sidebar({}: SidebarProps) {
         <img src={'/assets/wemet_logo.png'} alt={'main-logo'} />
       </NavLink>
       <ul css={menuStyle}>
-        <SidebarItem text="Feed" to="/" />
+        <SidebarItem text="Feed" to="/home" />
         <SidebarItem text="Meeting" to="/meeting" />
         <SidebarItem text="Network" to="/network" />
         <SidebarItem text="Conference" to="/conference" />

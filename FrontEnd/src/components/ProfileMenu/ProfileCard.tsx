@@ -9,6 +9,8 @@ import ProfileCardCountry from './ProfileCardCountry'
 import ProfileCardSave from './ProfileCardSave'
 import useProfileImg from 'hooks/useProfileImg'
 import ProfileCardPhone from './ProfileCardPhone'
+import gravatar from 'gravatar'
+import { API_PATH } from 'lib/api/client'
 
 export type ProfileCardProps = {
   children: React.ReactNode
@@ -81,8 +83,10 @@ function ProfileCardItem({ title, type, email, username }: ProfileCardItemProps)
                 imgProps={{
                   crossOrigin: 'anonymous',
                 }}
-                src={profileSrc}
-              />
+                src={`${API_PATH}static/${email}`}
+              >
+                <img src={gravatar.url(email, { s: '100px', d: 'retro' })} alt={'fallback'} />
+              </Avatar>
             </div>
             <input
               ref={fileRef}

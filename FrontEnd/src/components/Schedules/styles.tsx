@@ -1,29 +1,5 @@
 import { css } from '@emotion/react'
-import palette, { brandColor } from 'lib/palette'
-
-export const noScheduleStyle = css`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  width: 60%;
-
-  svg {
-    width: 33%;
-    height: 33%;
-    margin-top: 5rem;
-    min-width: 20rem;
-  }
-
-  div {
-    margin-top: 10px;
-    font-size: 2rem;
-    font-weight: 600;
-    color: ${palette.purple[600]};
-    user-select: none;
-  }
-`
+import { brandColor } from 'lib/palette'
 
 export const tableStyle = css`
   display: flex;
