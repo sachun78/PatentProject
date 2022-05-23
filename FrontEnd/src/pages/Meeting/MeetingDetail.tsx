@@ -76,7 +76,7 @@ function MeetingDetail({}: MeetingDetailProps) {
   }
 
   return (
-    <Stack direction={'row'} spacing={2}>
+    <Stack direction={'row'} spacing={2} sx={{ marginBottom: '1rem' }}>
       <ContainerBlock>
         <h1>{data.title}</h1>
         <MeetingSection>

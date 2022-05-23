@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 
 export const bodyStyle = css`
-  height: 4.5625rem;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,6 +13,8 @@ export const bodyStyle = css`
   span {
     margin-right: 9.875rem;
     margin-left: 13.75rem;
+    margin-top: 2rem;
+    align-self: flex-start;
     font: normal normal 800 15px/17px NanumSquareOTF;
     color: #333;
   }
@@ -20,7 +22,6 @@ export const bodyStyle = css`
   .sponsors {
     width: 50%;
     display: flex;
-    position: relative;
     justify-content: space-between;
 
     img {

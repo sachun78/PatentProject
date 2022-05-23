@@ -68,19 +68,21 @@ export const calendarStyle = css`
 
   .fc .fc-daygrid-event {
     padding-left: 0.625rem !important;
-    padding-top: 1px !important;
-    padding-bottom: 1px !important;
     margin-top: 6px !important;
-    border-collapse: collapse !important;
-    font-size: 0.6875rem !important;
-    font-weight: 400 !important;
-    font-family: Rubik, sans-serif !important;
-    -webkit-font-smoothing: antialiased !important;
-    line-height: 1.25rem !important;
+
+    //border-collapse: collapse !important;
+    font-size: 0.75rem !important;
+    font-weight: normal !important;
+    color: #6c6c6c !important;
+    line-height: 1.461538462rem !important;
 
     &:hover {
       cursor: pointer !important;
     }
+  }
+
+  .fc-event-title {
+    padding: 0 !important;
   }
 
   .fc-day-today {

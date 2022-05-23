@@ -16,13 +16,13 @@ const MeetingBook = loadable(() => import('pages/Meeting/MeetingBook'))
 const AppLayout = loadable(() => import('layouts/AppLayout'))
 const Landing = loadable(() => import('pages/Landing'))
 const Policy = loadable(() => import('pages/Policy'))
+const Forgot = loadable(() => import('pages/Forgot'))
 
 function App() {
   useCsrfQuery({ retry: true, staleTime: 1000 * 60 * 30 })
-
   return (
     <>
-      <DebugObserver />
+      {process.env.NODE_ENV === 'development' && <DebugObserver />}
       <ReactQueryDevtools initialIsOpen={false} />
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
@@ -31,6 +31,7 @@ function App() {
           <Route path="policy/:type" element={<Policy />} />
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<SignUp />} />
+          <Route path="forgotpw" element={<Forgot />} />
           <Route path="email/check" element={<MailCheck />} />
           <Route path="email/forgot" element={<MailCheck type={'forgot'} />} />
           <Route path="invitation/*" element={<MeetingBook />} />

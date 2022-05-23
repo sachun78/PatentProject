@@ -22,18 +22,31 @@ function ScheduleTable({ meetings, type = 'schedule' }: ScheduleTableProps) {
         borderRadius: '22px',
         maxWidth: '76.25rem',
         position: 'relative',
+        boxShadow: 'none',
       }}
       sx={type === 'history' ? { top: 0 } : { top: '-2.875rem' }}
     >
-      <Table sx={{ minWidth: 700 }} aria-label="history schedule table" size={'medium'}>
+      <Table sx={{ minWidth: 700 }} aria-label="history schedule table" size={'small'}>
         <TableHead>
           <TableRow>
-            <StyledTableCell align="center">Name</StyledTableCell>
-            <StyledTableCell align="center">Company</StyledTableCell>
-            <StyledTableCell align="center">E-mail</StyledTableCell>
-            <StyledTableCell align="center">Date</StyledTableCell>
-            <StyledTableCell align="center">Location</StyledTableCell>
-            <StyledTableCell align="center">Status</StyledTableCell>
+            <StyledTableCell align="center" size={'medium'}>
+              Name
+            </StyledTableCell>
+            <StyledTableCell align="center" size={'medium'}>
+              Company
+            </StyledTableCell>
+            <StyledTableCell align="center" size={'medium'}>
+              E-mail
+            </StyledTableCell>
+            <StyledTableCell align="center" size={'medium'}>
+              Date
+            </StyledTableCell>
+            <StyledTableCell align="center" size={'medium'}>
+              Location
+            </StyledTableCell>
+            <StyledTableCell align="center" size={'medium'}>
+              Status
+            </StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>

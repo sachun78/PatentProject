@@ -17,7 +17,6 @@ type ScheduleViewProps = {}
 
 function Schedules({}: ScheduleViewProps) {
   const [checked, setChecked] = useRecoilState(meetingSwitchState)
-  const [search, setSearch] = useState(false)
   const [searchText, setSearchText] = useState('')
   const { ref, inView } = useInView()
 
@@ -50,11 +49,6 @@ function Schedules({}: ScheduleViewProps) {
   const handleChange = useCallback(() => {
     setChecked((prev) => !prev)
   }, [setChecked])
-
-  const onSearchMode = useCallback(() => {
-    setSearch((prev) => !prev)
-    setSearchText('')
-  }, [setSearch])
 
   const meetings = useMemo(() => {
     if (!data) return []
@@ -91,11 +85,11 @@ function Schedules({}: ScheduleViewProps) {
         css={groupStyle}
       >
         {!checked && (
-          <SearchContainer onFocus={onSearchMode}>
+          <SearchContainer>
             <SearchBox filter={setSearchText} />
           </SearchContainer>
         )}
-        {!search && (
+        {!searchText && (
           <ToggleButton
             value="check"
             selected={!checked}
@@ -107,7 +101,7 @@ function Schedules({}: ScheduleViewProps) {
             {checked ? <IconControl name={'list'} /> : <IconControl name={'listSelect'} />}
           </ToggleButton>
         )}
-        {!search && (
+        {!searchText && (
           <ToggleButton
             value="check"
             selected={checked}
@@ -123,18 +117,16 @@ function Schedules({}: ScheduleViewProps) {
       {/*달력 모드인 경우 캘린더*/}
       {checked && <ScheduleCalendar meetings={meetings} />}
       {/*일반 모드인 경우 Table*/}
-      {!checked && !search && <ScheduleTable meetings={meetings} />}
+      {!checked && !searchText && <ScheduleTable meetings={meetings} />}
       {/*검색 모드인 경우 Table*/}
       {!checked &&
-        search &&
-        (!searchText ? (
-          <div>Search Schedule, input meeting name, useremail or name</div>
-        ) : searchData && searchData.length ? (
+        searchText &&
+        (searchData && searchData.length ? (
           <ScheduleTable meetings={searchData} />
         ) : (
           <div css={noScheduleStyle}>{searchLoading ? <h1>Searching...</h1> : <h1>There is no result</h1>}</div>
         ))}
-      {!checked && !search && hasNextPage && (
+      {!checked && !searchText && hasNextPage && (
         <Button
           ref={ref}
           variant={'contained'}

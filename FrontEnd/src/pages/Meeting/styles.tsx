@@ -98,7 +98,7 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
     backgroundColor: '#910457 ',
     color: '#fff',
     font: 'normal normal 800 16px/18px NanumSquareOTF',
-    borderRight: '1px solid #F2F2F2',
+    borderRight: '1px solid #9C9C9C',
     '&:last-of-type': {
       borderRight: 'none',
     },
@@ -111,6 +111,7 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   // hide last border
+  td: { borderTop: '1px solid #9c9c9c' },
   '&:last-child td, &:last-child th': {
     border: 0,
   },

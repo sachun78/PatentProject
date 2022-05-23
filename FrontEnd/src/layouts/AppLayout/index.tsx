@@ -48,12 +48,11 @@ export default function AppLayout({}: AppLayoutProps) {
           <Route path={"/meeting/*"} element={<Member />} />
           <Route path={"/network/*"} element={<Network />} />
           <Route path={"/profile"} element={<Profile />} />
-          <Route path={"/conference"} element={<Conference />} />          
+          <Route path={"/conference"} element={<Conference />} />
           <Route path={"/u/:email"} element={<User />} />
           <Route path={"/*"} element={<div>404 NOT FOUND</div>} />
           <Route path={"/postWrite/"} element={<PostWrite />} />
           <Route path={"/postEdit/:id"} element={<PostEdit />} />
-          
         </Routes>
       </AppLayout.Main>
       <AppLayout.Footer>
