@@ -16,6 +16,7 @@ type postCommentProps = {
 
 const useStyles = makeStyles(() => ({
   root: {
+    padding: 0,
     '& $notchedOutline': {
       borderWidth: 0,
     },
@@ -24,8 +25,7 @@ const useStyles = makeStyles(() => ({
     },
     '&$focused $notchedOutline': {
       borderWidth: 0,
-    },
-    paddingLeft: '1.25rem',
+    },    
     '&:not(:last-child)': {
       borderBottom: '1px solid #d9d9d9',
     },
