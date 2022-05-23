@@ -1,8 +1,5 @@
 import { css } from '@emotion/react';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import { Avatar, ListItemIcon, ListItemText, rgbToHex } from '@mui/material';
+import { Avatar, ListItemText } from '@mui/material';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
 import MenuItem from '@mui/material/MenuItem';
@@ -21,12 +18,12 @@ import { User as UserType } from 'lib/api/types';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MdMoreHoriz } from 'react-icons/md';
 import { useMutation, useQueryClient } from 'react-query';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import palette, { brandColor } from '../../lib/palette';
 import AskRemoveModal from './AskRemoveModal';
 
-export type PostHeaderProps = {
+export type PostHeaderProps = {  
   owner_username: string
   owner_email: string
   createdAt: Date
@@ -34,7 +31,7 @@ export type PostHeaderProps = {
   _id: string
 }
 
-function PostHeader({ owner_username, owner_email, createdAt, _id, owner_id }: PostHeaderProps) {
+function PostHeader({ owner_username, owner_email, createdAt, owner_id, _id }: PostHeaderProps) {
   const date = useMemo(() => new Date(createdAt), [])  
   const [url] = useState(`${API_PATH}static/${owner_email}`)
   const today = new Date();
@@ -121,23 +118,12 @@ function PostHeader({ owner_username, owner_email, createdAt, _id, owner_id }: P
       console.error(err)
       toast.error(err.response?.data.message)
     },
-  })
-  const onAddNetwork = useCallback(() => {    
-    if (!owner_email) return
-    addBuddyMutation.mutate(owner_email)
-  }, [addBuddyMutation, owner_email])
-
-  const onDeleteNetwork = useCallback(() => {
-    if (!owner_email) return
-    delBuddyMutation.mutate(owner_email)
-  }, [delBuddyMutation, owner_email])
+  })  
 
   if (!owner_email || !user || !buddyData ) {
     
     return <div>로딩중!!</div>
   }
-
-
 
   return (
     <div css={headerStyle}>
@@ -196,10 +182,7 @@ function PostHeader({ owner_username, owner_email, createdAt, _id, owner_id }: P
                     sx={{ zIndex: "999"}}
                   >
                     <Link to={`/u/${owner_email}`} css={linkStyle}>
-                      <MenuItem onClick={handleClose} disableRipple>                      
-                        {/* <ListItemIcon css={iconBoxStyle}>
-                          <img src="/assets/profile.png" style={{ width: "20px", height: "20px", display: 'inline-block', margin:"auto"}} />
-                        </ListItemIcon>                         */}
+                      <MenuItem onClick={handleClose} disableRipple>                                              
                         <ListItemText >
                           Writer
                         </ListItemText>
@@ -231,26 +214,7 @@ function PostHeader({ owner_username, owner_email, createdAt, _id, owner_id }: P
                       onConfirm={onDelete}
                       onCancel={onCancel}
                     />
-                    </div>) }
-                    {/* {user.email === owner_email ? null : !buddyData.buddy || buddyData.buddy?.findIndex((elem: { email: string; profile: any }) => elem.email === owner_email) === -1 
-                    ? (            
-                    <MenuItem onClick={onAddNetwork} disableRipple>                      
-                      <ListItemIcon css={iconBoxStyle}>
-                        <img src="/assets/follow.png" style={{ width: "20px", height: "20px", display: 'inline-block', margin:"auto"}} />
-                      </ListItemIcon>                      
-                      <ListItemText>
-                        Add
-                      </ListItemText>
-                    </MenuItem>                      
-                    ) : (
-                    <MenuItem onClick={onDeleteNetwork} disableRipple>
-                      <ListItemIcon  css={iconBoxStyle} sx={{background: "#910457"}}>
-                      <img src="/assets/follow-1.png" style={{ width: "20px", height: "20px", display: 'inline-block', margin:"auto", background: "#910457"}} />
-                      </ListItemIcon>
-                      <ListItemText>
-                        Cancle
-                      </ListItemText>
-                    </MenuItem>)}                     */}
+                    </div>) }                    
                   </MenuList>
                 </ClickAwayListener>
               </Paper>

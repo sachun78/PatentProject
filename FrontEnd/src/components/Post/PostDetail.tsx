@@ -13,13 +13,14 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import useProfileImg from '../../hooks/useProfileImg'
-import { IComment, User } from '../../lib/api/types'
+import { IComment, IPost, User } from '../../lib/api/types'
 import ImageContainer from './ImageContainer'
 import PostActionButtons from './PostActionButtons'
 import PostComment from './PostComment'
 import { commentStyle } from './PostFooter'
 import PostTextContainer from './PostTextContainer'
 import { url } from 'gravatar'
+import gravatar from 'gravatar'
 
 type postDetailProps = {}
 
@@ -32,12 +33,12 @@ function PostDetail({}: postDetailProps) {
   const { data: post, isLoading } = useQuery(['post', id], getPost, {
     enabled: !!id,
     retry: false,
-  })  
-  
+  })    
+
   const today = new Date();
-  const diff = useMemo(() => {
-    
-    if(post) {
+  
+  const diff = useMemo(() => {    
+    if(post) {        
         const date = new Date(post.createdAt) 
         const temp = (today.getTime() - date.getTime()) / 1000
         if(temp > 86400) {
@@ -58,10 +59,14 @@ function PostDetail({}: postDetailProps) {
   }, [post, user])
 
   const likeCountMut = useMutation(updateLike, {
-    onSuccess: () => {
-      qc.invalidateQueries(['posts'])
-      qc.invalidateQueries(['post', post._id])
+
+    onMutate: async newData => {      
+      const oldData = qc.getQueryData(['post', post._id]);      
+      await qc.cancelQueries(['post', post._id]);      
+      qc.setQueryData(['post', post._id], {...post, newData});      
+      return () => qc.setQueryData(['post', post._id], oldData);       
     },
+    
     onError: () => {
       toast.error('Something went wrong', {
         position: toast.POSITION.TOP_CENTER,
@@ -80,14 +85,23 @@ function PostDetail({}: postDetailProps) {
       },
       id as string,
       likeClicked ? 'unchecked' : 'checked',
-    ])
+    ], {
+      onSuccess: () => {                
+        qc.invalidateQueries(['post', post._id])
+      }
+    })
   }
 
   const onKeyDown = useCallback(
     (e: any) => {
       if (e.key === 'Enter') {
         e.preventDefault()
-        createCommentMut.mutate([{ contents: comments, createdAt: new Date() }, post._id])
+        createCommentMut.mutate([{ contents: comments, createdAt: new Date() }, post._id], {
+          onSuccess: () => {        
+            qc.invalidateQueries(['post', post._id])
+            
+          }   
+        })
 
         setComments('')
       }
@@ -96,9 +110,14 @@ function PostDetail({}: postDetailProps) {
   )
 
   const createCommentMut = useMutation(createComments, {
-    onSuccess: () => {
-      qc.invalidateQueries(['post', post._id])
+
+    onMutate: async newData => {      
+      const oldData = qc.getQueryData(['post', post._id]);      
+      await qc.cancelQueries(['post', post._id]);      
+      qc.setQueryData(['post', post._id], {...post, newData});      
+      return () => qc.setQueryData(['post', post._id], oldData);       
     },
+
     onError: () => {
       toast.error('Something went wrong', {
         position: toast.POSITION.TOP_CENTER,
@@ -162,7 +181,7 @@ function PostDetail({}: postDetailProps) {
             onKeyDown={onKeyDown}
             sx={{
               borderRadius: '1rem',
-              margin: '1.25rem 1.875rem 1.875rem 1.25rem',
+              margin: '0 1.875rem 1.875rem 1.25rem',
               position: 'relative',
               width: '95%',
             }}
@@ -172,7 +191,9 @@ function PostDetail({}: postDetailProps) {
                 src={profileSrc}
                 sx={{ width: 35, height: 35, mr: '25px' }}
                 imgProps={{ crossOrigin: 'anonymous' }}
-              ></Avatar>
+              >
+                <img src={gravatar.url(user.email, { s: '60px', d: 'retro' })} alt={'fallback'} />
+              </Avatar>
             }
           />
         </div>
@@ -181,7 +202,7 @@ function PostDetail({}: postDetailProps) {
           {post.comment.length !== 0 && (
             <div css={commentStyle}>
               {post.comment.map((viewComment: IComment) => (
-                <PostComment key={viewComment.id} viewComment={viewComment} _id={post._id} />
+                <PostComment key={viewComment.id} viewComment={viewComment} _id={post._id} post={post} />
               ))}
             </div>
           )}

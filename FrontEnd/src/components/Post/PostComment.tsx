@@ -2,7 +2,7 @@ import { Avatar, OutlinedInput } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { API_PATH } from 'lib/api/client'
 import { editComment } from 'lib/api/post/editComment'
-import { IComment, User } from 'lib/api/types'
+import { IComment, IPost, User } from 'lib/api/types'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 import { toast } from 'react-toastify'
@@ -11,6 +11,7 @@ import PostIconBox from './PostIconBox'
 type postCommentProps = {
   viewComment: IComment
   _id: string
+  post: IPost  
 }
 
 const useStyles = makeStyles(() => ({
@@ -34,7 +35,7 @@ const useStyles = makeStyles(() => ({
   notchedOutline: {},
 }))
 
-const PostComment = ({ viewComment, _id }: postCommentProps) => {
+const PostComment = ({ viewComment, post, _id }: postCommentProps) => {
   const qc = useQueryClient()
   const user = qc.getQueryData<User>('user') as User
   const [editValue, setEditValue] = useState(viewComment.contents)
@@ -52,10 +53,14 @@ const PostComment = ({ viewComment, _id }: postCommentProps) => {
   }, [])
 
   const editCommentMut = useMutation(editComment, {
-    onSuccess: () => {
-      qc.invalidateQueries(['post', _id])
-      qc.invalidateQueries(['posts'])
-    },
+
+    onMutate: async newData => {      
+      const oldData = qc.getQueryData(['post', _id]);      
+      await qc.cancelQueries(['post', _id]);      
+      qc.setQueryData(['post', _id], {...post, newData});                  
+      return () => qc.setQueryData(['post', _id], oldData);       
+    },  
+    
     onError: () => {
       toast.error('Something went wrong', {
         position: toast.POSITION.TOP_CENTER,
@@ -70,7 +75,13 @@ const PostComment = ({ viewComment, _id }: postCommentProps) => {
     (e: any) => {
       if (e.key === 'Enter') {
         e.preventDefault()
-        editCommentMut.mutate([{ contents: editValue, createdAt: viewComment.createdAt }, _id, e.target.name])
+        editCommentMut.mutate([{ contents: editValue, createdAt: viewComment.createdAt }, _id, e.target.name],
+          {
+            onSuccess: () => {                            
+              qc.invalidateQueries(['post', _id])
+              qc.invalidateQueries(['posts'])              
+            }
+          })
         setEdit(false)
       }
     },
@@ -105,6 +116,7 @@ const PostComment = ({ viewComment, _id }: postCommentProps) => {
           endAdornment={
             owner && (
               <PostIconBox
+                post={post}
                 edit={edit}
                 key={viewComment.id}
                 _id={_id}
@@ -141,6 +153,7 @@ const PostComment = ({ viewComment, _id }: postCommentProps) => {
         endAdornment={
           owner && (
             <PostIconBox
+              post={post}
               edit={edit}
               key={viewComment.id}
               _id={_id}

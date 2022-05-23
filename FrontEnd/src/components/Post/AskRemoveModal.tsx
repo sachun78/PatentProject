@@ -19,7 +19,7 @@ const AskRemoveModal = ({
       confirmText="Delete"
       onConfirm={onConfirm}
       onCancel={onCancel}
-      cancelText="Cancle"
+      cancelText="Cancel"
     />
   )
 }

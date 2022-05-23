@@ -13,13 +13,12 @@ import FilterArea from './filter/FilterArea'
 
 type HomeProps = {}
 
-function Home({}: HomeProps) {  
-  const [filter, setFilter] = useState(false)
+function Home({}: HomeProps) {    
 
   const { ref, inView } = useInView()
   const [searchText, setSearchText] = useState('')  
   const [filterOn, setFilterOn] = useState(false);  
-
+  
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
     ['posts'],
     ({ pageParam = 0 }) => getPosts(pageParam),
@@ -51,11 +50,7 @@ function Home({}: HomeProps) {
     })
   }, [data])  
 
-  if (isLoading) return <div>로딩중!!</div>  
-
-  const onFilter = (value: boolean) => {
-    setFilter(!filter)
-  }
+  if (isLoading) return <div>로딩중!!</div>    
 
   const onFocus = () => {    
     setFilterOn(true)        
@@ -81,6 +76,7 @@ function Home({}: HomeProps) {
           <div key={search._id} css={postViewStyle}>
             <Post 
               key={search._id}
+              post={search}              
               _id={search._id}
               owner_username={search.owner_username}
               owner_email={search.owner_email}
@@ -96,7 +92,8 @@ function Home({}: HomeProps) {
         {!searchData && posts?.map((post: IPost) => (
           <div key={post._id} css={postViewStyle} ref={ref}>    
           <Post
-            key={post._id}
+            key={post._id}            
+            post={post}
             _id={post._id}
             owner_username={post.owner_username}
             owner_email={post.owner_email}

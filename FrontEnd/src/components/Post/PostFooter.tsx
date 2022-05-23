@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 import useToggle from 'hooks/useToggle'
 import { updateLike } from 'lib/api/post/updateLike'
-import { IComment, User } from 'lib/api/types'
+import { IComment, IPost, User } from 'lib/api/types'
 import { brandColor } from 'lib/palette'
 import React, { useEffect, useMemo, useState } from 'react'
 import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
@@ -11,37 +11,31 @@ import { toast } from 'react-toastify'
 import PostComment from './PostComment'
 
 export type PostFooterProps = {
-  _id: string
-  owner_thumb: string
-  owner_username: string
+  post: IPost  
+  _id: string  
   comment: IComment[]
-  like_cnt: string[]
-  images: string[]
-  createdAt: Date
+  like_cnt: string[]  
 }
 
-function PostFooter({ _id, like_cnt, comment }: PostFooterProps) {
-  const qc = useQueryClient()
-  // const [likeClick, onToggleLike, setLikeClick] = useToggle(false)
-  const user = qc.getQueryData<User>('user') as User
-  const [owner, setOwner] = useState(false)
+function PostFooter({ post, _id, comment, like_cnt }: PostFooterProps) {  
+  const qc = useQueryClient()  
+  const user = qc.getQueryData<User>('user') as User  
   const likeClicked = useMemo(() => {
     return like_cnt.find((v: string) => v === user.email)
   },[like_cnt, user.email])
-  const viewComments = comment.filter((comments: IComment) => comment.indexOf(comments) < 2)
-
-  useEffect(() => {
-    if (_id === user.id) {
-      setOwner(true)
-    } 
-    
-  }, [])
+  const viewComments = comment.filter((comments: IComment) => comment.indexOf(comments) < 2)  
 
   const likeCountMut = useMutation(updateLike, {
-    onSuccess: () => {
-      qc.invalidateQueries(['posts'])
-      qc.invalidateQueries(['post', _id])
-    },
+
+    onMutate: async newData => {      
+      const oldData = qc.getQueryData(['post', _id]);      
+      await qc.cancelQueries(['post', _id]);        
+      qc.setQueryData(['post', _id], (oldData: any) => {
+        return { ...oldData, like_cnt: [...oldData.like_cnt, newData]}
+      });      
+      return () => qc.setQueryData(['post', _id], oldData);       
+    },    
+    
     onError: () => {
       toast.error('Something went wrong', {
         position: toast.POSITION.TOP_CENTER,
@@ -60,7 +54,11 @@ function PostFooter({ _id, like_cnt, comment }: PostFooterProps) {
       },
       _id,
       likeClicked ? 'unchecked' : 'checked',
-    ])    
+    ],{
+      onSuccess: () => {
+        qc.invalidateQueries(['posts'])        
+      },
+    })    
   }
 
   return (
@@ -81,7 +79,7 @@ function PostFooter({ _id, like_cnt, comment }: PostFooterProps) {
       ) : (
         <div css={commentStyle}>
           {viewComments.map((viewComment: IComment) => (
-            <PostComment key={viewComment.id} viewComment={viewComment} _id={_id} />
+            <PostComment key={viewComment.id} viewComment={viewComment} _id={_id} post={post} />
           ))}
         </div>
       )}
