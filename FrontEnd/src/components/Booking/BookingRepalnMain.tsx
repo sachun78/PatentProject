@@ -11,6 +11,7 @@ import TimeGridInput from '../DatePickerInput/TimeGridInput'
 import { isBefore } from 'date-fns'
 import { sectionTitle } from './BookingSide'
 import { useRemoveOutlineHover } from 'lib/styles/muiStyles'
+import { submitButton } from '../../lib/styles/submitButton'
 
 export type BookingRepalnMainProps = {
   meeting: IReplan
@@ -73,14 +74,12 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
   )
 
   const classes = useRemoveOutlineHover()
-
+  const buttonClass = submitButton()
   if (meeting.data.status !== 'none') {
     const isReplan = meeting.data.status === 'replan'
     return (
       <div css={mainStyle}>
-        <Typography variant="h5">
-          {isReplan ? 'Rescheduling has been completed.' : 'Already Confirm or Cancel!!'}
-        </Typography>
+        {isReplan ? 'Rescheduling has been completed.' : 'Already Confirm or Cancel!!'}
         <Link to={'/'} style={{ textAlign: 'center', marginTop: '1rem' }}>
           Back
         </Link>
@@ -102,7 +101,7 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
   return (
     <div css={mainStyle}>
       <h3 css={sectionTitle}>/ Replan /</h3>
-      <form onSubmit={onSubmit} style={{ width: '100%' }}>
+      <form onSubmit={onSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
         <RequestSection title={'Change Date'} icon={'date'}>
           <TimeGridInput
             startTime={startTime}
@@ -150,7 +149,7 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
             }}
           />
         </RequestSection>
-        <Button variant={'contained'} type={'submit'} disabled={replanMut.isLoading} fullWidth>
+        <Button variant={'contained'} type={'submit'} disabled={replanMut.isLoading} classes={buttonClass}>
           Submit
         </Button>
       </form>

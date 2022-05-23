@@ -124,8 +124,18 @@ export const calendarStyle = css`
   max-height: 43.1875rem;
   padding: 2rem 1.875rem;
   border-radius: 1rem;
-  box-shadow: 0 3px 6px #00000029;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 1);
   position: relative;
   top: -2.875rem;
+
+  tbody > tr > td.fc-daygrid-day:first-of-type,
+  table {
+    border-left: none !important;
+  }
+
+  .fc .fc-scrollgrid-section-liquid > td,
+  .fc-col-header-cell:last-of-type,
+  tbody > tr > td.fc-daygrid-day:last-of-type {
+    border-right: none !important;
+  }
 `

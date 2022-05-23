@@ -33,7 +33,7 @@ function ProfileCardSave({ onSave, loading }: ProfileCardSaveProps) {
 export const SaveBlock = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
 `
 
 export default ProfileCardSave

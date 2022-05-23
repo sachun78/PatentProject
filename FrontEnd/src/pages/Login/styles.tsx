@@ -36,8 +36,7 @@ export const inputStyle = css`
   width: 22.1875rem;
   background: #fff;
 
-  &:hover,
-  &:focus {
+  &:hover:not(.Mui-focused) {
     .MuiOutlinedInput-notchedOutline {
       border-color: #d9d9d9;
     }

@@ -16,7 +16,7 @@ export type NetworkItemProps = {
 function NetworkItem({ data }: NetworkItemProps) {
   const navigate = useNavigate()
   return (
-    <div css={itemStyle} onClick={() => navigate('/u/' + data.email)}>      
+    <div css={itemStyle} onClick={() => navigate('/u/' + data.email)}>
       <div css={iconStyle}>
         <Avatar
           alt="user-avatar"
@@ -32,36 +32,35 @@ function NetworkItem({ data }: NetworkItemProps) {
         <div css={nameStyle}>{data.name || data.username}</div>
         <div css={emailStyle}>{data.email}</div>
       </div>
-      <div css={informStyle}>        
-          <div css={companyBoxStyle}>
-            <Tooltip title="Company" placement={'top'}>
-              <span style={{width: "7.1875rem"}}>
-                <img src="/assets/company.png" />
-                myCompany
-                {/* {data.profile.company} */}
+      <div css={informStyle}>
+        <div css={companyBoxStyle}>
+          <Tooltip title="Company" placement={'top'}>
+            <span style={{ width: '7.1875rem' }}>
+              <img src="/assets/company.png" />
+              {data.profile.company}
+            </span>
+          </Tooltip>
+          {data.profile.country && (
+            <Tooltip title="Country" placement={'top'}>
+              <span>
+                <img src="/assets/country.png" alt={'country'} />
+                {getCountryName(data.profile.country)}
               </span>
             </Tooltip>
-            {data.profile.country && (
-              <Tooltip title="Country" placement={'top'}>
-                <span>
-                  <img src="/assets/country.png" alt={'country'} />
-                  {getCountryName(data.profile.country)}
-                </span>
-              </Tooltip>
-            )}
+          )}
+        </div>
+        <Tooltip title="Field" placement={'left'}>
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <Grid container>
+              {data.profile.field?.map((elem: string) => (
+                <FieldItem key={elem} color="#1E3560">
+                  {elem}
+                </FieldItem>
+              ))}
+            </Grid>
           </div>
-          <Tooltip title="Field" placement={'left'}>
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <Grid container>
-                {data.profile.field?.map((elem: string) => (
-                  <FieldItem key={elem} color="#1E3560">
-                    {elem}
-                  </FieldItem>
-                ))}
-              </Grid>
-            </div>
-          </Tooltip>
-        </div>      
+        </Tooltip>
+      </div>
       <div css={stateStyle}>
         <div>
           <img src="/assets/meeting.png" style={{ width: '1rem' }} alt={'meeting'} />
@@ -127,13 +126,11 @@ const emailStyle = css`
 `
 const informStyle = css`
   display: flex;
-  width: 28.125rem; 
+  width: 28.125rem;
   height: 3.6875rem;
   flex-direction: column;
   font-size: 0.875rem;
   color: ${palette.grey[400]};
-  
-  
 
   svg {
     margin-right: 0.375rem;
@@ -147,7 +144,6 @@ const informStyle = css`
   }
 `
 const stateStyle = css`
-
   width: 3.75rem;
   max-height: 3.75rem;
   height: 100%;

@@ -32,6 +32,10 @@ export const MeetingSection = styled.section`
   color: #333333;
   width: 100%;
 
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
   .multiline {
     white-space: pre-wrap;
     max-width: 100%;
@@ -94,6 +98,10 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
     backgroundColor: '#910457 ',
     color: '#fff',
     font: 'normal normal 800 16px/18px NanumSquareOTF',
+    borderRight: '1px solid #F2F2F2',
+    '&:last-of-type': {
+      borderRight: 'none',
+    },
   },
   [`&.${tableCellClasses.body}`]: {
     color: '#6C6C6C',
