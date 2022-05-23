@@ -29,7 +29,7 @@ export const loginFormStyle = css`
   }
 `
 export const inputStyle = css`
-  &:not(:first-child) {
+  &:not(:first-of-type) {
     margin-top: 1.5625rem;
   }
 

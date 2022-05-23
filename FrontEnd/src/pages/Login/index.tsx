@@ -31,7 +31,7 @@ function Login({}: LoginProps) {
               <NavLink to={'/email/check'} style={{ marginLeft: '3.0625rem' }}>
                 <h4>Sign Up</h4>
               </NavLink>
-              <NavLink to={'/email/check'} style={{ marginRight: '1rem' }}>
+              <NavLink to={'/email/forgot'} style={{ marginRight: '1rem' }}>
                 <h4>Forgot Password</h4>
               </NavLink>
             </div>

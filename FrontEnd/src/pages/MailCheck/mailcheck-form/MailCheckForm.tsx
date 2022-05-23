@@ -2,22 +2,23 @@ import { Divider, FormHelperText, OutlinedInput } from '@mui/material'
 import React, { FormEvent, useCallback, useState } from 'react'
 import useInput from 'hooks/useInput'
 import Joi from 'joi'
-import { sendmail } from 'lib/api/auth/sendmail'
+import { forgot_passwd, sendmail } from 'lib/api/auth/sendmail'
 import { useMutation } from 'react-query'
 import { AxiosError } from 'axios'
-import { helpertextStyle, inputStyle } from '../../Login/styles'
+import { helpertextStyle, inputStyle } from 'pages/Login/styles'
 import LoadingButton from '@mui/lab/LoadingButton'
 import styled from '@emotion/styled'
 
 export type MailCheckFormProps = {
   sendMail: boolean
   onSendmail: () => void
+  type: 'register' | 'forgot'
 }
 
-function MailCheckForm({ sendMail, onSendmail }: MailCheckFormProps) {
+function MailCheckForm({ sendMail, onSendmail, type }: MailCheckFormProps) {
   const [mailTypeError, setMailTypeError] = useState('')
   const [email, onChangeEmail, setEmail] = useInput('')
-  const sendmailMut = useMutation(sendmail, {
+  const sendmailMut = useMutation(type === 'register' ? sendmail : forgot_passwd, {
     onSuccess: () => {
       onSendmail()
     },
@@ -64,17 +65,19 @@ function MailCheckForm({ sendMail, onSendmail }: MailCheckFormProps) {
           >
             OR
           </Divider>
-          <div className="button-div">
-            <LoadingButton
-              variant="contained"
-              fullWidth
-              onClick={onSubmit}
-              loading={sendmailMut.isLoading}
-              loadingPosition={'start'}
-            >
-              Resend
-            </LoadingButton>
-          </div>
+          {type === 'register' && (
+            <div className="button-div">
+              <LoadingButton
+                variant="contained"
+                fullWidth
+                onClick={onSubmit}
+                loading={sendmailMut.isLoading}
+                loadingPosition={'start'}
+              >
+                Resend
+              </LoadingButton>
+            </div>
+          )}
         </CheckEmailBlock>
       ) : (
         <form onSubmit={onSubmit}>

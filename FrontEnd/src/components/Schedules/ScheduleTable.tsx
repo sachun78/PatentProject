@@ -1,6 +1,6 @@
-import { Badge, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material'
+import { Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material'
 import { StatusBlock, StyledTableCell, StyledTableRow } from 'pages/Meeting/styles'
-import { format, isAfter, isBefore } from 'date-fns'
+import { format, isBefore } from 'date-fns'
 import React from 'react'
 import { IMeeting } from 'lib/api/types'
 import { useNavigate } from 'react-router-dom'
@@ -25,12 +25,12 @@ function ScheduleTable({ meetings, type = 'schedule' }: ScheduleTableProps) {
       }}
       sx={type === 'history' ? { top: 0 } : { top: '-2.875rem' }}
     >
-      <Table sx={{ minWidth: 700 }} aria-label="history schedule table" size={'small'}>
+      <Table sx={{ minWidth: 700 }} aria-label="history schedule table" size={'medium'}>
         <TableHead>
           <TableRow>
             <StyledTableCell align="center">Name</StyledTableCell>
             <StyledTableCell align="center">Company</StyledTableCell>
-            <StyledTableCell align="center">Email</StyledTableCell>
+            <StyledTableCell align="center">E-mail</StyledTableCell>
             <StyledTableCell align="center">Date</StyledTableCell>
             <StyledTableCell align="center">Location</StyledTableCell>
             <StyledTableCell align="center">Status</StyledTableCell>
@@ -41,36 +41,29 @@ function ScheduleTable({ meetings, type = 'schedule' }: ScheduleTableProps) {
             let status = row.status
             if (status === 'none') {
               if (isBefore(new Date(row.startTime), new Date())) {
-                status = 'expired'
+                status = 'Expired'
               } else {
-                status = 'pending'
+                status = 'Pending'
               }
             }
             if (status === 'replan') {
               if (isBefore(new Date(row.startTime), new Date())) {
-                status = 'expired'
+                status = 'Expired'
               }
             }
             return (
               <StyledTableRow key={row._id + row.date} hover onClick={() => navi('/meeting/schedule/' + row._id)}>
-                <StyledTableCell align="center">{row.ownerName}</StyledTableCell>
-                <StyledTableCell align="center">{row.ownerCompany}</StyledTableCell>
+                <StyledTableCell align="center">{row.toName}</StyledTableCell>
+                <StyledTableCell align="center">{row.toCompany}</StyledTableCell>
                 <StyledTableCell align="center">{row.toEmail}</StyledTableCell>
                 <StyledTableCell align="center">
-                  {format(new Date(row.date), 'EEEE, d MMM, yyyy')} <br />
+                  {format(new Date(row.date), 'EE, d MMM, yyyy \n')}
                   {format(new Date(row.startTime), 'HH:mm - ')} {format(new Date(row.endTime), 'HH:mm')}
                 </StyledTableCell>
                 <StyledTableCell align="center">{row.location}</StyledTableCell>
                 <StyledTableCell align="center">
                   {type === 'schedule' ? (
-                    <Badge
-                      color="error"
-                      variant="standard"
-                      badgeContent={'end'}
-                      invisible={status !== 'confirm' || isAfter(new Date(row.startTime), new Date())}
-                    >
-                      <StatusBlock state={status}>{status}</StatusBlock>
-                    </Badge>
+                    <StatusBlock state={status}>{status}</StatusBlock>
                   ) : (
                     <StatusBlock state={row.history.status ? 'met' : ''}>
                       {row.history.status ? 'MET' : 'Failure'}

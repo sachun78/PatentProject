@@ -53,7 +53,7 @@ function ScheduleCalendar({ meetings }: ScheduleCalendarProps) {
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
         headerToolbar={{
-          center: 'prev,title,next',
+          center: 'prev title next',
           left: '',
           right: '',
         }}

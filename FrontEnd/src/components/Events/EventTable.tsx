@@ -21,7 +21,7 @@ function EventTable({ events }: EventTableProps) {
 
   const navi = useNavigate()
   return (
-    <TableContainer component={Paper} style={{ borderRadius: '1rem', maxWidth: '76.25rem' }}>
+    <TableContainer component={Paper} style={{ borderRadius: '1rem', maxWidth: '76.25rem', marginBottom: '1rem' }}>
       <Table sx={{ minWidth: 700 }} aria-label="history schedule table" size={'small'}>
         <TableHead>
           <TableRow>
@@ -41,8 +41,8 @@ function EventTable({ events }: EventTableProps) {
               >
                 <StyledTableCell align="center">{row.title}</StyledTableCell>
                 <StyledTableCell align="center">
-                  {format(new Date(row.start_date), 'EEEE, d MMM, yyyy - ')}
-                  {format(new Date(row.end_date), 'EEEE, d MMM, yyyy')}
+                  {format(new Date(row.start_date), 'd MMM - ')}
+                  {format(new Date(row.end_date), 'd MMM, yyyy')}
                 </StyledTableCell>
                 <StyledTableCell align="center">{row.meeting_list.length}</StyledTableCell>
               </StyledTableRow>

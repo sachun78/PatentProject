@@ -1,14 +1,6 @@
 import { css } from '@emotion/react'
 import { brandColor } from 'lib/palette'
 
-export const tableStyle = css`
-  display: flex;
-  flex-wrap: wrap;
-  flex: 1;
-  height: 100%;
-  flex-direction: row;
-`
-
 export const calendarStyle = css`
   .fc-today-button {
     width: 73px !important;
@@ -93,6 +85,7 @@ export const calendarStyle = css`
 
   .fc-day-today {
     background: #ffebe8 !important;
+
     .fc-daygrid-day-number {
       color: ${brandColor} !important;
     }
@@ -125,7 +118,6 @@ export const calendarStyle = css`
     color: ${brandColor};
     font: normal normal 800 18px/21px NanumSquareOTF;
     margin-left: 15px;
-    margin-right: 15px;
   }
 
   max-width: 76.25rem;

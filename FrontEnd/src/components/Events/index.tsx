@@ -4,7 +4,7 @@ import IconControl from 'components/IconControl/IconControl'
 import useEventQuery from 'hooks/query/useEventQuery'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import { useEventModal } from 'hooks/useEventTitle'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { eventSwitchState } from 'atoms/memberShipTabState'
 import EventCalendar from './EventCalendar'
@@ -15,6 +15,7 @@ import { isBefore } from 'date-fns'
 import { useCurrentEventState } from 'atoms/eventState'
 import EventTable from './EventTable'
 import { css } from '@emotion/react'
+import { useToggleImageButton } from '../../lib/styles/muiStyles'
 
 type EventsProps = {}
 
@@ -45,14 +46,7 @@ function Events({}: EventsProps) {
     setEndDate(temp_date)
   }, [setEdit, setEndDate, setEvent, setOpen, setStartDate])
 
-  const outDatedEvents = useMemo(
-    () =>
-      data?.filter((event) => {
-        const event_date = new Date(event.start_date)
-        return isBefore(event_date, new Date())
-      }),
-    [data]
-  )
+  const toggleClass = useToggleImageButton()
 
   if (isLoading)
     return (
@@ -97,9 +91,8 @@ function Events({}: EventsProps) {
             selected={!tableChecked}
             onChange={onTableViewChange}
             color={'primary'}
+            classes={toggleClass}
             sx={{
-              borderRadius: '50px',
-              border: '1px solid #910457',
               background: tableChecked ? '' : '#910457 !important',
             }}
           >
@@ -112,11 +105,8 @@ function Events({}: EventsProps) {
             selected={tableChecked}
             onChange={onTableViewChange}
             color={'primary'}
-            sx={{
-              borderRadius: '50px',
-              border: '1px solid #910457',
-              background: !tableChecked ? '' : '#910457 !important',
-            }}
+            classes={toggleClass}
+            sx={{ background: !tableChecked ? '' : '#910457 !important' }}
           >
             {!tableChecked ? <IconControl name={'list'} /> : <IconControl name={'listSelect'} />}
           </ToggleButton>
@@ -126,11 +116,8 @@ function Events({}: EventsProps) {
           selected={checked}
           onChange={handleChange}
           color={'primary'}
-          sx={{
-            borderRadius: '50px',
-            border: '1px solid #910457',
-            background: checked ? '#910457 !important' : '',
-          }}
+          classes={toggleClass}
+          sx={{ background: checked ? '#910457 !important' : '' }}
         >
           {checked ? <IconControl name={'dateSelect'} /> : <IconControl name={'date'} />}
         </ToggleButton>

@@ -6,9 +6,11 @@ import MailCheckForm from './mailcheck-form/MailCheckForm'
 import { containerStyle, loginFormStyle } from '../Login/styles'
 import { undoStyle } from '../Signup/styles'
 
-type RegisterProps = {}
+type RegisterProps = {
+  type?: 'register' | 'forgot'
+}
 
-export default function MailCheck({}: RegisterProps) {
+export default function MailCheck({ type = 'register' }: RegisterProps) {
   const { data } = useUserQuery()
   const [sendMail, setSendMail] = useState(false)
   const onSendmail = () => {
@@ -26,7 +28,7 @@ export default function MailCheck({}: RegisterProps) {
         </figure>
         <div css={loginFormStyle}>
           <section>
-            <MailCheckForm sendMail={sendMail} onSendmail={onSendmail} />
+            <MailCheckForm sendMail={sendMail} onSendmail={onSendmail} type={type} />
           </section>
         </div>
         <Link to={'/login'} className="link" css={undoStyle}>

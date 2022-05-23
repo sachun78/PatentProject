@@ -11,6 +11,7 @@ import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import { getMeetingsCursor, getMeetingSearch } from 'lib/api/meeting/getMeetings'
 import { css } from '@emotion/react'
+import { useToggleImageButton } from '../../lib/styles/muiStyles'
 
 type ScheduleViewProps = {}
 
@@ -62,6 +63,8 @@ function Schedules({}: ScheduleViewProps) {
     })
   }, [data])
 
+  const toggleClass = useToggleImageButton()
+
   if (isLoading) return <div>Loading...</div>
   if (meetings?.length === 0)
     return (
@@ -76,7 +79,8 @@ function Schedules({}: ScheduleViewProps) {
       <FormGroup
         row={true}
         style={{
-          marginBottom: '0.625rem',
+          marginTop: '-0.75rem',
+          marginBottom: '1.25rem',
           maxWidth: '76.25rem',
           display: 'flex',
           justifyContent: 'flex-end',
@@ -97,11 +101,8 @@ function Schedules({}: ScheduleViewProps) {
             selected={!checked}
             onChange={handleChange}
             color={'primary'}
-            sx={{
-              borderRadius: '50px',
-              border: '1px solid #910457',
-              background: !checked ? '#910457 !important' : '',
-            }}
+            classes={toggleClass}
+            sx={{ background: !checked ? '#910457 !important' : '' }}
           >
             {checked ? <IconControl name={'list'} /> : <IconControl name={'listSelect'} />}
           </ToggleButton>
@@ -112,11 +113,8 @@ function Schedules({}: ScheduleViewProps) {
             selected={checked}
             onChange={handleChange}
             color={'primary'}
-            sx={{
-              borderRadius: '50px',
-              border: '1px solid #910457',
-              background: checked ? '#910457 !important' : '',
-            }}
+            classes={toggleClass}
+            sx={{ background: checked ? '#910457 !important' : '' }}
           >
             {checked ? <IconControl name={'dateSelect'} /> : <IconControl name={'date'} />}
           </ToggleButton>
