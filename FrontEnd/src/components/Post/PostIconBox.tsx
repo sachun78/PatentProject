@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from 'react-query'
 import { toast } from 'react-toastify'
 import CancelIcon from '@mui/icons-material/Cancel'
 import { IconButton } from '@mui/material'
+import { IPost } from 'lib/api/types'
 
 type postIconBoxProps = {
   _id: string
@@ -13,6 +14,7 @@ type postIconBoxProps = {
   name: string
   getEdit: any
   edit: boolean
+  post: IPost
 }
 
 const PostIconBox = ({
@@ -21,10 +23,16 @@ const PostIconBox = ({
   name,
   getEdit,
   edit,
+  post
 }: postIconBoxProps) => {
   const qc = useQueryClient()
   const onCommentDelete = () => {
-    deleteCommentMut.mutate([_id, commentId])
+    deleteCommentMut.mutate([_id, commentId], {
+      onSuccess: () => {        
+        qc.invalidateQueries(['posts'])  
+        qc.invalidateQueries(['post', _id])              
+      }
+    })
   }
 
   const setEdit = () => {
@@ -32,10 +40,14 @@ const PostIconBox = ({
   }
 
   const deleteCommentMut = useMutation(deleteComment, {
-    onSuccess: () => {
-      qc.invalidateQueries(['posts'])
-      qc.invalidateQueries(['post', _id])
+
+    onMutate: async newData => {      
+      const oldData = qc.getQueryData(['post', _id]);      
+      await qc.cancelQueries(['post', _id]);      
+      qc.setQueryData(['post', _id], {...post, newData});      
+      return () => qc.setQueryData(['post', _id], oldData);       
     },
+    
     onError: () => {
       toast.error('Something went wrong', {
         position: toast.POSITION.TOP_CENTER,
