@@ -72,7 +72,8 @@ function Home({}: HomeProps) {
         </div>                
         <SearchBox filter={setSearchText} post={true} />                
       </div>                 
-        {searchData && searchData?.map((search: IPost) => (
+        {searchData && searchData.length === 0 ? <div css={noDataStyle}>There are no search results.</div> :        
+        searchData?.map((search: IPost) => (
           <div key={search._id} css={postViewStyle}>
             <Post 
               key={search._id}
@@ -115,6 +116,16 @@ function Home({}: HomeProps) {
     </>     
   )
 }
+
+const noDataStyle = css`
+  display: flex;
+  max-width: 54.375rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #9c9c9c;
+  border-radius: 16px;
+  height: 18.75rem;  
+`
 
 const nationStyle = css`
   padding: 0.5rem 0.75rem;

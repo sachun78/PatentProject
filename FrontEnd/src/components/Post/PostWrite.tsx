@@ -49,7 +49,7 @@ function PostWrite({}: postWriteProps) {
   const onImageSetting = () => {    
     
     const innerImage = quillInstance.current.getContents().ops.filter((insert: any) => (insert.insert['image'] !== undefined))
-    console.log(innerImage)
+    
     innerImage.map((insert: any) => {      
       image.push(insert.insert['image'])            
     })      
