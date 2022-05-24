@@ -8,6 +8,8 @@ import React, { memo } from 'react'
 import { FieldItem } from 'pages/User/styles'
 import getCountryName from 'lib/countryName'
 import { API_PATH } from 'lib/api/client'
+import { useQuery } from 'react-query'
+import { getMeetingHistoryUser } from 'lib/api/meeting/getMeetings'
 
 export type NetworkItemProps = {
   data: { email: string; profile: IProfile; name: string; username?: string }
@@ -15,6 +17,10 @@ export type NetworkItemProps = {
 
 function NetworkItem({ data }: NetworkItemProps) {
   const navigate = useNavigate()
+  const { data: historyData, isLoading: isLoadingHistory } = useQuery(['meeting_history', data.email], getMeetingHistoryUser)
+
+  if (isLoadingHistory) return null
+  
   return (
     <div css={itemStyle} onClick={() => navigate('/u/' + data.email)}>      
       <div css={iconStyle}>
@@ -33,39 +39,44 @@ function NetworkItem({ data }: NetworkItemProps) {
         <div css={emailStyle}>{data.email}</div>
       </div>
       <div css={informStyle}>        
-          <div css={companyBoxStyle}>
-            <Tooltip title="Company" placement={'top'}>
+        <div css={companyBoxStyle}>
+          <Tooltip title="Company" placement={'top'}>
+            <span>
+              <img src="/assets/company.png" />                
+              {data.profile.company}
+            </span>
+          </Tooltip>
+          {data.profile.country && (
+            <Tooltip title="Country" placement={'top'}>
               <span>
-                <img src="/assets/company.png" />                
-                {data.profile.company}
+                <img src="/assets/country.png" alt={'country'} />
+                {getCountryName(data.profile.country)}
               </span>
             </Tooltip>
-            {data.profile.country && (
-              <Tooltip title="Country" placement={'top'}>
-                <span>
-                  <img src="/assets/country.png" alt={'country'} />
-                  {getCountryName(data.profile.country)}
-                </span>
-              </Tooltip>
-            )}
-          </div>
-          <Tooltip title="Field" placement={'left'}>
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <Grid container>
-                {data.profile.field?.map((elem: string) => (
-                  <FieldItem key={elem} color="#1E3560">
-                    {elem}
-                  </FieldItem>
-                ))}
-              </Grid>
-            </div>
-          </Tooltip>
-        </div>      
-      <div css={stateStyle}>
-        <div>
-          <img src="/assets/meeting.png" style={{ width: '1rem' }} alt={'meeting'} />
+          )}
         </div>
+        <Tooltip title="Field" placement={'left'}>
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <Grid container>
+              {data.profile.field?.map((elem: string) => (
+                <FieldItem key={elem} color="#1E3560">
+                  {elem}
+                </FieldItem>
+              ))}
+            </Grid>
+          </div>
+        </Tooltip>
       </div>
+      <Tooltip title="Wemet" placement={'left'}>
+        <div css={stateStyle}>
+          <div>
+            <img src="/assets/meeting.png" style={{ width: '1rem' }} alt={'meeting'} />            
+          </div>
+          <div>
+            {historyData.length}                
+          </div>
+        </div>            
+      </Tooltip>      
     </div>
   )
 }
