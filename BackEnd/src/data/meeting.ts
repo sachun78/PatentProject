@@ -87,7 +87,7 @@ export async function getAllHistory(userId: string, _toEmail?: string) {
 }
 
 export async function getAllByIndex(userId: string, curPos: number, cnt: number) {
-  return meeting.find({ownerId: userId}).lean().sort({date: -1}).skip(curPos).limit(cnt);
+  return meeting.find({ownerId: userId}).lean().sort({date: -1, _id: -1}).skip(curPos).limit(cnt);
 }
 
 export async function getById(meetingId: string) {

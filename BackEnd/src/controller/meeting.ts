@@ -244,7 +244,7 @@ export async function sendInvitMail(req: IRequest, res: Response) {
 
   try {
     if (meetId) {
-      const meetData = await meetingRepo.getById(meetId);
+      let meetData = await meetingRepo.getById(meetId);
       if (!meetData) {
         return res.status(409).json({ message: `meeting is not found`});
       }
@@ -259,16 +259,14 @@ export async function sendInvitMail(req: IRequest, res: Response) {
         return res.status(403).json({ message: 'event owner is different. meeting create fail'});
       }
 
-      bodyData.status = 'none';
-      bodyData.code = shortid.generate();
+      meetData.status = 'none';
+      meetData.code = shortid.generate();
 
-      const modify = await meetingRepo.updateMeeting(meetId, bodyData);
-      if (!modify) {
-        return res.status(500).json({ message: `Failed save meeting ${bodyData.toEmail}`});
-      }
-
-      sendmail(modify, EMAILTYPE.INVI)
-        .then( value => res.status(200).json({ message: `Success send email: ${modify.toEmail}, code(${modify.code})`}))
+      sendmail(meetData, EMAILTYPE.INVI)
+        .then( value => {
+          meetingRepo.updateMeeting(meetId, meetData);
+          return res.status(200).json({ message: `Success send email: ${meetData?.toEmail}, code(${meetData?.code})`})
+        })
         .catch( reason => res.status(500).json({ message: `Failed email send ${reason}`}));
     }
     else {
