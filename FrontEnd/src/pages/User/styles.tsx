@@ -9,6 +9,7 @@ export const Container = styled.div`
   height: 100%;
   border-radius: 1rem;
   margin-right: 1rem;
+  box-shadow: 2px 5px 11px #00000029;
 `
 
 export const UserHeader = styled.div`
