@@ -8,6 +8,7 @@ import React, { memo, MouseEvent, useCallback } from 'react'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
 import { FiEdit } from 'react-icons/fi'
 import { periodString } from 'lib/stringParser'
+import { animated, useSpring } from 'react-spring'
 
 export type EventCardProps = {
   id: string
@@ -25,6 +26,14 @@ function EventCard({ title, startDate, endDate, id, count, cardView = false, dis
   const { setStartDate, setEndDate } = useDateRangeHook()
   const [, setEvent] = useCurrentEventState()
   const [, setMeetuser] = useMeetingReqUser()
+
+  const springProps = useSpring({
+    delay: 100,
+    transform: 'translateX(0px)',
+    from: {
+      transform: 'translateX(100%)',
+    },
+  })
 
   const handleEdit = useCallback(
     (e: MouseEvent<SVGElement>) => {
@@ -46,7 +55,7 @@ function EventCard({ title, startDate, endDate, id, count, cardView = false, dis
   }, [endDate, id, setEndDate, setEvent, setMeetuser, setStartDate, startDate, title])
 
   return (
-    <div css={wrapper(cardView)}>
+    <animated.div css={wrapper(cardView)} style={{ ...springProps }}>
       <div
         className={'inner'}
         onClick={() => {
@@ -77,7 +86,7 @@ function EventCard({ title, startDate, endDate, id, count, cardView = false, dis
           </Link>
         </div>
       )}
-    </div>
+    </animated.div>
   )
 }
 
@@ -110,6 +119,7 @@ const wrapper = (maxWidth: boolean) => css`
   &:hover {
     opacity: 1;
     box-shadow: none;
+
     .event-card-header {
       color: ${brandColor};
     }

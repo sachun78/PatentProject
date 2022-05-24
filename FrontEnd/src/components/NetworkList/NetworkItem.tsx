@@ -35,7 +35,7 @@ function NetworkItem({ data }: NetworkItemProps) {
       <div css={informStyle}>
         <div css={companyBoxStyle}>
           <Tooltip title="Company" placement={'top'}>
-            <span style={{ width: '7.1875rem' }}>
+            <span>
               <img src="/assets/company.png" />
               {data.profile.company}
             </span>
@@ -77,7 +77,7 @@ const companyBoxStyle = css`
   margin-bottom: 1.0625rem;
 
   span + span {
-    margin-left: 0.625rem;
+    margin-left: 1.6875rem;
   }
 
   span img {

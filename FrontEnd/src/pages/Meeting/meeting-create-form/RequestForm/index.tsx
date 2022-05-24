@@ -6,25 +6,25 @@ import { createMeeting } from 'lib/api/meeting/createMeeting'
 import LocationInput from 'components/LocationMap/LocationInput'
 import RequestSection from './RequestSection'
 import { toast } from 'react-toastify'
-import { buttonStyle, sectionStyle } from './styles'
+import { buttonStyle, PeriodBlock, sectionStyle } from './styles'
 import { Navigate, useNavigate } from 'react-router-dom'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { Checkbox, FormControlLabel, OutlinedInput } from '@mui/material'
-import { ContainerBlock } from 'pages/Meeting/styles'
+import { ContainerBlock, MeetingSection } from 'pages/Meeting/styles'
 import { getEvent } from 'lib/api/event/getEvent'
 import TimeGridInput from 'components/DatePickerInput/TimeGridInput'
 import { getProfilebyEmail } from 'lib/api/me/getProfile'
-import { useRemoveOutlineHover } from 'lib/styles/muiStyles'
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined'
 import { format } from 'date-fns'
 import ProfileBox from 'components/ProfileBox'
 import { IMeeting, IProfile } from 'lib/api/types'
 import useToggle from 'hooks/useToggle'
-import PhoneInput from '../../../../components/PhoneInput'
+import PhoneInput from 'components/PhoneInput'
 import PhoneInputT from 'react-phone-number-input'
 import LoadingButton from '@mui/lab/LoadingButton'
+import IconControl from 'components/IconControl'
+import { useRemoveOutlineHover } from '../../../../lib/styles/muiStyles'
 
 type RequestViewProps = {}
 
@@ -62,7 +62,7 @@ export default function RequestForm({}: RequestViewProps) {
   // Get User Profile
   const {
     data: profileData,
-    isLoading: isLoadingProfile,
+    isLoading: profileLoading,
     refetch,
   } = useQuery(['profile', meetuser || form.to], getProfilebyEmail, {
     enabled: false,
@@ -212,13 +212,15 @@ export default function RequestForm({}: RequestViewProps) {
   return (
     <ContainerBlock>
       <form css={sectionStyle} onSubmit={onSubmit}>
-        <RequestSection title={curEvent.title}>
-          <CalendarMonthOutlinedIcon style={{ marginRight: '0.5rem' }} />
+        <h1>{curEvent.title}</h1>
+        <PeriodBlock>
+          <IconControl name={'date'} />
           <span>
             {format(new Date(startDate), 'EEEE, d MMM, yyyy') + ' - ' + format(new Date(endDate), 'EEEE, d MMM, yyyy')}
           </span>
-        </RequestSection>
-        <RequestSection title={'Display the Meeting'}>
+        </PeriodBlock>
+        <MeetingSection>
+          <h2>Display the Meeting</h2>
           <OutlinedInput
             name="title"
             type={'text'}
@@ -229,8 +231,9 @@ export default function RequestForm({}: RequestViewProps) {
             sx={{ height: 38 }}
             fullWidth
           />
-        </RequestSection>
-        <RequestSection title={'Email'}>
+        </MeetingSection>
+        <MeetingSection>
+          <h2>Participant's email</h2>
           {meetuser ? (
             <span>{meetuser}</span>
           ) : (
@@ -246,51 +249,52 @@ export default function RequestForm({}: RequestViewProps) {
               classes={classes}
             />
           )}
-        </RequestSection>
-        {profileData ? (
-          <ProfileBox profileData={profileData} />
-        ) : (
-          form.to && (
-            <>
-              <RequestSection title={'Name'}>
-                <OutlinedInput
-                  name="name"
-                  type={'text'}
-                  value={form.name}
-                  onChange={onChange}
-                  placeholder={'Enter a name to request'}
-                  classes={classes}
-                  sx={{ height: 38 }}
-                  fullWidth
-                />
-              </RequestSection>
-              <RequestSection title={'Firm'}>
-                <OutlinedInput
-                  name="firm"
-                  type={'text'}
-                  value={form.firm}
-                  onChange={onChange}
-                  placeholder={'Enter the firm'}
-                  classes={classes}
-                  sx={{ height: 38 }}
-                  fullWidth
-                />
-              </RequestSection>
-              <RequestSection title={'Phone'}>
-                <PhoneInputT
-                  placeholder="Enter phone number"
-                  value={phone}
-                  onChange={onChangePhone}
-                  inputComponent={PhoneInput}
-                  ref={ref}
-                  international
-                  style={{ width: '100%' }}
-                />
-              </RequestSection>
-            </>
-          )
+          {profileData && <ProfileBox profileData={profileData} />}
+        </MeetingSection>
+        {!profileData && !profileLoading && form.to && (
+          <>
+            <MeetingSection title={'Name'}>
+              <h2>Name</h2>
+              <OutlinedInput
+                name="name"
+                type={'text'}
+                value={form.name}
+                onChange={onChange}
+                placeholder={'Enter a name to request'}
+                classes={classes}
+                sx={{ height: 38 }}
+                fullWidth
+              />
+            </MeetingSection>
+            <MeetingSection title={'Firm'}>
+              <h2>Firm</h2>
+              <OutlinedInput
+                name="firm"
+                type={'text'}
+                value={form.firm}
+                onChange={onChange}
+                placeholder={'Enter the firm'}
+                classes={classes}
+                sx={{ height: 38 }}
+                fullWidth
+              />
+            </MeetingSection>
+            <MeetingSection title={'Phone'}>
+              <h2>Phone</h2>
+              <PhoneInputT
+                placeholder="Enter phone number"
+                value={phone}
+                onChange={onChangePhone}
+                inputComponent={PhoneInput}
+                ref={ref}
+                international
+                style={{ width: '100%' }}
+              />
+            </MeetingSection>
+          </>
         )}
-        <RequestSection title={'Period'}>
+        <MeetingSection title={'Period'}>
+          <h2>Period</h2>
           <TimeGridInput
             startTime={time}
             endTime={endTime}
@@ -305,12 +309,14 @@ export default function RequestForm({}: RequestViewProps) {
             dateChange={onChangeDate}
             unavailables={event.restricted_time}
           />
-        </RequestSection>
-        <RequestSection title={'Location'}>
+        </MeetingSection>
+        <MeetingSection>
+          <h2>Location</h2>
           <LocationInput onChange={onChangeLocation} value={location} />
-        </RequestSection>
+        </MeetingSection>
         {detailOpen && (
-          <RequestSection title={'Detail address'}>
+          <MeetingSection title={'Detail address'}>
+            <h2>Detail address</h2>
             <OutlinedInput
               name="detail"
               type={'text'}
@@ -321,15 +327,25 @@ export default function RequestForm({}: RequestViewProps) {
               sx={{ height: 38 }}
               fullWidth
             />
-          </RequestSection>
+          </MeetingSection>
         )}
         <RequestSection
           title={'Comment'}
           checkButton={
             profile?.signature && (
               <FormControlLabel
-                control={<Checkbox value={isDefaultComment} onClick={onToggleIsDefaultComment} />}
-                label="use a default comment"
+                control={
+                  <Checkbox
+                    value={isDefaultComment}
+                    onClick={onToggleIsDefaultComment}
+                    sx={{ width: '10px', height: '10px', svg: { width: '10px', height: '10px' } }}
+                  />
+                }
+                label="Use a default comment"
+                sx={{
+                  span: { fontSize: '14px', fontWeight: 800, color: '#910457', fontFamily: 'NanumSquareOTF' },
+                  marginRight: 0,
+                }}
               />
             )
           }

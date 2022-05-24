@@ -1,11 +1,4 @@
-import { ReactComponent as links } from './iconmonstr-share-8.svg'
 import { ReactComponent as welcome } from './undraw_world_re_768g.svg'
-import { ReactComponent as back } from './iconmonstr-arrow-64.svg'
-import { ReactComponent as edit } from './iconmonstr-edit-5.svg'
-import { ReactComponent as plus } from './iconmonstr-plus-6.svg'
-import { ReactComponent as home } from './iconmonstr-home-6.svg'
-import { ReactComponent as schedule } from './iconmonstr-calendar-4.svg'
-import { ReactComponent as network } from './iconmonstr-user-29.svg'
 import { ReactComponent as searchIcon } from './search.svg'
 import { ReactComponent as write } from './write.svg'
 import { ReactComponent as add } from './add.svg'
@@ -26,16 +19,10 @@ import { ReactComponent as right } from './right.svg'
 import { ReactComponent as list } from './list.svg'
 import { ReactComponent as profile } from './profile.svg'
 import { ReactComponent as listSelect } from './list-select.svg'
+import { ReactComponent as country } from './country.svg'
 
 export {
-  links,
   welcome,
-  back,
-  edit,
-  plus,
-  home,
-  schedule,
-  network,
   add,
   infoUser,
   time,
@@ -56,4 +43,5 @@ export {
   dateSelect,
   profile,
   listSelect,
+  country,
 }

@@ -10,30 +10,21 @@ export type InputBaseProps = {
   disabled?: boolean
 } & React.HTMLAttributes<HTMLDivElement>
 
-function InputBase(
-  { className, style, children, disabled, ...rest }: InputBaseProps,
-  ref: React.Ref<HTMLDivElement>
-) {
+function InputBase({ className, style, children, disabled, ...rest }: InputBaseProps, ref: React.Ref<HTMLDivElement>) {
   return (
-    <div
-      css={wrapper(disabled)}
-      {...rest}
-      style={style}
-      className={className}
-      ref={ref}
-    >
+    <div css={wrapper(disabled)} {...rest} style={style} className={className} ref={ref}>
       {children}
     </div>
   )
 }
 
 const wrapper = (disabled: boolean = false) => css`
-  border: ${palette.blueGrey[50]} 1px solid;
-  border-radius: 0.5rem;
+  border: 1px solid #9c9c9c;
+  border-radius: 1rem;
   background: #fff;
-  height: 2.5rem;
-  color: ${palette.blueGrey[700]};
-  font-size: 1rem;
+  height: 2.375rem;
+  color: #6c6c6c;
+  font: normal normal normal 1rem/26px NanumSquareOTF;
   display: flex;
   ${disabled &&
   css`

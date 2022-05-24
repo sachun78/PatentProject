@@ -49,8 +49,8 @@ function LocationInput({ value, onChange }: locationInputProps) {
       </div>
 
       {open && (
-        <div css={calendarStyle}>          
-          <LocationMap location={address} getLocation={getLocation} />          
+        <div css={calendarStyle}>
+          <LocationMap location={address} getLocation={getLocation} />
         </div>
       )}
     </InputBase>
@@ -60,17 +60,16 @@ function LocationInput({ value, onChange }: locationInputProps) {
 const wrapper = css`
   position: relative;
   width: 100%;
-  max-width: 90rem;
 `
 
 const textStyle = css`
   flex: 1;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
   cursor: pointer;
-  padding-left: 1.6rem;
-  padding-right: 1.6rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
 
   &:focus-visible {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);

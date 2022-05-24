@@ -12,7 +12,11 @@ export type MeetingRescheduleProps = {}
 function MeetingReschedule({}: MeetingRescheduleProps) {
   const [param] = useSearchParams()
   const code = useMemo(() => param.get('code'), [param])
-  const { data: meeting, isLoading } = useQuery<IReplan>(['meeting', code ?? '', 'replan'], getMeetingInfoByCode, {
+  const {
+    data: meeting,
+    isLoading,
+    error,
+  } = useQuery<IReplan>(['meeting', code ?? '', 'replan'], getMeetingInfoByCode, {
     staleTime: Infinity,
     retry: false,
     refetchOnWindowFocus: false,
@@ -20,6 +24,11 @@ function MeetingReschedule({}: MeetingRescheduleProps) {
 
   if (!code || isLoading || !meeting) {
     return <div>Loading</div>
+  }
+
+  console.log(error)
+  if (error) {
+    return <div>error</div>
   }
 
   return (

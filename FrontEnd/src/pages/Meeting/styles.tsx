@@ -10,11 +10,11 @@ export const ContainerBlock = styled.div`
   display: flex;
   flex-direction: column;
   width: 29.0625rem;
-  min-width: 465px;
+  min-width: 29.0625rem;
   background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 2px 5px 11px #00000029;
   border-radius: 1rem;
-  padding: 30px;
+  padding: 1.875rem;
 
   h1 {
     color: #333;
