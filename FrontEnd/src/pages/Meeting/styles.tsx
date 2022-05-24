@@ -4,8 +4,9 @@ import palette, { brandColor } from 'lib/palette'
 import { css } from '@emotion/react'
 import { resetButton } from 'lib/styles/resetButton'
 import { Link } from 'react-router-dom'
+import { animated } from 'react-spring'
 
-export const ContainerBlock = styled.div`
+export const ContainerBlock = styled(animated.div)`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -15,7 +16,7 @@ export const ContainerBlock = styled.div`
   box-shadow: 2px 5px 11px #00000029;
   border-radius: 1rem;
   padding: 1.875rem;
-
+  margin-bottom: 1rem;
   h1 {
     color: #333;
     margin: 0 0 1.875rem;

@@ -15,7 +15,9 @@ import { ReactComponent as reschedule } from './reschedule.svg'
 import { ReactComponent as card } from './card.svg'
 import { ReactComponent as cardSelect } from './card-select.svg'
 import { ReactComponent as left } from './left.svg'
+import { ReactComponent as left2 } from './left2.svg'
 import { ReactComponent as right } from './right.svg'
+import { ReactComponent as right2 } from './right2.svg'
 import { ReactComponent as list } from './list.svg'
 import { ReactComponent as profile } from './profile.svg'
 import { ReactComponent as listSelect } from './list-select.svg'
@@ -39,6 +41,8 @@ export {
   cardSelect,
   left,
   right,
+  left2,
+  right2,
   list,
   dateSelect,
   profile,

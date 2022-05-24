@@ -11,7 +11,7 @@ import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import { getMeetingsCursor, getMeetingSearch } from 'lib/api/meeting/getMeetings'
 import { css } from '@emotion/react'
-import { useToggleImageButton } from '../../lib/styles/muiStyles'
+import { useToggleImageButton } from 'lib/styles/muiStyles'
 
 type ScheduleViewProps = {}
 
@@ -26,7 +26,7 @@ function Schedules({}: ScheduleViewProps) {
     {
       getNextPageParam: (lastPage, pages) => {
         // page 길이 5이면
-        const morePagesExist = lastPage?.length === 5
+        const morePagesExist = lastPage?.length === 10
         if (!morePagesExist) return false
         return pages.flat().length
       },

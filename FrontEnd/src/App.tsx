@@ -51,6 +51,7 @@ const globalStyle = css`
   #root {
     overflow-x: hidden;
     min-height: 100%;
+    height: 100%;
     background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('/assets/background.jpg');
     background-size: cover;
   }

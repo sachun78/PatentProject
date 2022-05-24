@@ -10,6 +10,11 @@ const initialState: MeetingReqState = {
   time: new Date(),
 }
 
+export const networkUserFindModalState = atom({
+  key: 'networkUserFindModalState',
+  default: false,
+})
+
 export const meetingReqState = atom({
   key: 'meetingReqState',
   default: initialState,

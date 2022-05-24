@@ -1,25 +1,27 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
 import { useRecoilState } from 'recoil'
 import { eventSelectModalState, useCurrentEventState } from 'atoms/eventState'
-import { css, keyframes } from '@emotion/react'
 import styled from '@emotion/styled'
-import EventCard from './EventCard'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useEventQuery from 'hooks/query/useEventQuery'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import { useNavigate } from 'react-router-dom'
-import { isBefore } from 'date-fns'
+import { format, isBefore } from 'date-fns'
+import { useButtonStyle } from '../ProfileMenu/ProfileCardSave'
+import IconControl from '../IconControl'
 
 export type EventSelectModalProps = {}
 
 function EventSelectDialog({}: EventSelectModalProps) {
   const [open, setOpen] = useRecoilState(eventSelectModalState)
-  const { data: events, isLoading } = useEventQuery()
+  const { data: events } = useEventQuery()
   const [index, setIndex] = useState(0)
   const [animationState, setAnimationState] = useState(false)
   const { setStartDate, setEndDate } = useDateRangeHook()
   const [, setEvent] = useCurrentEventState()
   const navigate = useNavigate()
+
+  const buttonStyle = useButtonStyle()
 
   const eventParsed = useMemo(() => {
     if (!events) return []
@@ -89,29 +91,40 @@ function EventSelectDialog({}: EventSelectModalProps) {
         setOpen((prev) => !prev)
       }}
       maxWidth={'xl'}
+      PaperProps={{ sx: { width: '555px', borderRadius: '1rem' } }}
     >
-      <DialogTitle>Event Select</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          To schedule a meeting with this person, please select an event and click the next button.
+      <DialogTitle
+        sx={{ padding: '30px 30px 15px', color: '#910457', font: ' normal normal 800 18px/21px NanumSquareOTF' }}
+      >
+        Event Select
+      </DialogTitle>
+      <DialogContent sx={{ padding: '0 30px 25px' }}>
+        <DialogContentText
+          sx={{ marginBottom: '25px', color: '#6c6c6c', font: 'normal normal normal 14px/22px NanumSquareOTF' }}
+        >
+          To schedule a meeting with this person, please select an event.
         </DialogContentText>
         <SelectBody>
-          <div onClick={onPrevClick}>{'<'}</div>
-          <div css={animationStyle(animationState)}>
-            <EventCard
-              title={eventParsed[index].title}
-              id={eventParsed[index]._id}
-              count={eventParsed[index].meeting_list.length}
-              endDate={new Date(eventParsed[index].end_date)}
-              startDate={new Date(eventParsed[index].start_date)}
-              cardView
-            />
-          </div>
-          <div onClick={onNextClick}>{'>'}</div>
+          <ArrowBlock onClick={onPrevClick}>
+            <IconControl name={'left2'} />
+          </ArrowBlock>
+          <CardBlock>
+            <h3>{eventParsed[index].title}</h3>
+            <p>
+              <b>Period</b> <span>{format(new Date(eventParsed[index].start_date), 'yyyy-MM-dd')}</span> ~{' '}
+              <span>{format(new Date(eventParsed[index].end_date), 'yyyy-MM-dd')}</span>
+            </p>
+            <p>
+              <b>Schedules</b> <span>{eventParsed[index].meeting_list.length}</span>
+            </p>
+          </CardBlock>
+          <ArrowBlock onClick={onNextClick}>
+            <IconControl name={'right2'} style={{ transform: 'rotate(180deg)' }} />
+          </ArrowBlock>
         </SelectBody>
       </DialogContent>
-      <DialogActions>
-        <Button variant={'contained'} onClick={onSelectEvent}>
+      <DialogActions sx={{ display: 'flex', justifyContent: 'center', padding: '0 0 30px' }}>
+        <Button variant={'contained'} onClick={onSelectEvent} classes={buttonStyle} style={{ marginTop: 0 }}>
           Next
         </Button>
       </DialogActions>
@@ -127,23 +140,54 @@ const SelectBody = styled.div`
   height: 100%;
 `
 
-const bounce = keyframes`
-  0% {
-    transform: translateY(-10%);
-  }
-  50% {
-    transform: translateY(10%);
-  }
-  100% {
-    transform: translateY(0);
+const ArrowBlock = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50px;
+
+  &:hover {
+    cursor: pointer;
+    border: 1px solid #9c9c9c;
+    box-shadow: 1px 1px 5px #00000029;
   }
 `
 
-const animationStyle = (state: boolean) => css`
-  ${!state
-    ? css`
-        animation: ${bounce} 0.4s ease-in forwards;
-      `
-    : null}
+const CardBlock = styled.div`
+  padding: 1.25rem 1.5625rem;
+  width: 24.6875rem;
+  height: 7.75rem;
+  border-radius: 1rem;
+  background: #f2f2f2;
+  box-shadow: 2px 5px 11px #00000029;
+
+  h3 {
+    color: #333;
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: 1.25rem;
+  }
+
+  p {
+    color: #6c6c6c;
+    font-size: 1rem;
+    display: flex;
+  }
+
+  b {
+    font-weight: 800;
+    min-width: 6.5625rem;
+  }
+
+  span {
+    font-weight: normal;
+  }
+
+  p + p {
+    margin-top: 0.625rem;
+  }
 `
+
 export default EventSelectDialog

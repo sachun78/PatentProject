@@ -30,12 +30,16 @@ function Landing({}: LandingProps) {
       <Section1>
         <img src={'/assets/wemet_logo.png'} alt={'logo'} className={'main-logo'} />
         <h1>
-          We bring people <span>together</span>. You make the <span>magic</span> happen.
+          <span>We Met for IP</span> and we want to <span>We Met for IP</span>. We will provide the tools. All you need
+          to do is <span>We Met for IP</span>!
         </h1>
         <p className={'contents'}>
-          Calendly takes the busywork of scheduling off your to-do list so you can get more done. thousands of teams
-          across the globe use calendly to make millions of 1-click meetings every week. coordinate, connect, and
-          nurture relationships all in one meeting lifecycle platform.
+          <b>We Met for IP</b> will make your meeting scheduling task mush easier for everybody in the IP industy. All
+          you need to do is provide the name and e-mail of the person you want to schedule a meeting.{' '}
+          <b>We Met for IP</b> will send the meeting invite, track date, time and place you will meet during an IP
+          event.<b>We Met for IP</b> will keep the history of the meeting so you know exactly where and when you met
+          each other.<b>We Met for IP</b> also provide a playground for all the people in the IP industry so you can
+          share precious memories and bring the IP community closer to each other.
         </p>
         <CardSection>
           <CardItem>
@@ -45,7 +49,9 @@ function Landing({}: LandingProps) {
                 <IconControl name={'dateSelect'} />
               </div>
               <h4>SCHEDULING PLATFORM</h4>
-              <p>Sample text Sample text Sample text Sample text Sample text Sample.</p>
+              <p>
+                All you need for meeting is <b>We Met for IP</b>.
+              </p>
             </div>
           </CardItem>
           <CardItem>
@@ -55,7 +61,9 @@ function Landing({}: LandingProps) {
                 <IconControl name={'dateSelect'} />
               </div>
               <h4>SCHEDULING PLATFORM</h4>
-              <p>Sample text Sample text Sample text Sample text Sample text Sample.</p>
+              <p>
+                All you need for meeting is <b>We Met for IP</b>.
+              </p>
             </div>
           </CardItem>
           <CardItem>
@@ -65,7 +73,9 @@ function Landing({}: LandingProps) {
                 <IconControl name={'dateSelect'} />
               </div>
               <h4>SCHEDULING PLATFORM</h4>
-              <p>Sample text Sample text Sample text Sample text Sample text Sample.</p>
+              <p>
+                All you need for meeting is <b>We Met for IP</b>.
+              </p>
             </div>
           </CardItem>
           <CardItem>
@@ -75,7 +85,9 @@ function Landing({}: LandingProps) {
                 <IconControl name={'dateSelect'} />
               </div>
               <h4>SCHEDULING PLATFORM</h4>
-              <p>Sample text Sample text Sample text Sample text Sample text Sample.</p>
+              <p>
+                All you need for meeting is <b>We Met for IP</b>.
+              </p>
             </div>
           </CardItem>
         </CardSection>

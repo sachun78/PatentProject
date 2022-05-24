@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 import { buttonStyle, PeriodBlock, sectionStyle } from './styles'
 import { Navigate, useNavigate } from 'react-router-dom'
 import useDateRangeHook from 'hooks/useDateRangeHook'
-import { useMeetingReqUser } from 'atoms/meetingReqState'
+import { networkUserFindModalState, useMeetingReqUser } from 'atoms/meetingReqState'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { Checkbox, FormControlLabel, OutlinedInput } from '@mui/material'
 import { ContainerBlock, MeetingSection } from 'pages/Meeting/styles'
@@ -24,7 +24,10 @@ import PhoneInput from 'components/PhoneInput'
 import PhoneInputT from 'react-phone-number-input'
 import LoadingButton from '@mui/lab/LoadingButton'
 import IconControl from 'components/IconControl'
-import { useRemoveOutlineHover } from '../../../../lib/styles/muiStyles'
+import { useRemoveOutlineHover } from 'lib/styles/muiStyles'
+import { useSpring } from 'react-spring'
+import NetworkFindModal from 'components/NetworkFindModal'
+import { useRecoilState } from 'recoil'
 
 type RequestViewProps = {}
 
@@ -34,6 +37,7 @@ export default function RequestForm({}: RequestViewProps) {
   const { startDate, endDate } = useDateRangeHook()
   const { date, time, setDate, setTime } = useDateTimeHook()
   const [endTime, setEndTime] = useState<Date | null>(null)
+  const [, setOpen] = useRecoilState(networkUserFindModalState)
   const [location, setLoaction] = useState('서울특별시 성동구 아차산로 100')
   const [detailOpen, setDetailOpen] = useState(false)
   const [detailAddress, setDetailAddress] = useState('')
@@ -53,6 +57,14 @@ export default function RequestForm({}: RequestViewProps) {
     name: '',
   })
 
+  const springProps = useSpring({
+    delay: 100,
+    transform: 'translateX(0px)',
+    from: {
+      transform: 'translateX(100%)',
+    },
+  })
+
   // Get Current Event
   const { data: event, isLoading } = useQuery(['event', curEvent.id], getEvent, {
     enabled: !!curEvent.id,
@@ -65,7 +77,7 @@ export default function RequestForm({}: RequestViewProps) {
     isLoading: profileLoading,
     refetch,
   } = useQuery(['profile', meetuser || form.to], getProfilebyEmail, {
-    enabled: false,
+    enabled: !!meetuser,
     retry: false,
     staleTime: 5000,
   })
@@ -210,7 +222,7 @@ export default function RequestForm({}: RequestViewProps) {
   }
 
   return (
-    <ContainerBlock>
+    <ContainerBlock style={{ ...springProps }}>
       <form css={sectionStyle} onSubmit={onSubmit}>
         <h1>{curEvent.title}</h1>
         <PeriodBlock>
@@ -237,17 +249,24 @@ export default function RequestForm({}: RequestViewProps) {
           {meetuser ? (
             <span>{meetuser}</span>
           ) : (
-            <OutlinedInput
-              name="to"
-              type={'email'}
-              value={form.to}
-              onChange={onChange}
-              onBlur={onBlur}
-              placeholder={'Meeting Email'}
-              fullWidth
-              sx={{ height: 38 }}
-              classes={classes}
-            />
+            <>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <OutlinedInput
+                  name="to"
+                  type={'email'}
+                  value={form.to}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  placeholder={'Meeting Email'}
+                  fullWidth
+                  sx={{ height: 38 }}
+                  classes={classes}
+                />
+                <div style={{ marginLeft: 8 }} onClick={() => setOpen(true)}>
+                  <IconControl name={'searchIcon'} />
+                </div>
+              </div>
+            </>
           )}
           {profileData && <ProfileBox profileData={profileData} />}
         </MeetingSection>
@@ -365,6 +384,7 @@ export default function RequestForm({}: RequestViewProps) {
           Propose Meeting
         </LoadingButton>
       </form>
+      <NetworkFindModal />
     </ContainerBlock>
   )
 }
