@@ -34,7 +34,8 @@ export default function RequestForm({}: RequestViewProps) {
   const { startDate, endDate } = useDateRangeHook()
   const { date, time, setDate, setTime } = useDateTimeHook()
   const [endTime, setEndTime] = useState<Date | null>(null)
-  const [location, setLoaction] = useState('서울특별시 성동구 아차산로 100')
+  const [location, setLoaction] = useState('')
+  // const [location, setLoaction] = useState('서울특별시 성동구 아차산로 100')
   const [detailOpen, setDetailOpen] = useState(false)
   const [detailAddress, setDetailAddress] = useState('')
   const [isDefaultComment, onToggleIsDefaultComment] = useToggle(false)
@@ -142,7 +143,8 @@ export default function RequestForm({}: RequestViewProps) {
     (e) => {
       e.preventDefault()
       const { title, to, comment } = form
-      if ((!to.trim() && !meetuser) || !location.trim() || !title.trim() || !time || !endTime) {
+      if ((!to.trim() && !meetuser) || !title.trim() || !time || !endTime) {
+      // if ((!to.trim() && !meetuser) || !location.trim() || !title.trim() || !time || !endTime) {
         toast.error('Please fill out the form', {
           position: toast.POSITION.TOP_CENTER,
           pauseOnHover: false,
@@ -306,23 +308,24 @@ export default function RequestForm({}: RequestViewProps) {
             unavailables={event.restricted_time}
           />
         </RequestSection>
-        <RequestSection title={'Location'}>
+        {/* <RequestSection title={'Location'}>
           <LocationInput onChange={onChangeLocation} value={location} />
         </RequestSection>
-        {detailOpen && (
-          <RequestSection title={'Detail address'}>
-            <OutlinedInput
-              name="detail"
-              type={'text'}
-              value={detailAddress}
-              onChange={onChangeDetailAdress}
-              placeholder={'Enter detailed address'}
-              classes={classes}
-              sx={{ height: 38 }}
-              fullWidth
-            />
-          </RequestSection>
-        )}
+        {detailOpen && ( */}
+        <RequestSection title={'Location'}>
+        {/* <RequestSection title={'Detail address'}> */}
+          <OutlinedInput
+            name="detail"
+            type={'text'}
+            value={detailAddress}
+            onChange={onChangeDetailAdress}
+            placeholder={'Enter detailed address'}
+            classes={classes}
+            sx={{ height: 38 }}
+            fullWidth
+          />
+        </RequestSection>
+        {/* // )} */}
         <RequestSection
           title={'Comment'}
           checkButton={

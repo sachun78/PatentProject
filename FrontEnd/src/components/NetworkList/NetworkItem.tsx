@@ -1,25 +1,20 @@
 import { css } from '@emotion/react'
-import palette, { brandColor } from 'lib/palette'
-import { IProfile } from 'lib/api/types'
-import { useNavigate } from 'react-router-dom'
 import { Avatar, Grid, Tooltip } from '@mui/material'
 import gravatar from 'gravatar'
-import React, { memo } from 'react'
-import { FieldItem } from 'pages/User/styles'
-import getCountryName from 'lib/countryName'
 import { API_PATH } from 'lib/api/client'
-import { useQuery } from 'react-query'
-import { getMeetingHistoryUser } from 'lib/api/meeting/getMeetings'
+import { IProfile } from 'lib/api/types'
+import getCountryName from 'lib/countryName'
+import palette, { brandColor } from 'lib/palette'
+import { FieldItem } from 'pages/User/styles'
+import React, { memo } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export type NetworkItemProps = {
   data: { email: string; profile: IProfile; name: string; username?: string }
 }
 
 function NetworkItem({ data }: NetworkItemProps) {
-  const navigate = useNavigate()
-  const { data: historyData, isLoading: isLoadingHistory } = useQuery(['meeting_history', data.email], getMeetingHistoryUser)
-
-  if (isLoadingHistory) return null
+  const navigate = useNavigate()  
   
   return (
     <div css={itemStyle} onClick={() => navigate('/u/' + data.email)}>      
@@ -73,7 +68,7 @@ function NetworkItem({ data }: NetworkItemProps) {
             <img src="/assets/meeting.png" style={{ width: '1rem' }} alt={'meeting'} />            
           </div>
           <div>
-            {historyData.length}                
+            0                
           </div>
         </div>            
       </Tooltip>      
