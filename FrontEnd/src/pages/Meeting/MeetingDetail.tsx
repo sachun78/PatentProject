@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from 'react'
 import { useMutation, useQuery } from 'react-query'
 import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
 import { toast } from 'react-toastify'
-import { Button, Divider, Stack } from '@mui/material'
+import { Button, Stack } from '@mui/material'
 import { ContainerBlock, InfoLink, MeetingSection, RescheduleButton, ScheduleInfoBlock } from './styles'
 import MeetingResult from 'components/Schedules/MeetingResult'
 import { IMeeting } from 'lib/api/types'
@@ -76,7 +76,7 @@ function MeetingDetail({}: MeetingDetailProps) {
   }
 
   return (
-    <Stack direction={'row'} spacing={2}>
+    <Stack direction={'row'} spacing={2} sx={{ marginBottom: '1rem' }}>
       <ContainerBlock>
         <h1>{data.title}</h1>
         <MeetingSection>
@@ -139,9 +139,17 @@ function MeetingDetail({}: MeetingDetailProps) {
               </RescheduleButton>
             )}
           </div>
-          {data.status === 'replan' && <Divider />}
           {!isExpired && data.status === 'replan' && (
-            <SaveBlock style={{ justifyContent: 'space-between' }}>
+            <SaveBlock style={{ justifyContent: 'space-around' }}>
+              <Button
+                variant={'contained'}
+                classes={classes}
+                onClick={onResult('cancel')}
+                disabled={finalMut.isLoading}
+                sx={{ background: '#9C9C9C ' }}
+              >
+                Cancel
+              </Button>
               {data.isPossibleAddSchedule ? (
                 <Button
                   variant={'contained'}
@@ -154,14 +162,6 @@ function MeetingDetail({}: MeetingDetailProps) {
               ) : (
                 <div>apply time already reserved,so need change time</div>
               )}
-              <Button
-                variant={'contained'}
-                classes={classes}
-                onClick={onResult('cancel')}
-                disabled={finalMut.isLoading}
-              >
-                Cancel
-              </Button>
             </SaveBlock>
           )}
         </MeetingSection>
@@ -169,7 +169,9 @@ function MeetingDetail({}: MeetingDetailProps) {
       {isResult ? (
         <MeetingResult />
       ) : (
-        change && <MeetingChange place={data.location} eventId={data.eventId} meetingId={data._id} />
+        change && (
+          <MeetingChange place={data.location} eventId={data.eventId} meetingId={data._id} onClose={onChangeToggle} />
+        )
       )}
     </Stack>
   )

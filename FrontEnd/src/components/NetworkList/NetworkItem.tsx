@@ -17,7 +17,7 @@ function NetworkItem({ data }: NetworkItemProps) {
   const navigate = useNavigate()  
   
   return (
-    <div css={itemStyle} onClick={() => navigate('/u/' + data.email)}>      
+    <div css={itemStyle} onClick={() => navigate('/u/' + data.email)}>
       <div css={iconStyle}>
         <Avatar
           alt="user-avatar"
@@ -132,13 +132,11 @@ const emailStyle = css`
 `
 const informStyle = css`
   display: flex;
-  width: 28.125rem; 
+  width: 28.125rem;
   height: 3.6875rem;
   flex-direction: column;
   font-size: 0.875rem;
   color: ${palette.grey[400]};
-  
-  
 
   svg {
     margin-right: 0.375rem;
@@ -152,7 +150,6 @@ const informStyle = css`
   }
 `
 const stateStyle = css`
-
   width: 3.75rem;
   max-height: 3.75rem;
   height: 100%;

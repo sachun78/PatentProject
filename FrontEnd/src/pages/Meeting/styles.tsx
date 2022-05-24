@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 import { TableCell, tableCellClasses, TableRow, ToggleButton } from '@mui/material'
-import palette, { brandColor } from '../../lib/palette'
+import palette, { brandColor } from 'lib/palette'
 import { css } from '@emotion/react'
-import { resetButton } from '../../lib/styles/resetButton'
+import { resetButton } from 'lib/styles/resetButton'
 import { Link } from 'react-router-dom'
 
 export const ContainerBlock = styled.div`
@@ -32,11 +32,14 @@ export const MeetingSection = styled.section`
   color: #333333;
   width: 100%;
 
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
   .multiline {
     white-space: pre-wrap;
     max-width: 100%;
     overflow-wrap: break-word;
-    font-size: 1rem;
     color: #6c6c6c;
     font: normal normal normal 16px/26px NanumSquareOTF;
   }
@@ -71,29 +74,34 @@ export const MeetingSection = styled.section`
   }
 `
 const statusColor = ({ state }: { state: string }) => css`
-  background: ${(state === 'replan' || state === 'met') && brandColor};
-  background: ${state === 'confirm' && palette.green[400]};
-  background: ${state === 'pending' && palette.deepOrange[400]};
+  background: ${state === 'met' && brandColor};
+  color: ${state === 'met' && '#fff'};
+  // background: ${state === 'confirm' && palette.green[400]};
+  background: ${state === 'Expired' && '#ddd'};
 `
 
 export const StatusBlock = styled.div`
-  padding: 0.2rem 0.75rem;
-  background: #ddd;
-  color: white;
-  font-weight: 600;
-  line-height: 1.5;
-  border-radius: 0.9rem;
+  width: 4rem;
+  height: 1.125rem;
+  color: #6c6c6c;
+  font: normal normal normal 12px/18px NanumSquareOTF;
+  border: 1px solid #9c9c9c;
+  border-radius: 50px;
+  background: #fff;
   display: inline-block;
-  box-shadow: 0 0 0.25rem 0 rgba(0, 0, 0, 0.1);
   text-align: center;
   ${statusColor};
 `
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: brandColor,
+    backgroundColor: '#910457 ',
     color: '#fff',
-    fontWeight: 'bold',
+    font: 'normal normal 800 16px/18px NanumSquareOTF',
+    borderRight: '1px solid #9C9C9C',
+    '&:last-of-type': {
+      borderRight: 'none',
+    },
   },
   [`&.${tableCellClasses.body}`]: {
     color: '#6C6C6C',
@@ -103,6 +111,7 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   // hide last border
+  td: { borderTop: '1px solid #9c9c9c' },
   '&:last-child td, &:last-child th': {
     border: 0,
   },

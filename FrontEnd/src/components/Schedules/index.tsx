@@ -11,12 +11,12 @@ import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import { getMeetingsCursor, getMeetingSearch } from 'lib/api/meeting/getMeetings'
 import { css } from '@emotion/react'
+import { useToggleImageButton } from '../../lib/styles/muiStyles'
 
 type ScheduleViewProps = {}
 
 function Schedules({}: ScheduleViewProps) {
   const [checked, setChecked] = useRecoilState(meetingSwitchState)
-  const [search, setSearch] = useState(false)
   const [searchText, setSearchText] = useState('')
   const { ref, inView } = useInView()
 
@@ -50,17 +50,14 @@ function Schedules({}: ScheduleViewProps) {
     setChecked((prev) => !prev)
   }, [setChecked])
 
-  const onSearchMode = useCallback(() => {
-    setSearch((prev) => !prev)
-    setSearchText('')
-  }, [setSearch])
-
   const meetings = useMemo(() => {
     if (!data) return []
     return data.pages.flat().filter((meeting) => {
       return !meeting.history
     })
   }, [data])
+
+  const toggleClass = useToggleImageButton()
 
   if (isLoading) return <div>Loading...</div>
   if (meetings?.length === 0)
@@ -76,7 +73,8 @@ function Schedules({}: ScheduleViewProps) {
       <FormGroup
         row={true}
         style={{
-          marginBottom: '0.625rem',
+          marginTop: '-0.75rem',
+          marginBottom: '1.25rem',
           maxWidth: '76.25rem',
           display: 'flex',
           justifyContent: 'flex-end',
@@ -87,36 +85,30 @@ function Schedules({}: ScheduleViewProps) {
         css={groupStyle}
       >
         {!checked && (
-          <SearchContainer onFocus={onSearchMode}>
+          <SearchContainer>
             <SearchBox filter={setSearchText} />
           </SearchContainer>
         )}
-        {!search && (
+        {!searchText && (
           <ToggleButton
             value="check"
             selected={!checked}
             onChange={handleChange}
             color={'primary'}
-            sx={{
-              borderRadius: '50px',
-              border: '1px solid #910457',
-              background: !checked ? '#910457 !important' : '',
-            }}
+            classes={toggleClass}
+            sx={{ background: !checked ? '#910457 !important' : '' }}
           >
             {checked ? <IconControl name={'list'} /> : <IconControl name={'listSelect'} />}
           </ToggleButton>
         )}
-        {!search && (
+        {!searchText && (
           <ToggleButton
             value="check"
             selected={checked}
             onChange={handleChange}
             color={'primary'}
-            sx={{
-              borderRadius: '50px',
-              border: '1px solid #910457',
-              background: checked ? '#910457 !important' : '',
-            }}
+            classes={toggleClass}
+            sx={{ background: checked ? '#910457 !important' : '' }}
           >
             {checked ? <IconControl name={'dateSelect'} /> : <IconControl name={'date'} />}
           </ToggleButton>
@@ -125,18 +117,16 @@ function Schedules({}: ScheduleViewProps) {
       {/*달력 모드인 경우 캘린더*/}
       {checked && <ScheduleCalendar meetings={meetings} />}
       {/*일반 모드인 경우 Table*/}
-      {!checked && !search && <ScheduleTable meetings={meetings} />}
+      {!checked && !searchText && <ScheduleTable meetings={meetings} />}
       {/*검색 모드인 경우 Table*/}
       {!checked &&
-        search &&
-        (!searchText ? (
-          <div>Search Schedule, input meeting name, useremail or name</div>
-        ) : searchData && searchData.length ? (
+        searchText &&
+        (searchData && searchData.length ? (
           <ScheduleTable meetings={searchData} />
         ) : (
           <div css={noScheduleStyle}>{searchLoading ? <h1>Searching...</h1> : <h1>There is no result</h1>}</div>
         ))}
-      {!checked && !search && hasNextPage && (
+      {!checked && !searchText && hasNextPage && (
         <Button
           ref={ref}
           variant={'contained'}

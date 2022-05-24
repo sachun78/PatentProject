@@ -5,7 +5,6 @@ import { useCurrentEventState } from 'atoms/eventState'
 import { useEventModal } from 'hooks/useEventTitle'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import React, { memo, MouseEvent, useCallback } from 'react'
-import media from 'lib/styles/media'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
 import { FiEdit } from 'react-icons/fi'
 import { periodString } from 'lib/stringParser'
@@ -66,11 +65,9 @@ function EventCard({ title, startDate, endDate, id, count, cardView = false, dis
         </div>
         <div css={contentStyle}>
           <span>
-            Period: <b>{periodString(startDate.toISOString(), endDate.toISOString())}</b>
+            Period : <b>{periodString(startDate.toISOString(), endDate.toISOString())}</b>
           </span>
-          <span>
-            Schedule(s): <b>{count}</b>
-          </span>
+          <span>Schedules : {count}</span>
         </div>
       </div>
       {!cardView && (
@@ -98,25 +95,21 @@ const wrapper = (maxWidth: boolean) => css`
     : css`
         width: 37.5rem;
         min-width: 37.5rem;
-        margin-bottom: 1.5625rem;
+        margin-bottom: 2.5rem;
         margin-right: 1.25rem;
-        height: 13.9375rem;
+        height: 13.5625rem;
         padding: 1.875rem;
+        box-shadow: 2px 5px 11px #00000029;
       `}
 
-  max-width: 37.5rem;
   border-radius: 1rem;
-
-  ${media.xsmall} {
-    width: calc(100% - 1rem);
-  }
 
   background: #fff;
   opacity: 0.7;
 
   &:hover {
     opacity: 1;
-
+    box-shadow: none;
     .event-card-header {
       color: ${brandColor};
     }
@@ -136,7 +129,7 @@ const buttonStyle = (disabled: boolean) => css`
         background-color: #9c9c9c;
       `}
 
-  margin: 3rem -1.875rem 0;
+  margin: 2.6875rem -1.875rem 0;
 
   border-bottom-right-radius: 1rem;
   border-bottom-left-radius: 1rem;
@@ -156,9 +149,9 @@ const buttonStyle = (disabled: boolean) => css`
 
 const eventHeaderStyle = css`
   display: flex;
-  margin-top: 7px;
   margin-bottom: 20px;
   justify-content: space-between;
+  opacity: 1;
 
   .event-card-header {
     font: normal normal 800 18px NanumSquareOTF;
@@ -185,8 +178,14 @@ const contentStyle = css`
   justify-content: center;
 
   font: normal normal normal 18px NanumSquareOTF;
+  color: #6c6c6c;
+
+  b {
+    font-weight: 800;
+    color: #6c6c6c;
+  }
 
   span {
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.375rem;
   }
 `

@@ -21,8 +21,11 @@ function EventTable({ events }: EventTableProps) {
 
   const navi = useNavigate()
   return (
-    <TableContainer component={Paper} style={{ borderRadius: '1rem', maxWidth: '76.25rem' }}>
-      <Table sx={{ minWidth: 700 }} aria-label="history schedule table" size={'small'}>
+    <TableContainer
+      component={Paper}
+      style={{ borderRadius: '1rem', maxWidth: '76.25rem', marginBottom: '1rem', boxShadow: 'none' }}
+    >
+      <Table sx={{ minWidth: 700 }} aria-label="history schedule table" size={'medium'}>
         <TableHead>
           <TableRow>
             <StyledTableCell align="center">Title</StyledTableCell>
@@ -39,12 +42,16 @@ function EventTable({ events }: EventTableProps) {
                 onClick={() => navi('/meeting/event/' + row._id)}
                 sx={disabled ? { backgroundColor: '#F2F2F2' } : undefined}
               >
-                <StyledTableCell align="center">{row.title}</StyledTableCell>
-                <StyledTableCell align="center">
-                  {format(new Date(row.start_date), 'EEEE, d MMM, yyyy - ')}
-                  {format(new Date(row.end_date), 'EEEE, d MMM, yyyy')}
+                <StyledTableCell align="center" size={'small'}>
+                  {row.title}
                 </StyledTableCell>
-                <StyledTableCell align="center">{row.meeting_list.length}</StyledTableCell>
+                <StyledTableCell align="center" size={'small'}>
+                  {format(new Date(row.start_date), 'd MMM ~ ')}
+                  {format(new Date(row.end_date), 'd MMM, yyyy')}
+                </StyledTableCell>
+                <StyledTableCell align="center" size={'small'}>
+                  {row.meeting_list.length}
+                </StyledTableCell>
               </StyledTableRow>
             )
           })}

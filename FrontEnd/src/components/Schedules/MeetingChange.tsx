@@ -5,24 +5,26 @@ import { useRemoveOutlineHover } from 'lib/styles/muiStyles'
 import useInput from 'hooks/useInput'
 import RequestSection from 'pages/Meeting/meeting-create-form/RequestForm/RequestSection'
 import TimeGridInput from '../DatePickerInput/TimeGridInput'
-import { useMutation, useQuery } from 'react-query'
-import { getEvent } from '../../lib/api/event/getEvent'
-import useDateRangeHook from '../../hooks/useDateRangeHook'
-import useDateTimeHook from '../../hooks/useDateTimeHook'
-import { IMeeting } from '../../lib/api/types'
-import { changeMeeting } from '../../lib/api/meeting/updateMeeting'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { getEvent } from 'lib/api/event/getEvent'
+import useDateRangeHook from 'hooks/useDateRangeHook'
+import useDateTimeHook from 'hooks/useDateTimeHook'
+import { IMeeting } from 'lib/api/types'
+import { changeMeeting } from 'lib/api/meeting/updateMeeting'
+import { submitButton } from 'lib/styles/submitButton'
 
 export type MeetingChangeProps = {
   place: string
   eventId: string
   meetingId: string
+  onClose: () => void
 }
 
-function MeetingChange({ place, eventId, meetingId }: MeetingChangeProps) {
+function MeetingChange({ place, eventId, meetingId, onClose }: MeetingChangeProps) {
   const [replace, setReplace] = useInput(place)
   const [comment, onChangeComment] = useInput('')
   const classes = useRemoveOutlineHover()
-
+  const qc = useQueryClient()
   const { data: event, isLoading } = useQuery(['event', eventId], getEvent, {
     enabled: !!eventId,
     retry: false,
@@ -32,7 +34,12 @@ function MeetingChange({ place, eventId, meetingId }: MeetingChangeProps) {
   const { date, time, setDate, setTime } = useDateTimeHook()
   const [endTime, setEndTime] = useState<Date | null>(null)
 
-  const onChangeMeeting = useMutation(changeMeeting, {})
+  const onChangeMeeting = useMutation(changeMeeting, {
+    onSuccess: () => {
+      onClose()
+      qc.invalidateQueries(['meeting', meetingId])
+    },
+  })
 
   const onChangeDate = useCallback(
     (change: Date) => {
@@ -78,11 +85,13 @@ function MeetingChange({ place, eventId, meetingId }: MeetingChangeProps) {
     [comment, endTime, meetingId, onChangeMeeting, replace, time]
   )
 
-  if (!event) return null
+  const buttonStyle = submitButton()
+
+  if (!event || isLoading) return null
 
   return (
     <ContainerBlock>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
         <RequestSection title={'TimeSelect'}>
           <TimeGridInput
             startTime={time}
@@ -122,7 +131,7 @@ function MeetingChange({ place, eventId, meetingId }: MeetingChangeProps) {
             fullWidth
           />
         </RequestSection>
-        <Button type={'submit'} variant={'contained'}>
+        <Button type={'submit'} variant={'contained'} classes={buttonStyle}>
           Submit
         </Button>
       </form>

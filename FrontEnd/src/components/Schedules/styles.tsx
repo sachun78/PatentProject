@@ -1,14 +1,6 @@
 import { css } from '@emotion/react'
 import { brandColor } from 'lib/palette'
 
-export const tableStyle = css`
-  display: flex;
-  flex-wrap: wrap;
-  flex: 1;
-  height: 100%;
-  flex-direction: row;
-`
-
 export const calendarStyle = css`
   .fc-today-button {
     width: 73px !important;
@@ -76,23 +68,26 @@ export const calendarStyle = css`
 
   .fc .fc-daygrid-event {
     padding-left: 0.625rem !important;
-    padding-top: 1px !important;
-    padding-bottom: 1px !important;
     margin-top: 6px !important;
-    border-collapse: collapse !important;
-    font-size: 0.6875rem !important;
-    font-weight: 400 !important;
-    font-family: Rubik, sans-serif !important;
-    -webkit-font-smoothing: antialiased !important;
-    line-height: 1.25rem !important;
+
+    //border-collapse: collapse !important;
+    font-size: 0.75rem !important;
+    font-weight: normal !important;
+    color: #6c6c6c !important;
+    line-height: 1.461538462rem !important;
 
     &:hover {
       cursor: pointer !important;
     }
   }
 
+  .fc-event-title {
+    padding: 0 !important;
+  }
+
   .fc-day-today {
     background: #ffebe8 !important;
+
     .fc-daygrid-day-number {
       color: ${brandColor} !important;
     }
@@ -125,15 +120,24 @@ export const calendarStyle = css`
     color: ${brandColor};
     font: normal normal 800 18px/21px NanumSquareOTF;
     margin-left: 15px;
-    margin-right: 15px;
   }
 
   max-width: 76.25rem;
   max-height: 43.1875rem;
   padding: 2rem 1.875rem;
   border-radius: 1rem;
-  box-shadow: 0 3px 6px #00000029;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 1);
   position: relative;
   top: -2.875rem;
+
+  tbody > tr > td.fc-daygrid-day:first-of-type,
+  table {
+    border-left: none !important;
+  }
+
+  .fc .fc-scrollgrid-section-liquid > td,
+  .fc-col-header-cell:last-of-type,
+  tbody > tr > td.fc-daygrid-day:last-of-type {
+    border-right: none !important;
+  }
 `

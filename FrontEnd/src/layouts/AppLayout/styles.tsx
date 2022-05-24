@@ -46,13 +46,6 @@ export const footerStyle = css`
   position: fixed;
   bottom: 0;
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: center;
-`
-
-export const loadStyle = css`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 10rem;
 `

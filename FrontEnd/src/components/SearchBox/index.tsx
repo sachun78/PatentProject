@@ -17,17 +17,19 @@ function SearchBox({ filter, post }: SearchBoxProps) {
   const onChange = useCallback(
     (e) => {
       setValue(e.target.value)
+      if (e.target.value === '') {
+        filter('')
+      }
     },
-    [setValue]
+    [filter, setValue]
   )
 
   const onSearch = useCallback(
     (e) => {
       e.preventDefault()
       filter(value)
-      setValue('')
     },
-    [filter, setValue, value]
+    [filter, value]
   )
 
   const onFocus = () => {

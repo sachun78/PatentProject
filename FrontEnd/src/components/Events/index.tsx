@@ -4,17 +4,21 @@ import IconControl from 'components/IconControl/IconControl'
 import useEventQuery from 'hooks/query/useEventQuery'
 import useDateRangeHook from 'hooks/useDateRangeHook'
 import { useEventModal } from 'hooks/useEventTitle'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { eventSwitchState } from 'atoms/memberShipTabState'
 import EventCalendar from './EventCalendar'
 import EventCard from './EventCard'
 import EventModal from './EventModal'
-import { noScheduleStyle, wrapper } from './styles'
+import { noScheduleStyle, SearchContainer, wrapper } from './styles'
 import { isBefore } from 'date-fns'
 import { useCurrentEventState } from 'atoms/eventState'
 import EventTable from './EventTable'
 import { css } from '@emotion/react'
+import { useToggleImageButton } from 'lib/styles/muiStyles'
+import SearchBox from '../SearchBox'
+import { useQuery } from 'react-query'
+import { getEventSearch } from '../../lib/api/event/getEvents'
 
 type EventsProps = {}
 
@@ -25,6 +29,15 @@ function Events({}: EventsProps) {
   const [checked, setChecked] = useRecoilState(eventSwitchState)
   const [tableChecked, setTableChecked] = useState(false)
   const [, setEvent] = useCurrentEventState()
+  const [searchText, setSearchText] = useState('')
+
+  const { data: searchData, isLoading: searchLoading } = useQuery(
+    ['event_search', searchText],
+    () => getEventSearch(searchText),
+    {
+      enabled: !!searchText,
+    }
+  )
 
   const handleChange = useCallback(() => {
     setChecked((prev) => !prev)
@@ -45,14 +58,7 @@ function Events({}: EventsProps) {
     setEndDate(temp_date)
   }, [setEdit, setEndDate, setEvent, setOpen, setStartDate])
 
-  const outDatedEvents = useMemo(
-    () =>
-      data?.filter((event) => {
-        const event_date = new Date(event.start_date)
-        return isBefore(event_date, new Date())
-      }),
-    [data]
-  )
+  const toggleClass = useToggleImageButton()
 
   if (isLoading)
     return (
@@ -92,14 +98,19 @@ function Events({}: EventsProps) {
         css={groupStyle}
       >
         {!checked && (
+          <SearchContainer>
+            <SearchBox filter={setSearchText} />
+          </SearchContainer>
+        )}
+        {!checked && (
           <ToggleButton
             value="check"
+            aria-label={'card-view'}
             selected={!tableChecked}
             onChange={onTableViewChange}
             color={'primary'}
+            classes={toggleClass}
             sx={{
-              borderRadius: '50px',
-              border: '1px solid #910457',
               background: tableChecked ? '' : '#910457 !important',
             }}
           >
@@ -109,36 +120,46 @@ function Events({}: EventsProps) {
         {!checked && (
           <ToggleButton
             value="check"
+            aria-label={'list-view'}
             selected={tableChecked}
             onChange={onTableViewChange}
             color={'primary'}
-            sx={{
-              borderRadius: '50px',
-              border: '1px solid #910457',
-              background: !tableChecked ? '' : '#910457 !important',
-            }}
+            classes={toggleClass}
+            sx={{ background: !tableChecked ? '' : '#910457 !important' }}
           >
             {!tableChecked ? <IconControl name={'list'} /> : <IconControl name={'listSelect'} />}
           </ToggleButton>
         )}
         <ToggleButton
           value="check"
+          aria-label={'calendar'}
           selected={checked}
           onChange={handleChange}
           color={'primary'}
-          sx={{
-            borderRadius: '50px',
-            border: '1px solid #910457',
-            background: checked ? '#910457 !important' : '',
-          }}
+          classes={toggleClass}
+          sx={{ background: checked ? '#910457 !important' : '' }}
         >
           {checked ? <IconControl name={'dateSelect'} /> : <IconControl name={'date'} />}
         </ToggleButton>
       </FormGroup>
       {checked ? (
-        <EventCalendar />
+        <EventCalendar /> /*CalendarView*/
+      ) : searchText && searchData ? (
+        !searchLoading ? (
+          searchData.length ? (
+            <EventTable events={searchData} />
+          ) : (
+            <div css={noScheduleStyle}>
+              <h1>Content does not exist</h1>
+            </div>
+          )
+        ) : (
+          <div css={noScheduleStyle}>
+            <h1>loading...</h1>
+          </div>
+        )
       ) : tableChecked ? (
-        <EventTable events={data} />
+        <EventTable events={data} /> /*TableView*/
       ) : (
         <div css={wrapper}>
           {data.map((event) => {

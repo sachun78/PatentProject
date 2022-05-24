@@ -172,16 +172,32 @@ function MeetingResult({}: MeetingResultProps) {
           <>
             <MeetingSection>
               <h2>Result</h2>
-              <OutlinedInput minRows={4} multiline value={metData.history.result} classes={removeHover} />
+              <OutlinedInput
+                minRows={4}
+                multiline
+                value={metData.history.result}
+                classes={removeHover}
+                inputProps={{
+                  style: {
+                    color: '#6C6C6C',
+                    font: 'normal normal normal 16px/26px NanumSquareOTF',
+                  },
+                }}
+                style={{ color: '#6C6C6C' }}
+              />
             </MeetingSection>
             {metData.history.photopath && (
               <MeetingSection>
                 <h2>Photo</h2>
                 <Box
                   component="span"
-                  onClick={(e: React.MouseEvent) => {
-                    fileRef?.current?.click()
-                    e.preventDefault()
+                  sx={{
+                    width: '405px',
+                    height: '200px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: '#F2F2F2',
                   }}
                 >
                   <ImgView
@@ -207,8 +223,8 @@ function MeetingResult({}: MeetingResultProps) {
 }
 
 const ImgView = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 255px;
+  height: 170px;
   border: 1px solid #ddd;
 `
 export default MeetingResult
