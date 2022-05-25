@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from 'react'
 import { useMutation, useQuery } from 'react-query'
 import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
 import { toast } from 'react-toastify'
-import { Button, Stack } from '@mui/material'
+import { Button, Grid, Stack } from '@mui/material'
 import { ContainerBlock, InfoLink, MeetingSection, RescheduleButton, ScheduleInfoBlock } from './styles'
 import MeetingResult from 'components/Schedules/MeetingResult'
 import { IMeeting } from 'lib/api/types'
@@ -76,104 +76,108 @@ function MeetingDetail({}: MeetingDetailProps) {
   }
 
   return (
-    <Stack direction={'row'} spacing={2} sx={{ marginBottom: '1rem' }}>
-      <ContainerBlock>
-        <h1>{data.title}</h1>
-        <MeetingSection>
-          <h2>Organizer</h2>
-          <Stack direction="row" spacing={'10px'} sx={{ alignItems: 'center' }}>
-            <p>{data.ownerName}</p>
-            <div className={'divider'}></div>
-            <p className={'email'}>{data.ownerEmail}</p>
-          </Stack>
-        </MeetingSection>
-        <MeetingSection>
-          <h2>Participant</h2>
-          <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
-            <p>{data.toName ? data.toName : '/name is empty/'}</p>
-            <div className={'divider'}></div>
-            <p className={'email'}>{data.toEmail}</p>
-            {data.isPaidUser && (
-              <InfoLink to={`/u/${data.toEmail}`}>
-                <IconControl name={'infoUser'} style={{ marginRight: '3px' }} />
-                info
-              </InfoLink>
-            )}
-          </Stack>
-          <ScheduleInfoBlock>
-            <IconControl name={'company'} style={{ minWidth: '22px' }} /> {data.ownerCompany}
-          </ScheduleInfoBlock>
-          <ScheduleInfoBlock>
-            <IconControl name={'phone'} style={{ minWidth: '22px' }} /> {data.ownerPhone}
-          </ScheduleInfoBlock>
-        </MeetingSection>
-        <MeetingSection>
-          <h2>Schedule Information</h2>
-          <ScheduleInfoBlock>
-            <IconControl name={'date'} /> {format(new Date(data?.date), 'EEEE, d MMM, yyyy')}
-          </ScheduleInfoBlock>
-          <ScheduleInfoBlock>
-            <IconControl name={'time'} />
-            {format(new Date(data.startTime), 'HH:mm') + ' - ' + format(new Date(data.endTime), 'HH:mm')}
-          </ScheduleInfoBlock>
-          <ScheduleInfoBlock>
-            <IconControl name={'place'} style={{ minWidth: '22px' }} /> {data.location}
-          </ScheduleInfoBlock>
-        </MeetingSection>
-        <MeetingSection>
-          <h2>Message</h2>
-          <div className={'multiline'}>{data.comment} </div>
-        </MeetingSection>
-        <MeetingSection>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <h2>
-              State
-              <span className={'state-text'}>
-                {data.status !== 'none' ? data.status : isExpired ? 'expired' : 'pending'}
-              </span>
-            </h2>
-            {!isResult && !isExpired && (data.status === 'confirm' || data.status === 'replan') && (
-              <RescheduleButton value={change} onChange={onChangeToggle}>
-                <IconControl name={'reschedule'} style={{ marginRight: '3px' }} />
-                Reschedule
-              </RescheduleButton>
-            )}
-          </div>
-          {!isExpired && data.status === 'replan' && (
-            <SaveBlock style={{ justifyContent: 'space-around' }}>
-              <Button
-                variant={'contained'}
-                classes={classes}
-                onClick={onResult('cancel')}
-                disabled={finalMut.isLoading}
-                sx={{ background: '#9C9C9C ' }}
-              >
-                Cancel
-              </Button>
-              {data.isPossibleAddSchedule ? (
+    <Grid container spacing={2} rowSpacing={2} width={'100%'}>
+      <Grid item>
+        <ContainerBlock>
+          <h1>{data.title}</h1>
+          <MeetingSection>
+            <h2>Organizer</h2>
+            <Stack direction="row" spacing={'10px'} sx={{ alignItems: 'center' }}>
+              <p>{data.ownerName}</p>
+              <div className={'divider'}></div>
+              <p className={'email'}>{data.ownerEmail}</p>
+            </Stack>
+          </MeetingSection>
+          <MeetingSection>
+            <h2>Participant</h2>
+            <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+              <p>{data.toName ? data.toName : '/name is empty/'}</p>
+              <div className={'divider'}></div>
+              <p className={'email'}>{data.toEmail}</p>
+              {data.isPaidUser && (
+                <InfoLink to={`/u/${data.toEmail}`}>
+                  <IconControl name={'infoUser'} style={{ marginRight: '3px' }} />
+                  info
+                </InfoLink>
+              )}
+            </Stack>
+            <ScheduleInfoBlock>
+              <IconControl name={'company'} style={{ minWidth: '22px' }} /> {data.ownerCompany}
+            </ScheduleInfoBlock>
+            <ScheduleInfoBlock>
+              <IconControl name={'phone'} style={{ minWidth: '22px' }} /> {data.ownerPhone}
+            </ScheduleInfoBlock>
+          </MeetingSection>
+          <MeetingSection>
+            <h2>Schedule Information</h2>
+            <ScheduleInfoBlock>
+              <IconControl name={'date'} /> {format(new Date(data?.date), 'EEEE, d MMM, yyyy')}
+            </ScheduleInfoBlock>
+            <ScheduleInfoBlock>
+              <IconControl name={'time'} />
+              {format(new Date(data.startTime), 'HH:mm') + ' - ' + format(new Date(data.endTime), 'HH:mm')}
+            </ScheduleInfoBlock>
+            <ScheduleInfoBlock>
+              <IconControl name={'place'} style={{ minWidth: '22px' }} /> {data.location}
+            </ScheduleInfoBlock>
+          </MeetingSection>
+          <MeetingSection>
+            <h2>Message</h2>
+            <div className={'multiline'}>{data.comment} </div>
+          </MeetingSection>
+          <MeetingSection>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <h2>
+                State
+                <span className={'state-text'}>
+                  {data.status !== 'none' ? data.status : isExpired ? 'expired' : 'pending'}
+                </span>
+              </h2>
+              {!isResult && !isExpired && (data.status === 'confirm' || data.status === 'replan') && (
+                <RescheduleButton value={change} onChange={onChangeToggle}>
+                  <IconControl name={'reschedule'} style={{ marginRight: '3px' }} />
+                  Reschedule
+                </RescheduleButton>
+              )}
+            </div>
+            {!isExpired && data.status === 'replan' && (
+              <SaveBlock style={{ justifyContent: 'space-around' }}>
                 <Button
                   variant={'contained'}
                   classes={classes}
-                  onClick={onResult('confirm')}
+                  onClick={onResult('cancel')}
                   disabled={finalMut.isLoading}
+                  sx={{ background: '#9C9C9C ' }}
                 >
-                  Confirm
+                  Cancel
                 </Button>
-              ) : (
-                <div>apply time already reserved,so need change time</div>
-              )}
-            </SaveBlock>
-          )}
-        </MeetingSection>
-      </ContainerBlock>
-      {isResult ? (
-        <MeetingResult />
-      ) : (
-        change && (
-          <MeetingChange place={data.location} eventId={data.eventId} meetingId={data._id} onClose={onChangeToggle} />
-        )
-      )}
-    </Stack>
+                {data.isPossibleAddSchedule ? (
+                  <Button
+                    variant={'contained'}
+                    classes={classes}
+                    onClick={onResult('confirm')}
+                    disabled={finalMut.isLoading}
+                  >
+                    Confirm
+                  </Button>
+                ) : (
+                  <div>apply time already reserved,so need change time</div>
+                )}
+              </SaveBlock>
+            )}
+          </MeetingSection>
+        </ContainerBlock>
+      </Grid>
+      <Grid item>
+        {isResult ? (
+          <MeetingResult />
+        ) : (
+          change && (
+            <MeetingChange place={data.location} eventId={data.eventId} meetingId={data._id} onClose={onChangeToggle} />
+          )
+        )}
+      </Grid>
+    </Grid>
   )
 }
 

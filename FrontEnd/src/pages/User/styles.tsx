@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import palette, { brandColor } from 'lib/palette'
+import { brandColor } from 'lib/palette'
 import { resetButton } from 'lib/styles/resetButton'
 
 export const Container = styled.div`
@@ -138,20 +138,5 @@ export const NameMailContainer = styled.div`
   span {
     font: normal normal normal 15px/17px NanumSquareOTF;
     color: #9c9c9c;
-  }
-`
-
-export const mailToStyle = css`
-  display: flex;
-  justify-content: center;
-  font-size: 1.75rem;
-  margin-left: 1rem;
-  color: ${palette.white};
-  background-color: ${palette.blue[600]};
-  border-radius: 0.4rem;
-  padding: 0.35rem 0.5rem;
-
-  &:hover {
-    background-color: ${palette.blue[500]};
   }
 `

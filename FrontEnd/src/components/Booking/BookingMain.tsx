@@ -84,7 +84,7 @@ function BookingMain({ code, status, expire, reserved }: BookingMainProps) {
           {status === 'none' && !reserved && (
             <div>
               Another Meeting in time is reserved.
-              <br /> if you want meeting please
+              <br /> if you want meeting please <br />
               <Link to={`../replan?code=${code}`} replace>
                 replan
               </Link>
