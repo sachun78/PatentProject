@@ -45,11 +45,7 @@ export async function sendAuthEmail(req: IRequest, res: Response, next: NextFunc
   }
 }
 
-export async function forgotPasswd(
-  req: IRequest,
-  res: Response,
-  next: NextFunction
-) {
+export async function forgotPasswd(req: IRequest, res: Response, next: NextFunction) {
   try {
     const emailInfo = {
       email: "",
@@ -61,20 +57,19 @@ export async function forgotPasswd(
     emailInfo.code = shortid.generate();
 
     const check = await EmaiAuthlRepo.findByEmail(emailInfo.email);
-    if (check) {
-      if (check.logged === true) {
-        await EmaiAuthlRepo.updateAuthMail(check.code, emailInfo);
-      }
-      else {
-        return res.status(409).json({message: `${emailInfo.email} is not signup-user`})
-      }
+    if (!check) {
+      return res.status(409).json({message: `${emailInfo.email} is not signup-user`})
     }
+
     console.log("[forgotpw-emailInfo]", emailInfo);
 
     sendmail(emailInfo, EMAILTYPE.FORGOT)
-      .then((value) =>
-        res.status(200).json({ message: `Success send email: ${emailInfo.email}` })
-      )
+      .then((value) => {
+        if (check.logged === true) {
+          EmaiAuthlRepo.updateAuthMail(check.code, emailInfo);
+        }
+        return res.status(200).json({ message: `Success send email: ${emailInfo.email}` })
+      })
       .catch((reason) =>
         res.status(500).json({ message: `Failed email send ${emailInfo.email}` })
       );
@@ -84,11 +79,7 @@ export async function forgotPasswd(
   }
 }
 
-export async function isVerifyMail(
-  req: IRequest,
-  res: Response,
-  next: NextFunction
-) {
+export async function isVerifyMail(req: IRequest, res: Response, next: NextFunction) {
   const reqCode: string = req.params.code;
 
   try {
@@ -97,9 +88,8 @@ export async function isVerifyMail(
       return res.status(404).json({ message: "Email info not found" });
     }
 
-    const diff = new Date().getTime() - new Date(mail.createdAt).getTime();
-    if (diff > 1000 * 60 * 60 * 24 || mail.logged) {
-      await EmaiAuthlRepo.deleteAuthMail(mail.email);
+    const diff = new Date().getTime() - new Date(mail.updatedAt).getTime();
+    if (diff > 1000 * 60 * 60 * 24) {
       return res.status(410).json({ message: "Expired code" });
     }
 
