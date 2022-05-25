@@ -2,6 +2,8 @@ import { css } from '@emotion/react'
 import useBuddyQuery from 'hooks/query/useBuddyQuery'
 import NetworkItem from './NetworkItem'
 import { IBuddy } from 'lib/api/types'
+import { noScheduleStyle } from '../Events/styles'
+import React from 'react'
 
 export type NetworkListProps = {}
 
@@ -9,11 +11,19 @@ function NetworkList({}: NetworkListProps) {
   const { data: buddyData, isLoading } = useBuddyQuery()
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div css={noScheduleStyle}>
+        <h1>Loading...</h1>
+      </div>
+    )
   }
 
   if (!buddyData || buddyData.length === 0 || !buddyData.buddy || buddyData.buddy.length === 0) {
-    return <div>No data</div>
+    return (
+      <div css={noScheduleStyle}>
+        <h1>empty</h1>
+      </div>
+    )
   }
 
   return (

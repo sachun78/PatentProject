@@ -12,15 +12,13 @@ import { BsChatLeftDots, BsHeart, BsHeartFill } from 'react-icons/bs'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import useProfileImg from '../../hooks/useProfileImg'
-import { IComment, IPost, User } from '../../lib/api/types'
+import { IComment, User } from 'lib/api/types'
 import ImageContainer from './ImageContainer'
 import PostActionButtons from './PostActionButtons'
 import PostComment from './PostComment'
 import { commentStyle } from './PostFooter'
 import PostTextContainer from './PostTextContainer'
-import { url } from 'gravatar'
-import gravatar from 'gravatar'
+import gravatar, { url } from 'gravatar'
 
 type postDetailProps = {}
 
@@ -33,40 +31,38 @@ function PostDetail({}: postDetailProps) {
   const { data: post, isLoading } = useQuery(['post', id], getPost, {
     enabled: !!id,
     retry: false,
-  })    
+  })
 
-  const today = new Date();
-  
-  const diff = useMemo(() => {    
-    if(post) {        
-        const date = new Date(post.createdAt) 
-        const temp = (today.getTime() - date.getTime()) / 1000
-        if(temp > 86400) {
-          return date.toDateString()
-        } else {
-          return formatDistanceToNow(date, { addSuffix: true})
-        }      
+  const today = new Date()
+
+  const diff = useMemo(() => {
+    if (post) {
+      const date = new Date(post.createdAt)
+      const temp = (today.getTime() - date.getTime()) / 1000
+      if (temp > 86400) {
+        return date.toDateString()
+      } else {
+        return formatDistanceToNow(date, { addSuffix: true })
+      }
     }
-  }, [post])    
+  }, [post])
 
   const [comments, onChangeComments, setComments] = useInput('')
-  
-  const user = qc.getQueryData<User>('user') as User  
-  const { profileSrc } = useProfileImg(44)  
+
+  const user = qc.getQueryData<User>('user') as User
 
   const likeClicked = useMemo(() => {
     if (post) return !!post.like_cnt.find((v: string) => v === user.email)
   }, [post, user])
 
   const likeCountMut = useMutation(updateLike, {
-
-    onMutate: async newData => {      
-      const oldData = qc.getQueryData(['post', post._id]);      
-      await qc.cancelQueries(['post', post._id]);      
-      qc.setQueryData(['post', post._id], {...post, newData});      
-      return () => qc.setQueryData(['post', post._id], oldData);       
+    onMutate: async (newData) => {
+      const oldData = qc.getQueryData(['post', post._id])
+      await qc.cancelQueries(['post', post._id])
+      qc.setQueryData(['post', post._id], { ...post, newData })
+      return () => qc.setQueryData(['post', post._id], oldData)
     },
-    
+
     onError: () => {
       toast.error('Something went wrong', {
         position: toast.POSITION.TOP_CENTER,
@@ -78,18 +74,21 @@ function PostDetail({}: postDetailProps) {
   })
 
   const onLike = () => {
-    likeCountMut.mutate([
+    likeCountMut.mutate(
+      [
+        {
+          email: user.email,
+          userId: user.id,
+        },
+        id as string,
+        likeClicked ? 'unchecked' : 'checked',
+      ],
       {
-        email: user.email,
-        userId: user.id,
-      },
-      id as string,
-      likeClicked ? 'unchecked' : 'checked',
-    ], {
-      onSuccess: () => {                
-        qc.invalidateQueries(['post', post._id])
+        onSuccess: () => {
+          qc.invalidateQueries(['post', post._id])
+        },
       }
-    })
+    )
   }
 
   const onKeyDown = useCallback(
@@ -97,10 +96,9 @@ function PostDetail({}: postDetailProps) {
       if (e.key === 'Enter') {
         e.preventDefault()
         createCommentMut.mutate([{ contents: comments, createdAt: new Date() }, post._id], {
-          onSuccess: () => {        
+          onSuccess: () => {
             qc.invalidateQueries(['post', post._id])
-            
-          }   
+          },
         })
 
         setComments('')
@@ -110,12 +108,11 @@ function PostDetail({}: postDetailProps) {
   )
 
   const createCommentMut = useMutation(createComments, {
-
-    onMutate: async newData => {      
-      const oldData = qc.getQueryData(['post', post._id]);      
-      await qc.cancelQueries(['post', post._id]);      
-      qc.setQueryData(['post', post._id], {...post, newData});      
-      return () => qc.setQueryData(['post', post._id], oldData);       
+    onMutate: async (newData) => {
+      const oldData = qc.getQueryData(['post', post._id])
+      await qc.cancelQueries(['post', post._id])
+      qc.setQueryData(['post', post._id], { ...post, newData })
+      return () => qc.setQueryData(['post', post._id], oldData)
     },
 
     onError: () => {
@@ -128,7 +125,7 @@ function PostDetail({}: postDetailProps) {
     },
   })
 
-  if (!post || isLoading)  {
+  if (!post || isLoading) {
     return <div>로딩중</div>
   }
 
@@ -148,14 +145,12 @@ function PostDetail({}: postDetailProps) {
             </Avatar>
           </div>
           <div css={titleStyle}>
-            <Link to={`/u/${post.owner_email}`}>    
-            <h4>
-              <span>{post.owner_username}</span>
-            </h4>
+            <Link to={`/u/${post.owner_email}`}>
+              <h4>
+                <span>{post.owner_username}</span>
+              </h4>
             </Link>
-            <div className={'time-date'}>                
-              {diff}
-            </div>
+            <div className={'time-date'}>{diff}</div>
           </div>
         </div>
         <ImageContainer images={post.images} isDetail={true} />
@@ -188,7 +183,7 @@ function PostDetail({}: postDetailProps) {
             startAdornment={
               <Avatar
                 alt="post-user-avatar"
-                src={profileSrc}
+                src={`${API_PATH}static/` + user.email}
                 sx={{ width: 35, height: 35, mr: '25px' }}
                 imgProps={{ crossOrigin: 'anonymous' }}
               >

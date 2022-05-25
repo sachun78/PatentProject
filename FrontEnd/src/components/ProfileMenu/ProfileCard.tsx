@@ -7,7 +7,6 @@ import ProfileCardText from './ProfileCardText'
 import ProfileCardField from './ProfileCardField'
 import ProfileCardCountry from './ProfileCardCountry'
 import ProfileCardSave from './ProfileCardSave'
-import useProfileImg from 'hooks/useProfileImg'
 import ProfileCardPhone from './ProfileCardPhone'
 import gravatar from 'gravatar'
 import { API_PATH } from 'lib/api/client'
@@ -45,7 +44,6 @@ export type ProfileCardItemProps = {
 
 function ProfileCardItem({ title, type, email, username }: ProfileCardItemProps) {
   const fileRef = useRef<HTMLInputElement>(null)
-  const { profileSrc } = useProfileImg()
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
     const file = e.target.files?.[0]

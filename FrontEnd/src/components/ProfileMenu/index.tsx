@@ -31,14 +31,14 @@ function ProfileMenu({}: ProfileMenuProps) {
   const [fields, setFields] = useState<string[]>(data?.field ?? [])
   const [fieldText, setFieldText] = useState('')
 
-  const difference = useMemo(() => _.difference(data?.field, fields), [data, fields])
+  const difference = useMemo(() => _.isEqual(fields, data?.field), [data, fields])
   const isSaveActive = useMemo(
     () =>
       data?.company !== company ||
       phone !== data?.phone ||
       data?.department !== department ||
       data?.position !== position ||
-      difference.length > 0 ||
+      !difference ||
       country !== data?.country ||
       signature !== data?.signature,
     [
@@ -51,7 +51,7 @@ function ProfileMenu({}: ProfileMenuProps) {
       data?.position,
       data?.signature,
       department,
-      difference.length,
+      difference,
       phone,
       position,
       signature,

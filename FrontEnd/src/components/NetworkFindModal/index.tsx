@@ -1,5 +1,5 @@
 import { useRecoilState } from 'recoil'
-import { networkUserFindModalState, useMeetingReqUser } from '../../atoms/meetingReqState'
+import { networkUserFindModalState, useMeetingReqUser } from 'atoms/meetingReqState'
 import React, { useCallback } from 'react'
 import {
   Avatar,

@@ -102,13 +102,7 @@ function MailCheckForm({ sendMail, onSendmail, type }: MailCheckFormProps) {
             </FormHelperText>
           )}
           <div className="button-div">
-            <LoadingButton
-              variant="contained"
-              type="submit"
-              fullWidth
-              loading={sendmailMut.isLoading}
-              loadingPosition={'start'}
-            >
+            <LoadingButton variant="contained" type="submit" fullWidth loading={sendmailMut.isLoading}>
               Email Check
             </LoadingButton>
           </div>

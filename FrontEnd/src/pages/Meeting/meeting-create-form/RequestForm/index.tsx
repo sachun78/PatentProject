@@ -3,7 +3,6 @@ import { useCurrentEventState } from 'atoms/eventState'
 import useDateTimeHook from 'hooks/useDateTimeHook'
 import useInputs from 'hooks/useInputs'
 import { createMeeting } from 'lib/api/meeting/createMeeting'
-import LocationInput from 'components/LocationMap/LocationInput'
 import RequestSection from './RequestSection'
 import { toast } from 'react-toastify'
 import { buttonStyle, PeriodBlock, sectionStyle } from './styles'
@@ -38,9 +37,6 @@ export default function RequestForm({}: RequestViewProps) {
   const { date, time, setDate, setTime } = useDateTimeHook()
   const [endTime, setEndTime] = useState<Date | null>(null)
   const [, setOpen] = useRecoilState(networkUserFindModalState)
-  const [location, setLoaction] = useState('서울특별시 성동구 아차산로 100')
-  const [detailOpen, setDetailOpen] = useState(false)
-  const [detailAddress, setDetailAddress] = useState('')
   const [isDefaultComment, onToggleIsDefaultComment] = useToggle(false)
   const [phone, setPhone] = useState('')
   const onChangePhone = useCallback((value?: any | undefined) => {
@@ -55,6 +51,7 @@ export default function RequestForm({}: RequestViewProps) {
     to: '',
     firm: '',
     name: '',
+    location: '',
   })
 
   const springProps = useSpring({
@@ -129,16 +126,6 @@ export default function RequestForm({}: RequestViewProps) {
     setEndTime(change)
   }, [])
 
-  const onChangeLocation = useCallback((change: string) => {
-    setLoaction(change)
-    setDetailOpen(true)
-  }, [])
-
-  const onChangeDetailAdress = (e: any) => {
-    console.log(e.target.value)
-    setDetailAddress(e.target.value)
-  }
-
   const onBlur = useCallback(
     (e) => {
       e.preventDefault()
@@ -155,7 +142,7 @@ export default function RequestForm({}: RequestViewProps) {
       e.preventDefault()
       const { title, to, comment } = form
       if ((!to.trim() && !meetuser) || !title.trim() || !time || !endTime) {
-      // if ((!to.trim() && !meetuser) || !location.trim() || !title.trim() || !time || !endTime) {
+        // if ((!to.trim() && !meetuser) || !location.trim() || !title.trim() || !time || !endTime) {
         toast.error('Please fill out the form', {
           position: toast.POSITION.TOP_CENTER,
           pauseOnHover: false,
@@ -177,7 +164,7 @@ export default function RequestForm({}: RequestViewProps) {
         date,
         startTime: time,
         endTime,
-        location: `${location} ${detailAddress}`,
+        location: form.location,
         toEmail: meetuser ? meetuser.toLowerCase() : to.toLowerCase(),
         toCompany,
         toName,
@@ -189,11 +176,9 @@ export default function RequestForm({}: RequestViewProps) {
       createScheduleMut,
       curEvent.id,
       date,
-      detailAddress,
       endTime,
       form,
       isDefaultComment,
-      location,
       meetuser,
       phone,
       profile?.signature,
@@ -335,12 +320,13 @@ export default function RequestForm({}: RequestViewProps) {
         </RequestSection>
         {detailOpen && ( */}
         <MeetingSection title={'Location'}>
-        {/* <RequestSection title={'Detail address'}> */}
+          {/* <RequestSection title={'Detail address'}> */}
+          <h2>Location</h2>
           <OutlinedInput
-            name="detail"
+            name="location"
             type={'text'}
-            value={detailAddress}
-            onChange={onChangeDetailAdress}
+            value={form.location}
+            onChange={onChange}
             placeholder={'Enter detailed address'}
             classes={classes}
             sx={{ height: 38 }}

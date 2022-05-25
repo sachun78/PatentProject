@@ -60,14 +60,14 @@ export const Section1 = styled.section`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-
+  position: relative;
   padding: 10.625rem 0 3.125rem;
   margin-top: 8.75rem;
   width: 100%;
 
   .main-logo {
     position: absolute;
-    top: 180px;
+    top: -58px;
     width: 116px;
     height: 150px;
   }
