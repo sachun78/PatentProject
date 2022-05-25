@@ -181,7 +181,7 @@ function PostEdit() {
     
   }, [post])
 
-  if(!post) return <div>로딩중!</div>
+  if(!post) return <div></div>
 
   return (
     <>

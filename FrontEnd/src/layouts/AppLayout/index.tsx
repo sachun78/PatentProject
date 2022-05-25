@@ -13,7 +13,7 @@ const Home = loadable(() => import('pages/Home'))
 const Profile = loadable(() => import('pages/Profile'))
 const Member = loadable(() => import('pages/Member'))
 const Network = loadable(() => import('pages/Network'))
-const Conference = loadable(() => import('pages/Conference/Conference'))
+const Conference = loadable(() => import('pages/Conference'))
 const PostDetail = loadable(() => import('components/Post/PostDetail'))
 const PostWrite = loadable(() => import('components/Post/PostWrite'))
 const PostEdit = loadable(() => import('components/Post/PostEdit'))
@@ -47,7 +47,7 @@ export default function AppLayout({}: AppLayoutProps) {
           <Route path={'/meeting/*'} element={<Member />} />
           <Route path={'/network/*'} element={<Network />} />
           <Route path={'/profile'} element={<Profile />} />
-          <Route path={'/conference'} element={<Conference />} />
+          <Route path={'/conference/*'} element={<Conference />} />
           <Route path={'/u/:email'} element={<User />} />
           <Route path={'/*'} element={<div>404 NOT FOUND</div>} />
           <Route path={'/postWrite/'} element={<PostWrite />} />
