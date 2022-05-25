@@ -3,7 +3,7 @@ import React from 'react'
 import { css } from '@emotion/react'
 import { Chip, OutlinedInput } from '@mui/material'
 import useToggle from 'hooks/useToggle'
-import { useRemoveOutlineHover } from '../../lib/styles/muiStyles'
+import { useRemoveOutlineHover } from 'lib/styles/muiStyles'
 
 export type ProfileCardFieldProps = {
   title: string

@@ -9,6 +9,7 @@ import { useMutation } from 'react-query'
 import { updateEventRestrictedTime } from 'lib/api/event/updateEvent'
 import { IMeeting } from 'lib/api/types'
 import { brandColor } from 'lib/palette'
+import { useButtonStyle } from '../ProfileMenu/ProfileCardSave'
 
 export type UnavailableTimePickerProps = {
   id: string
@@ -22,6 +23,8 @@ function UnavailableTimePicker({ id, startDate, endDate, unavailableList, reserv
   const [open, setOpen] = useState(false)
   const [currentUnavailableList, setCurrentUnavailableList] = useState(unavailableList)
   const calendarRef = useRef<FullCalendar | null>(null)
+
+  const classes = useButtonStyle()
 
   const handleOpen = useCallback(() => {
     setOpen(true)
@@ -85,13 +88,10 @@ function UnavailableTimePicker({ id, startDate, endDate, unavailableList, reserv
         variant={'contained'}
         onClick={handleOpen}
         tabIndex={0}
-        style={{
-          position: 'relative',
-          marginBottom: '1.875rem',
-          width: '20rem',
-        }}
+        classes={classes}
+        style={{ marginTop: 0, marginBottom: 8 }}
       >
-        Select Unavailable Time
+        Unavailable Time
       </Button>
       <Dialog onClose={handleClose} open={open} fullScreen>
         <DialogTitle>Set Meeting Date</DialogTitle>

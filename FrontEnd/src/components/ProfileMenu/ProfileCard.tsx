@@ -1,13 +1,12 @@
 import { css } from '@emotion/react'
-import { Avatar, IconButton, TextField } from '@mui/material'
+import { Avatar, IconButton } from '@mui/material'
 import React, { useRef } from 'react'
-import { careerStyle, emailStyle, itemStyle, photoStyle } from './styles'
+import { emailStyle, itemStyle, photoStyle } from './styles'
 import { upload } from 'lib/api/me/upload'
 import ProfileCardText from './ProfileCardText'
 import ProfileCardField from './ProfileCardField'
 import ProfileCardCountry from './ProfileCardCountry'
 import ProfileCardSave from './ProfileCardSave'
-import useProfileImg from 'hooks/useProfileImg'
 import ProfileCardPhone from './ProfileCardPhone'
 import gravatar from 'gravatar'
 import { API_PATH } from 'lib/api/client'
@@ -32,8 +31,8 @@ const wrapper = css`
   border-radius: 1rem;
 `
 
-type cardItemType = 'email' | 'photo' | 'username' | 'career'
-// INFOVIEW CARD ITEM
+type cardItemType = 'email' | 'photo' | 'username'
+// CARD ITEM
 export type ProfileCardItemProps = {
   title: string
   type: cardItemType
@@ -45,7 +44,6 @@ export type ProfileCardItemProps = {
 
 function ProfileCardItem({ title, type, email, username }: ProfileCardItemProps) {
   const fileRef = useRef<HTMLInputElement>(null)
-  const { profileSrc } = useProfileImg()
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
     const file = e.target.files?.[0]
@@ -113,12 +111,6 @@ function ProfileCardItem({ title, type, email, username }: ProfileCardItemProps)
         {type === 'username' && (
           <div css={emailStyle}>
             <div className="email-block">{username}</div>
-          </div>
-        )}
-        {/*4. CAREER TYPE*/}
-        {type === 'career' && (
-          <div css={careerStyle}>
-            <TextField multiline fullWidth />
           </div>
         )}
       </div>

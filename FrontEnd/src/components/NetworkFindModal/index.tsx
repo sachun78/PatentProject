@@ -1,5 +1,5 @@
 import { useRecoilState } from 'recoil'
-import { networkUserFindModalState, useMeetingReqUser } from '../../atoms/meetingReqState'
+import { networkUserFindModalState, useMeetingReqUser } from 'atoms/meetingReqState'
 import React, { useCallback } from 'react'
 import {
   Avatar,
@@ -59,7 +59,7 @@ function NetworkFindModal({}: NetworkFindModalProps) {
           <div>loading...</div>
         ) : (
           <List dense sx={{ width: '100%', bgcolor: 'background.paper' }}>
-            {buddyData.buddy.map((buddy: any) => {
+            {buddyData.buddy?.map((buddy: any) => {
               const labelId = `checkbox-list-secondary-label-${buddy}`
               return (
                 <ListItem key={buddy._id} disablePadding>

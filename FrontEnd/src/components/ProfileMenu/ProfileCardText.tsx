@@ -10,9 +10,18 @@ export type ProfileCardTextProps = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   multiline?: boolean
   size?: 'small' | 'large'
+  name?: string
 }
 
-function ProfileCardText({ editable = false, text, title, onChange, multiline, size = 'large' }: ProfileCardTextProps) {
+function ProfileCardText({
+  editable = false,
+  text,
+  title,
+  onChange,
+  multiline,
+  name,
+  size = 'large',
+}: ProfileCardTextProps) {
   const [edit, setEdit] = React.useState(editable)
   const toggle = useCallback(() => setEdit((prevState) => !prevState), [])
   const classes = useRemoveOutlineHover()
@@ -35,13 +44,13 @@ function ProfileCardText({ editable = false, text, title, onChange, multiline, s
           {edit && (
             <OutlinedInput
               placeholder={title}
-              name={title}
+              name={name || title}
               value={text || ''}
               onChange={onChange}
               autoComplete="off"
               css={inputStyle}
               classes={classes}
-              style={{ height: '40px' }}
+              style={!multiline ? { height: '40px' } : {}}
               multiline={multiline}
             />
           )}

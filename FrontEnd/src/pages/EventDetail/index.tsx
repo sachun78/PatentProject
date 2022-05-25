@@ -1,19 +1,19 @@
-import { useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { css } from '@emotion/react'
 import EventDetailContainer from 'components/Events/EventDetailContainer'
 
 export type EventProps = {}
 
 function EventDetail({}: EventProps) {
-  const location = useLocation()
+  const { id } = useParams()
 
-  if (location.pathname.split('/')[3] === '') {
+  if (!id) {
     return null
   }
 
   return (
     <div css={pageStyle}>
-      <EventDetailContainer id={location.pathname.split('/')[3]} />
+      <EventDetailContainer id={id} />
     </div>
   )
 }

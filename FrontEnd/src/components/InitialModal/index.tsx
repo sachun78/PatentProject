@@ -115,10 +115,31 @@ function InitialModal({}: InitialModalProps) {
               <p>Please enter your default profile.</p>
             </div>
           </HeaderDiv>
-          <ProfileCard.Text title="Company" text={company} editable onChange={onChange} size={'small'} />
+          <ProfileCard.Text
+            title="Company"
+            text={company}
+            editable
+            onChange={onChange}
+            size={'small'}
+            name={'company'}
+          />
           <ProfileCard.Phone title="Phone number" size={'small'} />
-          <ProfileCard.Text title="Department" text={department} editable onChange={onChange} size={'small'} />
-          <ProfileCard.Text title="Position" text={position} editable onChange={onChange} size={'small'} />
+          <ProfileCard.Text
+            title="Department"
+            text={department}
+            editable
+            onChange={onChange}
+            size={'small'}
+            name={'department'}
+          />
+          <ProfileCard.Text
+            title="Position"
+            text={position}
+            editable
+            onChange={onChange}
+            size={'small'}
+            name={'position'}
+          />
           <ProfileCard.Field
             title="Field"
             text={fieldText}

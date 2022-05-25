@@ -3,10 +3,10 @@ import { Avatar, AvatarGroup } from '@mui/material'
 import { brandColor } from 'lib/palette'
 import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
-import { memo, useMemo } from 'react'
-import useProfileImg from 'hooks/useProfileImg'
+import React, { memo, useMemo } from 'react'
 import { formatDistanceToNow } from 'date-fns'
-import { API_PATH } from '../../lib/api/client'
+import { API_PATH } from 'lib/api/client'
+import { url } from 'gravatar'
 
 export type EventDetailCardProps = {
   id: string
@@ -27,7 +27,6 @@ function EventDetailCard({ title, from, to, date, time, place, state, id }: Even
     })
     return dist.includes('ago')
   }, [time])
-  const { profileSrc } = useProfileImg()
 
   return (
     <Link css={wrapper} to={'/meeting/schedule/' + id}>
@@ -35,16 +34,20 @@ function EventDetailCard({ title, from, to, date, time, place, state, id }: Even
       <AvatarGroup max={3} css={avatarGroupStyle}>
         <Avatar
           alt={from}
-          src={profileSrc}
+          src={API_PATH + 'static/' + from}
           imgProps={{ crossOrigin: 'anonymous' }}
           style={{ border: '0.1px solid lightgray' }}
-        />
+        >
+          <img src={url(from, { s: '60px', d: 'retro' })} alt={'no-image'} />
+        </Avatar>
         <Avatar
           alt={to}
           src={API_PATH + 'static/' + to}
           imgProps={{ crossOrigin: 'anonymous' }}
           style={{ border: '0.1px solid lightgray' }}
-        />
+        >
+          <img src={url(to, { s: '60px', d: 'retro' })} alt={'no-image'} />
+        </Avatar>
       </AvatarGroup>
       <hr css={dividerStyle} />
       <ScheduleDetailContents>

@@ -6,6 +6,7 @@ interface IEmailAuth {
   code: string;
   logged: boolean;
   createdAt: number;
+  updatedAt: number;
 }
 
 const emailAuthSchema = new mongoose.Schema<IEmailAuth, Model<IEmailAuth>>({
@@ -14,7 +15,7 @@ const emailAuthSchema = new mongoose.Schema<IEmailAuth, Model<IEmailAuth>>({
   logged: { type: Boolean, default: false }
 },
 {
-  timestamps: { updatedAt: false, createdAt: true },
+  timestamps: true,
   versionKey: false
 });
 useVirtualId(emailAuthSchema);

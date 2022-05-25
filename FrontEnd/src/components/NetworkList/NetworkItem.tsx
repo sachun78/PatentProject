@@ -14,8 +14,8 @@ export type NetworkItemProps = {
 }
 
 function NetworkItem({ data }: NetworkItemProps) {
-  const navigate = useNavigate()  
-  
+  const navigate = useNavigate()
+
   return (
     <div css={itemStyle} onClick={() => navigate('/u/' + data.email)}>
       <div css={iconStyle}>
@@ -33,7 +33,7 @@ function NetworkItem({ data }: NetworkItemProps) {
         <div css={nameStyle}>{data.name || data.username}</div>
         <div css={emailStyle}>{data.email}</div>
       </div>
-      <div css={informStyle}>        
+      <div css={informStyle}>
         <div css={companyBoxStyle}>
           <Tooltip title="Company" placement={'top'}>
             <span>
@@ -65,13 +65,11 @@ function NetworkItem({ data }: NetworkItemProps) {
       <Tooltip title="Wemet" placement={'left'}>
         <div css={stateStyle}>
           <div>
-            <img src="/assets/meeting.png" style={{ width: '1rem' }} alt={'meeting'} />            
+            <img src="/assets/meeting.png" style={{ width: '1rem' }} alt={'meeting'} />
           </div>
-          <div>
-            0                
-          </div>
-        </div>            
-      </Tooltip>      
+          <div>0</div>
+        </div>
+      </Tooltip>
     </div>
   )
 }
@@ -92,7 +90,7 @@ const companyBoxStyle = css`
   }
 `
 
-const itemStyle = css`
+export const itemStyle = css`
   display: flex;
   width: 100%;
   max-height: 6.875rem;
@@ -115,11 +113,10 @@ const itemStyle = css`
     margin-top: 0.5rem;
   }
 `
-const iconStyle = css`
+export const iconStyle = css`
   margin-right: 1.25rem;
 `
-const userStyle = css`
-  //width: 13.625rem;
+export const userStyle = css`
   flex: 2;
 `
 const nameStyle = css`
@@ -131,9 +128,8 @@ const nameStyle = css`
 const emailStyle = css`
   color: #9c9c9c;
 `
-const informStyle = css`
+export const informStyle = css`
   display: flex;
-  //width: 28.125rem;
   flex: 3;
   height: 3.6875rem;
   flex-direction: column;
@@ -151,7 +147,7 @@ const informStyle = css`
     align-items: center;
   }
 `
-const stateStyle = css`
+export const stateStyle = css`
   width: 3.75rem;
   max-height: 3.75rem;
   height: 100%;
