@@ -79,6 +79,7 @@ export type IPost = {
   createdAt: Date
   updatedAt?: Date
   images: string[]
+  country: string
 }
 
 export type IComment = {

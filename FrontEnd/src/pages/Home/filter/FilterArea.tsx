@@ -2,15 +2,25 @@ import { css } from '@emotion/react';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import { any } from 'joi';
 import * as React from 'react';
+import { useState } from 'react';
 
-function FilterArea() {
-  
-  return (    
+type filterAreaProps = {
+  getCountry: Function
+}
+
+function FilterArea({ getCountry }: filterAreaProps) {  
+
+  return ( 
+    
     <Autocomplete
       css={containerStyle}      
       id="country-select-demo"        
-      multiple
+      multiple            
+      onChange={(e: any, newValue: any) => {
+        getCountry(newValue.map((val: any) => val.code));
+      }}
       options={countries}
       autoHighlight      
       renderOption={(props, option) => (
@@ -30,7 +40,7 @@ function FilterArea() {
           <TextField            
             css={textStyle}          
             {...params}
-            placeholder="Choose a country"            
+            placeholder="Choose a country"                        
             inputProps={{
               ...params.inputProps,
               autoComplete: 'new-password', // disable autocomplete and autofill
@@ -39,6 +49,7 @@ function FilterArea() {
         </>
       )}
     />    
+    
   );
 }
 

@@ -1,4 +1,4 @@
-import { Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material'
+import { Badge, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material'
 import { StatusBlock, StyledTableCell, StyledTableRow } from 'pages/Meeting/styles'
 import { format, isBefore } from 'date-fns'
 import React from 'react'
@@ -53,8 +53,7 @@ function ScheduleTable({ meetings, type = 'schedule', isProfile }: ScheduleTable
                 status = 'expired'
               }
             }
-            return (
-            <>
+            return (            
               <StyledTableRow key={row._id + row.date} hover onClick={() => navi('/meeting/schedule/' + row._id)}>                              
                 <StyledTableCell align="center" style={{ height: '15rem'}}>
                   <img src= {API_PATH + 'static/' + row.history.photopath} crossOrigin='anonymous' style={{ width: '14.75rem', height: '14.25rem', objectFit: 'fill' }} />                  
@@ -66,28 +65,14 @@ function ScheduleTable({ meetings, type = 'schedule', isProfile }: ScheduleTable
                 <StyledTableCell align="center">{row.location}</StyledTableCell>
                 <StyledTableCell align="center">
                   {type === 'schedule' ? (
-                    <Badge
-                      color="error"
-                      variant="standard"
-                      badgeContent={'end'}
-                      invisible={status !== 'confirm' || isAfter(new Date(row.startTime), new Date())}
-                    >
-                      <StatusBlock state={status}>{status}</StatusBlock>
-                    </Badge>
+                    <StatusBlock state={status}>{status}</StatusBlock>
                   ) : (
                     <StatusBlock state={row.history.status ? 'met' : ''}>
                       {row.history.status ? 'MET' : 'Failure'}
                     </StatusBlock>
                   )}
                 </StyledTableCell>
-              </StyledTableRow>
-              {/* <StyledTableRow key={row._id + row.date} hover onClick={() => navi('/meeting/schedule/' + row._id)}>            
-                <StyledTableCell align="center" rowSpan={4} colSpan={3}></StyledTableCell>            
-              </StyledTableRow>
-              <StyledTableRow key={row._id + row.date} hover onClick={() => navi('/meeting/schedule/' + row._id)}/>          
-              <StyledTableRow key={row._id + row.date} hover onClick={() => navi('/meeting/schedule/' + row._id)}/>
-              <StyledTableRow key={row._id + row.date} hover onClick={() => navi('/meeting/schedule/' + row._id)}/>           */}
-            </>  
+              </StyledTableRow>                          
             )
           })}
         </TableBody>

@@ -17,8 +17,13 @@ function Home({}: HomeProps) {
 
   const { ref, inView } = useInView()
   const [searchText, setSearchText] = useState('')  
-  const [filterOn, setFilterOn] = useState(false);  
-  
+  const [filterOn, setFilterOn] = useState(false);
+  const [countryFilter, setCountryFilter] = useState<any []>([]);  
+  const getCountry = (newValue: any[]) => { 
+
+    setCountryFilter(newValue)     
+  }     
+
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
     ['posts'],
     ({ pageParam = 0 }) => getPosts(pageParam),
@@ -30,7 +35,7 @@ function Home({}: HomeProps) {
         return pages.flat().length
       }      
     }    
-  )        
+  )          
 
   const { data: searchData } = useQuery(['posts_search', searchText], () => getPostsSearch(searchText), {
     enabled: !!searchText,
@@ -44,11 +49,15 @@ function Home({}: HomeProps) {
   }, [fetchNextPage, inView])
 
   const posts = useMemo(() => {
-    if (!data) return []
-    return data.pages.flat().filter((post) => {
+
+    if (!data) return []    
+    
+    return data.pages.flat().filter((post) => {      
+      
       return !post.history
     })
-  }, [data])  
+  }, [data])
+  
 
   if (isLoading) return <div>로딩중!!</div>    
 
@@ -63,34 +72,57 @@ function Home({}: HomeProps) {
   return (
     <>                   
       <Stack>
-      <div css={searchBoxStyle}>
-        <div css={nationStyle} onFocus={onFocus} onBlur={onBlur} tabIndex={1}>
-          <img src="/assets/country.png" alt={'country'} style={{ width: "1rem", height: "1rem", marginRight: "0.3125rem" }} />
-          <div style={{ marginRight: '1.25rem' }}>Nation</div>
-          {filterOn && <FilterArea />}
-          
-        </div>                
-        <SearchBox filter={setSearchText} post={true} />                
-      </div>                 
-        {searchData && searchData.length === 0 ? <div css={noDataStyle}>There are no search results.</div> :        
-        searchData?.map((search: IPost) => (
-          <div key={search._id} css={postViewStyle}>
-            <Post 
-              key={search._id}
-              post={search}              
-              _id={search._id}
-              owner_username={search.owner_username}
-              owner_email={search.owner_email}
-              owner_id={search.owner_id}
-              like_cnt={search.like_cnt}
-              contents={search.contents}
-              comment={search.comment}
-              images={search.images}
-              createdAt={search.createdAt}
-            />
-          </div> 
-        ))}         
-        {!searchData && posts?.map((post: IPost) => (
+        <div css={searchBoxStyle}>
+          <div css={nationStyle} onFocus={onFocus} onBlur={onBlur} tabIndex={1}>
+            <img src="/assets/country.png" alt={'country'} style={{ width: "1rem", height: "1rem", marginRight: "0.3125rem" }} />
+            <div style={{ marginRight: '1.25rem' }}>Nation</div>
+            {filterOn && <FilterArea getCountry={getCountry} />}                      
+          </div>                
+          <SearchBox filter={setSearchText} post={true} />                
+        </div>                 
+        {countryFilter.length === 0 ? (
+          searchData && searchData.length === 0 ? <div css={noDataStyle}>There are no search results.</div> :        
+          searchData?.map((search: IPost) => (
+            <div key={search._id} css={postViewStyle}>
+              <Post 
+                key={search._id}
+                post={search}              
+                _id={search._id}
+                owner_username={search.owner_username}
+                owner_email={search.owner_email}
+                owner_id={search.owner_id}
+                like_cnt={search.like_cnt}
+                contents={search.contents}
+                comment={search.comment}
+                images={search.images}
+                createdAt={search.createdAt}
+              />
+            </div> 
+          ))
+        ) 
+        : (
+          searchData && searchData.length === 0 ? <div css={noDataStyle}>There are no search results.</div> :        
+          searchData?.filter((post: IPost) => countryFilter.includes(post.country)).map((search: IPost) => (
+            <div key={search._id} css={postViewStyle}>
+              <Post 
+                key={search._id}
+                post={search}              
+                _id={search._id}
+                owner_username={search.owner_username}
+                owner_email={search.owner_email}
+                owner_id={search.owner_id}
+                like_cnt={search.like_cnt}
+                contents={search.contents}
+                comment={search.comment}
+                images={search.images}
+                createdAt={search.createdAt}
+              />
+            </div> 
+          ))
+        ) 
+        
+        }         
+        {countryFilter.length === 0 ? (!searchData && posts?.map((post: IPost) => (
           <div key={post._id} css={postViewStyle} ref={ref}>    
           <Post
             key={post._id}            
@@ -106,7 +138,25 @@ function Home({}: HomeProps) {
             createdAt={post.createdAt}              
           />
           </div>    
-        ))}        
+        )))
+        : (!searchData && posts?.filter((post: IPost) => countryFilter.includes(post.country)).map((post: IPost) => (
+          <div key={post._id} css={postViewStyle} ref={ref}>    
+          <Post
+            key={post._id}            
+            post={post}
+            _id={post._id}
+            owner_username={post.owner_username}
+            owner_email={post.owner_email}
+            owner_id={post.owner_id}
+            like_cnt={post.like_cnt}
+            contents={post.contents}
+            comment={post.comment}
+            images={post.images}
+            createdAt={post.createdAt}              
+          />
+          </div>    
+        )))
+        }        
       </Stack>
       <Link css={linkStyle} to={'/postWrite/'}>
         <Fab sx={{ position: 'fixed', bottom: 103, right: '1.025rem', zIndex: 10 }} color="primary" >

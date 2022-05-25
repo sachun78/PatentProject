@@ -1,11 +1,8 @@
 import { css } from '@emotion/react'
-import { RadioGroup } from '@mui/material'
 import IconControl from 'components/IconControl'
 import { createPost } from 'lib/api/post/createPost'
 import { postImgUpload } from 'lib/api/post/postImgUpload'
-import { User } from 'lib/api/types'
-import palette from 'lib/palette'
-import { range } from 'lodash'
+import { IProfile, User } from 'lib/api/types'
 import Quill from 'quill'
 import 'quill/dist/quill.snow.css'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -23,6 +20,7 @@ function PostWrite({}: postWriteProps) {
   const quillInstance = useRef<any>(null)
   const navigate = useNavigate()
   const user = qc.getQueryData<User>('user') as User
+  const profile = qc.getQueryData<IProfile>('profile') as IProfile
   const [image, setImage] = useState<string[]>([])   
   
   const createPostMut = useMutation(createPost, {
@@ -73,6 +71,7 @@ function PostWrite({}: postWriteProps) {
     createPostMut.mutate({
       contents: body.replace(imgRegex, ""),
       images: image as string[],
+      country: profile.country as string
     })
   },[body, image])
 

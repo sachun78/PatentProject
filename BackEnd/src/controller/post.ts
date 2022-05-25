@@ -65,10 +65,10 @@ export async function getPosts(req: IRequest, res: Response) {
       let _curPos: number = parseInt(curPos);
       let _cnt: number = parseInt(cnt);
 
-      const indexData = await postRepo.getPostIndex(_curPos, _cnt);
-      console.log(indexData);
+      const indexData = await postRepo.getPostIndex(_curPos, _cnt);      
       return res.status(200).json(indexData);
     }
+
 
     let retData;
     if (!postId) {
@@ -107,7 +107,7 @@ export async function createPost(req: IRequest, res: Response) {
     if (userData) {
       postData["owner_id"] = userData.id;
       postData["owner_username"] = userData.username;
-      postData["owner_email"] = userData.email;
+      postData["owner_email"] = userData.email;      
     } else {
       return res.status(409).json({ message: "user is not found" });
     }
