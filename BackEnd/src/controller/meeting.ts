@@ -23,16 +23,17 @@ const enum MEETING_STATUS {
 const checkInviteCode = async (code: string, data: any): Promise<any> => {
   const meeting = await meetingRepo.getByCode(code);
   if (!meeting) {
-    return new Promise((resolve, reject) => {
-      reject(new Error('message: Not found meeting'));
-    });
+    throw new Error('message: Not found meeting');
+  }
+
+  const isPossibleAddSchedule = await isPossibleAdd(meeting.eventId, {start: meeting.startTime, end: meeting.endTime});
+  if (isPossibleAddSchedule === true) {
+    throw new Error('message: already meeting schedule');
   }
 
   const meetingUpdate = await meetingRepo.updateMeeting(meeting.id, data);
   if (!meetingUpdate) {
-    return new Promise((resolve, reject) => {
-      reject(new Error('message: Failed meeting info update'));
-    });
+    throw new Error('message: Failed meeting info update');
   }
 
   return meetingUpdate;
@@ -178,7 +179,7 @@ export async function confirmMeeting(req: IRequest, res: Response) {
   }
   catch(e) {
     console.error(e);
-    return res.status(403).json({ message: 'Failed meeting info update'});
+    return res.status(403).json({ message: `${e}`});
   }
 }
 
