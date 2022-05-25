@@ -102,7 +102,7 @@ function Home({}: HomeProps) {
         ) 
         : (
           searchData && searchData.length === 0 ? <div css={noDataStyle}>There are no search results.</div> :        
-          searchData?.filter((post: IPost) => countryFilter.includes(post.country)).map((search: IPost) => (
+          searchData?.filter((post: IPost) => !countryFilter.includes(post.country)).map((search: IPost) => (
             <div key={search._id} css={postViewStyle}>
               <Post 
                 key={search._id}
@@ -139,7 +139,7 @@ function Home({}: HomeProps) {
           />
           </div>    
         )))
-        : (!searchData && posts?.filter((post: IPost) => countryFilter.includes(post.country)).map((post: IPost) => (
+        : (!searchData && posts?.filter((post: IPost) => !countryFilter.includes(post.country)).map((post: IPost) => (
           <div key={post._id} css={postViewStyle} ref={ref}>    
           <Post
             key={post._id}            

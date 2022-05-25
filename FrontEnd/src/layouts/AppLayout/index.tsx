@@ -41,10 +41,8 @@ export default function AppLayout({}: AppLayoutProps) {
         <Sidebar />
       </AppLayout.Sidebar>
       <AppLayout.Main>
-        <Routes>
-          {/*<Route path={'/home'} element={<Home />} />*/}
-          <Route path={'/'} element={<Home />} />
-          {/* <Route path={'*'} element={<Navigate to={'home'} />} /> */}
+        <Routes>          
+          <Route path={'/'} element={<Home />} />          
           <Route path={'/postDetail/:id'} element={<PostDetail />} />
           <Route path={'/meeting/*'} element={<Member />} />
           <Route path={'/network/*'} element={<Network />} />
