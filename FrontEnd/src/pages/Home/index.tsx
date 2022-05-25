@@ -1,9 +1,8 @@
 import { css } from '@emotion/react'
 import AddIcon from '@mui/icons-material/Add'
-import { Fab, Stack } from '@mui/material'
+import { Fab, Skeleton, Stack } from '@mui/material'
 import Post from 'components/Post/'
 import PostSearchBox from 'components/Post/PostSearchBox'
-import SearchBox from 'components/SearchBox'
 import { getPosts, getPostsSearch } from 'lib/api/post/getPosts'
 import { IPost } from 'lib/api/types'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -11,6 +10,7 @@ import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import { Link } from 'react-router-dom'
 import FilterArea from './filter/FilterArea'
+
 
 type HomeProps = {}
 
@@ -60,7 +60,21 @@ function Home({}: HomeProps) {
   }, [data])
   
 
-  if (isLoading) return <div>로딩중!!</div>    
+  if (isLoading) return (
+    <Stack css={postViewStyle}>
+      <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '1.5rem'}}>
+        <Skeleton variant='rectangular' width={114} height={32} />
+        <Skeleton variant='rectangular' width={250} height={32} />
+      </div>      
+      <Skeleton variant='circular' width={60} height={60} sx={{ marginLeft: '1.875rem', marginBottom: '1.25rem'}}/>
+      <Skeleton variant='rectangular' width={870} height={400} sx={{  marginBottom: '2rem'}}/>
+      <Skeleton variant='circular' width={60} height={60} sx={{ marginLeft: '1.875rem', marginBottom: '1.25rem'}}/>
+      <Skeleton variant='rectangular' width={870} height={400} sx={{  marginBottom: '2rem'}}/>
+      <Skeleton variant='circular' width={60} height={60} sx={{ marginLeft: '1.875rem', marginBottom: '1.25rem'}}/>
+      <Skeleton variant='rectangular' width={870} height={400}/>
+    </Stack>                   
+  )
+    
 
   const onFocus = () => {    
     setFilterOn(true)        
@@ -71,7 +85,7 @@ function Home({}: HomeProps) {
   }
   
   return (
-    <>                   
+    <>    
       <Stack>
         <div css={searchBoxStyle}>
           <div css={nationStyle} onFocus={onFocus} onBlur={onBlur} tabIndex={1}>
@@ -160,7 +174,7 @@ function Home({}: HomeProps) {
         }        
       </Stack>
       <Link css={linkStyle} to={'/postWrite/'}>
-        <Fab sx={{ position: 'fixed', bottom: 103, right: '1.025rem', zIndex: 10 }} color="primary" >
+        <Fab sx={{ position: 'fixed', bottom: 103, right: '2rem', zIndex: 10 }} color="primary" >
           <AddIcon />
         </Fab>
       </Link>    

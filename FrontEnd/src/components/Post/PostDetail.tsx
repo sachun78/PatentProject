@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import { Avatar, OutlinedInput } from '@mui/material'
+import { Avatar, OutlinedInput, Skeleton } from '@mui/material'
 import { formatDistanceToNow } from 'date-fns'
 import useInput from 'hooks/useInput'
 import { createComments } from 'lib/api/post/createComment'
@@ -125,13 +125,18 @@ function PostDetail({}: postDetailProps) {
     },
   })
 
-  if (!post || isLoading) {
-    return <div>로딩중</div>
+  if (!post || isLoading)  {
+    return (
+      <div>
+        <Skeleton variant='circular' width={60} height={60} sx={{ marginLeft: '1.875rem', marginBottom: '1.25rem'}}/>
+        <Skeleton variant='rectangular' width={870} height={400} sx={{  marginBottom: '2rem'}}/>
+      </div>
+    )
   }
 
   return (
     <>
-      <div css={wrapStyle}>
+      <div css={wrapStyle}>      
         <div css={detailStyle}>
           <div css={iconStyle}>
             <Avatar

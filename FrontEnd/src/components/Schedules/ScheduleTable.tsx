@@ -28,6 +28,8 @@ function ScheduleTable({ meetings, type = 'schedule', isProfile }: ScheduleTable
       }}
       sx={type === 'history' ? { top: 0 } : { top: '-2.875rem' }}
     >
+    {meetings.length === 0 ? (<div style={{ padding: '1rem 0 1rem 1.5rem', color: '#9C9C9C', fontWeight: '700' }}> There are no meeting history.</div>) 
+    : (
       <Table sx={{ minWidth: 700 }} aria-label="history schedule table" size={'small'}>
         <TableHead>
           <TableRow>
@@ -77,6 +79,9 @@ function ScheduleTable({ meetings, type = 'schedule', isProfile }: ScheduleTable
           })}
         </TableBody>
       </Table>
+
+    )}
+      
     </TableContainer>
     )
   }
