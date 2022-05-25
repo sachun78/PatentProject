@@ -27,7 +27,7 @@ const checkInviteCode = async (code: string, data: any): Promise<any> => {
   }
 
   const isPossibleAddSchedule = await isPossibleAdd(meeting.eventId, {start: meeting.startTime, end: meeting.endTime});
-  if (isPossibleAddSchedule === true) {
+  if (isPossibleAddSchedule === false) {
     throw new Error('message: already meeting schedule');
   }
 
