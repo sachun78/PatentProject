@@ -9,7 +9,7 @@ import { getMeetingHistoryUser } from '../../lib/api/meeting/getMeetings'
 import ScheduleTable from '../../components/Schedules/ScheduleTable'
 
 export type UserSummaryProps = {
-  email: string
+  email: string  
 }
 
 function UserSummary({ email }: UserSummaryProps) {
@@ -74,7 +74,7 @@ function UserSummary({ email }: UserSummaryProps) {
       </Middle>
       <div className="History">
         <h3>Relative Meeting</h3>
-        <ScheduleTable meetings={historyData} type={'history'} />
+        <ScheduleTable meetings={historyData} type={'history'} isProfile={true} />
       </div>
     </UserBody>
   )

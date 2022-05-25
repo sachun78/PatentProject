@@ -10,4 +10,5 @@ export async function createPost(input: postInput) {
 type postInput = {
   contents: string
   images: string[]
+  country: string
 }

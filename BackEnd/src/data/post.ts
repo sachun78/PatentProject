@@ -9,6 +9,7 @@ type PostType = {
   images: string[];
   like_cnt: string[];
   comment: CommentType[];
+  country: string;
 }
 
 type CommentType = {
@@ -36,7 +37,8 @@ const postSchema = new mongoose.Schema<PostType>({
       contents: { type: String, required: true},
       createdAt: { type: Date, required: true}
     }], default: []
-  }
+  },
+  country: { type: String, required: true }
 }, 
 {
   timestamps: true,

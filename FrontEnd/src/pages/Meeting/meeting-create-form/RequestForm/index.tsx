@@ -154,7 +154,8 @@ export default function RequestForm({}: RequestViewProps) {
     (e) => {
       e.preventDefault()
       const { title, to, comment } = form
-      if ((!to.trim() && !meetuser) || !location.trim() || !title.trim() || !time || !endTime) {
+      if ((!to.trim() && !meetuser) || !title.trim() || !time || !endTime) {
+      // if ((!to.trim() && !meetuser) || !location.trim() || !title.trim() || !time || !endTime) {
         toast.error('Please fill out the form', {
           position: toast.POSITION.TOP_CENTER,
           pauseOnHover: false,
@@ -329,25 +330,24 @@ export default function RequestForm({}: RequestViewProps) {
             unavailables={event.restricted_time}
           />
         </MeetingSection>
-        <MeetingSection>
-          <h2>Location</h2>
+        {/* <RequestSection title={'Location'}>
           <LocationInput onChange={onChangeLocation} value={location} />
+        </RequestSection>
+        {detailOpen && ( */}
+        <MeetingSection title={'Location'}>
+        {/* <RequestSection title={'Detail address'}> */}
+          <OutlinedInput
+            name="detail"
+            type={'text'}
+            value={detailAddress}
+            onChange={onChangeDetailAdress}
+            placeholder={'Enter detailed address'}
+            classes={classes}
+            sx={{ height: 38 }}
+            fullWidth
+          />
         </MeetingSection>
-        {detailOpen && (
-          <MeetingSection title={'Detail address'}>
-            <h2>Detail address</h2>
-            <OutlinedInput
-              name="detail"
-              type={'text'}
-              value={detailAddress}
-              onChange={onChangeDetailAdress}
-              placeholder={'Enter detailed address'}
-              classes={classes}
-              sx={{ height: 38 }}
-              fullWidth
-            />
-          </MeetingSection>
-        )}
+        {/* // )} */}
         <RequestSection
           title={'Comment'}
           checkButton={

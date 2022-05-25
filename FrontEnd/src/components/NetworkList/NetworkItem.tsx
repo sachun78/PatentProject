@@ -1,20 +1,21 @@
 import { css } from '@emotion/react'
-import palette, { brandColor } from 'lib/palette'
-import { IProfile } from 'lib/api/types'
-import { useNavigate } from 'react-router-dom'
 import { Avatar, Grid, Tooltip } from '@mui/material'
 import gravatar from 'gravatar'
-import React, { memo } from 'react'
-import { FieldItem } from 'pages/User/styles'
-import getCountryName from 'lib/countryName'
 import { API_PATH } from 'lib/api/client'
+import { IProfile } from 'lib/api/types'
+import getCountryName from 'lib/countryName'
+import palette, { brandColor } from 'lib/palette'
+import { FieldItem } from 'pages/User/styles'
+import React, { memo } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export type NetworkItemProps = {
   data: { email: string; profile: IProfile; name: string; username?: string }
 }
 
 function NetworkItem({ data }: NetworkItemProps) {
-  const navigate = useNavigate()
+  const navigate = useNavigate()  
+  
   return (
     <div css={itemStyle} onClick={() => navigate('/u/' + data.email)}>
       <div css={iconStyle}>
@@ -32,7 +33,7 @@ function NetworkItem({ data }: NetworkItemProps) {
         <div css={nameStyle}>{data.name || data.username}</div>
         <div css={emailStyle}>{data.email}</div>
       </div>
-      <div css={informStyle}>
+      <div css={informStyle}>        
         <div css={companyBoxStyle}>
           <Tooltip title="Company" placement={'top'}>
             <span>
@@ -61,11 +62,16 @@ function NetworkItem({ data }: NetworkItemProps) {
           </div>
         </Tooltip>
       </div>
-      <div css={stateStyle}>
-        <div>
-          <img src="/assets/meeting.png" style={{ width: '1rem' }} alt={'meeting'} />
-        </div>
-      </div>
+      <Tooltip title="Wemet" placement={'left'}>
+        <div css={stateStyle}>
+          <div>
+            <img src="/assets/meeting.png" style={{ width: '1rem' }} alt={'meeting'} />            
+          </div>
+          <div>
+            0                
+          </div>
+        </div>            
+      </Tooltip>      
     </div>
   )
 }
