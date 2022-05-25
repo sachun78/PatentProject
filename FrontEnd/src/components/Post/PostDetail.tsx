@@ -150,7 +150,7 @@ function PostDetail({}: postDetailProps) {
           <div css={titleStyle}>
             <Link to={`/u/${post.owner_email}`}>    
             <h4>
-              <span>{post.owner_username}/ etc ..</span>
+              <span>{post.owner_username}</span>
             </h4>
             </Link>
             <div className={'time-date'}>                

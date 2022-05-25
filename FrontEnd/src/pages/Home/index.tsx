@@ -2,6 +2,7 @@ import { css } from '@emotion/react'
 import AddIcon from '@mui/icons-material/Add'
 import { Fab, Stack } from '@mui/material'
 import Post from 'components/Post/'
+import PostSearchBox from 'components/Post/PostSearchBox'
 import SearchBox from 'components/SearchBox'
 import { getPosts, getPostsSearch } from 'lib/api/post/getPosts'
 import { IPost } from 'lib/api/types'
@@ -78,7 +79,7 @@ function Home({}: HomeProps) {
             <div style={{ marginRight: '1.25rem' }}>Nation</div>
             {filterOn && <FilterArea getCountry={getCountry} />}                      
           </div>                
-          <SearchBox filter={setSearchText} post={true} />                
+          <PostSearchBox filter={setSearchText} />                
         </div>                 
         {countryFilter.length === 0 ? (
           searchData && searchData.length === 0 ? <div css={noDataStyle}>There are no search results.</div> :        

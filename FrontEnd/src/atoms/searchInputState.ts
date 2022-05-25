@@ -8,3 +8,12 @@ const searchInputState = atom<string>({
 export function useSearchInputState() {
   return useRecoilState(searchInputState)
 }
+
+const postSearchInputState = atom<string>({
+  key: 'postSearchInputState',
+  default: '',
+})
+
+export function usePostSearchInputState() {
+  return useRecoilState(postSearchInputState)
+}
