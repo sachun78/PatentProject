@@ -2,7 +2,7 @@ import React from 'react'
 import ScheduleTable from 'components/Schedules/ScheduleTable'
 import { useQuery } from 'react-query'
 import { getMeetingHistory } from 'lib/api/meeting/getMeetings'
-import { noScheduleStyle } from '../../components/Events/styles'
+import { noScheduleStyle } from 'components/Events/styles'
 
 export type MeetingHistoryProps = {}
 

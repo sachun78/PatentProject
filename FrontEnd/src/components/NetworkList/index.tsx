@@ -4,6 +4,7 @@ import NetworkItem from './NetworkItem'
 import { IBuddy } from 'lib/api/types'
 import { noScheduleStyle } from '../Events/styles'
 import React from 'react'
+import NetworkSkeleton from './NetworkSkeleton'
 
 export type NetworkListProps = {}
 
@@ -12,8 +13,10 @@ function NetworkList({}: NetworkListProps) {
 
   if (isLoading) {
     return (
-      <div css={noScheduleStyle}>
-        <h1>Loading...</h1>
+      <div css={networkStyle}>
+        {Array.from({ length: 6 }, (v, i) => i).map((v) => {
+          return <NetworkSkeleton key={v} />
+        })}
       </div>
     )
   }

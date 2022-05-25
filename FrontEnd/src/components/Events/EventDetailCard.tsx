@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
 import React, { memo, useMemo } from 'react'
 import { formatDistanceToNow } from 'date-fns'
-import { API_PATH } from '../../lib/api/client'
+import { API_PATH } from 'lib/api/client'
 import { url } from 'gravatar'
 
 export type EventDetailCardProps = {
