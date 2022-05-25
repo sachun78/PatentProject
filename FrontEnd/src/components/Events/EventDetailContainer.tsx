@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react'
-import { MdCalendarToday } from 'react-icons/md'
 import { getEvent } from 'lib/api/event/getEvent'
 import { css } from '@emotion/react'
 import { useQuery } from 'react-query'
 import { Navigate } from 'react-router-dom'
 import EventDetailCard from './EventDetailCard'
 import UnavailableTimePicker from '../UnavailableTimePicker'
-import { IEvent, IMeeting } from '../../lib/api/types'
+import { IEvent, IMeeting } from 'lib/api/types'
 import { format, isBefore } from 'date-fns'
+import IconControl from '../IconControl'
 
 export type EventDetailLeftProps = {
   id: string
@@ -36,7 +36,7 @@ function EventDetailContainer({ id }: EventDetailLeftProps) {
     <>
       <h1 css={titleEventStyle}>{event.title}</h1>
       <section css={dateSectionStyle}>
-        <MdCalendarToday />
+        <IconControl name={'date'} />
         <span>
           {format(new Date(event.start_date), 'yyyy/MM/dd')} - {format(new Date(event.end_date), 'yyyy/MM/dd')}
         </span>

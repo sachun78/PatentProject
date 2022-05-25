@@ -18,7 +18,7 @@ import { css } from '@emotion/react'
 import { useToggleImageButton } from 'lib/styles/muiStyles'
 import SearchBox from '../SearchBox'
 import { useQuery } from 'react-query'
-import { getEventSearch } from '../../lib/api/event/getEvents'
+import { getEventSearch } from 'lib/api/event/getEvents'
 
 type EventsProps = {}
 

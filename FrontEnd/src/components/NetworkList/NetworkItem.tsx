@@ -37,7 +37,7 @@ function NetworkItem({ data }: NetworkItemProps) {
         <div css={companyBoxStyle}>
           <Tooltip title="Company" placement={'top'}>
             <span>
-              <img src="/assets/company.png" />                
+              <img src="/assets/company.png" alt={'company'} />
               {data.profile.company}
             </span>
           </Tooltip>
@@ -119,7 +119,8 @@ const iconStyle = css`
   margin-right: 1.25rem;
 `
 const userStyle = css`
-  width: 13.625rem;
+  //width: 13.625rem;
+  flex: 2;
 `
 const nameStyle = css`
   font-size: 1.25rem;
@@ -132,7 +133,8 @@ const emailStyle = css`
 `
 const informStyle = css`
   display: flex;
-  width: 28.125rem;
+  //width: 28.125rem;
+  flex: 3;
   height: 3.6875rem;
   flex-direction: column;
   font-size: 0.875rem;

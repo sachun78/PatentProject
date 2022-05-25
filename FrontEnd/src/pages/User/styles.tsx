@@ -9,6 +9,7 @@ export const Container = styled.div`
   height: 100%;
   border-radius: 1rem;
   margin-right: 1rem;
+  box-shadow: 2px 5px 11px #00000029;
 `
 
 export const UserHeader = styled.div`
@@ -69,14 +70,6 @@ export const Middle = styled.div`
   width: 100%;
   display: flex;
   padding-right: 1rem;
-  // pre {
-  //   white-space: pre-wrap;
-  //   font-size: 0.75rem;
-  //   font-family: NanumSquareOTF;
-  //   line-height: 1.5;
-  //   margin: 0 0 1rem;
-  //   color: ${palette.blueGrey[600]};
-  // }
 `
 
 export const Field = styled.div`
@@ -91,7 +84,6 @@ export const FieldItem = styled.div`
   display: flex;
   align-items: center;
   margin-right: 0.5rem;
-  margin-bottom: 0.25rem;
   color: #fff;
   padding: 0.25rem 0.5rem;
   border-radius: 50px;

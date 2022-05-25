@@ -1,6 +1,6 @@
 import { Badge, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material'
 import { StatusBlock, StyledTableCell, StyledTableRow } from 'pages/Meeting/styles'
-import { format, isBefore } from 'date-fns'
+import { format, isAfter, isBefore } from 'date-fns'
 import React from 'react'
 import { IMeeting } from 'lib/api/types'
 import { useNavigate } from 'react-router-dom'
@@ -142,10 +142,16 @@ function ScheduleTable({ meetings, type = 'schedule', isProfile }: ScheduleTable
                 <StyledTableCell align="center">{row.location}</StyledTableCell>
                 <StyledTableCell align="center">
                   {type === 'schedule' ? (
-                    <StatusBlock state={status}>{status}</StatusBlock>
+                    <Badge
+                      color="error"
+                      variant="dot"
+                      invisible={status !== 'confirm' || isAfter(new Date(row.startTime), new Date())}
+                    >
+                      <StatusBlock state={status}>{status}</StatusBlock>
+                    </Badge>
                   ) : (
                     <StatusBlock state={row.history.status ? 'met' : ''}>
-                      {row.history.status ? 'MET' : 'Failure'}
+                      {row.history.status ? 'Met' : 'Failure'}
                     </StatusBlock>
                   )}
                 </StyledTableCell>

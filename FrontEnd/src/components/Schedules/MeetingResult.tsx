@@ -133,7 +133,19 @@ function MeetingResult({}: MeetingResultProps) {
                 name="mhistory_img"
               />
               {filePath ? (
-                <ImgView src={`${API_PATH}static/${filePath}`} alt={'result-img'} crossOrigin="anonymous" />
+                <Box
+                  component="span"
+                  sx={{
+                    width: '405px',
+                    height: '200px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: '#F2F2F2',
+                  }}
+                >
+                  <ImgView src={`${API_PATH}static/${filePath}`} alt={'result-img'} crossOrigin="anonymous" />
+                </Box>
               ) : (
                 <UploadButton
                   onClick={(e) => {

@@ -57,7 +57,7 @@ function ProfileCardField({
                     disabled={text === ''}
                     className="plus"
                     onClick={onAdd}
-                    style={{ width: '25px', height: '25px' }}
+                    style={{ minWidth: '25px', minHeight: '25px', marginRight: '15px' }}
                   >
                     +
                   </button>

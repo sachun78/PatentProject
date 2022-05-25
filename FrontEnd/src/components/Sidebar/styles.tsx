@@ -11,14 +11,14 @@ export const sidebarStyle = css`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  max-width: 95px;
+  max-width: 5.9375rem;
   user-select: none;
 `
 
 export const menuStyle = css`
   list-style: none;
   padding: 0;
-  margin: 35px 0 30px;
+  margin: 2.1875rem 0 1.875rem;
 `
 
 export const logoStyle = css`
@@ -28,7 +28,7 @@ export const logoStyle = css`
   justify-content: flex-end;
 
   img {
-    width: 70px;
+    width: 4.375rem;
     height: 100%;
     margin-right: 0.78125rem;
   }
@@ -37,7 +37,7 @@ export const logoStyle = css`
 export const dividerStyle = css`
   border-top: 1px solid #9c9c9c;
   width: 6.8125rem;
-  margin-right: -7px;
+  margin-right: -0.4375rem;
 `
 
 export const userStyle = css`

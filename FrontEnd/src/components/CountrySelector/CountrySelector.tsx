@@ -1,7 +1,6 @@
 import { Autocomplete, AutocompleteValue, Box, TextField } from '@mui/material'
 import { css } from '@emotion/react'
 import { SyntheticEvent } from 'react'
-import palette from '../../lib/palette'
 
 export type CountrySelectorProps = {
   disabled?: boolean
@@ -27,7 +26,7 @@ function CountrySelector({ onChange, defaultValue, disabled = false }: CountrySe
           component="li"
           sx={{
             '& > img': { mr: 2, flexShrink: 0 },
-            fontSize: 12,
+            fontSize: 16,
           }}
           {...props}
         >
@@ -39,7 +38,7 @@ function CountrySelector({ onChange, defaultValue, disabled = false }: CountrySe
           {...params}
           inputProps={{
             ...params.inputProps,
-            style: { fontSize: 12, padding: 0 },
+            style: { fontSize: 16, padding: 0, color: '#6c6c6c' },
             autoComplete: 'country', // disable autocomplete and autofill
           }}
         />
@@ -51,19 +50,20 @@ function CountrySelector({ onChange, defaultValue, disabled = false }: CountrySe
 export const countrySelectorStyle = css`
   width: 100%;
   flex-grow: 1;
+  font: normal normal normal 1rem/26px NanumSquareOTF;
 
   .MuiFormControl-root {
-    height: 2.5rem;
+    height: 2.375rem;
     align-items: center;
     display: flex;
     justify-content: center;
   }
 
   .MuiOutlinedInput-root {
-    height: 2.5rem;
-    border: ${palette.blueGrey[50]} 1px solid;
-    border-radius: 0.5rem;
-    color: ${palette.blueGrey[700]};
+    height: 2.375rem;
+    border: 1px solid #9c9c9c;
+    border-radius: 1rem;
+    color: #6c6c6c;
     padding: 0 1rem 0 1rem;
   }
 

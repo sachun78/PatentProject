@@ -8,7 +8,6 @@ export const useFocusOutlineStyle = makeStyles(() => ({
     border: '1px solid #9C9C9C',
   },
 }))
-
 export const useRemoveOutlineHover = makeStyles(() => ({
   root: {
     '& $notchedOutline': {
@@ -20,9 +19,15 @@ export const useRemoveOutlineHover = makeStyles(() => ({
     '&$focused $notchedOutline': {
       borderWidth: 0,
     },
-    border: '#eceff1 1px solid',
-    borderRadius: '0.5rem',
+    border: '1px solid #9C9C9C',
+    borderRadius: '1rem',
     backgroundColor: '#fff',
+    font: 'normal normal normal 14px/26px NanumSquareOTF',
+    color: '#6c6c6c',
+    padding: 0,
+    '& .MuiOutlinedInput-input': {
+      padding: '0.6rem 1.2rem',
+    },
   },
   focused: {},
   notchedOutline: {},

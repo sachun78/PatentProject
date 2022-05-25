@@ -8,6 +8,7 @@ import React, { memo, MouseEvent, useCallback } from 'react'
 import { useMeetingReqUser } from 'atoms/meetingReqState'
 import { FiEdit } from 'react-icons/fi'
 import { periodString } from 'lib/stringParser'
+import { animated, useSpring } from 'react-spring'
 
 export type EventCardProps = {
   id: string
@@ -15,16 +16,23 @@ export type EventCardProps = {
   startDate: Date
   endDate: Date
   count: number
-  cardView?: boolean
   disabled?: boolean
 }
 
-function EventCard({ title, startDate, endDate, id, count, cardView = false, disabled = false }: EventCardProps) {
+function EventCard({ title, startDate, endDate, id, count, disabled = false }: EventCardProps) {
   const navigate = useNavigate()
   const { setOpen, setEdit } = useEventModal()
   const { setStartDate, setEndDate } = useDateRangeHook()
   const [, setEvent] = useCurrentEventState()
   const [, setMeetuser] = useMeetingReqUser()
+
+  const springProps = useSpring({
+    delay: 100,
+    transform: 'translateX(0px)',
+    from: {
+      transform: 'translateX(100%)',
+    },
+  })
 
   const handleEdit = useCallback(
     (e: MouseEvent<SVGElement>) => {
@@ -46,22 +54,18 @@ function EventCard({ title, startDate, endDate, id, count, cardView = false, dis
   }, [endDate, id, setEndDate, setEvent, setMeetuser, setStartDate, startDate, title])
 
   return (
-    <div css={wrapper(cardView)}>
+    <animated.div css={wrapper} style={{ ...springProps }}>
       <div
         className={'inner'}
         onClick={() => {
-          if (!cardView) {
-            navigate(`/meeting/event/${id}`)
-          }
+          navigate(`/meeting/event/${id}`)
         }}
       >
         <div css={eventHeaderStyle}>
           <span className="event-card-header">{title}</span>
-          {!cardView && (
-            <div className={'toolbar'}>
-              <FiEdit onClick={!disabled ? handleEdit : undefined} />
-            </div>
-          )}
+          <div className={'toolbar'}>
+            <FiEdit onClick={!disabled ? handleEdit : undefined} />
+          </div>
         </div>
         <div css={contentStyle}>
           <span>
@@ -70,37 +74,25 @@ function EventCard({ title, startDate, endDate, id, count, cardView = false, dis
           <span>Schedules : {count}</span>
         </div>
       </div>
-      {!cardView && (
-        <div css={buttonStyle(disabled)} onClick={!disabled ? onCreateSchedule : undefined} aria-disabled={true}>
-          <Link to={!disabled ? '/meeting/schedule/request' : '#'}>
-            <div className="text">+ New Schedule</div>
-          </Link>
-        </div>
-      )}
-    </div>
+      <div css={buttonStyle(disabled)} onClick={!disabled ? onCreateSchedule : undefined} aria-disabled={true}>
+        <Link to={!disabled ? '/meeting/schedule/request' : '#'}>
+          <div className="text">+ New Schedule</div>
+        </Link>
+      </div>
+    </animated.div>
   )
 }
 
 export default memo(EventCard)
 
-const wrapper = (maxWidth: boolean) => css`
-  ${maxWidth
-    ? css`
-        width: 37.5rem;
-        margin-bottom: 0;
-        margin-right: 0;
-        height: 6rem;
-        padding: 0 1rem;
-      `
-    : css`
-        width: 37.5rem;
-        min-width: 37.5rem;
-        margin-bottom: 2.5rem;
-        margin-right: 1.25rem;
-        height: 13.5625rem;
-        padding: 1.875rem;
-        box-shadow: 2px 5px 11px #00000029;
-      `}
+const wrapper = css`
+  width: 37.5rem;
+  min-width: 37.5rem;
+  margin-bottom: 2.5rem;
+  margin-right: 1.25rem;
+  height: 13.5625rem;
+  padding: 1.875rem;
+  box-shadow: 2px 5px 11px #00000029;
 
   border-radius: 1rem;
 
@@ -110,6 +102,7 @@ const wrapper = (maxWidth: boolean) => css`
   &:hover {
     opacity: 1;
     box-shadow: none;
+
     .event-card-header {
       color: ${brandColor};
     }
