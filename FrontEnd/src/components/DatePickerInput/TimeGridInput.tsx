@@ -111,7 +111,11 @@ function TimeGridInput({
           : 'Select Date'}
       </div>
       <Dialog onClose={handleClose} open={open} fullScreen>
-        <DialogTitle>Set Meeting Date</DialogTitle>
+        <DialogTitle
+          sx={{ padding: '30px 30px 15px', color: '#910457', font: 'normal normal 800 18px/21px NanumSquareOTF' }}
+        >
+          Set Meeting Date
+        </DialogTitle>
         <DialogContent dividers={true}>
           <DialogContentText></DialogContentText>
           <CalendarContainer>
@@ -125,8 +129,8 @@ function TimeGridInput({
               initialDate={new Date()}
               selectOverlap={false}
               headerToolbar={{
-                left: 'prev next',
-                center: 'title',
+                left: '',
+                center: 'prev title next',
                 right: '',
               }}
               select={(info) => {
@@ -172,7 +176,7 @@ function TimeGridInput({
         </DialogContent>
         <DialogActions>
           <Stack direction="row" spacing={1} alignItems="center">
-            <div css={rectangleStyle('#d0d0d0')}></div>&<div css={rectangleStyle('#ccc')}></div>
+            <div css={rectangleStyle('#ccc')}></div>
             unavailable
             <div css={rectangleStyle('#fff')}></div>
             available
@@ -198,8 +202,8 @@ const rectangleStyle = (color: string) => css`
 `
 
 const CalendarContainer = styled.div`
-  .fc-view {
-    //overflow-x: auto;
+  .fc-toolbar-chunk {
+    display: flex !important;
   }
 
   .fc-view > table thead th:first-of-type {

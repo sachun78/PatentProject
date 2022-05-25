@@ -94,7 +94,11 @@ function UnavailableTimePicker({ id, startDate, endDate, unavailableList, reserv
         Unavailable Time
       </Button>
       <Dialog onClose={handleClose} open={open} fullScreen>
-        <DialogTitle>Set Meeting Date</DialogTitle>
+        <DialogTitle
+          sx={{ padding: '30px 30px 15px', color: '#910457', font: 'normal normal 800 18px/21px NanumSquareOTF' }}
+        >
+          Set Meeting Date
+        </DialogTitle>
         <DialogContent dividers={true}>
           <CalendarContainer>
             <FullCalendar

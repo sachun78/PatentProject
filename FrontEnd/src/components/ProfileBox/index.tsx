@@ -27,7 +27,7 @@ function ProfileBox({ profileData }: ProfileBoxProps) {
       <FlexRow>
         <Avatar
           alt={'photo'}
-          src={`${API_PATH}static/${profileData.photo_path}`}
+          src={`${API_PATH}static/${profileData.email}`}
           sx={{ width: 47, height: 47, marginRight: '15px' }}
           style={{ border: '0.1px solid lightgray' }}
           imgProps={{ crossOrigin: 'anonymous' }}

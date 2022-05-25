@@ -67,13 +67,7 @@ function MailCheckForm({ sendMail, onSendmail, type }: MailCheckFormProps) {
           </Divider>
           {type === 'register' && (
             <div className="button-div">
-              <LoadingButton
-                variant="contained"
-                fullWidth
-                onClick={onSubmit}
-                loading={sendmailMut.isLoading}
-                loadingPosition={'start'}
-              >
+              <LoadingButton variant="contained" fullWidth onClick={onSubmit} loading={sendmailMut.isLoading}>
                 Resend
               </LoadingButton>
             </div>

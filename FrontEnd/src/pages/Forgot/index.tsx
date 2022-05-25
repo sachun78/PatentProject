@@ -34,6 +34,11 @@ function Forgot({}: ForgotProps) {
   const navigate = useNavigate()
   const reset = useMutation('reset', resetPassword, {
     onSuccess: () => {
+      toast.success('change success', {
+        position: 'top-center',
+        pauseOnFocusLoss: false,
+        pauseOnHover: false,
+      })
       navigate('/login')
     },
     onError(err: AxiosError) {
@@ -44,11 +49,23 @@ function Forgot({}: ForgotProps) {
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault()
-      if (!data) return
+      if (!data) {
+        setError('not found code')
+        return
+      }
+      if (!form.password.trim() || !form.password_confirm.trim()) {
+        setError('password is required')
+        return
+      }
+
+      if (form.password !== form.password_confirm) {
+        setError('password not match')
+        return
+      }
 
       reset.mutate({ password: form.password, email: data.email })
     },
-    [data, form.password, reset]
+    [data, form.password, form.password_confirm, reset]
   )
 
   if (isLoadingCode) {
@@ -114,7 +131,7 @@ function Forgot({}: ForgotProps) {
             </section>
             <section>
               <div className="button-div">
-                <Button variant="contained" type="submit" fullWidth>
+                <Button variant="contained" type="submit" fullWidth disabled={reset.isLoading}>
                   Change Password
                 </Button>
               </div>

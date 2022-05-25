@@ -3,13 +3,12 @@ import SidebarItem from './SidebarItem'
 import { useQueryClient } from 'react-query'
 import { User } from 'lib/api/types'
 import useAuth from 'hooks/useAuth'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Avatar } from '@mui/material'
 import { dividerStyle, logoStyle, menuStyle, sidebarStyle, userStyle } from './styles'
 import { BiLogOut } from 'react-icons/bi'
 import { API_PATH } from 'lib/api/client'
 import gravatar from 'gravatar'
-import { Link } from 'react-router-dom'
 
 type SidebarProps = {}
 

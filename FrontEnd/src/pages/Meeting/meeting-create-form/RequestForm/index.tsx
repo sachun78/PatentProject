@@ -235,24 +235,22 @@ export default function RequestForm({}: RequestViewProps) {
           {meetuser ? (
             <span>{meetuser}</span>
           ) : (
-            <>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <OutlinedInput
-                  name="to"
-                  type={'email'}
-                  value={form.to}
-                  onChange={onChange}
-                  onBlur={onBlur}
-                  placeholder={'Meeting Email'}
-                  fullWidth
-                  sx={{ height: 38 }}
-                  classes={classes}
-                />
-                <div style={{ marginLeft: 8 }} onClick={() => setOpen(true)}>
-                  <IconControl name={'searchIcon'} />
-                </div>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <OutlinedInput
+                name="to"
+                type={'email'}
+                value={form.to}
+                onChange={onChange}
+                onBlur={onBlur}
+                placeholder={'Meeting Email'}
+                fullWidth
+                sx={{ height: 38 }}
+                classes={classes}
+              />
+              <div style={{ marginLeft: 8 }} onClick={() => setOpen(true)}>
+                <IconControl name={'searchIcon'} />
               </div>
-            </>
+            </div>
           )}
           {profileData && <ProfileBox profileData={profileData} />}
         </MeetingSection>
