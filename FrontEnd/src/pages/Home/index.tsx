@@ -160,7 +160,7 @@ function Home({}: HomeProps) {
         }        
       </Stack>
       <Link css={linkStyle} to={'/postWrite/'}>
-        <Fab sx={{ position: 'fixed', bottom: 103, right: '1.025rem', zIndex: 10 }} color="primary" >
+        <Fab sx={{ position: 'fixed', bottom: 103, right: '2rem', zIndex: 10 }} color="primary" >
           <AddIcon />
         </Fab>
       </Link>    
