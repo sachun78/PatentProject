@@ -155,7 +155,8 @@ function Events({}: EventsProps) {
           )
         ) : (
           <div css={noScheduleStyle}>
-            <h1>loading...</h1>
+            <CircularProgress />
+            <div>Loading...</div>
           </div>
         )
       ) : tableChecked ? (

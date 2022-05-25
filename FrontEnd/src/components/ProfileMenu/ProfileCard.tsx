@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
-import { Avatar, IconButton, TextField } from '@mui/material'
+import { Avatar, IconButton } from '@mui/material'
 import React, { useRef } from 'react'
-import { careerStyle, emailStyle, itemStyle, photoStyle } from './styles'
+import { emailStyle, itemStyle, photoStyle } from './styles'
 import { upload } from 'lib/api/me/upload'
 import ProfileCardText from './ProfileCardText'
 import ProfileCardField from './ProfileCardField'
@@ -31,8 +31,8 @@ const wrapper = css`
   border-radius: 1rem;
 `
 
-type cardItemType = 'email' | 'photo' | 'username' | 'career'
-// INFOVIEW CARD ITEM
+type cardItemType = 'email' | 'photo' | 'username'
+// CARD ITEM
 export type ProfileCardItemProps = {
   title: string
   type: cardItemType
@@ -111,12 +111,6 @@ function ProfileCardItem({ title, type, email, username }: ProfileCardItemProps)
         {type === 'username' && (
           <div css={emailStyle}>
             <div className="email-block">{username}</div>
-          </div>
-        )}
-        {/*4. CAREER TYPE*/}
-        {type === 'career' && (
-          <div css={careerStyle}>
-            <TextField multiline fullWidth />
           </div>
         )}
       </div>

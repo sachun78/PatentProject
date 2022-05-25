@@ -96,10 +96,6 @@ export const textStyle = css`
     }
   }
 `
-
-export const careerStyle = css`
-  width: 100%;
-`
 // PROFILECARD STYLES
 
 export const itemStyle = css`

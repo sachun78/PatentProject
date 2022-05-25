@@ -8,6 +8,7 @@ import UnavailableTimePicker from '../UnavailableTimePicker'
 import { IEvent, IMeeting } from 'lib/api/types'
 import { format, isBefore } from 'date-fns'
 import IconControl from '../IconControl'
+import { noScheduleStyle } from './styles'
 
 export type EventDetailLeftProps = {
   id: string
@@ -30,7 +31,12 @@ function EventDetailContainer({ id }: EventDetailLeftProps) {
 
   if (isLoading) return <div>Loading!</div>
   if (error) return <Navigate to={'/'} />
-  if (!event) return <div>No event</div>
+  if (!event)
+    return (
+      <div css={noScheduleStyle}>
+        <h1>No event</h1>
+      </div>
+    )
 
   return (
     <>
@@ -71,7 +77,9 @@ function EventDetailContainer({ id }: EventDetailLeftProps) {
           })}
         </div>
       ) : (
-        <div> No schedule</div>
+        <div css={noScheduleStyle}>
+          <h1>There are no meeting schedules!</h1>
+        </div>
       )}
     </>
   )

@@ -3,6 +3,7 @@ import ScheduleTable from 'components/Schedules/ScheduleTable'
 import { useQuery } from 'react-query'
 import { getMeetingHistory } from 'lib/api/meeting/getMeetings'
 import { noScheduleStyle } from 'components/Events/styles'
+import { CircularProgress } from '@mui/material'
 
 export type MeetingHistoryProps = {}
 
@@ -12,7 +13,8 @@ function MeetingHistory({}: MeetingHistoryProps) {
   if (isLoading)
     return (
       <div css={noScheduleStyle}>
-        <h1>Loading...</h1>
+        <CircularProgress />
+        <div>Loading...</div>
       </div>
     )
   if (!data || data.length === 0)

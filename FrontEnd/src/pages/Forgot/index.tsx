@@ -1,14 +1,14 @@
-import Auth from '../../layouts/Auth'
+import Auth from 'layouts/Auth'
 import { containerStyle, inputStyle, loginFormStyle } from '../Login/styles'
 import React, { useCallback, useState } from 'react'
 import { Button, CircularProgress, FormHelperText, TextField } from '@mui/material'
-import useInputs from '../../hooks/useInputs'
+import useInputs from 'hooks/useInputs'
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMutation, useQuery } from 'react-query'
-import { checkCode } from '../../lib/api/auth/sendmail'
+import { checkCode } from 'lib/api/auth/sendmail'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
-import { resetPassword } from '../../lib/api/auth/resetPassword'
+import { resetPassword } from 'lib/api/auth/resetPassword'
 
 export type ForgotProps = {}
 
@@ -44,9 +44,11 @@ function Forgot({}: ForgotProps) {
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault()
-      reset.mutate({ password: form.password, email: '' })
+      if (!data) return
+
+      reset.mutate({ password: form.password, email: data.email })
     },
-    [form.password, reset]
+    [data, form.password, reset]
   )
 
   if (isLoadingCode) {

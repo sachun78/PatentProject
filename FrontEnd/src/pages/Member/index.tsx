@@ -35,7 +35,7 @@ function Member({}: MemberShipProps) {
         </ul>
         <Routes>
           <Route path="event" element={<Events />} />
-          <Route path="event/*" element={<EventDetail />} />
+          <Route path="event/:id" element={<EventDetail />} />
           <Route path="schedule" element={<Schedules />} />
           <Route path="schedule/*" element={<Meeting />} />
           <Route path="history" element={<MeetingHistory />} />

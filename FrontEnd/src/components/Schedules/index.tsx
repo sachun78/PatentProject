@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import IconControl from '../IconControl'
-import { Button, FormGroup, ToggleButton } from '@mui/material'
+import { Button, CircularProgress, FormGroup, ToggleButton } from '@mui/material'
 import ScheduleCalendar from './ScheduleCalendar'
 import { meetingSwitchState } from 'atoms/memberShipTabState'
 import { useRecoilState } from 'recoil'
@@ -124,7 +124,16 @@ function Schedules({}: ScheduleViewProps) {
         (searchData && searchData.length ? (
           <ScheduleTable meetings={searchData} />
         ) : (
-          <div css={noScheduleStyle}>{searchLoading ? <h1>Searching...</h1> : <h1>There is no result</h1>}</div>
+          <div css={noScheduleStyle}>
+            {searchLoading ? (
+              <h1>
+                <CircularProgress />
+                Searching...
+              </h1>
+            ) : (
+              <h1>There is no result</h1>
+            )}
+          </div>
         ))}
       {!checked && !searchText && hasNextPage && (
         <Button
