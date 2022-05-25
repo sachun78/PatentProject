@@ -32,7 +32,8 @@ function FilterArea({ getCountry }: filterAreaProps) {
             srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
             alt=""
           />
-          {option.label} ({option.code}) +{option.phone}
+          {option.label} ({option.code})
+           {/* +{option.phone} */}
         </Box>
       )}
       renderInput={(params) => (

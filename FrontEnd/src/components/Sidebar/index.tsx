@@ -9,6 +9,7 @@ import { dividerStyle, logoStyle, menuStyle, sidebarStyle, userStyle } from './s
 import { BiLogOut } from 'react-icons/bi'
 import { API_PATH } from 'lib/api/client'
 import gravatar from 'gravatar'
+import { Link } from 'react-router-dom'
 
 type SidebarProps = {}
 
@@ -21,10 +22,10 @@ function Sidebar({}: SidebarProps) {
 
   return (
     <div css={sidebarStyle}>
-      <NavLink to="/" css={logoStyle}>
+      <Link to="/" reloadDocument replace css={logoStyle}>
         <img src={'/assets/wemet_logo.png'} alt={'main-logo'} />
-      </NavLink>
-      <ul css={menuStyle}>      
+      </Link>
+      <ul css={menuStyle}>
         <SidebarItem text="Feed" to="/" />
         <SidebarItem text="Meeting" to="/meeting" />
         <SidebarItem text="Network" to="/network" />
