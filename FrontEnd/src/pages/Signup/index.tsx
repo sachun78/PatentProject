@@ -33,7 +33,7 @@ export default function Signup({}: RegisterProps) {
     data,
     error: codeError,
     isLoading: isLoadingCode,
-  } = useQuery('authCode', () => checkCode(code ?? ''), {
+  } = useQuery('authCode', () => checkCode(code ?? '', 'auth'), {
     staleTime: Infinity,
     refetchOnWindowFocus: false,
     refetchOnMount: false,

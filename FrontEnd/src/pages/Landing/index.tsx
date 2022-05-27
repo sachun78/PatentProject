@@ -10,19 +10,21 @@ function Landing({}: LandingProps) {
   return (
     <>
       <Header>
-        <div className={'logo'}>
-          <img src={'/assets/wemet_logo_mini.png'} alt={'logo'} />
+        <div className={'inner'}>
+          <div className={'logo'}>
+            <img src={'/assets/wemet_logo_mini.png'} alt={'logo'} />
+          </div>
+          <ul>
+            <li>
+              <button onClick={() => navigation('/login')} className={'btn-login'}>
+                Login
+              </button>
+            </li>
+            <li className={'skip'}>
+              <button onClick={() => navigation('/email/check')}>Get started</button>
+            </li>
+          </ul>
         </div>
-        <ul>
-          <li>
-            <button onClick={() => navigation('/login')} className={'btn-login'}>
-              Login
-            </button>
-          </li>
-          <li className={'skip'}>
-            <button onClick={() => navigation('/email/check')}>Get started</button>
-          </li>
-        </ul>
       </Header>
       <section style={{ width: '100%', height: '100px' }}></section>
       <Section1>

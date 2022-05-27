@@ -160,7 +160,7 @@ function MeetingResult({}: MeetingResultProps) {
               <h2>Whether or not we met</h2>
               <RadioGroup row onChange={onMetChange} value={metValue}>
                 <FormControlLabel value="met" control={<Radio />} label="We met" />
-                <FormControlLabel value="fail" control={<Radio />} label="Not" />
+                <FormControlLabel value="fail" control={<Radio />} label="Missed" />
               </RadioGroup>
             </MeetingSection>
 

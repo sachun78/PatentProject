@@ -71,7 +71,7 @@ function ScheduleTable({ meetings, type = 'schedule', isProfile }: ScheduleTable
                       />
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {format(new Date(row.date), 'EEEE, d MMM, yyyy')} <br />
+                      {format(new Date(row.date), 'd MMM, yyyy')} <br />
                       {format(new Date(row.startTime), 'HH:mm - ')} {format(new Date(row.endTime), 'HH:mm')}
                     </StyledTableCell>
                     <StyledTableCell align="center">{row.location}</StyledTableCell>
@@ -149,7 +149,7 @@ function ScheduleTable({ meetings, type = 'schedule', isProfile }: ScheduleTable
                 <StyledTableCell align="center">{row.toCompany}</StyledTableCell>
                 <StyledTableCell align="center">{row.toEmail}</StyledTableCell>
                 <StyledTableCell align="center">
-                  {format(new Date(row.date), 'EE, d MMM, yyyy \n')}
+                  {format(new Date(row.date), 'd MMM, yyyy')} <br />
                   {format(new Date(row.startTime), 'HH:mm - ')} {format(new Date(row.endTime), 'HH:mm')}
                 </StyledTableCell>
                 <StyledTableCell align="center">{row.location}</StyledTableCell>

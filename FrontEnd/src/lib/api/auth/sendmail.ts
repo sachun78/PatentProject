@@ -11,7 +11,9 @@ export async function forgot_passwd(email: string) {
   return response.data
 }
 
-export async function checkCode(code: string) {
-  const response = await client.get<IAuthCode>('/api/authemail/code/' + code)
+type authType = 'auth' | 'passwd'
+
+export async function checkCode(code: string, type: authType) {
+  const response = await client.get<IAuthCode>('/api/authemail/code', { params: { type, code } })
   return response.data
 }

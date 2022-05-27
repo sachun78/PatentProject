@@ -23,7 +23,7 @@ function Forgot({}: ForgotProps) {
     data,
     error: codeError,
     isLoading: isLoadingCode,
-  } = useQuery('resetCode', () => checkCode(code ?? ''), {
+  } = useQuery('resetCode', () => checkCode(code ?? '', 'passwd'), {
     staleTime: Infinity,
     refetchOnWindowFocus: false,
     refetchOnMount: false,

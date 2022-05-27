@@ -125,18 +125,18 @@ function PostDetail({}: postDetailProps) {
     },
   })
 
-  if (!post || isLoading)  {
+  if (!post || isLoading) {
     return (
       <div>
-        <Skeleton variant='circular' width={60} height={60} sx={{ marginLeft: '1.875rem', marginBottom: '1.25rem'}}/>
-        <Skeleton variant='rectangular' width={870} height={400} sx={{  marginBottom: '2rem'}}/>
+        <Skeleton variant="circular" width={60} height={60} sx={{ marginLeft: '1.875rem', marginBottom: '1.25rem' }} />
+        <Skeleton variant="rectangular" width={870} height={400} sx={{ marginBottom: '2rem' }} />
       </div>
     )
   }
 
   return (
     <>
-      <div css={wrapStyle}>      
+      <div css={wrapStyle}>
         <div css={detailStyle}>
           <div css={iconStyle}>
             <Avatar
@@ -191,8 +191,9 @@ function PostDetail({}: postDetailProps) {
                 src={`${API_PATH}static/` + user.email}
                 sx={{ width: 35, height: 35, mr: '25px' }}
                 imgProps={{ crossOrigin: 'anonymous' }}
+                style={{ border: '0.1px solid lightgray' }}
               >
-                <img src={gravatar.url(user.email, { s: '60px', d: 'retro' })} alt={'fallback'} />
+                <img src={gravatar.url(user.email, { s: '35px', d: 'retro' })} alt={'fallback'} />
               </Avatar>
             }
           />

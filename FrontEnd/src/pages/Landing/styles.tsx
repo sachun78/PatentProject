@@ -138,17 +138,22 @@ export const MainSection = styled.section`
 
 export const Header = styled.nav`
   position: fixed;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 75rem;
+  width: 100%;
   top: 0;
   left: 0;
   right: 0;
   height: 6.25rem;
-  margin: 0 auto;
   backdrop-filter: blur(50px);
   z-index: 50;
+
+  .inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 75rem;
+    margin: 0 auto;
+    height: 6.25rem;
+  }
 
   img {
   }

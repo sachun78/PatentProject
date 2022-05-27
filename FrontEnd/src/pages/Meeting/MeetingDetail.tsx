@@ -50,6 +50,24 @@ function MeetingDetail({}: MeetingDetailProps) {
     [finalMut, id]
   )
 
+  const state = useMemo(() => {
+    if (!data) return ''
+    let status = data?.status
+    if (status === 'none') {
+      if (isBefore(new Date(data.startTime), new Date())) {
+        status = 'Expired'
+      } else {
+        status = 'Pending'
+      }
+    }
+    if (status === 'replan') {
+      if (isBefore(new Date(data.startTime), new Date())) {
+        status = 'Expired'
+      }
+    }
+    return status
+  }, [data])
+
   const classes = useButtonStyle()
 
   if (!id) {
@@ -129,9 +147,7 @@ function MeetingDetail({}: MeetingDetailProps) {
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <h2>
                 State
-                <span className={'state-text'}>
-                  {data.status !== 'none' ? data.status : isExpired ? 'expired' : 'pending'}
-                </span>
+                <span className={'state-text'}>{state}</span>
               </h2>
               {!isResult && !isExpired && (data.status === 'confirm' || data.status === 'replan') && (
                 <RescheduleButton value={change} onChange={onChangeToggle}>
