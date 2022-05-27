@@ -41,7 +41,7 @@ const linkStyle = css`
 
   &.active {
     color: #910457;
-    font-weight: bold;
+    font-weight: 800;
   }
 `
 

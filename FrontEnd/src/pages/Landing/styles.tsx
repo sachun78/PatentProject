@@ -5,52 +5,22 @@ import { resetButton } from 'lib/styles/resetButton'
 export const CardSection = styled.section`
   margin-top: 4.375rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
 `
 
 export const CardItem = styled.div`
-  width: 285px;
-  height: 25rem;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: none;
-    border-radius: 15px;
-  }
-
-  & > div {
-    width: 15rem;
-    height: 10.1875rem;
-    padding: 20px;
-    background: white;
-    position: relative;
-    bottom: 100px;
-    margin: 0 auto;
-    z-index: 2;
-    box-shadow: 2px 5px 11px #00000029;
-    border-radius: 15px;
-
-    h4 {
-      position: relative;
-      top: -39px;
-      text-align: center;
-      text-transform: uppercase;
-      font: normal normal 800 16px/36px NanumSquareOTF;
-      color: #333333;
-    }
-
-    p {
-      position: relative;
-      top: -40px;
-      text-align: center;
-      font: normal normal normal 16px/26px NanumSquareOTF;
-      color: #6c6c6c;
-    }
-  }
+  width: 24.5rem;
+  height: 3.125rem;
+  background: #ffffff;
+  border: 1px solid #707070;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   & + & {
-    margin-left: 1.25rem;
+    margin-top: 1.875rem;
   }
 `
 
@@ -79,19 +49,18 @@ export const Section1 = styled.section`
   h1 {
     text-align: center;
     color: #333333;
-    font: normal normal 300 60px/80px NanumSquareOTF;
-    line-height: 1.333333333;
-    text-transform: uppercase;
-    max-width: 56.25rem;
+    font: normal normal 300 51px/60px NanumSquareOTF;
+    line-height: 1.176470588;
+    width: 990px;
   }
 
-  p.contents {
-    text-align: left;
-    color: #6c6c6c;
-    font: normal normal normal 18px/28px NanumSquareOTF;
-    line-height: 1.75;
-    margin-top: 3.125rem;
-    max-width: 37rem;
+  h2 {
+    text-align: center;
+    color: #333333;
+    font: normal normal 300 36px/60px NanumSquareOTF;
+    line-height: 1.666666667;
+    max-width: 66rem;
+    width: 990px;
   }
 `
 export const Footer = styled.footer`
@@ -99,7 +68,7 @@ export const Footer = styled.footer`
   display: flex;
   justify-content: space-between;
   width: 59.5625rem;
-  margin: 7.6875rem auto 0;
+  margin: 5rem auto 0;
 
   span {
     font: normal normal 800 15px/17px NanumSquareOTF;
@@ -114,6 +83,56 @@ export const Footer = styled.footer`
   .cisun {
     width: 51px;
     height: 17px;
+  }
+`
+
+export const MainSection = styled.section`
+  margin: 3.125rem auto 0;
+  min-width: 1220px;
+  position: relative;
+
+  img {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+
+  .large-block {
+    position: relative;
+    width: 1.875rem;
+    height: 45rem;
+    background: #910457;
+  }
+
+  .small-block {
+    position: absolute;
+    width: 1.875rem;
+    height: 31rem;
+    top: 113px;
+    left: 1191px;
+    background: #910457;
+  }
+
+  .text-block {
+    position: absolute;
+    top: 123px;
+    left: 50.625rem;
+    width: 25rem;
+    height: 29.75rem;
+    background: #fff;
+    z-index: 5;
+    padding: 1.875rem;
+  }
+
+  p.contents {
+    width: 21.25rem;
+    height: 416px;
+    position: relative;
+    text-align: left;
+    color: #6c6c6c;
+    font: normal normal normal 18px NanumSquareOTF;
+    line-height: 1.55;
+    max-width: 37rem;
   }
 `
 

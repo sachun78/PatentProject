@@ -164,7 +164,7 @@ function ScheduleTable({ meetings, type = 'schedule', isProfile }: ScheduleTable
                     </Badge>
                   ) : (
                     <StatusBlock state={row.history.status ? 'met' : ''}>
-                      {row.history.status ? 'Met' : 'Failure'}
+                      {row.history.status ? 'Met' : 'Missed'}
                     </StatusBlock>
                   )}
                 </StyledTableCell>

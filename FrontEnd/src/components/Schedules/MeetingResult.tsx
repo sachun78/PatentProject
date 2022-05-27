@@ -52,7 +52,6 @@ function MeetingResult({}: MeetingResultProps) {
   })
   const imgUplaodMut = useMutation(upload, {
     onSuccess: (res) => {
-      console.log(res)
       setFilePath(res.fileName)
     },
   })
@@ -221,10 +220,13 @@ function MeetingResult({}: MeetingResultProps) {
               </MeetingSection>
             )}
             <MeetingSection>
-              <h2>Whether or not we met</h2>
-              <RadioGroup row value={metData.status ? 'met' : 'fail'}>
-                {metData.status && <FormControlLabel value="met" control={<Radio />} label="We met" />}
-                {!metData.status && <FormControlLabel value="fail" control={<Radio />} label="Not" />}
+              <h2>Whether we met or not</h2>
+              <RadioGroup row value={metData.history.status ? 'met' : 'fail'}>
+                {metData.history.status ? (
+                  <FormControlLabel value="met" control={<Radio />} label="Met" />
+                ) : (
+                  <FormControlLabel value="fail" control={<Radio />} label="Missed" />
+                )}
               </RadioGroup>
             </MeetingSection>
           </>
@@ -237,6 +239,5 @@ function MeetingResult({}: MeetingResultProps) {
 const ImgView = styled.img`
   width: 255px;
   height: 170px;
-  border: 1px solid #ddd;
 `
 export default MeetingResult
