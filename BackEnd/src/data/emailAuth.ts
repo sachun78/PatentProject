@@ -2,17 +2,17 @@ import mongoose, { Types, Date, Model } from 'mongoose'
 import { useVirtualId } from 'database/database';
 
 interface IEmailAuth {
-  email: string;
-  code: string;
-  logged: boolean;
-  createdAt: number;
-  updatedAt: number;
+  email: string,
+  code: string,
+  logged: boolean,
+  createdAt: number,
+  updatedAt: number
 }
 
 const emailAuthSchema = new mongoose.Schema<IEmailAuth, Model<IEmailAuth>>({
   email: { type: String, required: true },
   code: { type: String, required: true },
-  logged: { type: Boolean, default: false }
+  logged: { type: Boolean, default: false },
 },
 {
   timestamps: true,

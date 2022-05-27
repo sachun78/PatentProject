@@ -3,6 +3,7 @@ import shortid from "shortid";
 import { EMAILTYPE, sendmail } from "middleware/sendMailProc";
 
 import * as EmaiAuthlRepo from "data/emailAuth";
+import * as EmailPasswdRepo from "data/emailPasswd"
 import * as AuthRepo from "data/auth"
 
 interface IRequest extends Request {
@@ -63,13 +64,22 @@ export async function forgotPasswd(req: IRequest, res: Response, next: NextFunct
       return res.status(409).json({message: `${emailInfo.email} is not signup-user`})
     }
 
+    const checkPasswdEmail = await EmailPasswdRepo.findByEmail(emailInfo.email)
+    if (checkPasswdEmail?.logged === false) {
+      const diff = new Date().getTime() - new Date(checkPasswdEmail.updatedAt).getTime();
+      if (diff < 1000 * 60 * 10) {
+        return res.status(403).json({message: `${emailInfo.email} Please check the emails sent previously`})
+      }
+      else {
+        await EmailPasswdRepo.deleteEmailPasswd(emailInfo.email);
+      }
+    }
+
     console.log("[forgotpw-emailInfo]", emailInfo);
 
     sendmail(emailInfo, EMAILTYPE.FORGOT)
       .then((value) => {
-        if (check.logged === true) {
-          EmaiAuthlRepo.updateAuthMail(check.code, emailInfo);
-        }
+        EmailPasswdRepo.saveEmailPasswd(emailInfo);
         return res.status(200).json({ message: `Success send email: ${emailInfo.email}` })
       })
       .catch((reason) =>
@@ -82,27 +92,51 @@ export async function forgotPasswd(req: IRequest, res: Response, next: NextFunct
 }
 
 export async function isVerifyMail(req: IRequest, res: Response, next: NextFunction) {
-  const reqCode: string = req.params.code;
+  const reqCode: string = req.query.code as string;
+  const reqType: string = req.query.type as string;
 
   try {
-    const mail = await EmaiAuthlRepo.findAuthMail(reqCode);
-    if (!mail) {
-      return res.status(404).json({ message: "Email info not found" });
+    if (reqType === 'auth') {
+      const mail = await EmaiAuthlRepo.findAuthMail(reqCode);
+      if (!mail) {
+        return res.status(404).json({ message: "Email info not found" });
+      }
+  
+      const diff = new Date().getTime() - new Date(mail.updatedAt).getTime();
+      if (diff > 1000 * 60 * 60 * 24) {
+        return res.status(410).json({ message: "Expired code" });
+      }
+  
+      const authmail = await EmaiAuthlRepo.updateAuthMail(reqCode, {
+        logged: true,
+      });
+      if (!authmail) {
+        return res.status(404).json({ message: "Email info not found" });
+      }
+  
+      return res.status(200).json({ email: authmail.email, message: "verified success !!!" });
     }
-
-    const diff = new Date().getTime() - new Date(mail.updatedAt).getTime();
-    if (diff > 1000 * 60 * 60 * 24) {
-      return res.status(410).json({ message: "Expired code" });
+    else if (reqType === 'passwd') {
+      const mail = await EmailPasswdRepo.findEmailPasswd(reqCode);
+      if (!mail) {
+        return res.status(404).json({ message: "Email info not found" });
+      }
+  
+      const diff = new Date().getTime() - new Date(mail.updatedAt).getTime();
+      if (diff > 1000 * 60 * 60 * 24) {
+        return res.status(410).json({ message: "Expired code" });
+      }
+  
+      const authmail = await EmailPasswdRepo.updateEmailPasswd(reqCode, {
+        logged: true,
+      });
+      if (!authmail) {
+        return res.status(404).json({ message: "Email info not found" });
+      }
+  
+      return res.status(200).json({ email: authmail.email, message: "verified success !!!" });
     }
-
-    const authmail = await EmaiAuthlRepo.updateAuthMail(reqCode, {
-      logged: true,
-    });
-    if (!authmail) {
-      return res.status(404).json({ message: "Email info not found" });
-    }
-
-    res.status(200).json({ email: authmail.email, message: "verified success !!!" });
+    
   } catch (e) {
     console.error(e);
     next(e);

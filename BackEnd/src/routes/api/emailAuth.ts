@@ -11,7 +11,7 @@ const validateCredential = [
   validate
 ]
 
-route.get('/code/:code', emailAuth.isVerifyMail)
+route.get('/code/', emailAuth.isVerifyMail)
 route.post('/send-authemail', validateCredential, emailAuth.sendAuthEmail);
 route.post('/forget-passwd', validateCredential, emailAuth.forgotPasswd);
 
