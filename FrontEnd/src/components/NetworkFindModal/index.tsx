@@ -69,12 +69,12 @@ function NetworkFindModal({}: NetworkFindModalProps) {
                         alt={`Avatar n°${buddy.email + 1}`}
                         src={`${API_PATH}static/${buddy.email}`}
                         imgProps={{ crossOrigin: 'anonymous' }}
-                        style={{ border: '0.1px solid lightgray' }}
+                        style={{ border: '1px solid lightgray' }}
                       >
                         <img src={gravatar.url(buddy.email ?? '', { s: '38px', d: 'retro' })} alt={'fallback-img'} />
                       </Avatar>
                     </ListItemAvatar>
-                    <ListItemText id={labelId} primary={`${buddy.email}`} />
+                    <ListItemText id={labelId} primary={`${buddy.name}`} />
                   </ListItemButton>
                 </ListItem>
               )

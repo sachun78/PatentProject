@@ -29,7 +29,7 @@ function ProfileBox({ profileData }: ProfileBoxProps) {
           alt={'photo'}
           src={`${API_PATH}static/${profileData.email}`}
           sx={{ width: 47, height: 47, marginRight: '15px' }}
-          style={{ border: '0.1px solid lightgray' }}
+          style={{ border: '1px solid lightgray' }}
           imgProps={{ crossOrigin: 'anonymous' }}
         >
           <img src={gravatar.url(profileData.email ?? '', { s: '47px', d: 'retro' })} alt={'fallback-img'} />

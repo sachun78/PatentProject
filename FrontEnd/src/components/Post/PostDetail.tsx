@@ -143,7 +143,7 @@ function PostDetail({}: postDetailProps) {
               alt={post.owner_username}
               src={`${API_PATH}static/` + post.owner_email}
               sx={{ width: 60, height: 60 }}
-              style={{ border: '0.1px solid lightgray' }}
+              style={{ border: '1px solid lightgray' }}
               imgProps={{ crossOrigin: 'anonymous' }}
             >
               <img src={url(post.owner_email, { s: '60px', d: 'retro' })} alt={'no-image'} />
@@ -181,7 +181,7 @@ function PostDetail({}: postDetailProps) {
             onKeyDown={onKeyDown}
             sx={{
               borderRadius: '1rem',
-              margin: '0 1.875rem 1.875rem 1.25rem',
+              margin: `0 1.875rem ${post.comment.length !== 0 ? '0.625rem' : '1.875rem'} 1.25rem`,
               position: 'relative',
               width: '95%',
             }}
@@ -191,14 +191,13 @@ function PostDetail({}: postDetailProps) {
                 src={`${API_PATH}static/` + user.email}
                 sx={{ width: 35, height: 35, mr: '25px' }}
                 imgProps={{ crossOrigin: 'anonymous' }}
-                style={{ border: '0.1px solid lightgray' }}
+                style={{ border: '1px solid lightgray' }}
               >
                 <img src={gravatar.url(user.email, { s: '35px', d: 'retro' })} alt={'fallback'} />
               </Avatar>
             }
           />
         </div>
-
         <div style={{ display: 'flex', flexDirection: 'column', margin: '0 1.45rem 0 1.25rem', textAlign: 'center' }}>
           {post.comment.length !== 0 && (
             <div css={commentStyle}>

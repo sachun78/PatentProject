@@ -36,7 +36,7 @@ function EventDetailCard({ title, from, to, date, time, place, state, id }: Even
           alt={from}
           src={API_PATH + 'static/' + from}
           imgProps={{ crossOrigin: 'anonymous' }}
-          style={{ border: '0.1px solid lightgray' }}
+          style={{ border: '1px solid lightgray' }}
         >
           <img src={url(from, { s: '60px', d: 'retro' })} alt={'no-image'} />
         </Avatar>
@@ -44,7 +44,7 @@ function EventDetailCard({ title, from, to, date, time, place, state, id }: Even
           alt={to}
           src={API_PATH + 'static/' + to}
           imgProps={{ crossOrigin: 'anonymous' }}
-          style={{ border: '0.1px solid lightgray' }}
+          style={{ border: '1px solid lightgray' }}
         >
           <img src={url(to, { s: '60px', d: 'retro' })} alt={'no-image'} />
         </Avatar>

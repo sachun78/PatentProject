@@ -1,10 +1,9 @@
 import { useMemo } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { dateRangeState, eventState, updateDateRange } from '../atoms/eventState'
+import { useRecoilState } from 'recoil'
+import { dateRangeState } from '../atoms/eventState'
 
 export default function useDateRangeHook() {
-  const dateRange = useRecoilValue(dateRangeState)
-  const setEventState = useSetRecoilState(eventState)
+  const [dateRange, setDateRange] = useRecoilState(dateRangeState)
 
   const today = useMemo(() => {
     const day = new Date()
@@ -15,12 +14,16 @@ export default function useDateRangeHook() {
 
   const { startDate, endDate } = dateRange
   const setStartDate = (value: Date) => {
-    setEventState((state) => updateDateRange(state, 'startDate', value))
-    return true
+    setDateRange({
+      startDate: value,
+      endDate: endDate,
+    })
   }
   const setEndDate = (value: Date) => {
-    setEventState((state) => updateDateRange(state, 'endDate', value))
-    return true
+    setDateRange({
+      startDate: startDate,
+      endDate: value,
+    })
   }
 
   return {

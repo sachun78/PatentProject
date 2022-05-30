@@ -1,15 +1,9 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { eventEditState, eventModalState, eventState, updateEventEdit, updateEventModalOpen } from '../atoms/eventState'
+import { useRecoilState } from 'recoil'
+import { eventEditState, eventModalState } from '../atoms/eventState'
 
 export function useEventModal() {
-  const open = useRecoilValue(eventModalState)
-  const isEdit = useRecoilValue(eventEditState)
-  const setEventState = useSetRecoilState(eventState)
-
-  const setOpen = (value: boolean) =>
-    setEventState((state) => updateEventModalOpen(state, value))
-  const setEdit = (value: boolean) =>
-    setEventState((state) => updateEventEdit(state, value))
+  const [open, setOpen] = useRecoilState(eventModalState)
+  const [isEdit, setEdit] = useRecoilState(eventEditState)
 
   return { open, isEdit, setOpen, setEdit }
 }

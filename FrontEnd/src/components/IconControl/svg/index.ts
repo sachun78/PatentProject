@@ -22,6 +22,7 @@ import { ReactComponent as list } from './list.svg'
 import { ReactComponent as profile } from './profile.svg'
 import { ReactComponent as listSelect } from './list-select.svg'
 import { ReactComponent as country } from './country.svg'
+import { ReactComponent as invite } from './invite.svg'
 
 export {
   welcome,
@@ -48,4 +49,5 @@ export {
   profile,
   listSelect,
   country,
+  invite,
 }

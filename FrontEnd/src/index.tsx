@@ -6,14 +6,13 @@ import reportWebVitals from './reportWebVitals'
 import { BrowserRouter } from 'react-router-dom'
 import { RecoilRoot } from 'recoil'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import recoilInitializer from './atoms/recoilInitializer'
 import { ThemeProvider } from '@mui/material'
 import theme from './lib/styles/theme'
 
 const queryClient = new QueryClient()
 ReactDOM.render(
   <React.StrictMode>
-    <RecoilRoot initializeState={recoilInitializer}>
+    <RecoilRoot>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <ThemeProvider theme={theme}>

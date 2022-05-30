@@ -1,4 +1,4 @@
-import { atom, useRecoilState } from 'recoil'
+import { atom, selector, useRecoilState } from 'recoil'
 import produce from 'immer'
 
 export type MeetingReqState = {
@@ -18,6 +18,39 @@ export const networkUserFindModalState = atom({
 export const meetingReqState = atom({
   key: 'meetingReqState',
   default: initialState,
+})
+
+export const MeetingDateState = selector<MeetingReqState['date']>({
+  key: 'MeetingDateState',
+  get: ({ get }) => {
+    const state = get(meetingReqState)
+    return state.date
+  },
+  set: ({ set }, date) => {
+    set(
+      meetingReqState,
+      produce((state) => {
+        state.date = date
+      })
+    )
+  },
+})
+
+export const MeetingTimeState = selector<MeetingReqState['date']>({
+  key: 'MeetingTimeState',
+  get: ({ get }) => {
+    const state = get(meetingReqState)
+    return state.time
+  },
+  set: ({ set }, time) => {
+    set(
+      meetingReqState,
+      produce((state) => {
+        state.date = time
+        state.time = time
+      })
+    )
+  },
 })
 
 export const meetingReqUser = atom({

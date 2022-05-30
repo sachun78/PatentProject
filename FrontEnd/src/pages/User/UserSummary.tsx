@@ -5,11 +5,11 @@ import React from 'react'
 import { useQuery } from 'react-query'
 import { getProfilebyEmail } from 'lib/api/me/getProfile'
 import { Navigate } from 'react-router-dom'
-import { getMeetingHistoryUser } from '../../lib/api/meeting/getMeetings'
-import ScheduleTable from '../../components/Schedules/ScheduleTable'
+import { getMeetingHistoryUser } from 'lib/api/meeting/getMeetings'
+import ScheduleTable from 'components/Schedules/ScheduleTable'
 
 export type UserSummaryProps = {
-  email: string  
+  email: string
 }
 
 function UserSummary({ email }: UserSummaryProps) {

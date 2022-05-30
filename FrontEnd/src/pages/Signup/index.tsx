@@ -41,7 +41,7 @@ export default function Signup({}: RegisterProps) {
     retry: false,
   })
 
-  const mutation = useMutation('signUp', () => signup({ ...form, email: data?.email || '' }), {
+  const mutation = useMutation('signUp', () => signup({ ...form, email: data?.email.toLowerCase() || '' }), {
     onSuccess: () => {
       navigate('/login')
     },

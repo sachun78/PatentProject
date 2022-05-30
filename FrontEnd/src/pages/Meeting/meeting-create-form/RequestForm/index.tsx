@@ -45,7 +45,7 @@ export default function RequestForm({}: RequestViewProps) {
   const navi = useNavigate()
   const qc = useQueryClient()
   const ref = useRef(null)
-  const [form, onChange] = useInputs({
+  const [form, onChange, , setForm] = useInputs({
     comment: '',
     title: '',
     to: '',
@@ -69,14 +69,9 @@ export default function RequestForm({}: RequestViewProps) {
   })
 
   // Get User Profile
-  const {
-    data: profileData,
-    isLoading: profileLoading,
-    refetch,
-  } = useQuery(['profile', meetuser || form.to], getProfilebyEmail, {
+  const { data: profileData, refetch } = useQuery(['profile', meetuser || form.to], getProfilebyEmail, {
     enabled: !!meetuser,
     retry: false,
-    staleTime: 5000,
   })
 
   const profile = useMemo(() => qc.getQueryData<IProfile>('profile'), [qc])
@@ -132,9 +127,13 @@ export default function RequestForm({}: RequestViewProps) {
       if (!form.to.trim()) {
         return
       }
+      setForm({
+        name: 'to',
+        value: form.to.toLowerCase(),
+      })
       refetch()
     },
-    [form.to, refetch]
+    [form.to, setForm]
   )
 
   const onSubmit = useCallback(
@@ -142,7 +141,6 @@ export default function RequestForm({}: RequestViewProps) {
       e.preventDefault()
       const { title, to, comment } = form
       if ((!to.trim() && !meetuser) || !title.trim() || !time || !endTime) {
-        // if ((!to.trim() && !meetuser) || !location.trim() || !title.trim() || !time || !endTime) {
         toast.error('Please fill out the form', {
           position: toast.POSITION.TOP_CENTER,
           pauseOnHover: false,
@@ -155,8 +153,6 @@ export default function RequestForm({}: RequestViewProps) {
       const toCompany = profileData?.company ? profileData.company : form.firm
       const toName = profileData?.username ? profileData.username : form.name
       const toPhone = profileData?.phone ? profileData.phone : phone
-
-      console.log(toCompany, toName, toPhone)
 
       createScheduleMut.mutate({
         eventId: curEvent.id,
@@ -254,7 +250,7 @@ export default function RequestForm({}: RequestViewProps) {
           )}
           {profileData && <ProfileBox profileData={profileData} />}
         </MeetingSection>
-        {!profileData && !profileLoading && form.to && (
+        {!profileData && form.to && (
           <>
             <MeetingSection title={'Name'}>
               <h2>Name</h2>
@@ -313,12 +309,7 @@ export default function RequestForm({}: RequestViewProps) {
             unavailables={event.restricted_time}
           />
         </MeetingSection>
-        {/* <RequestSection title={'Location'}>
-          <LocationInput onChange={onChangeLocation} value={location} />
-        </RequestSection>
-        {detailOpen && ( */}
         <MeetingSection title={'Location'}>
-          {/* <RequestSection title={'Detail address'}> */}
           <h2>Location</h2>
           <OutlinedInput
             name="location"
@@ -331,7 +322,6 @@ export default function RequestForm({}: RequestViewProps) {
             fullWidth
           />
         </MeetingSection>
-        {/* // )} */}
         <RequestSection
           title={'Comment'}
           checkButton={

@@ -7,11 +7,11 @@ import RequestSection from 'pages/Meeting/meeting-create-form/RequestForm/Reques
 import TimeGridInput from '../DatePickerInput/TimeGridInput'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { getEvent } from 'lib/api/event/getEvent'
-import useDateRangeHook from 'hooks/useDateRangeHook'
 import useDateTimeHook from 'hooks/useDateTimeHook'
 import { IMeeting } from 'lib/api/types'
 import { changeMeeting } from 'lib/api/meeting/updateMeeting'
 import { submitButton } from 'lib/styles/submitButton'
+import { toast } from 'react-toastify'
 
 export type MeetingChangeProps = {
   place: string
@@ -30,7 +30,6 @@ function MeetingChange({ place, eventId, meetingId, onClose }: MeetingChangeProp
     retry: false,
   })
 
-  const { startDate, endDate } = useDateRangeHook()
   const { date, time, setDate, setTime } = useDateTimeHook()
   const [endTime, setEndTime] = useState<Date | null>(null)
 
@@ -73,9 +72,8 @@ function MeetingChange({ place, eventId, meetingId, onClose }: MeetingChangeProp
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault()
-      console.log(replace, comment, time, endTime)
       if (!endTime) {
-        return console.log('종료시간을 입력해주세요')
+        return toast('please select changed meeting time', { pauseOnHover: false })
       }
       if (!comment.trim()) {
         return
@@ -131,7 +129,7 @@ function MeetingChange({ place, eventId, meetingId, onClose }: MeetingChangeProp
             fullWidth
           />
         </RequestSection>
-        <Button type={'submit'} variant={'contained'} classes={buttonStyle}>
+        <Button type={'submit'} variant={'contained'} classes={buttonStyle} disabled={onChangeMeeting.isLoading}>
           Submit
         </Button>
       </form>

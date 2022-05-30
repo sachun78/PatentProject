@@ -19,7 +19,7 @@ export type InitialModalProps = {}
 function InitialModal({}: InitialModalProps) {
   const { data } = useProfileQuery()
   const { open, setOpen, handleClose } = useModal(false)
-  const [phone] = useProfileFormState()
+  const [phone] = useProfileFormState() // set on Profile.Phone component
   const qc = useQueryClient()
   const mutation = useMutation(() => patchProfile({ ...form, field: fields, country, phone }), {
     onSuccess: (data) => {

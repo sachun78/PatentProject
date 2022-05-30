@@ -16,7 +16,6 @@ function EventSelectDialog({}: EventSelectModalProps) {
   const [open, setOpen] = useRecoilState(eventSelectModalState)
   const { data: events } = useEventQuery()
   const [index, setIndex] = useState(0)
-  const [animationState, setAnimationState] = useState(false)
   const { setStartDate, setEndDate } = useDateRangeHook()
   const [, setEvent] = useCurrentEventState()
   const navigate = useNavigate()
@@ -37,7 +36,6 @@ function EventSelectDialog({}: EventSelectModalProps) {
     }
     if (eventParsed.length > index + 1) setIndex(index + 1)
     else setIndex(0)
-    setAnimationState(true)
   }, [eventParsed, index])
 
   const onPrevClick = useCallback(() => {
@@ -45,7 +43,6 @@ function EventSelectDialog({}: EventSelectModalProps) {
 
     if (1 <= index) setIndex(index - 1)
     else setIndex(eventParsed.length - 1)
-    setAnimationState(true)
   }, [eventParsed, index])
 
   const onSelectEvent = useCallback(() => {
@@ -59,10 +56,6 @@ function EventSelectDialog({}: EventSelectModalProps) {
     setEndDate(new Date(end_date))
     navigate('/meeting/schedule/request')
   }, [eventParsed, index, setEndDate, setEvent, setStartDate])
-
-  useEffect(() => {
-    setAnimationState(false)
-  }, [index])
 
   useEffect(() => {
     return () => {

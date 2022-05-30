@@ -1,19 +1,9 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { meetingReqState, updateDate, updateTime } from 'atoms/meetingReqState'
+import { useRecoilState } from 'recoil'
+import { MeetingDateState, MeetingTimeState } from 'atoms/meetingReqState'
 
 export default function useDateTimeHook() {
-  const meetingReq = useRecoilValue(meetingReqState)
-  const setMeetingState = useSetRecoilState(meetingReqState)
-
-  const { time, date } = meetingReq
-  const setDate = (value: Date) => {
-    setMeetingState((state) => updateDate(state, value))
-    return true
-  }
-  const setTime = (value: Date) => {
-    setMeetingState((state) => updateTime(state, value))
-    return true
-  }
+  const [date, setDate] = useRecoilState(MeetingDateState)
+  const [time, setTime] = useRecoilState(MeetingTimeState)
 
   return {
     time,

@@ -77,7 +77,7 @@ function ProfileCardItem({ title, type, email, username }: ProfileCardItemProps)
             <div className={'img'}>
               <Avatar
                 sx={{ width: 100, height: 100 }}
-                style={{ border: '0.1px solid lightgray' }}
+                style={{ border: '1px solid lightgray' }}
                 imgProps={{
                   crossOrigin: 'anonymous',
                 }}

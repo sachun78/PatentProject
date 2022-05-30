@@ -1,5 +1,4 @@
 import { css } from '@emotion/react'
-import { brandColor } from 'lib/palette'
 
 export const wrapper = css`
   padding-right: 1rem;
@@ -14,18 +13,20 @@ export const tabStyle = css`
 
   li {
     z-index: 50;
+    &:not(:last-of-type) {
+      margin-right: 3.3125rem;
+    }
   }
 `
 
 export const itemStyle = css`
   text-decoration: none;
-  margin-right: 3.3125rem;
   color: #6c6c6c;
   font: normal normal 800 17px 'NanumSquareOTF';
   line-height: 1.117647059;
 
   &.active,
   &:hover {
-    color: ${brandColor};
+    color: #910457;
   }
 `

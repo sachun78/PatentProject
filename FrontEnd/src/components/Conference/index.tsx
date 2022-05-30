@@ -15,8 +15,8 @@ function ConferenceList({}: conferenceProps) {
       <Grid container>
         {Array.from({ length: 6 }, (v, i) => i).map((v) => {
           return (
-            <Grid item>
-              <ConferenceCard img={v % 2 ? img1 : img2} key={v} />
+            <Grid item key={v}>
+              <ConferenceCard img={v % 2 ? img1 : img2} />
             </Grid>
           )
         })}

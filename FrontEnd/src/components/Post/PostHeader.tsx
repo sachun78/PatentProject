@@ -1,29 +1,29 @@
-import { css } from '@emotion/react';
-import { Avatar, ListItemText } from '@mui/material';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Grow from '@mui/material/Grow';
-import MenuItem from '@mui/material/MenuItem';
-import MenuList from '@mui/material/MenuList';
-import Paper from '@mui/material/Paper';
-import Popper from '@mui/material/Popper';
-import { AxiosError } from 'axios';
-import { formatDistanceToNow } from 'date-fns';
-import gravatar from 'gravatar';
-import useBuddyQuery from 'hooks/query/useBuddyQuery';
-import { addBuddy } from 'lib/api/buddy/addBuddy';
-import { deleteBuddy } from 'lib/api/buddy/deleteBuddy';
-import { API_PATH } from 'lib/api/client';
-import { deletePost } from 'lib/api/post/deletePost';
-import { User as UserType } from 'lib/api/types';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { MdMoreHoriz } from 'react-icons/md';
-import { useMutation, useQueryClient } from 'react-query';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import palette, { brandColor } from '../../lib/palette';
-import AskRemoveModal from './AskRemoveModal';
+import { css } from '@emotion/react'
+import { Avatar, ListItemText } from '@mui/material'
+import ClickAwayListener from '@mui/material/ClickAwayListener'
+import Grow from '@mui/material/Grow'
+import MenuItem from '@mui/material/MenuItem'
+import MenuList from '@mui/material/MenuList'
+import Paper from '@mui/material/Paper'
+import Popper from '@mui/material/Popper'
+import { AxiosError } from 'axios'
+import { formatDistanceToNow } from 'date-fns'
+import gravatar from 'gravatar'
+import useBuddyQuery from 'hooks/query/useBuddyQuery'
+import { addBuddy } from 'lib/api/buddy/addBuddy'
+import { deleteBuddy } from 'lib/api/buddy/deleteBuddy'
+import { API_PATH } from 'lib/api/client'
+import { deletePost } from 'lib/api/post/deletePost'
+import { User as UserType } from 'lib/api/types'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { MdMoreHoriz } from 'react-icons/md'
+import { useMutation, useQueryClient } from 'react-query'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import palette, { brandColor } from '../../lib/palette'
+import AskRemoveModal from './AskRemoveModal'
 
-export type PostHeaderProps = {  
+export type PostHeaderProps = {
   owner_username: string
   owner_email: string
   createdAt: Date
@@ -32,21 +32,21 @@ export type PostHeaderProps = {
 }
 
 function PostHeader({ owner_username, owner_email, createdAt, owner_id, _id }: PostHeaderProps) {
-  const date = useMemo(() => new Date(createdAt), [])  
+  const date = useMemo(() => new Date(createdAt), [])
   const [url] = useState(`${API_PATH}static/${owner_email}`)
-  const today = new Date();
+  const today = new Date()
   const diff = (today.getTime() - date.getTime()) / 1000
-  const [open, setOpen] = useState(false);
-  const anchorRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false)
+  const anchorRef = useRef<HTMLDivElement>(null)
   const qc = useQueryClient()
   const [modal, setModal] = useState(false)
   const navigate = useNavigate()
   const user = qc.getQueryData<UserType>('user')
-  const { data: buddyData, isLoading } = useBuddyQuery()    
-  const prevOpen = useRef(open);
+  const { data: buddyData, isLoading } = useBuddyQuery()
+  const prevOpen = useRef(open)
   const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
+    setOpen((prevOpen) => !prevOpen)
+  }
 
   const onRemoveClick = () => {
     setModal(true)
@@ -60,7 +60,7 @@ function PostHeader({ owner_username, owner_email, createdAt, owner_id, _id }: P
     onSuccess: () => {
       qc.invalidateQueries(['post', _id])
       qc.invalidateQueries(['posts'])
-      navigate("/")
+      navigate('/')
     },
   })
 
@@ -70,33 +70,30 @@ function PostHeader({ owner_username, owner_email, createdAt, owner_id, _id }: P
   }, [deletePostlMut, _id])
 
   const handleClose = (event: Event | React.SyntheticEvent) => {
-    if (
-      anchorRef.current &&
-      anchorRef.current.contains(event.target as HTMLElement)
-    ) {
-      return;
+    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
+      return
     }
 
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   function handleListKeyDown(event: React.KeyboardEvent) {
     if (event.key === 'Tab') {
-      event.preventDefault();
-      setOpen(false);
+      event.preventDefault()
+      setOpen(false)
     } else if (event.key === 'Escape') {
-      setOpen(false);
+      setOpen(false)
     }
   }
-  
+
   // return focus to the button when we transitioned from !open -> open
   useEffect(() => {
     if (prevOpen.current === true && open === false) {
-      anchorRef.current!.focus();
+      anchorRef.current!.focus()
     }
 
-    prevOpen.current = open;
-  }, [open]);
+    prevOpen.current = open
+  }, [open])
 
   const addBuddyMutation = useMutation(addBuddy, {
     onSuccess: () => {
@@ -118,10 +115,9 @@ function PostHeader({ owner_username, owner_email, createdAt, owner_id, _id }: P
       console.error(err)
       toast.error(err.response?.data.message)
     },
-  })  
+  })
 
-  if (!owner_email || !user || !buddyData ) {
-    
+  if (!owner_email || !user || !buddyData) {
     return <div>로딩중!!</div>
   }
 
@@ -131,110 +127,100 @@ function PostHeader({ owner_username, owner_email, createdAt, owner_id, _id }: P
         <Avatar
           src={url}
           sx={{ width: 60, height: 60 }}
-          style={{ border: '0.1px solid lightgray' }}
+          style={{ border: '1px solid lightgray' }}
           imgProps={{ crossOrigin: 'anonymous' }}
         >
           <img className={'fallback'} src={gravatar.url(owner_email, { s: '60px', d: 'retro' })} alt={'user-img'} />
         </Avatar>
       </div>
       <div css={titleStyle}>
-        <Link to={`/u/${owner_email}`}>    
-        <h4>
-          <span>{owner_username}</span>
-        </h4>
+        <Link to={`/u/${owner_email}`}>
+          <h4>
+            <span>{owner_username}</span>
+          </h4>
         </Link>
         <div className={'time-date'}>
           {diff > 86400 ? date.toDateString() : formatDistanceToNow(date, { addSuffix: true })}
         </div>
       </div>
-      <div css={moreStyle} id="composition-button"
-        ref={anchorRef} 
+      <div
+        css={moreStyle}
+        id="composition-button"
+        ref={anchorRef}
         aria-controls={open ? 'composition-menu' : undefined}
         aria-expanded={open ? 'true' : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
       >
-        <MdMoreHoriz />        
-      </div>      
+        <MdMoreHoriz />
+      </div>
       <Popper
-          open={open}
-          anchorEl={anchorRef.current}
-          role={undefined}
-          placement="bottom-start"
-          transition
-          disablePortal          
-        >
-          {({ TransitionProps, placement }) => (
-            <Grow
-              {...TransitionProps}
-              style={{
-                transformOrigin:
-                  placement === 'bottom-start' ? 'left top' : 'left bottom',
-              }}
-            >
-              <Paper style={{width: '13ch'}}>
-                <ClickAwayListener onClickAway={handleClose}>
-                  <MenuList
-                    autoFocusItem={open}
-                    id="composition-menu"
-                    aria-labelledby="composition-button"
-                    onKeyDown={handleListKeyDown}
-                    sx={{ zIndex: "999"}}
-                  >
-                    <Link to={`/u/${owner_email}`} css={linkStyle}>
-                      <MenuItem onClick={handleClose} disableRipple>                                              
-                        <ListItemText >
-                          Writer
-                        </ListItemText>
-                      </MenuItem>
-                    </Link>                    
-                    <Link to={`/postDetail/${_id}`} css={linkStyle}>
-                      <MenuItem onClick={handleClose} disableRipple>
-                        <ListItemText>
-                        View details
-                        </ListItemText>
-                      </MenuItem>
-                    </Link>
-                    {owner_id === user.id && ( <div>
-                    <Link to={`/PostEdit/${_id}`} css={linkStyle}>
-                      <MenuItem onClick={handleClose} disableRipple>
-                        <ListItemText>
-                          Edit
-                        </ListItemText>
-                      </MenuItem>
-                    </Link>                    
+        open={open}
+        anchorEl={anchorRef.current}
+        role={undefined}
+        placement="bottom-start"
+        transition
+        disablePortal
+      >
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            style={{
+              transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
+            }}
+          >
+            <Paper style={{ width: '13ch' }}>
+              <ClickAwayListener onClickAway={handleClose}>
+                <MenuList
+                  autoFocusItem={open}
+                  id="composition-menu"
+                  aria-labelledby="composition-button"
+                  onKeyDown={handleListKeyDown}
+                  sx={{ zIndex: '999' }}
+                >
+                  <Link to={`/u/${owner_email}`} css={linkStyle}>
+                    <MenuItem onClick={handleClose} disableRipple>
+                      <ListItemText>Writer</ListItemText>
+                    </MenuItem>
+                  </Link>
+                  <Link to={`/postDetail/${_id}`} css={linkStyle}>
+                    <MenuItem onClick={handleClose} disableRipple>
+                      <ListItemText>View details</ListItemText>
+                    </MenuItem>
+                  </Link>
+                  {owner_id === user.id && (
+                    <div>
+                      <Link to={`/PostEdit/${_id}`} css={linkStyle}>
+                        <MenuItem onClick={handleClose} disableRipple>
+                          <ListItemText>Edit</ListItemText>
+                        </MenuItem>
+                      </Link>
                       <MenuItem onClick={onRemoveClick} disableRipple>
-                        <ListItemText>
-                          Delete
-                        </ListItemText>
+                        <ListItemText>Delete</ListItemText>
                       </MenuItem>
-                    
-                    <AskRemoveModal
-                      visible={modal}
-                      onConfirm={onDelete}
-                      onCancel={onCancel}
-                    />
-                    </div>) }                    
-                  </MenuList>
-                </ClickAwayListener>
-              </Paper>
-            </Grow>
-          )}
+
+                      <AskRemoveModal visible={modal} onConfirm={onDelete} onCancel={onCancel} />
+                    </div>
+                  )}
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
       </Popper>
     </div>
   )
 }
 
-const iconBoxStyle = css`  
-  
+const iconBoxStyle = css`
   height: 36px;
   border: 1px solid #910457;
   border-radius: 999px;
-  margin-right: 1rem      
+  margin-right: 1rem;
 `
 
 const linkStyle = css`
-  color: #000;  
+  color: #000;
 `
 
 const headerStyle = css`

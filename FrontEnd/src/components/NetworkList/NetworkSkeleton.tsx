@@ -1,6 +1,6 @@
-import { iconStyle, itemStyle, userStyle } from './NetworkItem'
 import { Skeleton } from '@mui/material'
 import React from 'react'
+import { iconStyle, itemStyle, userStyle } from './styles'
 
 export type NetworkSkeletonProps = {}
 

@@ -43,7 +43,7 @@ function MailCheckForm({ sendMail, onSendmail, type }: MailCheckFormProps) {
       schema.validateAsync({ email }).catch((err) => {
         setMailTypeError(err.message)
       })
-      sendmailMut.mutate(email)
+      sendmailMut.mutate(email.toLowerCase())
     },
     [email, sendmailMut]
   )

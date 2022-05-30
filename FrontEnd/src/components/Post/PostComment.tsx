@@ -11,7 +11,7 @@ import PostIconBox from './PostIconBox'
 type postCommentProps = {
   viewComment: IComment
   _id: string
-  post: IPost  
+  post: IPost
 }
 
 const useStyles = makeStyles(() => ({
@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
     },
     '&$focused $notchedOutline': {
       borderWidth: 0,
-    },    
+    },
     '&:not(:last-child)': {
       borderBottom: '1px solid #d9d9d9',
     },
@@ -53,14 +53,13 @@ const PostComment = ({ viewComment, post, _id }: postCommentProps) => {
   }, [])
 
   const editCommentMut = useMutation(editComment, {
+    onMutate: async (newData) => {
+      const oldData = qc.getQueryData(['post', _id])
+      await qc.cancelQueries(['post', _id])
+      qc.setQueryData(['post', _id], { ...post, newData })
+      return () => qc.setQueryData(['post', _id], oldData)
+    },
 
-    onMutate: async newData => {      
-      const oldData = qc.getQueryData(['post', _id]);      
-      await qc.cancelQueries(['post', _id]);      
-      qc.setQueryData(['post', _id], {...post, newData});                  
-      return () => qc.setQueryData(['post', _id], oldData);       
-    },  
-    
     onError: () => {
       toast.error('Something went wrong', {
         position: toast.POSITION.TOP_CENTER,
@@ -75,13 +74,12 @@ const PostComment = ({ viewComment, post, _id }: postCommentProps) => {
     (e: any) => {
       if (e.key === 'Enter') {
         e.preventDefault()
-        editCommentMut.mutate([{ contents: editValue, createdAt: viewComment.createdAt }, _id, e.target.name],
-          {
-            onSuccess: () => {                            
-              qc.invalidateQueries(['post', _id])
-              qc.invalidateQueries(['posts'])              
-            }
-          })
+        editCommentMut.mutate([{ contents: editValue, createdAt: viewComment.createdAt }, _id, e.target.name], {
+          onSuccess: () => {
+            qc.invalidateQueries(['post', _id])
+            qc.invalidateQueries(['posts'])
+          },
+        })
         setEdit(false)
       }
     },
@@ -102,8 +100,8 @@ const PostComment = ({ viewComment, post, _id }: postCommentProps) => {
           name={viewComment.id}
           placeholder={viewComment.contents}
           onChange={onChange}
-          onKeyDown={onKeyDown}          
-          sx={{ width:'95%' }}          
+          onKeyDown={onKeyDown}
+          sx={{ width: '95%' }}
           classes={classes}
           startAdornment={
             <Avatar
@@ -137,16 +135,16 @@ const PostComment = ({ viewComment, post, _id }: postCommentProps) => {
         key={viewComment.id}
         name={viewComment.id}
         value={viewComment.contents}
-        readOnly        
+        readOnly
         inputRef={inputRef}
-        sx={{ width:'95%' }}               
+        sx={{ width: '95%' }}
         classes={classes}
         startAdornment={
           <Avatar
             alt={viewComment.owner_username}
             src={`${API_PATH}static/` + viewComment.owner_email}
-            sx={{ width: 35, height: 35, mr: '34px'}}
-            style={{ border: '0.1px solid lightgray' }}
+            sx={{ width: 35, height: 35, mr: '34px' }}
+            style={{ border: '1px solid lightgray' }}
             imgProps={{ crossOrigin: 'anonymous' }}
           />
         }

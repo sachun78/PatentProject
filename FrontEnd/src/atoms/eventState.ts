@@ -1,11 +1,13 @@
 import { atom, selector, useRecoilState } from 'recoil'
 import produce from 'immer'
 
+type dateRange = {
+  startDate: Date
+  endDate: Date
+}
+
 export type EventState = {
-  dateRange: {
-    startDate: Date
-    endDate: Date
-  }
+  dateRange: dateRange
   open: boolean
   isEdit: boolean
 }
@@ -52,6 +54,15 @@ export const dateRangeState = selector<EventState['dateRange']>({
     const event = get(eventState)
     return event.dateRange
   },
+  set: ({ set }, newValue) => {
+    if (typeof newValue === 'object')
+      set(
+        eventState,
+        produce((event) => {
+          event.dateRange = newValue
+        })
+      )
+  },
 })
 
 export const eventModalState = selector<EventState['open']>({
@@ -59,6 +70,15 @@ export const eventModalState = selector<EventState['open']>({
   get: ({ get }) => {
     const event = get(eventState)
     return event.open
+  },
+  set: ({ set }, newValue) => {
+    if (typeof newValue === 'boolean')
+      set(
+        eventState,
+        produce((event) => {
+          event.open = newValue
+        })
+      )
   },
 })
 
@@ -68,19 +88,13 @@ export const eventEditState = selector<EventState['isEdit']>({
     const event = get(eventState)
     return event.isEdit
   },
+  set: ({ set }, newValue) => {
+    if (typeof newValue === 'boolean')
+      set(
+        eventState,
+        produce((event) => {
+          event.isEdit = newValue
+        })
+      )
+  },
 })
-
-export const updateDateRange = (state: EventState, key: keyof EventState['dateRange'], value: Date) =>
-  produce(state, (draft) => {
-    draft.dateRange[key] = value
-  })
-
-export const updateEventModalOpen = (state: EventState, value: boolean) =>
-  produce(state, (draft) => {
-    draft.open = value
-  })
-
-export const updateEventEdit = (state: EventState, value: boolean) =>
-  produce(state, (draft) => {
-    draft.isEdit = value
-  })

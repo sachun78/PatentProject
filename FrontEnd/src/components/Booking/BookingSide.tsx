@@ -24,7 +24,7 @@ function BookingSide({ meeting }: BookingSideProps) {
           alt={meeting.ownerEmail}
           src={`${API_PATH}static/${meeting.ownerEmail}`}
           sx={{ width: 60, height: 60, marginBottom: '20px' }}
-          style={{ border: '0.1px solid lightgray' }}
+          style={{ border: '1px solid lightgray' }}
           imgProps={{ crossOrigin: 'anonymous' }}
         >
           <img src={gravatar.url(meeting.ownerEmail, { s: '60px', d: 'retro' })} alt={'fallback'} />

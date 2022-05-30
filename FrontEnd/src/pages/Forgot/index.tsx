@@ -63,7 +63,7 @@ function Forgot({}: ForgotProps) {
         return
       }
 
-      reset.mutate({ password: form.password, email: data.email })
+      reset.mutate({ password: form.password, email: data.email.toLowerCase() })
     },
     [data, form.password, form.password_confirm, reset]
   )

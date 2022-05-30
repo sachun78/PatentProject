@@ -78,8 +78,8 @@ export default function BookingRepalnMain({ meeting }: BookingRepalnMainProps) {
   if (meeting.data.status !== 'none') {
     const isReplan = meeting.data.status === 'replan'
     return (
-      <div css={mainStyle}>
-        {isReplan ? 'Rescheduling has been completed.' : 'Already Confirm or Cancel!!'}
+      <div css={mainStyle} style={{ textAlign: 'center' }}>
+        {isReplan ? 'Rescheduling request success.' : 'Already select Confirm or Cancel'}
         <Link to={'/'} style={{ textAlign: 'center', marginTop: '1rem' }}>
           Back
         </Link>
