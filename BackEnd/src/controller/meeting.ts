@@ -260,6 +260,7 @@ export async function sendInvitMail(req: IRequest, res: Response) {
         return res.status(403).json({ message: 'event owner is different. meeting create fail'});
       }
 
+      meetData.date = bodyData.startTime
       meetData.location = bodyData.location
       meetData.comment = bodyData.comment
       meetData.startTime = bodyData.startTime
