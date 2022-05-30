@@ -6,7 +6,7 @@ import React from 'react'
 import { IProfileDetail } from 'lib/api/types'
 import { FlexRow } from './styles'
 import IconControl from '../IconControl'
-import { FieldItem } from '../../pages/User/styles'
+import { FieldItem } from 'pages/User/styles'
 
 export type ProfileBoxProps = {
   profileData: IProfileDetail

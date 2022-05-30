@@ -2,7 +2,7 @@ import { Navigate, useParams } from 'react-router-dom'
 import { useMutation, useQuery } from 'react-query'
 import React, { useCallback, useRef, useState } from 'react'
 import { Box, Button, FormControlLabel, OutlinedInput, Radio, RadioGroup } from '@mui/material'
-import { ContainerBlock, MeetingSection, UploadButton } from '../../pages/Meeting/styles'
+import { ContainerBlock, MeetingSection, UploadButton } from 'pages/Meeting/styles'
 import { getEvent } from 'lib/api/event/getEvent'
 import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
 import useInput from 'hooks/useInput'
@@ -157,7 +157,7 @@ function MeetingResult({}: MeetingResultProps) {
               )}
             </MeetingSection>
             <MeetingSection>
-              <h2>Whether or not we met</h2>
+              <h2>Whether we met or not</h2>
               <RadioGroup row onChange={onMetChange} value={metValue}>
                 <FormControlLabel value="met" control={<Radio />} label="We met" />
                 <FormControlLabel value="fail" control={<Radio />} label="Missed" />

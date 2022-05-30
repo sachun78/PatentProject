@@ -5,7 +5,6 @@ export default function useAuth() {
   const queryClient = useQueryClient()
   const logout = () => {
     logoutAPI().then(() => queryClient.invalidateQueries('user'))
-    console.log('logout')
   }
 
   return { logout }

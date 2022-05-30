@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import { brandColor } from 'lib/palette'
-import { itemStyle, tabStyle } from '../../pages/Member/style'
+import { itemStyle, tabStyle } from 'pages/Member/style'
 import { NavLink } from 'react-router-dom'
 import React from 'react'
 

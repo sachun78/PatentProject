@@ -3,7 +3,6 @@ import { inputStyle } from '../styles'
 import React, { useCallback, useState } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 import { signin } from 'lib/api/auth/signin'
-import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 import useInputs from 'hooks/useInputs'
 
@@ -19,7 +18,6 @@ function LoginForm({}: LoginFormProps) {
     },
     {
       onSuccess: (res) => {
-        toast('Login Success', { type: 'success', position: 'top-center', autoClose: 2000, hideProgressBar: true })
         queryClient.setQueryData('user', res.user)
       },
       onError: (err: AxiosError) => {

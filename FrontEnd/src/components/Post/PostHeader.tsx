@@ -1,17 +1,14 @@
 import { css } from '@emotion/react'
-import { Avatar, ListItemText } from '@mui/material'
+import { Avatar, CircularProgress, ListItemText } from '@mui/material'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 import Grow from '@mui/material/Grow'
 import MenuItem from '@mui/material/MenuItem'
 import MenuList from '@mui/material/MenuList'
 import Paper from '@mui/material/Paper'
 import Popper from '@mui/material/Popper'
-import { AxiosError } from 'axios'
 import { formatDistanceToNow } from 'date-fns'
 import gravatar from 'gravatar'
 import useBuddyQuery from 'hooks/query/useBuddyQuery'
-import { addBuddy } from 'lib/api/buddy/addBuddy'
-import { deleteBuddy } from 'lib/api/buddy/deleteBuddy'
 import { API_PATH } from 'lib/api/client'
 import { deletePost } from 'lib/api/post/deletePost'
 import { User as UserType } from 'lib/api/types'
@@ -19,8 +16,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { MdMoreHoriz } from 'react-icons/md'
 import { useMutation, useQueryClient } from 'react-query'
 import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import palette, { brandColor } from '../../lib/palette'
+import palette, { brandColor } from 'lib/palette'
 import AskRemoveModal from './AskRemoveModal'
 
 export type PostHeaderProps = {
@@ -32,18 +28,21 @@ export type PostHeaderProps = {
 }
 
 function PostHeader({ owner_username, owner_email, createdAt, owner_id, _id }: PostHeaderProps) {
-  const date = useMemo(() => new Date(createdAt), [])
-  const [url] = useState(`${API_PATH}static/${owner_email}`)
-  const today = new Date()
-  const diff = (today.getTime() - date.getTime()) / 1000
   const [open, setOpen] = useState(false)
-  const anchorRef = useRef<HTMLDivElement>(null)
-  const qc = useQueryClient()
   const [modal, setModal] = useState(false)
+  const [url] = useState(`${API_PATH}static/${owner_email}`)
+  const anchorRef = useRef<HTMLDivElement>(null)
+  const prevOpen = useRef(open)
+
+  const qc = useQueryClient()
   const navigate = useNavigate()
   const user = qc.getQueryData<UserType>('user')
-  const { data: buddyData, isLoading } = useBuddyQuery()
-  const prevOpen = useRef(open)
+
+  const date = useMemo(() => new Date(createdAt), [])
+  const today = new Date()
+  const diff = (today.getTime() - date.getTime()) / 1000
+  const { data: buddyData } = useBuddyQuery()
+
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen)
   }
@@ -58,7 +57,6 @@ function PostHeader({ owner_username, owner_email, createdAt, owner_id, _id }: P
 
   const deletePostlMut = useMutation(deletePost, {
     onSuccess: () => {
-      qc.invalidateQueries(['post', _id])
       qc.invalidateQueries(['posts'])
       navigate('/')
     },
@@ -88,37 +86,15 @@ function PostHeader({ owner_username, owner_email, createdAt, owner_id, _id }: P
 
   // return focus to the button when we transitioned from !open -> open
   useEffect(() => {
-    if (prevOpen.current === true && open === false) {
+    if (prevOpen.current && !open) {
       anchorRef.current!.focus()
     }
 
     prevOpen.current = open
   }, [open])
 
-  const addBuddyMutation = useMutation(addBuddy, {
-    onSuccess: () => {
-      toast.success('Buddy added!')
-      qc.invalidateQueries('buddy')
-    },
-    onError: (err: AxiosError) => {
-      console.error(err)
-      toast.error(err.response?.data.message)
-    },
-  })
-
-  const delBuddyMutation = useMutation(deleteBuddy, {
-    onSuccess: () => {
-      toast.success('Buddy deleted!')
-      qc.invalidateQueries('buddy')
-    },
-    onError: (err: AxiosError) => {
-      console.error(err)
-      toast.error(err.response?.data.message)
-    },
-  })
-
-  if (!owner_email || !user || !buddyData) {
-    return <div>로딩중!!</div>
+  if (!owner_email || !buddyData) {
+    return <CircularProgress />
   }
 
   return (
@@ -188,7 +164,7 @@ function PostHeader({ owner_username, owner_email, createdAt, owner_id, _id }: P
                       <ListItemText>View details</ListItemText>
                     </MenuItem>
                   </Link>
-                  {owner_id === user.id && (
+                  {owner_id === user?.id && (
                     <div>
                       <Link to={`/PostEdit/${_id}`} css={linkStyle}>
                         <MenuItem onClick={handleClose} disableRipple>
@@ -212,23 +188,13 @@ function PostHeader({ owner_username, owner_email, createdAt, owner_id, _id }: P
   )
 }
 
-const iconBoxStyle = css`
-  height: 36px;
-  border: 1px solid #910457;
-  border-radius: 999px;
-  margin-right: 1rem;
-`
-
 const linkStyle = css`
-  color: #000;
+  color: #333;
 `
 
 const headerStyle = css`
   display: flex;
-  padding-top: 1.5625rem;
-  padding-left: 1.875rem;
-  padding-right: 1.875rem;
-  padding-bottom: 20px;
+  padding: 1.5625rem 1.875rem 1.25rem;
   align-items: flex-start;
 `
 const moreStyle = css`
@@ -269,14 +235,14 @@ const titleStyle = css`
 
   span {
     color: #333333;
-    font-family: NanumSquare;
+    font-family: NanumSquareOTF;
     font-weight: 800;
     font-size: 18px;
     line-height: 1.166666667;
   }
 
   .time-date {
-    font-family: 'NanumSquare';
+    font-family: 'NanumSquareOTF';
     font-size: 14px;
     line-height: 1.142857143;
     color: #9c9c9c;

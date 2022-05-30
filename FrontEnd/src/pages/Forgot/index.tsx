@@ -35,11 +35,6 @@ function Forgot({}: ForgotProps) {
   const navigate = useNavigate()
   const reset = useMutation('reset', resetPassword, {
     onSuccess: () => {
-      toast.success('change success', {
-        position: 'top-center',
-        pauseOnFocusLoss: false,
-        pauseOnHover: false,
-      })
       navigate('/login')
     },
     onError(err: AxiosError) {

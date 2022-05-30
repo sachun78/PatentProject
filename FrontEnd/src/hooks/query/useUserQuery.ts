@@ -1,10 +1,10 @@
 import { useQuery } from 'react-query'
-import { getCurrentUser } from '../../lib/api/me/getCurrentUser'
+import { getCurrentUser } from 'lib/api/me/getCurrentUser'
 
 function useUserQuery() {
   return useQuery('user', getCurrentUser, {
     retry: false,
-    staleTime: 2000
+    staleTime: 2000,
   })
 }
 

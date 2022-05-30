@@ -1,10 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { animated, useSpring } from 'react-spring'
-import media from '../../lib/styles/media'
+import media from 'lib/styles/media'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import { brandColor } from '../../lib/palette'
+import { brandColor } from 'lib/palette'
 
 export type HorizontalTabProps = {
   className?: string
@@ -64,7 +64,7 @@ export type TabItemProps = {
 
 function TabItem({ name, text, to, active, width, theme }: TabItemProps) {
   return (
-    <StyledLink to={to} className={active ? 'active' : ''} style={{ width }} theme={theme}>
+    <StyledLink to={to} className={active ? 'active' : ''} style={{ width }} theme={theme} replace>
       {text}
     </StyledLink>
   )

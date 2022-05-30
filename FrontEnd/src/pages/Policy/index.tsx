@@ -1,7 +1,7 @@
 import { Navigate, useParams } from 'react-router-dom'
 import styled from '@emotion/styled'
 import HorizontalTab from 'components/HorizontalTab'
-import PolicyViewer from '../../components/policy/PolicyViewer'
+import PolicyViewer from 'components/policy/PolicyViewer'
 import { Helmet } from 'react-helmet-async'
 import React from 'react'
 
@@ -19,7 +19,6 @@ export type PolicyProps = {}
 
 function Policy({}: PolicyProps) {
   const { type } = useParams()
-  console.log(type)
 
   if (!type || !(type === 'privacy' || type === 'terms')) {
     return <Navigate to="/policy/privacy" />
@@ -36,7 +35,7 @@ function Policy({}: PolicyProps) {
         </HorizontalTab>
         <PolicyViewer type={type} />
       </main>
-      {!type && <Navigate to="/policy/privacy" />}
+      {!type && <Navigate to="/policy/privacy" replace />}
     </PolicyTemplate>
   )
 }

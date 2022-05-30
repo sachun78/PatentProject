@@ -5,7 +5,7 @@ import { css } from '@emotion/react'
 import { useRef, useState } from 'react'
 import useOnClickOutside from 'use-onclickoutside'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import { brandColor } from '../../lib/palette'
+import { brandColor } from 'lib/palette'
 
 export type DatePickerProps = {
   value: Date

@@ -11,7 +11,7 @@ import TimeGridInput from '../DatePickerInput/TimeGridInput'
 import { isBefore } from 'date-fns'
 import { sectionTitle } from './BookingSide'
 import { useRemoveOutlineHover } from 'lib/styles/muiStyles'
-import { submitButton } from '../../lib/styles/submitButton'
+import { submitButton } from 'lib/styles/submitButton'
 
 export type BookingRepalnMainProps = {
   meeting: IReplan

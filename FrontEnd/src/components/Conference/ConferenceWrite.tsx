@@ -1,36 +1,36 @@
-import styled from '@emotion/styled';
-import { Box, Button, OutlinedInput } from '@mui/material';
-import { ContainerBlock } from 'pages/Meeting/styles';
-import React from 'react';
-import { MeetingSection } from '../../pages/Meeting/styles';
+import styled from '@emotion/styled'
+import { Box, Button, OutlinedInput } from '@mui/material'
+import { ContainerBlock, MeetingSection } from 'pages/Meeting/styles'
+import React from 'react'
 
 const ConferenceWrite = () => {
-  return (<>
-    <ContainerBlock>      
-      <form
-        onSubmit={() => {}}
-        style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}
-      >
-        <MeetingSection>
-          <h2>Title</h2>
-          <OutlinedInput
-            minRows={1}
-            multiline
-            value={''}
-            placeholder={'Enter Conference Title here'}
-            onChange={() => {}}
-          />
-        </MeetingSection>
-        <MeetingSection>
-          <h2>Photo</h2>
-          <input
-            ref={null}
-            onChange={() => {}}
-            type="file"
-            style={{ display: 'none' }}
-            accept="image/*"
-            name="mhistory_img"
-          />            
+  return (
+    <>
+      <ContainerBlock>
+        <form
+          onSubmit={() => {}}
+          style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}
+        >
+          <MeetingSection>
+            <h2>Title</h2>
+            <OutlinedInput
+              minRows={1}
+              multiline
+              value={''}
+              placeholder={'Enter Conference Title here'}
+              onChange={() => {}}
+            />
+          </MeetingSection>
+          <MeetingSection>
+            <h2>Photo</h2>
+            <input
+              ref={null}
+              onChange={() => {}}
+              type="file"
+              style={{ display: 'none' }}
+              accept="image/*"
+              name="mhistory_img"
+            />
             <Box
               component="span"
               sx={{
@@ -43,18 +43,12 @@ const ConferenceWrite = () => {
               }}
             >
               <ImgView src={''} alt={''} crossOrigin="anonymous" />
-            </Box>            
-          </MeetingSection>          
+            </Box>
+          </MeetingSection>
           <MeetingSection>
-          <h2>Contents</h2>
-          <OutlinedInput
-            minRows={6}
-            multiline
-            value={''}
-            placeholder={'Enter your text here'}
-            onChange={() => {}}
-          />
-        </MeetingSection>    
+            <h2>Contents</h2>
+            <OutlinedInput minRows={6} multiline value={''} placeholder={'Enter your text here'} onChange={() => {}} />
+          </MeetingSection>
           <Button
             type={'submit'}
             variant={'contained'}
@@ -69,12 +63,13 @@ const ConferenceWrite = () => {
           >
             Submit
           </Button>
-        </form>      
-    </ContainerBlock>
-  </>);
+        </form>
+      </ContainerBlock>
+    </>
+  )
 }
 
-export default ConferenceWrite;
+export default ConferenceWrite
 
 const ImgView = styled.img`
   width: 255px;

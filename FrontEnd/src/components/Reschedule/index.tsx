@@ -27,7 +27,6 @@ function MeetingReschedule({}: MeetingRescheduleProps) {
     return <div>Loading</div>
   }
 
-  console.log(error)
   if (error) {
     return <div>error</div>
   }

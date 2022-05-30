@@ -3,15 +3,13 @@ import IconControl from 'components/IconControl'
 import { editPost } from 'lib/api/post/editPost'
 import { getPost } from 'lib/api/post/getPost'
 import { postImgUpload } from 'lib/api/post/postImgUpload'
-import { User } from 'lib/api/types'
-import palette from 'lib/palette'
 import Quill from 'quill'
 import 'quill/dist/quill.snow.css'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { API_PATH } from '../../lib/api/client'
+import { API_PATH } from 'lib/api/client'
 
 function PostEdit() {
   const qc = useQueryClient()
@@ -19,14 +17,13 @@ function PostEdit() {
   const quillElement = useRef<any>(null)
   const quillInstance = useRef<any>(null)
   const navigate = useNavigate()
-  const user = qc.getQueryData<User>('user') as User
 
   const { id } = useParams()
   const { data: post, isLoading } = useQuery(['post', id], getPost, {
     retry: false,
   })
 
-  const [body, setBody] = useState('') 
+  const [body, setBody] = useState('')
 
   const onImageSetting = () => {
     const innerImage = quillInstance.current
@@ -41,12 +38,6 @@ function PostEdit() {
     onSuccess: () => {
       qc.invalidateQueries(['posts'])
       qc.invalidateQueries(['post', id])
-      toast.success('Editing Successful', {
-        position: toast.POSITION.TOP_CENTER,
-        pauseOnHover: false,
-        pauseOnFocusLoss: false,
-        autoClose: 3000,
-      })
       navigate('/')
     },
     onError: () => {
@@ -61,7 +52,6 @@ function PostEdit() {
 
   const onSubmit = useCallback(
     (e) => {
-      const imgRegex = /<img[^>]*src=[\"']?([^>\"']+)[\"']?[^/>]*>/g
       onImageSetting()
       e.preventDefault()
       if (!body.trim()) {
@@ -73,6 +63,7 @@ function PostEdit() {
         })
         return
       }
+      const imgRegex = /<img[^>]*src=[\"']?([^>\"']+)[\"']?[^/>]*>/g
 
       postEditMut.mutate([
         {
@@ -85,7 +76,7 @@ function PostEdit() {
     [body, image]
   )
 
-  const onCancle = () => {
+  const onCancel = () => {
     navigate(-1)
   }
 
@@ -111,16 +102,16 @@ function PostEdit() {
   const imageHandler = () => {
     const ops = quillInstance.current.getContents().ops
     const innerImage = ops.filter((insert: any) => insert.insert['image'] !== undefined)
-    const range = quillInstance.current.getSelection(true);      
-    
-    if(innerImage.length > 3) {
+    const range = quillInstance.current.getSelection(true)
+
+    if (innerImage.length > 3) {
       toast.success('There are up to four image attachments.', {
         position: toast.POSITION.TOP_CENTER,
         pauseOnHover: false,
         pauseOnFocusLoss: false,
         autoClose: 2000,
       })
-      return;
+      return
     }
 
     // 1. 이미지를 저장할 input type=file DOM을 만든다.
@@ -139,7 +130,8 @@ function PostEdit() {
 
       postImgUpload(formData).then((res) => {
         quillInstance.current.root.innerHTML =
-        quillInstance.current.root.innerHTML + `<img src='${API_PATH}static/${res.fileName}' crossorigin='anonymous' width='500px' height='300px' >` 
+          quillInstance.current.root.innerHTML +
+          `<img src='${API_PATH}static/${res.fileName}' crossorigin='anonymous' width='500px' height='300px' >`
 
         setTimeout(() => quillInstance.current.setSelection(range.index + 2), 0)
       })
@@ -155,7 +147,7 @@ function PostEdit() {
           container: [
             [{ size: ['small', false, 'large', 'huge'] }],
             ['bold', 'italic', 'underline', 'strike'],
-            [{ list: 'ordered' }, { list: 'bullet' }, { align: [false,"center", "right", "justify"]}],
+            [{ list: 'ordered' }, { list: 'bullet' }, { align: [false, 'center', 'right', 'justify'] }],
             ['blockquote', 'code-block', 'link', 'image'],
           ],
           handlers: {
@@ -167,43 +159,41 @@ function PostEdit() {
 
     const quill = quillInstance.current
 
-    if(post) {
+    if (post) {
       post.images.map(
-        (img: any) =>
-          (quill.root.innerHTML = quill.root.innerHTML + `<img src='${img}' crossOrigin='anonymous' />`)
+        (img: any) => (quill.root.innerHTML = quill.root.innerHTML + `<img src='${img}' crossOrigin='anonymous' />`)
       )
       quill.root.innerHTML = quill.root.innerHTML + post.contents
-  
+
       quill.on('text-change', () => {
         setBody(quill.root.innerHTML)
       })
     }
-    
   }, [post])
 
-  if(!post) return <div></div>
+  if (!post) return <div></div>
 
   return (
     <>
       <div css={postWriteStyle}>
-        <form onSubmit={onSubmit} encType="multipart/form-data" style={{ height: "100%", marginBottom: "1.875rem" }}>
+        <form onSubmit={onSubmit} encType="multipart/form-data" style={{ height: '100%', marginBottom: '1.875rem' }}>
           <div css={headStyle}>
-            <IconControl name={'write'} style={{ padding: "0 0.375rem 0 0" }}/>
-              Edit Post
-          </div>                    
+            <IconControl name={'write'} style={{ padding: '0 0.375rem 0 0' }} />
+            Edit Post
+          </div>
           <div css={quillWrapperStyle}>
             <div css={editorStyle} ref={quillElement} />
           </div>
         </form>
         <div css={buttonWrapStyle}>
-          <button css={buttonStyle} onClick={onCancle} style={{ background: '#9C9C9C'}}>
-            Cancle
+          <button css={buttonStyle} onClick={onCancel} style={{ background: '#9C9C9C' }}>
+            Cancel
           </button>
-          <button css={buttonStyle} onClick={onSubmit} style={{ background: '#910457'}}>
+          <button css={buttonStyle} onClick={onSubmit} style={{ background: '#910457' }}>
             Edit
-          </button>        
+          </button>
         </div>
-      </div>      
+      </div>
     </>
   )
 }
@@ -212,7 +202,7 @@ export default PostEdit
 
 const headStyle = css`
   display: flex;
-  font:  800 18px NanumSquareOTF;
+  font: 800 18px NanumSquareOTF;
   align-items: center;
   padding: 1.875rem 0 1.875rem 1.875rem;
   color: #333333;
@@ -220,34 +210,34 @@ const headStyle = css`
 
 const editorStyle = css`
   max-height: 26.125rem;
-  background: #FFFFFF !important;
+  background: #ffffff !important;
 `
 
-const quillWrapperStyle = css` 
-  height: 32.5rem;  
+const quillWrapperStyle = css`
+  height: 32.5rem;
 
   .ql-container {
     border: none !important;
   }
+
   .ql-toolbar {
-    background: #F2F2F2;
+    background: #f2f2f2;
     border: none !important;
     padding: 0.5rem 0 0.5rem 1rem !important;
   }
 
-  .ql-editor {        
+  .ql-editor {
     font: 15px NanumSquareOTF;
     line-height: 1.5;
     margin: 1.875rem;
     padding: 0;
-    color: #6C6C6C;
-    
+    color: #6c6c6c;
   }
 
-  .ql-editor.ql-blank::before{
+  .ql-editor.ql-blank::before {
     font: 15px NanumSquareOTF;
-    color: #D9D9D9;    
-  }  
+    color: #d9d9d9;
+  }
 `
 const postWriteStyle = css`
   width: 54.375rem;
@@ -258,24 +248,24 @@ const postWriteStyle = css`
   border-radius: 0.7rem;
   opacity: 0.8;
   position: relative;
-  background: #FFFFFF;
-  
+  background: #ffffff;
 `
 const buttonWrapStyle = css`
   display: flex;
-  justify-content: center;  
+  justify-content: center;
+
   button + button {
     margin-left: 1.25rem;
-  }     
+  }
 `
 
-const buttonStyle = css`  
+const buttonStyle = css`
   border: none;
-  border-radius: 999px;  
+  border-radius: 999px;
   width: 9.375rem;
   height: 1.75rem;
   font: 14px NanumSquareOTF;
-  font-weight: 100;  
-  color: white;  
-  cursor: pointer;    
+  font-weight: 100;
+  color: white;
+  cursor: pointer;
 `

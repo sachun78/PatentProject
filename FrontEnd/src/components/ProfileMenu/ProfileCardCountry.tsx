@@ -3,9 +3,9 @@ import React, { memo, SyntheticEvent } from 'react'
 import { css } from '@emotion/react'
 import CountrySelector, { countries, CountryType } from '../CountrySelector/CountrySelector'
 import { AutocompleteValue } from '@mui/material'
-import getCountryName from '../../lib/countryName'
+import getCountryName from 'lib/countryName'
 import styled from '@emotion/styled'
-import { resetButton } from '../../lib/styles/resetButton'
+import { resetButton } from 'lib/styles/resetButton'
 
 export type ProfileCardCountryProps = {
   title: string

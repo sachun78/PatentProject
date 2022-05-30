@@ -12,7 +12,7 @@ import { SaveBlock, useButtonStyle } from 'components/ProfileMenu/ProfileCardSav
 import { updateMeeting } from 'lib/api/meeting/updateMeeting'
 import MeetingChange from 'components/Schedules/MeetingChange'
 import useToggle from 'hooks/useToggle'
-import IconControl from '../../components/IconControl'
+import IconControl from 'components/IconControl'
 
 export type MeetingDetailProps = {}
 

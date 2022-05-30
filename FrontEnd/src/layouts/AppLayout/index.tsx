@@ -5,9 +5,9 @@ import Sponsor from 'components/Sponsor'
 import useUserQuery from 'hooks/query/useUserQuery'
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import User from '../../pages/User'
+import User from 'pages/User'
 import { footerStyle, mainStyle, sidebarStyle } from './styles'
-import InitialModal from '../../components/InitialModal'
+import InitialModal from 'components/InitialModal'
 
 const Home = loadable(() => import('pages/Home'))
 const Profile = loadable(() => import('pages/Profile'))
@@ -41,8 +41,8 @@ export default function AppLayout({}: AppLayoutProps) {
         <Sidebar />
       </AppLayout.Sidebar>
       <AppLayout.Main>
-        <Routes>          
-          <Route path={'/'} element={<Home />} />          
+        <Routes>
+          <Route path={'/'} element={<Home />} />
           <Route path={'/postDetail/:id'} element={<PostDetail />} />
           <Route path={'/meeting/*'} element={<Member />} />
           <Route path={'/network/*'} element={<Network />} />

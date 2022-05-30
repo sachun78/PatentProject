@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import media from 'lib/styles/media'
-import { brandColor } from '../../lib/palette'
+import { brandColor } from 'lib/palette'
 
 export const sidebarStyle = css`
   // ${media.xlarge} {

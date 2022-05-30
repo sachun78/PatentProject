@@ -43,7 +43,6 @@ function InitialModal({}: InitialModalProps) {
   const handleCountry = (e: SyntheticEvent, v: AutocompleteValue<CountryType, undefined, undefined, undefined>) => {
     if (!v) return
     setCountry(v.code)
-    console.log(v)
   }
 
   // FIELD CONTROL
