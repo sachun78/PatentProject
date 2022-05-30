@@ -5,6 +5,7 @@ import useUserQuery from 'hooks/query/useUserQuery'
 import MailCheckForm from './mailcheck-form/MailCheckForm'
 import { containerStyle, loginFormStyle } from '../Login/styles'
 import { undoStyle } from '../Signup/styles'
+import { Helmet } from 'react-helmet-async'
 
 type RegisterProps = {
   type?: 'register' | 'forgot'
@@ -22,6 +23,9 @@ export default function MailCheck({ type = 'register' }: RegisterProps) {
 
   return (
     <Auth>
+      <Helmet>
+        <title>{type === 'forgot' ? 'Forgot' : 'Signup'} - WEMET</title>
+      </Helmet>
       <div css={containerStyle} style={!sendMail ? { height: '31.75rem' } : { height: '34.3125rem' }}>
         <figure>
           <img src={'/assets/login_logo.png'} alt={'login-logo'} />

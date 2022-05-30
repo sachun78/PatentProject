@@ -8,19 +8,25 @@ import { RecoilRoot } from 'recoil'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ThemeProvider } from '@mui/material'
 import theme from './lib/styles/theme'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 
 const queryClient = new QueryClient()
 ReactDOM.render(
   <React.StrictMode>
-    <RecoilRoot>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <ThemeProvider theme={theme}>
-            <App />
-          </ThemeProvider>
-        </BrowserRouter>
-      </QueryClientProvider>
-    </RecoilRoot>
+    <HelmetProvider>
+      <Helmet>
+        <title>WEMET</title>
+      </Helmet>
+      <RecoilRoot>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <ThemeProvider theme={theme}>
+              <App />
+            </ThemeProvider>
+          </BrowserRouter>
+        </QueryClientProvider>
+      </RecoilRoot>
+    </HelmetProvider>
   </React.StrictMode>,
   document.getElementById('root')
 )

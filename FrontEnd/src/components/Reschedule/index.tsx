@@ -6,6 +6,7 @@ import { wrapper } from '../Booking/styles'
 import { IReplan } from 'lib/api/types'
 import { useQuery } from 'react-query'
 import { getMeetingInfoByCode } from 'lib/api/meeting/getMeetingInfoByCode'
+import { Helmet } from 'react-helmet-async'
 
 export type MeetingRescheduleProps = {}
 
@@ -33,6 +34,9 @@ function MeetingReschedule({}: MeetingRescheduleProps) {
 
   return (
     <div css={wrapper}>
+      <Helmet>
+        <title>Reschedule a meeting - WEMET</title>
+      </Helmet>
       <BookingSide meeting={meeting.data} />
       <BookingReplanMain meeting={meeting} />
     </div>

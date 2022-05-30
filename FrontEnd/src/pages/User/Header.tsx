@@ -15,6 +15,7 @@ import { addBuddy } from 'lib/api/buddy/addBuddy'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 import { deleteBuddy } from 'lib/api/buddy/deleteBuddy'
+import { Helmet } from 'react-helmet-async'
 
 export type HeaderProps = {
   email: string
@@ -26,16 +27,12 @@ function Header({ email }: HeaderProps) {
   const [, setOpen] = useRecoilState(eventSelectModalState)
   const [, setMeetuser] = useMeetingReqUser()
 
-  const {
-    data: profileData,
-    isLoading: isLoadingProfile,
-    error: profileError,
-  } = useQuery(['profile', email], getProfilebyEmail, {
+  const { data: profileData, error: profileError } = useQuery(['profile', email], getProfilebyEmail, {
     retry: false,
     staleTime: 5000,
   })
 
-  const { data: buddyData, isLoading, error } = useBuddyQuery()
+  const { data: buddyData, error } = useBuddyQuery()
 
   const addBuddyMutation = useMutation(addBuddy, {
     onSuccess: () => {
@@ -90,6 +87,9 @@ function Header({ email }: HeaderProps) {
 
   return (
     <UserHeader>
+      <Helmet>
+        <title>{profileData.username} - WEMET</title>
+      </Helmet>
       <img
         src={`${API_PATH}static/${email}`}
         alt={email}

@@ -9,6 +9,7 @@ import { IEvent, IMeeting } from 'lib/api/types'
 import { format, isBefore } from 'date-fns'
 import IconControl from '../IconControl'
 import { noScheduleStyle } from './styles'
+import { Helmet } from 'react-helmet-async'
 
 export type EventDetailLeftProps = {
   id: string
@@ -40,6 +41,9 @@ function EventDetailContainer({ id }: EventDetailLeftProps) {
 
   return (
     <>
+      <Helmet>
+        <title>{event.title} - WEMET</title>
+      </Helmet>
       <h1 css={titleEventStyle}>{event.title}</h1>
       <section css={dateSectionStyle}>
         <IconControl name={'date'} />

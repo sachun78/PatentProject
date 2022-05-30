@@ -15,6 +15,7 @@ import { MdLock } from 'react-icons/md'
 import { checkCode } from 'lib/api/auth/sendmail'
 import { toast } from 'react-toastify'
 import { containerStyle, inputStyle, loginFormStyle } from '../Login/styles'
+import { Helmet } from 'react-helmet-async'
 
 type RegisterProps = {}
 
@@ -115,6 +116,9 @@ export default function Signup({}: RegisterProps) {
 
   return (
     <Auth>
+      <Helmet>
+        <title>Signup - WEMET</title>
+      </Helmet>
       <div css={containerStyle} style={{ height: '44.875rem' }}>
         <figure>
           <img src={'/assets/login_logo.png'} alt={'login-logo'} />

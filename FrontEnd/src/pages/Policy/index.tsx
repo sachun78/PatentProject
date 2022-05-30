@@ -2,6 +2,8 @@ import { Navigate, useParams } from 'react-router-dom'
 import styled from '@emotion/styled'
 import HorizontalTab from 'components/HorizontalTab'
 import PolicyViewer from '../../components/policy/PolicyViewer'
+import { Helmet } from 'react-helmet-async'
+import React from 'react'
 
 const PolicyTemplate = styled.div`
   main {
@@ -24,6 +26,9 @@ function Policy({}: PolicyProps) {
   }
   return (
     <PolicyTemplate>
+      <Helmet>
+        <title>Policy - WEMET</title>
+      </Helmet>
       <main>
         <HorizontalTab activeTab={type} tabWidth={12}>
           <HorizontalTab.TabItem to="/policy/terms" name="terms" text="Terms" />

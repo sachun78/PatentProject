@@ -1,11 +1,12 @@
 import BookingSide from './BookingSide'
 import BookingMain from './BookingMain'
 import { Navigate, useSearchParams } from 'react-router-dom'
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { getMeetingInfoByCode } from 'lib/api/meeting/getMeetingInfoByCode'
 import { wrapper } from './styles'
 import { useQuery } from 'react-query'
 import { isBefore } from 'date-fns'
+import { Helmet } from 'react-helmet-async'
 
 export type BookingProps = {}
 
@@ -30,6 +31,9 @@ function Booking({}: BookingProps) {
   }
   return (
     <div css={wrapper}>
+      <Helmet>
+        <title>Meeting Book - WEMET</title>
+      </Helmet>
       <BookingSide meeting={bookingData.data} />
       <BookingMain
         code={code}

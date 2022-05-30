@@ -5,6 +5,7 @@ import { containerStyle, dividerStyle, loginFormStyle, underBlockStyle } from '.
 import useUserQuery from 'hooks/query/useUserQuery'
 import LoginForm from './login-form/LoginForm'
 import Auth from 'layouts/Auth'
+import { Helmet } from 'react-helmet-async'
 
 type LoginProps = {}
 
@@ -17,6 +18,9 @@ function Login({}: LoginProps) {
 
   return (
     <Auth>
+      <Helmet>
+        <title>Login - WEMET</title>
+      </Helmet>
       <div css={containerStyle}>
         <figure>
           <img src={'/assets/login_logo.png'} alt={'login-logo'} />

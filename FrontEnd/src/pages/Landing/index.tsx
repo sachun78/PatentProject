@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CardItem, CardSection, Footer, Header, MainSection, Section1 } from './styles'
+import { Helmet } from 'react-helmet-async'
 
 export type LandingProps = {}
 
@@ -9,6 +10,9 @@ function Landing({}: LandingProps) {
 
   return (
     <>
+      <Helmet>
+        <title>All you need for meeting is WeMet for IP - WEMET</title>
+      </Helmet>
       <Header>
         <div className={'inner'}>
           <div className={'logo'}>

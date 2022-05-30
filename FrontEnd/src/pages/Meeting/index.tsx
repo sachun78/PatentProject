@@ -1,5 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import loadable from '@loadable/component'
+import { Helmet } from 'react-helmet-async'
+import React from 'react'
 
 type MeetingProps = {}
 
@@ -8,10 +10,15 @@ const MeetingDetail = loadable(() => import('./MeetingDetail'))
 
 function Meeting({}: MeetingProps) {
   return (
-    <Routes>
-      <Route path="/request" element={<RequestForm />} />
-      <Route path="/:id" element={<MeetingDetail />} />
-    </Routes>
+    <>
+      <Helmet>
+        <title>Schedule - WEMET</title>
+      </Helmet>
+      <Routes>
+        <Route path="/request" element={<RequestForm />} />
+        <Route path="/:id" element={<MeetingDetail />} />
+      </Routes>
+    </>
   )
 }
 

@@ -9,6 +9,7 @@ import { checkCode } from 'lib/api/auth/sendmail'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import { resetPassword } from 'lib/api/auth/resetPassword'
+import { Helmet } from 'react-helmet-async'
 
 export type ForgotProps = {}
 
@@ -86,6 +87,9 @@ function Forgot({}: ForgotProps) {
 
   return (
     <Auth>
+      <Helmet>
+        <title>Forgot - WEMET</title>
+      </Helmet>
       <div css={containerStyle} style={{ height: '34.3125rem' }}>
         <figure>
           <img src={'/assets/login_logo.png'} alt={'login-logo'} />

@@ -4,6 +4,7 @@ import { Navigate, NavLink, Route, Routes } from 'react-router-dom'
 import { itemStyle, tabStyle, wrapper } from './style'
 import loadable from '@loadable/component'
 import MeetingHistory from '../Meeting/MeetingHistory'
+import { Helmet } from 'react-helmet-async'
 
 type MemberShipProps = {}
 
@@ -15,6 +16,9 @@ const EventDetail = loadable(() => import('pages/EventDetail'))
 function Member({}: MemberShipProps) {
   return (
     <div css={wrapper}>
+      <Helmet>
+        <title>Meeting - WEMET</title>
+      </Helmet>
       <Box sx={{ width: '100%' }}>
         <ul css={tabStyle}>
           <li>

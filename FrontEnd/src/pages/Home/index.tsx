@@ -10,7 +10,7 @@ import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import { Link } from 'react-router-dom'
 import FilterArea from './filter/FilterArea'
-import { noScheduleStyle } from '../../components/Events/styles'
+import { noScheduleStyle } from 'components/Events/styles'
 
 type HomeProps = {}
 
@@ -23,7 +23,7 @@ function Home({}: HomeProps) {
     setCountryFilter(newValue)
   }
 
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
+  const { data, isLoading, fetchNextPage, hasNextPage } = useInfiniteQuery(
     ['posts'],
     ({ pageParam = 0 }) => getPosts(pageParam),
     {
