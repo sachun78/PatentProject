@@ -76,7 +76,7 @@ export async function forgotPasswd(
     emailInfo.code = shortid.generate();
 
     const user = await AuthRepo.findByEmail(req.body.email);
-    if (user) {
+    if (!user) {
       return res.status(409).json({ message: `INVALID USER` });
     }
 
