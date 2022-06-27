@@ -14,29 +14,26 @@ function PostTextContainer({ contents }: postTextContainerProps) {
   useEffect(() => {
     quillInstance.current = new Quill(quillElement.current, {
       theme: 'bubble',
-      readOnly: true
+      readOnly: true,
     })
     quillInstance.current.root.innerHTML = `${contents}`
   }, [])
-  
+
   useEffect(() => {
     quillInstance.current.root.innerHTML = `${contents}`
-  },[contents])
+  }, [contents])
 
-  return (    
-    <div ref={quillElement} css={bodyStyle}></div>       
-      
-  )
+  return <div ref={quillElement} css={bodyStyle}></div>
 }
 
 const bodyStyle = css`
-  padding: 0 1.875rem;  
+  padding: 0 1.875rem;
   line-height: 1.142857143;
-  color: #000;  
+  color: #6c6c6c;
 
   .ql-editor {
-    padding: 20px 0 0 0
+    padding: 0;
+    font: normal normal normal 14px NanumSquareOTF;
   }
-
-  `
+`
 export default PostTextContainer

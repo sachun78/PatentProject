@@ -154,14 +154,16 @@ function PostHeader({ owner_username, owner_email, createdAt, owner_id, _id }: P
                   onKeyDown={handleListKeyDown}
                   sx={{ zIndex: '999' }}
                 >
-                  <Link to={`/u/${owner_email}`} css={linkStyle}>
-                    <MenuItem onClick={handleClose} disableRipple>
-                      <ListItemText>Writer</ListItemText>
-                    </MenuItem>
-                  </Link>
+                  {owner_id !== user?.id && (
+                    <Link to={`/u/${owner_email}`} css={linkStyle}>
+                      <MenuItem onClick={handleClose} disableRipple>
+                        <ListItemText>Info</ListItemText>
+                      </MenuItem>
+                    </Link>
+                  )}
                   <Link to={`/postDetail/${_id}`} css={linkStyle}>
                     <MenuItem onClick={handleClose} disableRipple>
-                      <ListItemText>View details</ListItemText>
+                      <ListItemText>More</ListItemText>
                     </MenuItem>
                   </Link>
                   {owner_id === user?.id && (
@@ -242,7 +244,7 @@ const titleStyle = css`
   }
 
   .time-date {
-    font-family: 'NanumSquareOTF';
+    font-family: NanumSquareOTF;
     font-size: 14px;
     line-height: 1.142857143;
     color: #9c9c9c;

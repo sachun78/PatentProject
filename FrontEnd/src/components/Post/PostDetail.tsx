@@ -20,9 +20,9 @@ import { commentStyle } from './PostFooter'
 import PostTextContainer from './PostTextContainer'
 import gravatar, { url } from 'gravatar'
 
-type postDetailProps = {}
-
 const API_PATH = process.env.REACT_APP_API_PATH
+
+type postDetailProps = {}
 
 function PostDetail({}: postDetailProps) {
   const qc = useQueryClient()
@@ -33,7 +33,7 @@ function PostDetail({}: postDetailProps) {
     retry: false,
   })
 
-  const today = new Date()
+  const today = useMemo(() => new Date(), [])
 
   const diff = useMemo(() => {
     if (post) {
@@ -45,10 +45,9 @@ function PostDetail({}: postDetailProps) {
         return formatDistanceToNow(date, { addSuffix: true })
       }
     }
-  }, [post])
+  }, [post, today])
 
   const [comments, onChangeComments, setComments] = useInput('')
-
   const user = qc.getQueryData<User>('user') as User
 
   const likeClicked = useMemo(() => {
@@ -146,7 +145,7 @@ function PostDetail({}: postDetailProps) {
               style={{ border: '1px solid lightgray' }}
               imgProps={{ crossOrigin: 'anonymous' }}
             >
-              <img src={url(post.owner_email, { s: '60px', d: 'retro' })} alt={'no-image'} />
+              <img src={url(post.owner_email, { s: '60px', d: 'retro' })} />
             </Avatar>
           </div>
           <div css={titleStyle}>
@@ -158,7 +157,7 @@ function PostDetail({}: postDetailProps) {
             <div className={'time-date'}>{diff}</div>
           </div>
         </div>
-        <ImageContainer images={post.images} isDetail={true} />
+        <ImageContainer images={post.images} />
         <PostTextContainer contents={post.contents} />
         <div css={buttonWrapper}>
           <div css={leftButtonsStyle}>
@@ -249,10 +248,7 @@ const iconStyle = css`
 
 const detailStyle = css`
   display: flex;
-  padding-top: 1.875rem;
-  padding-left: 1.875rem;
-  padding-right: 1.875rem;
-  padding-bottom: 20px;
+  padding: 1.875rem 1.875rem 1.25rem;
   align-items: flex-start;
 `
 const titleStyle = css`

@@ -9,33 +9,44 @@ import PostHeader from './PostHeader'
 import PostTextContainer from './PostTextContainer'
 
 type PostProps = {
-  post: IPost  
+  post: IPost
   _id: string
   owner_username: string
-  owner_email: string  
-  like_cnt: string[]  
+  owner_email: string
+  like_cnt: string[]
   comment: IComment[]
   images: string[]
   createdAt: Date
   owner_id: string
   contents: string
-
 }
 
-function Post({ post, _id, owner_username, owner_email, owner_id, like_cnt, contents, comment, images, createdAt }: PostProps) {
+function Post({
+  post,
+  _id,
+  owner_username,
+  owner_email,
+  owner_id,
+  like_cnt,
+  contents,
+  comment,
+  images,
+  createdAt,
+}: PostProps) {
   return (
     <div css={postStyle}>
-      <PostHeader owner_username={owner_username} owner_email={owner_email} createdAt={createdAt} owner_id={owner_id} _id={_id}  />
+      <PostHeader
+        owner_username={owner_username}
+        owner_email={owner_email}
+        createdAt={createdAt}
+        owner_id={owner_id}
+        _id={_id}
+      />
       <Link className="detail" to={`/postDetail/${_id}`}>
-        <ImageContainer images={images} isDetail={false} />
+        <ImageContainer images={images} />
         <PostTextContainer contents={contents} />
       </Link>
-      <PostFooter        
-        post={post}
-        _id={_id}                
-        comment={comment}
-        like_cnt={like_cnt}                
-      />
+      <PostFooter post={post} _id={_id} comment={comment} like_cnt={like_cnt} />
     </div>
   )
 }

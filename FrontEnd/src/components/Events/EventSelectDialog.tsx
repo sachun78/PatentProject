@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useEventQuery from 'hooks/query/useEventQuery'
 import useDateRangeHook from 'hooks/useDateRangeHook'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { format, isBefore } from 'date-fns'
 import { useButtonStyle } from '../ProfileMenu/ProfileCardSave'
 import IconControl from '../IconControl'
@@ -72,7 +72,10 @@ function EventSelectDialog({}: EventSelectModalProps) {
         }}
         maxWidth={'xl'}
       >
-        <DialogTitle>No Available Events</DialogTitle>
+        <DialogTitle>No Available Event</DialogTitle>
+        <DialogContent>
+          Please Make <Link to={'/meeting/event'}>New Event</Link> to Meeting request
+        </DialogContent>
       </Dialog>
     )
   }

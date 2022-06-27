@@ -25,15 +25,6 @@ function PostEdit() {
 
   const [body, setBody] = useState('')
 
-  const onImageSetting = () => {
-    const innerImage = quillInstance.current
-      .getContents()
-      .ops.filter((insert: any) => insert.insert['image'] !== undefined)
-    innerImage.map((insert: any) => {
-      image.push(insert.insert['image'])
-    })
-  }
-
   const postEditMut = useMutation(editPost, {
     onSuccess: () => {
       qc.invalidateQueries(['posts'])
@@ -52,8 +43,18 @@ function PostEdit() {
 
   const onSubmit = useCallback(
     (e) => {
-      onImageSetting()
       e.preventDefault()
+
+      const innerImage = quillInstance.current
+        .getContents()
+        .ops.filter((insert: any) => insert.insert['image'] !== undefined)
+      const newImage = image
+
+      innerImage.map(async (insert: any) => {
+        setImage([...image, insert.insert['image']])
+        newImage.push(insert.insert['image'])
+      })
+
       if (!body.trim()) {
         toast.error('Please enter the contents', {
           position: toast.POSITION.TOP_CENTER,
@@ -63,22 +64,23 @@ function PostEdit() {
         })
         return
       }
-      const imgRegex = /<img[^>]*src=[\"']?([^>\"']+)[\"']?[^/>]*>/g
+
+      const imgRegex = /<p><br><\/p><p><img[^>]*src=["']?([^>"']+)["']?[^/>]*><\/p>/g
 
       postEditMut.mutate([
         {
           contents: body.replace(imgRegex, ''),
-          images: image as string[],
+          images: newImage,
         },
-        id as string,
+        id!!,
       ])
     },
-    [body, image]
+    [body, id, image, postEditMut]
   )
 
-  const onCancel = () => {
+  const onCancel = useCallback(() => {
     navigate(-1)
-  }
+  }, [navigate])
 
   const makeUUID = (fileName: string) => {
     function s4() {
@@ -141,7 +143,7 @@ function PostEdit() {
   useEffect(() => {
     quillInstance.current = new Quill(quillElement.current, {
       theme: 'snow',
-      placeholder: '   Please enter the contents...',
+      placeholder: ' Please enter the contents...',
       modules: {
         toolbar: {
           container: [

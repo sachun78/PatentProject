@@ -44,20 +44,20 @@ function PostWrite({}: postWriteProps) {
     },
   })
 
-  const onImageSetting = () => {
-    const innerImage = quillInstance.current
-      .getContents()
-      .ops.filter((insert: any) => insert.insert['image'] !== undefined)
-
-    innerImage.map((insert: any) => {
-      image.push(insert.insert['image'])
-    })
-  }
-
   const onSubmit = useCallback(
     (e) => {
-      const imgRegex = /<img[^>]*src=[\"']?([^>\"']+)[\"']?[^/>]*>/g
-      onImageSetting()
+      const imgRegex = /<p><img[^>]*src=["']?([^>"']+)["']?[^/>]*><\/p>/g
+
+      const innerImage = quillInstance.current
+        .getContents()
+        .ops.filter((insert: any) => insert.insert['image'] !== undefined)
+      const newImage = image
+
+      innerImage.map(async (insert: any) => {
+        setImage([...image, insert.insert['image']])
+        newImage.push(insert.insert['image'])
+      })
+
       e.preventDefault()
       if (!body.trim()) {
         toast.error('Please enter the contents', {
@@ -165,6 +165,10 @@ function PostWrite({}: postWriteProps) {
     })
   }, [])
 
+  if (!user) {
+    return null
+  }
+
   return (
     <>
       <div css={postWriteStyle}>
@@ -210,6 +214,7 @@ const quillWrapperStyle = css`
   .ql-container {
     border: none !important;
   }
+
   .ql-toolbar {
     background: #f2f2f2;
     border: none !important;
@@ -244,6 +249,7 @@ const postWriteStyle = css`
 const buttonWrapStyle = css`
   display: flex;
   justify-content: center;
+
   button + button {
     margin-left: 1.25rem;
   }
