@@ -98,7 +98,7 @@ export async function getMeeting(req: IRequest, res: Response) {
   let sendData: any = {};
   const data = await meetingRepo.getById(id);
   if (data) {
-    if (data.ownerId !== user_id) {
+    if (data.ownerId !== user_id || data.toEmail !== user_id) {
       return res.status(403).send('[getMeeting] forbidden');
     }
     sendData = JSON.parse(JSON.stringify(data));
