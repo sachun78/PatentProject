@@ -54,7 +54,7 @@ useVirtualId(meetingSchema);
 
 const meeting = mongoose.model('meetings', meetingSchema);
 
-export async function getAllTest(userId: string, email: string) {
+export async function getAllWithToEmail(userId: string, email: string) {
   return meeting.find( {$or: [{ownerId: userId}, {toEmail: email}]} ).lean().sort({date: -1});
 }
 
