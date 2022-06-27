@@ -292,6 +292,7 @@ export async function sendInvitMail(req: IRequest, res: Response) {
       const readyMeetingData = await readyCreateMeeting(user_id, bodyData);
 
       if (bodyData.isMenual === true) {
+        readyMeetingData.revMeeting.status = 'confirm'
         createMeeting(readyMeetingData);
         return res.status(200).json({message: 'menual meeting saved !!!!'})
       }
