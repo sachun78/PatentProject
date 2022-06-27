@@ -94,6 +94,10 @@ export async function getAllByIndex(userId: string, curPos: number, cnt: number)
   return meeting.find({ownerId: userId}).lean().sort({date: -1, _id: -1}).skip(curPos).limit(cnt);
 }
 
+export async function getAllByIndex2(userId: string, email: string, curPos: number, cnt: number) {
+  return meeting.find({$or: [{ownerId: userId}, {toEmail: email}]}).lean().sort({date: -1, _id: -1}).skip(curPos).limit(cnt);
+}
+
 export async function getById(meetingId: string) {
   return meeting.findById(meetingId).then((value) => {
     console.log(value);

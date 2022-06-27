@@ -13,9 +13,10 @@ export async function getEvents(req: IRequest, res: Response) {
   const keyword = req.query.search;
   const user_id = req.userId;
 
-  const data = await (month
-    ? eventRepo.getAllByMonth(user_id, month)
-    : eventRepo.getAll(user_id));
+  // const data = await (month
+  //   ? eventRepo.getAllByMonth(user_id, month)
+  //   : eventRepo.getAll(user_id));
+  const data = await eventRepo.getAll(user_id)
 
   let retData;
   const fuse = new Fuse(data, {
@@ -51,7 +52,7 @@ export async function getEvent(req: IRequest, res: Response) {
 
 export async function createEvent(req: IRequest, res: Response) {
   const body = req.body;
-  const isExist = await eventRepo.findByData(body);
+  const isExist = await eventRepo.findByData(body.title, body.start_date, body.end_date);
   if (isExist) {
     return res.status(409).json({
        message: `already event - title:${isExist.title}`

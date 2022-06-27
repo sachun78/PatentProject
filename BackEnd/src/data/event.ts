@@ -57,8 +57,8 @@ export async function getById(eventId: string) {
   })
 }
 
-export async function findByData(eventData: IEvent) {
-  return Event.findOne(eventData).lean();
+export async function findByData(_title: string, startDate: Date, endDate: Date,) {
+  return Event.findOne({title: _title, start_date: startDate, end_date: endDate}).lean();
 }
 
 export async function createEvent(eventData: IEvent, userId: string) {

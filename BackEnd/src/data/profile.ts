@@ -8,7 +8,7 @@ interface IProfile {
   position?: string;
   history?: string;
   field?: string[];
-  status: -1 | 0 | 1 | 2;  // TODO(User 상태 정의)
+  status: Number;  // TODO(User 상태 정의)
   country?: string;
   phone?: string;
   signature: string;
