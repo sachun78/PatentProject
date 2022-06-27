@@ -66,7 +66,7 @@ export async function getMeetings(req: IRequest, res: Response, next: NextFuncti
     const fuse = new Fuse(data, {
       includeScore: true,
       useExtendedSearch: true,
-      keys: ['ownerCompnay', 'toEmail', 'title', 'ownerName']
+      keys: ['ownerCompany', 'toEmail', 'title', 'ownerName']
     });
     if (searchData) {
       retData = fuse.search("'" + searchData);
