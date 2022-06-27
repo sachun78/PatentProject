@@ -34,7 +34,7 @@ function PostFooter({ post, _id, comment, like_cnt }: PostFooterProps) {
             return {
               ...post,
               like_cnt:
-                likeClicked === 'unchecked'
+                likeClicked !== user.email
                   ? like_cnt.concat(newData[0].email)
                   : like_cnt.filter((v: string) => v === newData[0].email),
             }
@@ -89,9 +89,7 @@ function PostFooter({ post, _id, comment, like_cnt }: PostFooterProps) {
           </div>
         </Link>
       </div>
-      {viewComments.length === 0 ? (
-        <div></div>
-      ) : (
+      {viewComments.length === 0 ? null : (
         <div css={commentStyle}>
           {viewComments.map((viewComment: IComment) => (
             <PostComment key={viewComment.id} viewComment={viewComment} _id={_id} post={post} />

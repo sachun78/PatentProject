@@ -1,6 +1,5 @@
 import { css } from '@emotion/react'
 import { Box, Modal } from '@mui/material'
-import palette, { grey } from 'lib/palette'
 
 type askModalProps = {
   visible: boolean
@@ -12,15 +11,7 @@ type askModalProps = {
   onCancel: any
 }
 
-const AskModal = ({
-  visible,
-  title,
-  description,
-  confirmText,
-  cancelText,
-  onConfirm,
-  onCancel,
-}: askModalProps) => {
+const AskModal = ({ visible, title, description, confirmText, cancelText, onConfirm, onCancel }: askModalProps) => {
   if (!visible) return null
   return (
     <Modal hideBackdrop open={true}>
@@ -29,12 +20,12 @@ const AskModal = ({
           width: '29rem',
           height: '7.75rem',
           position: 'absolute',
-          backgroundColor: "#F2F2F2",
+          backgroundColor: '#F2F2F2',
           padding: '1rem 1.5rem 1rem 2rem',
           borderRadius: '1rem',
           top: '20rem',
           left: '35rem',
-          opacity: [0.9, 0.9, 0.9],          
+          opacity: [0.9, 0.9, 0.9],
         }}
       >
         <div css={boxStyle}>
@@ -58,21 +49,21 @@ const AskModal = ({
 export default AskModal
 
 const boxStyle = css`
-  font: NanumSquareOTF;
-  color: #6C6C6C;  
+  font-family: NanumSquareOTF;
+  color: #6c6c6c;
 `
 
 const buttonWrapStyle = css`
-  display: flex;  
+  display: flex;
   justify-content: flex-end;
-  margin-top: 0.25rem;  
+  margin-top: 0.25rem;
   button + button {
     margin-left: 0.5rem;
   }
   height: 2.125rem;
   & + & {
     margin-left: 0.5rem;
-  }  
+  }
 `
 
 const buttonStyle = css`
@@ -83,5 +74,5 @@ const buttonStyle = css`
   padding: 0.25rem 1rem;
   color: white;
   outline: none;
-  cursor: pointer;  
+  cursor: pointer;
 `

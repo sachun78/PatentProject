@@ -59,7 +59,12 @@ function Schedules({}: ScheduleViewProps) {
 
   const toggleClass = useToggleImageButton()
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading)
+    return (
+      <div css={noScheduleStyle}>
+        <h1>Loading...</h1>
+      </div>
+    )
   if (meetings?.length === 0)
     return (
       <div css={noScheduleStyle}>

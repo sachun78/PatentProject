@@ -26,24 +26,25 @@ function ProfileCardCountry({ title, editable, country, onChange, size = 'large'
         </div>
         <div css={countryWrapper}>
           <CountryInner>
-            {edit && (
+            {edit ? (
               <CountrySelector
                 onChange={onChange}
                 defaultValue={countries[countries.findIndex((v) => country === v.code)]}
               />
-            )}
-            {!edit && <div css={countryNormalStyle}>{getCountryName(country)}</div>}
-            {!edit && (
-              <div style={{ alignSelf: 'center' }}>
-                <button
-                  css={resetButton}
-                  onClick={() => {
-                    setEdit((prev) => !prev)
-                  }}
-                >
-                  <img src={'/assets/write.png'} alt={'edit-btn'} style={{ width: '17px', height: '17px' }} />
-                </button>
-              </div>
+            ) : (
+              <>
+                <div css={countryNormalStyle}>{getCountryName(country)}</div>
+                <div style={{ alignSelf: 'center' }}>
+                  <button
+                    css={resetButton}
+                    onClick={() => {
+                      setEdit((prev) => !prev)
+                    }}
+                  >
+                    <img src={'/assets/write.png'} alt={'edit-btn'} style={{ width: '17px', height: '17px' }} />
+                  </button>
+                </div>
+              </>
             )}
           </CountryInner>
         </div>

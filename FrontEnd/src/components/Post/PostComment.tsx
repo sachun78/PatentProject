@@ -90,79 +90,44 @@ const PostComment = ({ viewComment, post, _id }: postCommentProps) => {
     setEdit(a)
     if (!edit) inputRef.current.focus()
   }
+
   const classes = useStyles()
 
-  if (edit) {
-    return (
-      <>
-        <OutlinedInput
-          key={viewComment.id}
-          name={viewComment.id}
-          placeholder={viewComment.contents}
-          onChange={onChange}
-          onKeyDown={onKeyDown}
-          sx={{ width: '95%' }}
-          classes={classes}
-          startAdornment={
-            <Avatar
-              alt={viewComment.owner_username}
-              src={`${API_PATH}static/` + viewComment.owner_email}
-              sx={{ width: 35, height: 35, mr: '25px' }}
-              imgProps={{ crossOrigin: 'anonymous' }}
-            />
-          }
-          endAdornment={
-            owner && (
-              <PostIconBox
-                post={post}
-                edit={edit}
-                key={viewComment.id}
-                _id={_id}
-                commentId={viewComment.id}
-                name={viewComment.id}
-                getEdit={getEdit}
-              />
-            )
-          }
-        />
-      </>
-    )
-  }
-
   return (
-    <>
-      <OutlinedInput
-        key={viewComment.id}
-        name={viewComment.id}
-        value={viewComment.contents}
-        readOnly
-        inputRef={inputRef}
-        sx={{ width: '95%' }}
-        classes={classes}
-        startAdornment={
-          <Avatar
-            alt={viewComment.owner_username}
-            src={`${API_PATH}static/` + viewComment.owner_email}
-            sx={{ width: 35, height: 35, mr: '34px' }}
-            style={{ border: '1px solid lightgray' }}
-            imgProps={{ crossOrigin: 'anonymous' }}
+    <OutlinedInput
+      key={viewComment.id}
+      name={viewComment.id}
+      placeholder={viewComment.contents}
+      value={editValue}
+      onChange={onChange}
+      onKeyDown={onKeyDown}
+      readOnly={!edit}
+      inputRef={inputRef}
+      sx={{ width: '95%' }}
+      classes={classes}
+      startAdornment={
+        <Avatar
+          alt={viewComment.owner_username}
+          src={`${API_PATH}static/` + viewComment.owner_email}
+          sx={{ width: 35, height: 35, mr: '34px' }}
+          style={{ border: '1px solid lightgray' }}
+          imgProps={{ crossOrigin: 'anonymous' }}
+        />
+      }
+      endAdornment={
+        owner && (
+          <PostIconBox
+            post={post}
+            edit={edit}
+            key={viewComment.id}
+            _id={_id}
+            commentId={viewComment.id}
+            name={viewComment.id}
+            getEdit={getEdit}
           />
-        }
-        endAdornment={
-          owner && (
-            <PostIconBox
-              post={post}
-              edit={edit}
-              key={viewComment.id}
-              _id={_id}
-              commentId={viewComment.id}
-              name={viewComment.id}
-              getEdit={getEdit}
-            />
-          )
-        }
-      />
-    </>
+        )
+      }
+    />
   )
 }
 

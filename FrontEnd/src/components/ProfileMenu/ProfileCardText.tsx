@@ -33,15 +33,7 @@ function ProfileCardText({
           <label>{title}</label>
         </div>
         <div css={textStyle}>
-          {!edit && (
-            <div className="text">
-              <div>{text}</div>
-              <button className={'btn'} onClick={toggle}>
-                <img src={'/assets/write.png'} alt={'edit-btn'} style={{ width: '17px', height: '17px' }} />
-              </button>
-            </div>
-          )}
-          {edit && (
+          {edit ? (
             <OutlinedInput
               placeholder={title}
               name={name || title}
@@ -53,6 +45,13 @@ function ProfileCardText({
               style={!multiline ? { height: '40px' } : {}}
               multiline={multiline}
             />
+          ) : (
+            <div className="text">
+              <div>{text}</div>
+              <button className={'btn'} onClick={toggle}>
+                <img src={'/assets/write.png'} alt={'edit-btn'} style={{ width: '17px', height: '17px' }} />
+              </button>
+            </div>
           )}
         </div>
       </div>

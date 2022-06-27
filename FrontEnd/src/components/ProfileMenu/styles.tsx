@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import palette, { brandColor } from 'lib/palette'
+import palette from 'lib/palette'
 import { resetButton } from 'lib/styles/resetButton'
 
 export const emailStyle = css`
@@ -67,14 +67,8 @@ export const textStyle = css`
     color: #333333;
     font: normal normal 800 16px/18px NanumSquareOTF;
 
-    svg {
-      &:hover {
-        color: ${brandColor};
-      }
-
-      width: 1rem;
-      height: 1rem;
-      cursor: pointer;
+    img {
+      user-select: none;
     }
   }
 
@@ -121,6 +115,7 @@ export const itemStyle = css`
   .title {
     width: 7.5rem;
     flex-shrink: 0;
+    user-select: none;
 
     label {
       color: #6c6c6c;
