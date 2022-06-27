@@ -42,11 +42,11 @@ const config = {
     ),
     refresh_token: required(
       'GOOGLE_EMAIL_REFRESH_TOKEN',
-      '1//04IclppXxb66UCgYIARAAGAQSNwF-L9IrJ-PThPCPaImVng9_WeyFktwpp1ZmE9rjBgi0Lwktkh1RitLo3bPfFAi0lsxLl65NKxQ'
+      '1//04qYauGVbDo3bCgYIARAAGAQSNwF-L9IreJ0Rhven_0J3yZAMW5Mc4IBpEskzLHUDx4CiosdZ40pt0wHgqRLB65oRFZtyyZz8uEY'
     ),
     access_token: required(
       'GOOGLE_EMAIL_ACCESS_TOKEN',
-      'ya29.a0ARrdaM-7nSSgtZEJ0WFJReaiyea6YXATtplXFthITNPBx9dZ46i6JBF_G7dxZcqJkDy_NctuMkIYhIjNJHkp0X0OU0Fj8c6e_lxaI9GS7_y-nr0wf_g6-j9IbzNwQ7oOY7Rh_r_50Dv1xiFDJRdmMKzBdfh1'
+      'ya29.A0ARrdaM-WUGZZ9Xa5qA7v93s0xeSX6wjC32TPFKeEwxQSiKWGn-0TXghR2dDtFc1-Au471zukW6g-Nhz2o2Q5JWsnxMTU0FtYQrRBZedak1DGEJupdwrfNe74VqH4iQWc_kVnqnSpB1ii-QEqUcsRuP6Wx2xRYUNnWUtBVEFTQVRBU0ZRRl91NjFWR0pfN3dKQ1piZnNrM3lULWZyZEN1Zw0163'
     ),
   },
 };

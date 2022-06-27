@@ -54,7 +54,13 @@ export async function getMeetings(req: IRequest, res: Response, next: NextFuncti
       return res.status(200).json(indexData);
     }
 
-    const data = await meetingRepo.getAll(user_id);
+    const user = await authRepo.findById(user_id);
+    if (!user) {
+      return res.status(409).json({ message: `meeting: userId (${user_id}) not found`});
+    }
+
+    const data = await meetingRepo.getAllWithToEmail(user_id, user.email);
+    //const data = await meetingRepo.getAll(user_id);
     let retData;
     
     const fuse = new Fuse(data, {
