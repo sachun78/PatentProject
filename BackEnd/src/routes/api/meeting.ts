@@ -10,7 +10,8 @@ route.get('/:id', isAuth, meetingCtrl.getMeeting);
 route.get('/show/:code', meetingCtrl.getMeetingByCode);
 route.get('/cancel/:code', meetingCtrl.cancelMeeting);
 route.get('/confirm/:code', meetingCtrl.confirmMeeting);
-route.patch('/replan/:code', meetingCtrl.replanlMeeting);
+route.patch('/replan/:code', meetingCtrl.replanMeeting);
+route.patch('/:id', isAuth, meetingCtrl.updateMeeting);
 route.post('/send-invitemail', isAuth, meetingCtrl.sendInvitMail);
 route.post('/send-resultmail', isAuth, meetingCtrl.sendResultMail);
 

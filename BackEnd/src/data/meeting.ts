@@ -20,7 +20,7 @@ export interface IMeeting {
   endTime: string,
   location: string,
   comment: string,
-  status: 'none' | 'confirm' | 'cancel' | 'replan',
+  status: 'none' | 'confirm' | 'cancel' | 'replan' | 'req_cancel' | 'req_replan',
   code: string,
   history: string
 };
@@ -43,7 +43,7 @@ export const meetingSchema = new mongoose.Schema<IMeeting>({
   endTime: { type: String, requierd: true },
   location: { type: String, requierd: true },
   comment: { type: String, requierd: true },
-  status: { type: String, enum: ['none', 'confirm', 'cancel', 'replan'], default: 'none' },
+  status: { type: String, enum: ['none', 'confirm', 'cancel', 'replan', 'req_cancel', 'req_replan'], default: 'none' },
   code: { type: String, requierd: true },
   history: { type: String, ref: "mhistory", default: ""}
 },{

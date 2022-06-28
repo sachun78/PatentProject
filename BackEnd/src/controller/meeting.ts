@@ -17,7 +17,9 @@ const enum MEETING_STATUS {
   NONE = 'none',
   CONFIRM = 'confirm',
   CANCEL = 'cancel',
-  REPLAN = 'replan'
+  REPLAN = 'replan',
+  REQ_CANCEL = 'req_cancel',
+  REQ_REPLAN = 'req_replan'
 }
 
 const checkInviteCode = async (code: string, data: any): Promise<any> => {
@@ -208,13 +210,39 @@ export async function cancelMeeting(req: IRequest, res: Response) {
   }
 }
 
-export async function replanlMeeting(req: IRequest, res: Response) {
+export async function replanMeeting(req: IRequest, res: Response) {
   const code = req.params.code;
 
   try {
     const data = {status: MEETING_STATUS.REPLAN, ...req.body};
     const check = await checkInviteCode(code, data);
     res.status(200).json({ message: `Success update status[${check.status}]`});
+  }
+  catch(e) {
+    console.error(e);
+    return res.status(403).json({ message: 'Failed meeting info update'});
+  }
+}
+
+export async function updateMeeting(req: IRequest, res: Response) {
+  const user_id = req.userId
+  const id = req.params.id;
+  const body = req.body
+
+  try {
+    const owner = await authRepo.findById(user_id)
+    if (!owner) {
+      return res.status(403).send('[updateMeeting] owner not found')
+    }
+
+    const data = await meetingRepo.getById(id);
+    if (data) {
+      if (data.ownerId !== user_id && data.toEmail !== owner.email) {
+        return res.status(403).send('[updateMeeting] forbidden');
+      }
+    }
+    const updated = await meetingRepo.updateMeeting(id, body)
+    res.status(200).json({ message: `meeting update[${updated?.status}]`});
   }
   catch(e) {
     console.error(e);
