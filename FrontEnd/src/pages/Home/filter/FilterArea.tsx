@@ -59,10 +59,11 @@ const textStyle = css`
 `
 
 const containerStyle = css`
-  width: 30.625rem;
+  max-width: 36rem;
+  width: 36rem;
   flex-grow: 1;
   height: 1.375rem;
-  padding: 0 0 0 0;
+  padding: 0;
   align-items: center;
 
   .MuiFormControl-root {

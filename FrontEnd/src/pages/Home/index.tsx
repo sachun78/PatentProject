@@ -214,7 +214,7 @@ const nationStyle = css`
   display: flex;
   flex-direction: row;
   align-items: center;
-
+  max-width: 600px;
   input {
     width: 12.5rem;
     height: 1.375rem;
@@ -233,7 +233,6 @@ const searchBoxStyle = css`
   position: relative;
   display: flex;
   max-width: 54.375rem;
-  width: 54.375rem;
   height: 2rem;
   margin-bottom: 1.5rem;
   flex-direction: row;

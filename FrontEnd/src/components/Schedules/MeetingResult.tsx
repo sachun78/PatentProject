@@ -11,6 +11,8 @@ import { upload } from 'lib/api/meeting/resultUpload'
 import styled from '@emotion/styled'
 import { useRemoveOutlineHover } from 'lib/styles/muiStyles'
 import IconControl from '../IconControl'
+import useToggle from 'hooks/useToggle'
+import patchResult from '../../lib/api/meeting/patchResult'
 
 export type MeetingResultProps = {}
 
@@ -27,8 +29,10 @@ function MeetingResult({}: MeetingResultProps) {
     refetchOnWindowFocus: false,
     enabled: !!id,
   })
+  const [editComment, toggleEditComment] = useToggle(false)
+  const [comment, onChangeComment] = useInput(metData.history.result)
   const [result, onChange, setResult] = useInput('')
-  const [metValue, setMetValue] = React.useState('')
+  const [metValue, setMetValue] = useState('')
   const [filePath, setFilePath] = useState('')
   const fileRef = useRef<HTMLInputElement>(null)
   const onMetChange = useCallback(
@@ -50,11 +54,28 @@ function MeetingResult({}: MeetingResultProps) {
       setMetValue('')
     },
   })
+
+  const metResultPatch = useMutation(patchResult, {
+    onSuccess: () => {
+      refetch()
+    },
+  })
+
   const imgUplaodMut = useMutation(upload, {
     onSuccess: (res) => {
       setFilePath(res.fileName)
     },
   })
+
+  const onFixResult = useCallback(() => {
+    if (!editComment) {
+      return toggleEditComment()
+    }
+
+    metResultPatch.mutate({ result: comment, meetingId: metData.history.id })
+    toggleEditComment()
+  }, [comment, editComment, metData.history.id, metResultPatch, toggleEditComment])
+
   const onImgUpload = useCallback(
     (e) => {
       e.preventDefault()
@@ -105,135 +126,140 @@ function MeetingResult({}: MeetingResultProps) {
   }
 
   return (
-    <>
-      <ContainerBlock>
-        {!metData.history ? (
-          <form
-            onSubmit={onSubmit}
-            style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}
+    <ContainerBlock>
+      {!metData.history ? (
+        <form
+          onSubmit={onSubmit}
+          style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}
+        >
+          <MeetingSection>
+            <h2>Result</h2>
+            <OutlinedInput
+              minRows={6}
+              multiline
+              value={result}
+              placeholder={'Enter your text here'}
+              onChange={onChange}
+            />
+          </MeetingSection>
+          <MeetingSection>
+            <h2>Photo</h2>
+            <input
+              ref={fileRef}
+              onChange={onImgUpload}
+              type="file"
+              style={{ display: 'none' }}
+              accept="image/*"
+              name="mhistory_img"
+            />
+            {filePath ? (
+              <Box
+                component="span"
+                sx={{
+                  width: '405px',
+                  height: '200px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: '#F2F2F2',
+                }}
+              >
+                <ImgView src={`${API_PATH}static/${filePath}`} alt={'result-img'} crossOrigin="anonymous" />
+              </Box>
+            ) : (
+              <UploadButton
+                onClick={(e) => {
+                  e.preventDefault()
+                  fileRef?.current?.click()
+                }}
+              >
+                <IconControl name={'add'} />
+              </UploadButton>
+            )}
+          </MeetingSection>
+          <MeetingSection>
+            <h2>Whether we met or not</h2>
+            <RadioGroup row onChange={onMetChange} value={metValue}>
+              <FormControlLabel value="met" control={<Radio />} label="We met" />
+              <FormControlLabel value="fail" control={<Radio />} label="Missed" />
+            </RadioGroup>
+          </MeetingSection>
+
+          <Button
+            type={'submit'}
+            variant={'contained'}
+            sx={{
+              width: '150px',
+              height: '28px',
+              alignSelf: 'center',
+              borderRadius: '1rem',
+              font: 'normal normal normal 14px/26px NanumSquareOTF',
+              textTransform: 'none',
+            }}
           >
-            <MeetingSection>
+            Submit
+          </Button>
+        </form>
+      ) : (
+        <>
+          <MeetingSection>
+            <FixableHeader>
               <h2>Result</h2>
-              <OutlinedInput
-                minRows={6}
-                multiline
-                value={result}
-                placeholder={'Enter your text here'}
-                onChange={onChange}
-              />
-            </MeetingSection>
+              <div onClick={onFixResult}>
+                {editComment ? <IconControl name={'left'} /> : <IconControl name={'write'} />}
+              </div>
+            </FixableHeader>
+            <OutlinedInput
+              minRows={4}
+              multiline
+              value={comment}
+              onChange={onChangeComment}
+              classes={removeHover}
+              readOnly={!editComment}
+              inputProps={{
+                style: {
+                  color: '#6C6C6C',
+                  font: 'normal normal normal 16px/26px NanumSquareOTF',
+                },
+              }}
+              style={{ color: '#6C6C6C', border: editComment ? '1px solid #A1045A' : '1px solid black' }}
+            />
+          </MeetingSection>
+          {metData.history.photopath && (
             <MeetingSection>
               <h2>Photo</h2>
-              <input
-                ref={fileRef}
-                onChange={onImgUpload}
-                type="file"
-                style={{ display: 'none' }}
-                accept="image/*"
-                name="mhistory_img"
-              />
-              {filePath ? (
-                <Box
-                  component="span"
-                  sx={{
-                    width: '405px',
-                    height: '200px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    background: '#F2F2F2',
-                  }}
-                >
-                  <ImgView src={`${API_PATH}static/${filePath}`} alt={'result-img'} crossOrigin="anonymous" />
-                </Box>
-              ) : (
-                <UploadButton
-                  onClick={(e) => {
-                    e.preventDefault()
-                    fileRef?.current?.click()
-                  }}
-                >
-                  <IconControl name={'add'} />
-                </UploadButton>
-              )}
-            </MeetingSection>
-            <MeetingSection>
-              <h2>Whether we met or not</h2>
-              <RadioGroup row onChange={onMetChange} value={metValue}>
-                <FormControlLabel value="met" control={<Radio />} label="We met" />
-                <FormControlLabel value="fail" control={<Radio />} label="Missed" />
-              </RadioGroup>
-            </MeetingSection>
-
-            <Button
-              type={'submit'}
-              variant={'contained'}
-              sx={{
-                width: '150px',
-                height: '28px',
-                alignSelf: 'center',
-                borderRadius: '1rem',
-                font: 'normal normal normal 14px/26px NanumSquareOTF',
-                textTransform: 'none',
-              }}
-            >
-              Submit
-            </Button>
-          </form>
-        ) : (
-          <>
-            <MeetingSection>
-              <h2>Result</h2>
-              <OutlinedInput
-                minRows={4}
-                multiline
-                value={metData.history.result}
-                classes={removeHover}
-                inputProps={{
-                  style: {
-                    color: '#6C6C6C',
-                    font: 'normal normal normal 16px/26px NanumSquareOTF',
-                  },
+              <Box
+                component="span"
+                sx={{
+                  width: '405px',
+                  height: '200px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: '#F2F2F2',
                 }}
-                style={{ color: '#6C6C6C' }}
-              />
+              >
+                <ImgView
+                  src={`${API_PATH}static/${metData.history.photopath}`}
+                  alt={'result_photo'}
+                  crossOrigin="anonymous"
+                />
+              </Box>
             </MeetingSection>
-            {metData.history.photopath && (
-              <MeetingSection>
-                <h2>Photo</h2>
-                <Box
-                  component="span"
-                  sx={{
-                    width: '405px',
-                    height: '200px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    background: '#F2F2F2',
-                  }}
-                >
-                  <ImgView
-                    src={`${API_PATH}static/${metData.history.photopath}`}
-                    alt={'result_photo'}
-                    crossOrigin="anonymous"
-                  />
-                </Box>
-              </MeetingSection>
-            )}
-            <MeetingSection>
-              <h2>Whether we met or not</h2>
-              <RadioGroup row value={metData.history.status ? 'met' : 'fail'}>
-                {metData.history.status ? (
-                  <FormControlLabel value="met" control={<Radio />} label="Met" />
-                ) : (
-                  <FormControlLabel value="fail" control={<Radio />} label="Missed" />
-                )}
-              </RadioGroup>
-            </MeetingSection>
-          </>
-        )}
-      </ContainerBlock>
-    </>
+          )}
+          <MeetingSection>
+            <h2>Whether we met or not</h2>
+            <RadioGroup row value={metData.history.status ? 'met' : 'fail'}>
+              {metData.history.status ? (
+                <FormControlLabel value="met" control={<Radio />} label="Met" />
+              ) : (
+                <FormControlLabel value="fail" control={<Radio />} label="Missed" />
+              )}
+            </RadioGroup>
+          </MeetingSection>
+        </>
+      )}
+    </ContainerBlock>
   )
 }
 
@@ -241,4 +267,11 @@ const ImgView = styled.img`
   width: 255px;
   height: 170px;
 `
+
+const FixableHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
+
 export default MeetingResult
