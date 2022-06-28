@@ -17,6 +17,7 @@ export const ContainerBlock = styled(animated.div)`
   border-radius: 1rem;
   padding: 1.875rem;
   margin-bottom: 1rem;
+
   h1 {
     color: #333;
     margin: 0 0 1.875rem;
@@ -61,6 +62,7 @@ export const MeetingSection = styled.section`
     line-height: 2.25;
     margin: 0 0 0.25rem;
     border-radius: 0.5rem;
+    user-select: none;
   }
 
   p {
@@ -77,7 +79,15 @@ export const MeetingSection = styled.section`
 const statusColor = ({ state }: { state?: string }) => css`
   background: ${state === 'met' && brandColor};
   color: ${state === 'met' && '#fff'};
-  // background: ${state === 'confirm' && palette.green[400]};
+  ${state === 'confirm' &&
+  css`
+    border: 1px solid ${palette.green[300]};
+  `};
+
+  ${(state === 'Pending' || state === 'req_replan' || state === 'req_cancel') &&
+  css`
+    border: 1px solid ${palette.orange[400]};
+  `};
   background: ${state === 'Expired' && '#ddd'};
 `
 

@@ -152,7 +152,13 @@ function ScheduleTable({ meetings, type = 'schedule', isProfile }: ScheduleTable
                     <Badge
                       color="error"
                       variant="dot"
-                      invisible={status !== 'confirm' || isAfter(new Date(row.startTime), new Date())}
+                      invisible={
+                        user.email === row.toEmail ||
+                        status === 'cancel' ||
+                        status === 'Expired' ||
+                        status === 'Pending' ||
+                        (status === 'confirm' && isAfter(new Date(row.startTime), new Date()))
+                      }
                     >
                       <StatusBlock state={status}>{status}</StatusBlock>
                     </Badge>

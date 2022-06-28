@@ -1,18 +1,19 @@
-import { Navigate, useParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import React, { useCallback, useMemo } from 'react'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { getMeetingOne } from 'lib/api/meeting/getMeetingOne'
 import { toast } from 'react-toastify'
 import { Button, Grid, Stack } from '@mui/material'
 import { ContainerBlock, InfoLink, MeetingSection, RescheduleButton, ScheduleInfoBlock } from './styles'
 import MeetingResult from 'components/Schedules/MeetingResult'
-import { IMeeting } from 'lib/api/types'
+import { IMeeting, User as UserType } from 'lib/api/types'
 import { format, isBefore } from 'date-fns'
 import { SaveBlock, useButtonStyle } from 'components/ProfileMenu/ProfileCardSave'
 import { updateMeeting } from 'lib/api/meeting/updateMeeting'
 import MeetingChange from 'components/Schedules/MeetingChange'
 import useToggle from 'hooks/useToggle'
 import IconControl from 'components/IconControl'
+import patchStatusMeeting from '../../lib/api/meeting/patchStatusMeeting'
 
 export type MeetingDetailProps = {}
 
@@ -26,11 +27,19 @@ function MeetingDetail({}: MeetingDetailProps) {
     staleTime: 5000,
   })
 
+  const qc = useQueryClient()
+  const user = qc.getQueryData<UserType>('user')
+  const navi = useNavigate()
   const finalMut = useMutation(updateMeeting, {
     onSuccess: () => {
       refetch()
     },
-    onError: () => {},
+  })
+
+  const requestStatus = useMutation(patchStatusMeeting, {
+    onSuccess: () => {
+      refetch()
+    },
   })
 
   const isExpired = useMemo(() => {
@@ -53,16 +62,14 @@ function MeetingDetail({}: MeetingDetailProps) {
   const state = useMemo(() => {
     if (!data) return ''
     let status = data?.status
-    if (status === 'none') {
+
+    if (status === 'none' || status === 'replan' || status === 'req_replan' || status === 'req_cancel') {
       if (isBefore(new Date(data.startTime), new Date())) {
         status = 'Expired'
       } else {
-        status = 'Pending'
-      }
-    }
-    if (status === 'replan') {
-      if (isBefore(new Date(data.startTime), new Date())) {
-        status = 'Expired'
+        if (status === 'none') status = 'Pending'
+        if (status === 'req_replan') status = 'Request replan'
+        if (status === 'req_cancel') status = 'Request cancel'
       }
     }
     return status
@@ -104,6 +111,10 @@ function MeetingDetail({}: MeetingDetailProps) {
               <p>{data.ownerName}</p>
               <div className={'divider'}></div>
               <p className={'email'}>{data.ownerEmail}</p>
+              <InfoLink to={`/u/${data.ownerEmail}`}>
+                <IconControl name={'infoUser'} style={{ marginRight: '3px' }} />
+                info
+              </InfoLink>
             </Stack>
           </MeetingSection>
           <MeetingSection>
@@ -149,14 +160,96 @@ function MeetingDetail({}: MeetingDetailProps) {
                 State
                 <span className={'state-text'}>{state}</span>
               </h2>
-              {!isResult && !isExpired && (data.status === 'confirm' || data.status === 'replan') && (
-                <RescheduleButton value={change} onChange={onChangeToggle}>
+              {!isResult &&
+                !isExpired &&
+                (data.status === 'confirm' || data.status === 'replan') &&
+                data.toEmail !== user?.email && (
+                  <RescheduleButton value={change} onChange={onChangeToggle}>
+                    <IconControl name={'reschedule'} style={{ marginRight: '3px' }} />
+                    Reschedule
+                  </RescheduleButton>
+                )}
+
+              {!isResult && !isExpired && data.status === 'req_replan' && data.toEmail !== user?.email && (
+                <>
+                  <RescheduleButton value={change} onChange={onChangeToggle}>
+                    <IconControl name={'reschedule'} style={{ marginRight: '3px' }} />
+                    Reschedule
+                  </RescheduleButton>
+                  <RescheduleButton
+                    value={change}
+                    onClick={() => {
+                      requestStatus.mutate({ status: 'cancel', meetingId: data._id })
+                    }}
+                  >
+                    <IconControl name={'reschedule'} style={{ marginRight: '3px' }} />
+                    Cancel
+                  </RescheduleButton>
+                </>
+              )}
+
+              {!isResult && !isExpired && data.status === 'req_cancel' && data.toEmail !== user?.email && (
+                <RescheduleButton
+                  value={change}
+                  onClick={() => {
+                    requestStatus.mutate({ status: 'cancel', meetingId: data._id })
+                  }}
+                >
                   <IconControl name={'reschedule'} style={{ marginRight: '3px' }} />
-                  Reschedule
+                  Cancel
                 </RescheduleButton>
               )}
+
+              {!isResult && !isExpired && data.status === 'confirm' && data.toEmail === user?.email && (
+                <>
+                  <RescheduleButton
+                    value={change}
+                    onClick={() => {
+                      requestStatus.mutate({ status: 'req_replan', meetingId: data._id })
+                      alert('onClick reschedule Request')
+                    }}
+                  >
+                    <IconControl name={'reschedule'} style={{ marginRight: '3px' }} />
+                    Replan request
+                  </RescheduleButton>
+                  <RescheduleButton
+                    value={change}
+                    onClick={() => {
+                      requestStatus.mutate({ status: 'req_cancel', meetingId: data._id })
+                      alert('onClick cancel Request')
+                    }}
+                  >
+                    <IconControl name={'reschedule'} style={{ marginRight: '3px' }} />
+                    Cancel request
+                  </RescheduleButton>
+                </>
+              )}
+
+              {!isResult && !isExpired && data.status === 'none' && data.toEmail === user?.email && (
+                <>
+                  <RescheduleButton
+                    value={change}
+                    onClick={() => {
+                      navi(`/invitation/detail?code=${data.code}`)
+                    }}
+                  >
+                    <IconControl name={'reschedule'} style={{ marginRight: '3px' }} />
+                    Confirm/ Cancel
+                  </RescheduleButton>
+                  <RescheduleButton
+                    value={change}
+                    onClick={() => {
+                      navi(`/invitation/replan?code=${data.code}`)
+                    }}
+                  >
+                    <IconControl name={'reschedule'} style={{ marginRight: '3px' }} />
+                    Replan
+                  </RescheduleButton>
+                </>
+              )}
             </div>
-            {!isExpired && data.status === 'replan' && (
+
+            {!change && !isExpired && data.status === 'replan' && data.toEmail !== user?.email && (
               <SaveBlock style={{ justifyContent: 'space-around' }}>
                 <Button
                   variant={'contained'}

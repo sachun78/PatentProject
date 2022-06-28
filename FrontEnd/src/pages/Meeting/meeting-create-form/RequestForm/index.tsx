@@ -369,7 +369,7 @@ export default function RequestForm({}: RequestViewProps) {
         <FormControlLabel
           value="top"
           control={<Checkbox checked={privateSchedule} onChange={togglePrivateSchedule} />}
-          label="Make Private Schedule (without send mail)"
+          label="Make Confirmed Schedule (without send mail)"
           labelPlacement="end"
         />
 
