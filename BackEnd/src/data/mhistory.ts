@@ -21,6 +21,10 @@ useVirtualId(mhistoryScheme);
 
 const mhistory = mongoose.model('mhistory', mhistoryScheme);
 
+export async function findById(id: string) {
+  return mhistory.findById(id).lean();
+}
+
 export async function createMhistory(_history: IMhistory) {
   return new mhistory({
     ..._history,

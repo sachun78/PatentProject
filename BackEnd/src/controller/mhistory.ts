@@ -70,3 +70,23 @@ export async function createMhistory(
     next(e);
   }
 }
+
+export async function updateMhistory(
+  req: IRequest,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const id = req.params.id;
+    const body = req.body
+
+    const mhistory = await MhisRepo.updateMhistory(id, body)
+    if (!mhistory) {
+      return res.status(403).json({message: `mHistory(${id}) is not found`})
+    }
+    res.status(201).json(mhistory);
+  } catch (e) {
+    console.error("[MHis][createMhistory] ", e);
+    next(e);
+  }
+}
