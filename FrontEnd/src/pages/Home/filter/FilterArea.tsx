@@ -7,19 +7,20 @@ import { countries } from 'components/CountrySelector/CountrySelector'
 
 type filterAreaProps = {
   getCountry: Function
+  select: any[]
 }
 
-function FilterArea({ getCountry }: filterAreaProps) {
+function FilterArea({ select, getCountry }: filterAreaProps) {
   return (
     <Autocomplete
       css={containerStyle}
-      id="country-select-demo"
       multiple
       onChange={(e: any, newValue: any) => {
-        getCountry(newValue.map((val: any) => val.code))
+        getCountry(newValue)
       }}
       options={countries}
       autoHighlight
+      value={select}
       renderOption={(props, option) => (
         <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
           <img
@@ -29,31 +30,22 @@ function FilterArea({ getCountry }: filterAreaProps) {
             srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
             alt=""
           />
-          {option.label} ({option.code}){/* +{option.phone} */}
+          {option.label} ({option.code})
         </Box>
       )}
       renderInput={(params) => (
-        <>
-          <TextField
-            css={textStyle}
-            {...params}
-            placeholder="Select countries to exclude from the post display"
-            inputProps={{
-              ...params.inputProps,
-              autoComplete: 'new-password', // disable autocomplete and autofill
-            }}
-          />
-        </>
+        <TextField
+          css={textStyle}
+          {...params}
+          placeholder={select.length === 0 ? 'The post will be displayed of the chosen country' : undefined}
+          inputProps={{
+            ...params.inputProps,
+            autoComplete: undefined, // disable autocomplete and autofill
+          }}
+        />
       )}
     />
   )
-}
-
-interface CountryType {
-  code: string
-  label: string
-  phone: string
-  suggested?: boolean
 }
 
 export default FilterArea

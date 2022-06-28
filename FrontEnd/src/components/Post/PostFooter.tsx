@@ -21,7 +21,7 @@ function PostFooter({ post, _id, comment, like_cnt }: PostFooterProps) {
   const user = qc.getQueryData<User>('user') as User
   const likeClicked = useMemo(() => {
     return like_cnt.find((v: string) => v === user.email)
-  }, [like_cnt, user.email])
+  }, [like_cnt])
   const viewComments = comment.filter((comments: IComment) => comment.indexOf(comments) < 2)
 
   const likeCountMut = useMutation(updateLike, {
@@ -36,17 +36,21 @@ function PostFooter({ post, _id, comment, like_cnt }: PostFooterProps) {
               like_cnt:
                 likeClicked !== user.email
                   ? like_cnt.concat(newData[0].email)
-                  : like_cnt.filter((v: string) => v === newData[0].email),
+                  : like_cnt.filter((v: string) => v !== likeClicked),
             }
           }
           return post
         })
       })
+
       qc.setQueryData('posts', {
         pageParams: oldPages.pageParams,
         pages: newPagesArray,
       })
       return { oldPages }
+    },
+    onSettled: () => {
+      qc.invalidateQueries('posts')
     },
     onError: (e) => {
       toast.error('Something went wrong', {
@@ -59,21 +63,14 @@ function PostFooter({ post, _id, comment, like_cnt }: PostFooterProps) {
   })
 
   const onLike = () => {
-    likeCountMut.mutate(
-      [
-        {
-          email: user.email,
-          userId: user.id,
-        },
-        _id,
-        likeClicked ? 'unchecked' : 'checked',
-      ],
+    likeCountMut.mutate([
       {
-        onSuccess: () => {
-          qc.invalidateQueries(['posts'])
-        },
-      }
-    )
+        email: user.email,
+        userId: user.id,
+      },
+      _id,
+      likeClicked ? 'unchecked' : 'checked',
+    ])
   }
 
   return (

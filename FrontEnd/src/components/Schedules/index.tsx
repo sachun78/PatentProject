@@ -12,6 +12,7 @@ import { useInfiniteQuery, useQuery } from 'react-query'
 import { getMeetingsCursor, getMeetingSearch } from 'lib/api/meeting/getMeetings'
 import { css } from '@emotion/react'
 import { useToggleImageButton } from 'lib/styles/muiStyles'
+import { Link } from 'react-router-dom'
 
 type ScheduleViewProps = {}
 
@@ -25,7 +26,6 @@ function Schedules({}: ScheduleViewProps) {
     ({ pageParam = 0 }) => getMeetingsCursor(pageParam),
     {
       getNextPageParam: (lastPage, pages) => {
-        // page 길이 5이면
         const morePagesExist = lastPage?.length === 10
         if (!morePagesExist) return false
         return pages.flat().length
@@ -69,7 +69,9 @@ function Schedules({}: ScheduleViewProps) {
     return (
       <div css={noScheduleStyle}>
         <h1>There is no upcoming schedule.</h1>
-        <h1>Create your schedule through an event.</h1>
+        <h1>
+          Create your schedule through an <Link to={'/meeting/event'}>event</Link>.
+        </h1>
       </div>
     )
 

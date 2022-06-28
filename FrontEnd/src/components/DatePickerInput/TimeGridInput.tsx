@@ -108,7 +108,7 @@ function TimeGridInput({
               hour: '2-digit',
               minute: '2-digit',
             })}`
-          : 'Select Date'}
+          : 'Select Date *'}
       </div>
       <Dialog onClose={handleClose} open={open} fullScreen>
         <DialogTitle
@@ -264,8 +264,6 @@ export const textStyle = css`
   padding-left: 1rem;
   padding-right: 1rem;
   width: 100%;
-
-  color: #6c6c6c;
 
   &:focus-visible {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);

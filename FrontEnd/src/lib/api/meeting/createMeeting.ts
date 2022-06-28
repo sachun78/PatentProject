@@ -19,4 +19,5 @@ type MeetingInput = {
   endTime: Date
   location: string
   comment: string
+  isMenual: boolean
 }
