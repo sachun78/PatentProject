@@ -7,5 +7,6 @@ const route = express.Router();
 
 route.post("/upload/", isAuth, upload, mMhisCtrl.mhistoryImage);
 route.post("/:id", isAuth, mMhisCtrl.createMhistory);
+route.patch("/:id", isAuth, mMhisCtrl.updateMhistory)
 
 export default route;
