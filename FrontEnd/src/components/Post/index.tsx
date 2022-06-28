@@ -42,7 +42,7 @@ function Post({
         owner_id={owner_id}
         _id={_id}
       />
-      <Link className="detail" to={`/postDetail/${_id}`}>
+      <Link to={`/postDetail/${_id}`}>
         <ImageContainer images={images} />
         <PostTextContainer contents={contents} />
       </Link>
@@ -67,10 +67,6 @@ const postStyle = css`
   a:hover {
     text-decoration: none;
     cursor: pointer;
-  }
-
-  .detail {
-    z-index: -1;
   }
 `
 export default Post

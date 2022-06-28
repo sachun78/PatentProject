@@ -17,7 +17,7 @@ import TimeGridInput from 'components/DatePickerInput/TimeGridInput'
 import { getProfilebyEmail } from 'lib/api/me/getProfile'
 import { format } from 'date-fns'
 import ProfileBox from 'components/ProfileBox'
-import { IMeeting, IProfile } from 'lib/api/types'
+import { IMeeting, IProfile, User } from 'lib/api/types'
 import useToggle from 'hooks/useToggle'
 import PhoneInput from 'components/PhoneInput'
 import PhoneInputT from 'react-phone-number-input'
@@ -39,6 +39,7 @@ export default function RequestForm({}: RequestViewProps) {
   const [, setOpen] = useRecoilState(networkUserFindModalState)
   const [isDefaultComment, onToggleIsDefaultComment] = useToggle(false)
   const [phone, setPhone] = useState('')
+  const [privateSchedule, togglePrivateSchedule] = useToggle(false)
   const onChangePhone = useCallback((value?: any | undefined) => {
     setPhone(value)
   }, [])
@@ -75,6 +76,7 @@ export default function RequestForm({}: RequestViewProps) {
   })
 
   const profile = useMemo(() => qc.getQueryData<IProfile>('profile'), [qc])
+  const user = qc.getQueryData<User>('user')
   const filteredTimeEvent = useMemo(() => {
     if (!event) return []
     return (event.meeting_list as IMeeting[]).filter((meeting: IMeeting) => {
@@ -140,8 +142,19 @@ export default function RequestForm({}: RequestViewProps) {
     (e) => {
       e.preventDefault()
       const { title, to, comment } = form
+
       if ((!to.trim() && !meetuser) || !title.trim() || !time || !endTime) {
         toast.error('Please fill out the form', {
+          position: toast.POSITION.TOP_CENTER,
+          pauseOnHover: false,
+          pauseOnFocusLoss: false,
+          autoClose: 3000,
+        })
+        return
+      }
+
+      if (meetuser === user?.email || user?.email === to) {
+        toast.error("You can't send it to yourself.", {
           position: toast.POSITION.TOP_CENTER,
           pauseOnHover: false,
           pauseOnFocusLoss: false,
@@ -162,6 +175,7 @@ export default function RequestForm({}: RequestViewProps) {
         endTime,
         location: form.location,
         toEmail: meetuser ? meetuser.toLowerCase() : to.toLowerCase(),
+        isMenual: privateSchedule,
         toCompany,
         toName,
         toPhone,
@@ -220,14 +234,13 @@ export default function RequestForm({}: RequestViewProps) {
             type={'text'}
             value={form.title}
             onChange={onChange}
-            placeholder={'Enter a title that will be used to represent the meeting'}
+            placeholder={'Represent the meeting *'}
             classes={classes}
             sx={{ height: 38 }}
-            fullWidth
           />
         </MeetingSection>
         <MeetingSection>
-          <h2>Participant's email</h2>
+          <h2>Recipient</h2>
           {meetuser ? (
             <span>{meetuser}</span>
           ) : (
@@ -238,7 +251,7 @@ export default function RequestForm({}: RequestViewProps) {
                 value={form.to}
                 onChange={onChange}
                 onBlur={onBlur}
-                placeholder={'Meeting Email'}
+                placeholder={'Meeting Email Recipient *'}
                 fullWidth
                 sx={{ height: 38 }}
                 classes={classes}
@@ -262,7 +275,6 @@ export default function RequestForm({}: RequestViewProps) {
                 placeholder={'Enter a name to request'}
                 classes={classes}
                 sx={{ height: 38 }}
-                fullWidth
               />
             </MeetingSection>
             <MeetingSection title={'Firm'}>
@@ -275,7 +287,6 @@ export default function RequestForm({}: RequestViewProps) {
                 placeholder={'Enter the firm'}
                 classes={classes}
                 sx={{ height: 38 }}
-                fullWidth
               />
             </MeetingSection>
             <MeetingSection title={'Phone'}>
@@ -292,8 +303,8 @@ export default function RequestForm({}: RequestViewProps) {
             </MeetingSection>
           </>
         )}
-        <MeetingSection title={'Period'}>
-          <h2>Period</h2>
+        <MeetingSection title={'Calendar'}>
+          <h2>Calendar</h2>
           <TimeGridInput
             startTime={time}
             endTime={endTime}
@@ -316,14 +327,14 @@ export default function RequestForm({}: RequestViewProps) {
             type={'text'}
             value={form.location}
             onChange={onChange}
-            placeholder={'Enter detailed address'}
+            placeholder={'Enter detailed address *'}
             classes={classes}
             sx={{ height: 38 }}
-            fullWidth
           />
         </MeetingSection>
         <RequestSection
           title={'Comment'}
+          h2
           checkButton={
             profile?.signature && (
               <FormControlLabel
@@ -344,7 +355,7 @@ export default function RequestForm({}: RequestViewProps) {
           }
         >
           <OutlinedInput
-            placeholder="Leave a message"
+            placeholder="Leave a message *"
             name="comment"
             value={!isDefaultComment ? form.comment : profile?.signature}
             onChange={!isDefaultComment ? onChange : undefined}
@@ -354,6 +365,14 @@ export default function RequestForm({}: RequestViewProps) {
             classes={classes}
           />
         </RequestSection>
+
+        <FormControlLabel
+          value="top"
+          control={<Checkbox checked={privateSchedule} onChange={togglePrivateSchedule} />}
+          label="Make Private Schedule (without send mail)"
+          labelPlacement="end"
+        />
+
         <LoadingButton css={buttonStyle} variant={'contained'} loading={createScheduleMut.isLoading} type={'submit'}>
           Propose Meeting
         </LoadingButton>

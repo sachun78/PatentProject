@@ -19,6 +19,7 @@ function Home({}: HomeProps) {
   const [searchText, setSearchText] = useState('')
   const [filterOn, setFilterOn] = useState(false)
   const [countryFilter, setCountryFilter] = useState<any[]>([])
+
   const getCountry = (newValue: any[]) => {
     setCountryFilter(newValue)
   }
@@ -44,7 +45,7 @@ function Home({}: HomeProps) {
     if (hasNextPage && inView) {
       fetchNextPage()
     }
-  }, [fetchNextPage, inView])
+  }, [data, fetchNextPage, hasNextPage, inView])
 
   const posts = useMemo(() => {
     if (!data) return []
@@ -53,6 +54,14 @@ function Home({}: HomeProps) {
       return !post.history
     })
   }, [data])
+
+  const onFocus = () => {
+    setFilterOn(true)
+  }
+
+  const onBlur = () => {
+    setFilterOn(false)
+  }
 
   if (isLoading)
     return (
@@ -69,22 +78,21 @@ function Home({}: HomeProps) {
           <Skeleton variant="rectangular" width={114} height={32} />
           <Skeleton variant="rectangular" width={250} height={32} />
         </div>
-        <Skeleton variant="circular" width={60} height={60} sx={{ marginLeft: '1.875rem', marginBottom: '1.25rem' }} />
-        <Skeleton variant="rectangular" width={870} height={400} sx={{ marginBottom: '2rem' }} />
-        <Skeleton variant="circular" width={60} height={60} sx={{ marginLeft: '1.875rem', marginBottom: '1.25rem' }} />
-        <Skeleton variant="rectangular" width={870} height={400} sx={{ marginBottom: '2rem' }} />
-        <Skeleton variant="circular" width={60} height={60} sx={{ marginLeft: '1.875rem', marginBottom: '1.25rem' }} />
-        <Skeleton variant="rectangular" width={870} height={400} />
+        {Array.from({ length: 3 }, (v, i) => i).map((v) => {
+          return (
+            <>
+              <Skeleton
+                variant="circular"
+                width={60}
+                height={60}
+                sx={{ marginLeft: '1.875rem', marginBottom: '1.25rem' }}
+              />
+              <Skeleton variant="rectangular" width={870} height={400} sx={{ marginBottom: '2rem' }} />
+            </>
+          )
+        })}
       </Stack>
     )
-
-  const onFocus = () => {
-    setFilterOn(true)
-  }
-
-  const onBlur = () => {
-    setFilterOn(false)
-  }
 
   return (
     <>
@@ -96,8 +104,8 @@ function Home({}: HomeProps) {
               alt={'country'}
               style={{ width: '1rem', height: '1rem', marginRight: '0.3125rem' }}
             />
-            <div style={{ marginRight: '1.25rem' }}>Nation</div>
-            {filterOn && <FilterArea getCountry={getCountry} />}
+            <div>Nation</div>
+            {filterOn && <FilterArea getCountry={getCountry} select={countryFilter} />}
           </div>
           <PostSearchBox filter={setSearchText} />
         </div>
@@ -131,7 +139,7 @@ function Home({}: HomeProps) {
           </div>
         ) : (
           searchData
-            ?.filter((post: IPost) => !countryFilter.includes(post.country))
+            ?.filter((post: IPost) => countryFilter.find((x) => x.code === post.country))
             .map((search: IPost) => (
               <div key={search._id} css={postViewStyle}>
                 <Post
@@ -171,7 +179,7 @@ function Home({}: HomeProps) {
             ))
           : !searchData &&
             posts
-              ?.filter((post: IPost) => !countryFilter.includes(post.country))
+              ?.filter((post: IPost) => countryFilter.find((x) => x.code === post.country))
               .map((post: IPost) => (
                 <div key={post._id} css={postViewStyle} ref={ref}>
                   <Post
@@ -202,7 +210,7 @@ function Home({}: HomeProps) {
 const nationStyle = css`
   padding: 0.5rem 0.75rem;
   border: 1px solid #910457;
-  border-radius: 1rem;
+  border-radius: 50px;
   display: flex;
   flex-direction: row;
   align-items: center;

@@ -8,16 +8,24 @@ type RequestSectionProps = {
   children: React.ReactNode
   checkButton?: React.ReactNode
   icon?: IconControlType
+  h2?: boolean
 }
 
-function RequestSection({ title, children, checkButton, icon }: RequestSectionProps) {
+function RequestSection({ title, children, checkButton, icon, h2 }: RequestSectionProps) {
   return (
     <section css={sectionStyle}>
       <div className={'header'}>
-        <h3>
-          {icon && <IconControl name={icon} />}
-          {title}
-        </h3>
+        {h2 ? (
+          <h2>
+            {icon && <IconControl name={icon} />}
+            {title}
+          </h2>
+        ) : (
+          <h3>
+            {icon && <IconControl name={icon} />}
+            {title}
+          </h3>
+        )}
         {checkButton}
       </div>
       <div className={'child-item'}>{children}</div>
@@ -35,9 +43,14 @@ const sectionStyle = css`
     font: normal normal normal 16px/26px NanumSquareOTF;
     margin-top: 0;
     margin-bottom: 0.625rem;
-
     display: flex;
     align-items: center;
+  }
+
+  h2 {
+    font: normal normal 800 16px/36px NanumSquareOTF;
+    line-height: 2.25;
+    margin: 0 0 0.25rem;
   }
 
   svg {

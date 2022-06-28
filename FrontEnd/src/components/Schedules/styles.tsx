@@ -140,4 +140,9 @@ export const calendarStyle = css`
   tbody > tr > td.fc-daygrid-day:last-of-type {
     border-right: none !important;
   }
+
+  .fc-timeGridDay-button,
+  .fc-dayGridMonth-button {
+    background-color: #a1045a !important;
+  }
 `

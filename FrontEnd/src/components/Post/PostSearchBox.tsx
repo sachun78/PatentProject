@@ -5,11 +5,11 @@ import IconControl from 'components/IconControl'
 import React, { Dispatch, useCallback, useState } from 'react'
 
 export type PostSearchBoxProps = {
-  filter: Dispatch<string>  
+  filter: Dispatch<string>
 }
 
 function PostSearchBox({ filter }: PostSearchBoxProps) {
-  const [value, setValue] = usePostSearchInputState()  
+  const [value, setValue] = usePostSearchInputState()
   const [bdColor, setBdColor] = useState('#9C9C9C')
 
   const onChange = useCallback(
@@ -37,10 +37,10 @@ function PostSearchBox({ filter }: PostSearchBoxProps) {
   const onBlur = () => {
     setBdColor('#9C9C9C')
   }
-  
+
   return (
     <form
-      css={nationStyle}
+      css={searchBoxStyle}
       style={{ width: '15.625rem', borderColor: `${bdColor}`, justifyContent: 'space-between' }}
       onFocus={onFocus}
       onBlur={onBlur}
@@ -53,16 +53,16 @@ function PostSearchBox({ filter }: PostSearchBoxProps) {
         value={value}
         onChange={onChange}
       />
-      <IconButton type="submit" sx={{ p: '8px' }} aria-label="search">
+      <IconButton type="submit" sx={{ p: 0 }} aria-label="search">
         <IconControl name={'searchIcon'} />
       </IconButton>
     </form>
-  )  
+  )
 }
 
 export default PostSearchBox
 
-const nationStyle = css`
+const searchBoxStyle = css`
   padding: 0.5rem 0.75rem;
   border: 1px solid #910457;
   border-radius: 1rem;
@@ -70,7 +70,6 @@ const nationStyle = css`
   flex-direction: row;
   align-items: center;
   width: 15.625rem;
-  border-color: bdColor;
   justify-content: space-between;
 
   input {

@@ -74,7 +74,7 @@ export const MeetingSection = styled.section`
     width: 1px;
   }
 `
-const statusColor = ({ state }: { state: string }) => css`
+const statusColor = ({ state }: { state?: string }) => css`
   background: ${state === 'met' && brandColor};
   color: ${state === 'met' && '#fff'};
   // background: ${state === 'confirm' && palette.green[400]};

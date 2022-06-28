@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import { Avatar, CircularProgress, ListItemText } from '@mui/material'
+import { Avatar, ListItemText } from '@mui/material'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 import Grow from '@mui/material/Grow'
 import MenuItem from '@mui/material/MenuItem'
@@ -8,7 +8,6 @@ import Paper from '@mui/material/Paper'
 import Popper from '@mui/material/Popper'
 import { formatDistanceToNow } from 'date-fns'
 import gravatar from 'gravatar'
-import useBuddyQuery from 'hooks/query/useBuddyQuery'
 import { API_PATH } from 'lib/api/client'
 import { deletePost } from 'lib/api/post/deletePost'
 import { User as UserType } from 'lib/api/types'
@@ -41,7 +40,6 @@ function PostHeader({ owner_username, owner_email, createdAt, owner_id, _id }: P
   const date = useMemo(() => new Date(createdAt), [])
   const today = new Date()
   const diff = (today.getTime() - date.getTime()) / 1000
-  const { data: buddyData } = useBuddyQuery()
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen)
@@ -92,10 +90,6 @@ function PostHeader({ owner_username, owner_email, createdAt, owner_id, _id }: P
 
     prevOpen.current = open
   }, [open])
-
-  if (!owner_email || !buddyData) {
-    return <CircularProgress />
-  }
 
   return (
     <div css={headerStyle}>

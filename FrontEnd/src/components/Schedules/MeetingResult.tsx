@@ -96,9 +96,10 @@ function MeetingResult({}: MeetingResultProps) {
 
   const removeHover = useRemoveOutlineHover()
 
-  if (isLoading || isLoadingMet || !eventData) {
-    return <div>Loading</div>
+  if (!eventData || isLoading || isLoadingMet) {
+    return null
   }
+
   if (!metData) {
     return <Navigate to={'..'} />
   }

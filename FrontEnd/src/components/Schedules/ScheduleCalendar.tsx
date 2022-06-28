@@ -54,9 +54,10 @@ function ScheduleCalendar({ meetings }: ScheduleCalendarProps) {
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
         headerToolbar={{
           center: 'prev title next',
-          left: '',
-          right: '',
+          left: 'dayGridMonth',
+          end: 'timeGridDay',
         }}
+        allDaySlot={false}
         events={scheduleEvents}
         showNonCurrentDates={false}
         fixedWeekCount={false}

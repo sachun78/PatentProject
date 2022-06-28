@@ -2,10 +2,11 @@ import { Badge, Paper, Table, TableBody, TableContainer, TableHead, TableRow } f
 import { StatusBlock, StyledTableCell, StyledTableRow } from 'pages/Meeting/styles'
 import { format, isAfter, isBefore } from 'date-fns'
 import React from 'react'
-import { IMeeting } from 'lib/api/types'
+import { IMeeting, User } from 'lib/api/types'
 import { useNavigate } from 'react-router-dom'
 import { API_PATH } from 'lib/api/client'
 import { noScheduleStyle } from '../Events/styles'
+import { useQueryClient } from 'react-query'
 
 type ScheduleType = 'schedule' | 'history'
 
@@ -17,6 +18,8 @@ export type ScheduleTableProps = {
 
 function ScheduleTable({ meetings, type = 'schedule', isProfile }: ScheduleTableProps) {
   const navi = useNavigate()
+  const qc = useQueryClient()
+  const user = qc.getQueryData<User>('user') as User
 
   if (isProfile) {
     if (meetings.length === 0) {
@@ -43,6 +46,7 @@ function ScheduleTable({ meetings, type = 'schedule', isProfile }: ScheduleTable
                 Photo
               </StyledTableCell>
               <StyledTableCell align="center">Date</StyledTableCell>
+              <StyledTableCell align="center">Time</StyledTableCell>
               <StyledTableCell align="center">Location</StyledTableCell>
               <StyledTableCell align="center">Status</StyledTableCell>
             </TableRow>
@@ -72,8 +76,8 @@ function ScheduleTable({ meetings, type = 'schedule', isProfile }: ScheduleTable
                       alt="meeting_image"
                     />
                   </StyledTableCell>
+                  <StyledTableCell align="center">{format(new Date(row.date), 'd MMM, yyyy')}</StyledTableCell>
                   <StyledTableCell align="center">
-                    {format(new Date(row.date), 'd MMM, yyyy')} <br />
                     {format(new Date(row.startTime), 'HH:mm - ')} {format(new Date(row.endTime), 'HH:mm')}
                   </StyledTableCell>
                   <StyledTableCell align="center">{row.location}</StyledTableCell>
@@ -109,24 +113,13 @@ function ScheduleTable({ meetings, type = 'schedule', isProfile }: ScheduleTable
       <Table sx={{ minWidth: 700 }} aria-label="history schedule table" size={'small'}>
         <TableHead>
           <TableRow>
-            <StyledTableCell align="center" size={'medium'}>
-              Name
-            </StyledTableCell>
-            <StyledTableCell align="center" size={'medium'}>
-              Company
-            </StyledTableCell>
-            <StyledTableCell align="center" size={'medium'}>
-              E-mail
-            </StyledTableCell>
-            <StyledTableCell align="center" size={'medium'}>
-              Date
-            </StyledTableCell>
-            <StyledTableCell align="center" size={'medium'}>
-              Location
-            </StyledTableCell>
-            <StyledTableCell align="center" size={'medium'}>
-              Status
-            </StyledTableCell>
+            <StyledTableCell align="center">Name</StyledTableCell>
+            <StyledTableCell align="center">Company</StyledTableCell>
+            <StyledTableCell align="center">Email</StyledTableCell>
+            <StyledTableCell align="center">Date</StyledTableCell>
+            <StyledTableCell align="center">Time</StyledTableCell>
+            <StyledTableCell align="center">Location</StyledTableCell>
+            <StyledTableCell align="center">Status</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -146,11 +139,11 @@ function ScheduleTable({ meetings, type = 'schedule', isProfile }: ScheduleTable
             }
             return (
               <StyledTableRow key={row._id + row.date} hover onClick={() => navi('/meeting/schedule/' + row._id)}>
-                <StyledTableCell align="center">{row.toName}</StyledTableCell>
-                <StyledTableCell align="center">{row.toCompany}</StyledTableCell>
+                <StyledTableCell align="center">{row.toName ? row.toName : 'No provided'}</StyledTableCell>
+                <StyledTableCell align="center">{row.toCompany ? row.toCompany : 'No provided'}</StyledTableCell>
                 <StyledTableCell align="center">{row.toEmail}</StyledTableCell>
+                <StyledTableCell align="center">{format(new Date(row.date), 'MMM, d')}</StyledTableCell>
                 <StyledTableCell align="center">
-                  {format(new Date(row.date), 'd MMM, yyyy')} <br />
                   {format(new Date(row.startTime), 'HH:mm - ')} {format(new Date(row.endTime), 'HH:mm')}
                 </StyledTableCell>
                 <StyledTableCell align="center">{row.location}</StyledTableCell>
@@ -168,6 +161,7 @@ function ScheduleTable({ meetings, type = 'schedule', isProfile }: ScheduleTable
                       {row.history.status ? 'Met' : 'Missed'}
                     </StatusBlock>
                   )}
+                  {row.toEmail === user.email && <StatusBlock>receive</StatusBlock>}
                 </StyledTableCell>
               </StyledTableRow>
             )
